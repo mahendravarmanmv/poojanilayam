@@ -1,0 +1,288 @@
+@import "bootstrap/dist/css/bootstrap.min.css";
+@import "bootstrap-icons/font/bootstrap-icons.css";
+
+:root {
+    --pn-primary: #a8492e;
+    --pn-primary-dark: #71321f;
+    --pn-gold: #b8893d;
+
+    --pn-cream: #fbf6ec;
+    --pn-beige: #f3e9d8;
+
+    --pn-brown: #38231c;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: #fff;
+    color: var(--pn-brown);
+}
+
+a {
+    text-decoration: none;
+}
+
+
+/* -------------------------------------------------------
+   Brand Utilities
+------------------------------------------------------- */
+
+.text-pn-primary {
+    color: var(--pn-primary) !important;
+}
+
+.text-pn-gold {
+    color: var(--pn-gold) !important;
+}
+
+.text-pn-brown {
+    color: var(--pn-brown) !important;
+}
+
+.bg-pn-cream {
+    background-color: var(--pn-cream) !important;
+}
+
+.bg-pn-beige {
+    background-color: var(--pn-beige) !important;
+}
+
+.bg-pn-primary {
+    background-color: var(--pn-primary) !important;
+}
+
+.bg-pn-brown {
+    background-color: var(--pn-brown) !important;
+}
+
+
+/* -------------------------------------------------------
+   Typography
+------------------------------------------------------- */
+
+.font-serif {
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+}
+
+
+/* -------------------------------------------------------
+   Buttons
+------------------------------------------------------- */
+
+.btn-pn {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: var(--pn-primary);
+    --bs-btn-border-color: var(--pn-primary);
+
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: var(--pn-primary-dark);
+    --bs-btn-hover-border-color: var(--pn-primary-dark);
+
+    border-radius: 0.625rem;
+    font-weight: 600;
+}
+
+.btn-pn-outline {
+    --bs-btn-color: var(--pn-primary);
+    --bs-btn-border-color: var(--pn-primary);
+
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: var(--pn-primary);
+    --bs-btn-hover-border-color: var(--pn-primary);
+
+    border-radius: 0.625rem;
+    font-weight: 600;
+}
+
+
+/* -------------------------------------------------------
+   Section Heading
+------------------------------------------------------- */
+
+.pn-section-label {
+    letter-spacing: 0.14em;
+}
+
+.pn-divider {
+    width: 70px;
+    height: 2px;
+    background-color: var(--pn-gold);
+}
+
+
+/* -------------------------------------------------------
+   Hero
+------------------------------------------------------- */
+
+.pn-hero {
+    min-height: 680px;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(251, 246, 236, 0.98) 0%,
+            rgba(251, 246, 236, 0.94) 38%,
+            rgba(251, 246, 236, 0.55) 62%,
+            rgba(251, 246, 236, 0.08) 100%
+        ),
+        url("../images/home/hero.jpg")
+        center center /
+        cover no-repeat;
+}
+
+.pn-hero-title {
+    font-size: clamp(
+        2.7rem,
+        6vw,
+        5.25rem
+    );
+
+    line-height: 1.02;
+}
+
+.pn-hero-accent {
+    color: var(--pn-primary);
+}
+
+
+/* -------------------------------------------------------
+   Search
+------------------------------------------------------- */
+
+.pn-search {
+    max-width: 720px;
+}
+
+
+/* -------------------------------------------------------
+   Service Cards
+------------------------------------------------------- */
+
+.pn-service-card {
+    transition:
+        transform 180ms ease,
+        border-color 180ms ease,
+        box-shadow 180ms ease;
+}
+
+.pn-service-card:hover {
+    transform: translateY(-4px);
+
+    border-color:
+        var(--pn-gold) !important;
+
+    box-shadow:
+        0 0.75rem 2rem
+        rgba(56, 35, 28, 0.08) !important;
+}
+
+
+/* -------------------------------------------------------
+   Pooja Cards
+------------------------------------------------------- */
+
+.pn-pooja-card {
+    transition:
+        transform 180ms ease,
+        box-shadow 180ms ease;
+}
+
+.pn-pooja-card:hover {
+    transform: translateY(-5px);
+
+    box-shadow:
+        0 1rem 2.5rem
+        rgba(56, 35, 28, 0.10) !important;
+}
+
+.pn-pooja-image {
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+}
+
+
+/* -------------------------------------------------------
+   Occasion Cards
+------------------------------------------------------- */
+
+.pn-occasion-icon {
+    width: 64px;
+    height: 64px;
+}
+
+
+/* -------------------------------------------------------
+   Temple Images
+------------------------------------------------------- */
+
+.pn-temple-image {
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+}
+
+
+/* -------------------------------------------------------
+   Digital Pooja
+------------------------------------------------------- */
+
+.pn-digital {
+    background:
+        linear-gradient(
+            100deg,
+            rgba(56, 35, 28, 0.98),
+            rgba(113, 50, 31, 0.90)
+        );
+}
+
+
+/* -------------------------------------------------------
+   Mobile
+------------------------------------------------------- */
+
+
+
+@media (max-width: 991.98px) {
+
+    .pn-hero {
+        min-height: 650px;
+
+        background:
+            linear-gradient(
+                180deg,
+                rgba(251, 246, 236, 0.98) 0%,
+                rgba(251, 246, 236, 0.90) 52%,
+                rgba(251, 246, 236, 0.30) 100%
+            ),
+            url("../images/home/hero.jpg")
+            center center /
+            cover
+            no-repeat;
+    }
+
+}
+
+
+
+@media (max-width: 575.98px) {
+
+    .pn-hero {
+        min-height: 620px;
+    }
+
+    .pn-hero-title {
+        font-size: 2.8rem;
+    }
+
+}
+
+.icon-circle-58 {
+    width: 58px;
+    height: 58px;
+    flex-shrink: 0;
+}
