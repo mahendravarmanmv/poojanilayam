@@ -187,7 +187,7 @@
             >
 
                 <a
-                    href="{{ url('/') }}"
+                    href="{{ route('home') }}"
                     class="text-white
                            text-decoration-none
                            fw-semibold

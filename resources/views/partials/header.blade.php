@@ -68,7 +68,7 @@
 
             {{-- Brand --}}
             <a
-                href="{{ url('/') }}"
+                href="{{ route('home') }}"
                 class="navbar-brand
                        d-flex
                        align-items-center
@@ -189,7 +189,7 @@
                     <li class="nav-item">
 
                         <a
-                            href="{{ url('/') }}"
+                            href="{{ route('home') }}"
                             class="nav-link
                                    px-xl-3
                                    fw-semibold
@@ -204,7 +204,7 @@
                     <li class="nav-item dropdown">
 
     <a
-        href="#"
+        href="{{ route('pooja.ganapathi-homam') }}"
         class="nav-link
                dropdown-toggle
                px-xl-3

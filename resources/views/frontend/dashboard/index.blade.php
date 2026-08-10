@@ -147,7 +147,7 @@
                 <li class="breadcrumb-item">
 
                     <a
-                        href="{{ url('/') }}"
+                        href="{{ route('home') }}"
                         class="text-pn-primary"
                     >
                         Home

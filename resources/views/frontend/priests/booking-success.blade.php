@@ -1813,7 +1813,7 @@
 
 
                     <a
-                        href="{{ url('/') }}"
+                        href="{{ route('home') }}"
                         class="btn
                                btn-outline-light
                                px-4"

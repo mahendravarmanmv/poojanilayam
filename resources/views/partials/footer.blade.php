@@ -304,21 +304,21 @@
                             flex-wrap
                             gap-3">
 
-                    <a href="#"
+                    <a href="{{ route('privacy') }}"
                        class="small text-white-50">
 
                         Privacy Policy
 
                     </a>
 
-                    <a href="#"
+                    <a href="{{ route('terms') }}"
                        class="small text-white-50">
 
                         Terms & Conditions
 
                     </a>
 
-                    <a href="#"
+                    <a href="{{ route('refund') }}"
                        class="small text-white-50">
 
                         Refund Policy
