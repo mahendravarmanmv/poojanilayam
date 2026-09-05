@@ -136,31 +136,31 @@
                 <ul class="list-unstyled mb-0">
 
                     <li class="mb-2">
-                        <a href="#" class="text-white-50">
+                        <a href="{{ route('pooja.index') }}" class="text-white-50">
                             Poojas
                         </a>
                     </li>
 
                     <li class="mb-2">
-                        <a href="#" class="text-white-50">
+                        <a href="{{ route('temple.index') }}" class="text-white-50">
                             Temples
                         </a>
                     </li>
 
                     <li class="mb-2">
-                        <a href="#" class="text-white-50">
+                        <a href="{{ route('priest.index') }}" class="text-white-50">
                             Priests
                         </a>
                     </li>
 
                     <li class="mb-2">
-                        <a href="#" class="text-white-50">
+                        <a href="{{ route('digital-pooja.index') }}" class="text-white-50">
                             Digital Pooja
                         </a>
                     </li>
 
                     <li class="mb-2">
-                        <a href="#" class="text-white-50">
+                        <a href="{{ route('astrology.index') }}" class="text-white-50">
                             Astrology
                         </a>
                     </li>
@@ -179,19 +179,19 @@
                 <ul class="list-unstyled mb-0">
 
                     <li class="mb-2">
-                        <a href="#" class="text-white-50">
+                        <a href="{{ route('store.index') }}" class="text-white-50">
                             Online Store
                         </a>
                     </li>
 
                     <li class="mb-2">
-                        <a href="#" class="text-white-50">
+                        <a href="{{ route('donation.index') }}" class="text-white-50">
                             Donations
                         </a>
                     </li>
 
                     <li class="mb-2">
-                        <a href="#" class="text-white-50">
+                        <a href="{{ route('festival.index') }}" class="text-white-50">
                             Festival
                         </a>
                     </li>
@@ -203,7 +203,7 @@
                     </li>
 
                     <li class="mb-2">
-                        <a href="#" class="text-white-50">
+                        <a href="{{ route('blog.index') }}" class="text-white-50">
                             Spiritual Blogs
                         </a>
                     </li>

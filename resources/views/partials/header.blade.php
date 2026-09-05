@@ -12,8 +12,7 @@
                        align-items-center
                        justify-content-between
                        gap-2
-                       py-2"
-            >
+                       py-2">
 
                 <span class="small">
 
@@ -27,8 +26,7 @@
                     class="d-flex
                            align-items-center
                            gap-3
-                           small"
-                >
+                           small">
 
                     <a href="#" class="text-white">
                         Track Booking
@@ -36,13 +34,13 @@
 
                     <span class="text-white-50">|</span>
 
-                    <a href="#" class="text-white">
+                    <a href="{{ route('support.help-center') }}" class="text-white">
                         Help
                     </a>
 
                     <span class="text-white-50">|</span>
 
-                    <a href="#" class="text-white">
+                    <a href="{{ route('contact') }}" class="text-white">
                         Contact
                     </a>
 
@@ -60,8 +58,7 @@
         class="navbar
                navbar-expand-xl
                bg-pn-cream
-               border-bottom"
-    >
+               border-bottom">
 
         <div class="container py-2">
 
@@ -72,8 +69,7 @@
                 class="navbar-brand
                        d-flex
                        align-items-center
-                       gap-2"
-            >
+                       gap-2">
 
                 <span
                     class="d-flex
@@ -85,8 +81,7 @@
                            border-warning-subtle
                            text-pn-primary
                            fs-4"
-                    style="width:46px;height:46px;"
-                >
+                    style="width:46px;height:46px;">
 
                     <i class="bi bi-flower1"></i>
 
@@ -101,8 +96,7 @@
                                fw-bold
                                fs-4
                                text-pn-brown
-                               lh-1"
-                    >
+                               lh-1">
 
                         Pooja Nilayam
 
@@ -125,20 +119,17 @@
                        align-items-center
                        gap-1
                        ms-auto
-                       d-xl-none"
-            >
+                       d-xl-none">
 
                 <a
-                    href="#"
-                    class="btn btn-sm text-pn-brown"
-                >
+                    href="{{ route('search') }}"
+                    class="btn btn-sm text-pn-brown">
                     <i class="bi bi-search fs-5"></i>
                 </a>
 
                 <a
-                    href="#"
-                    class="btn btn-sm text-pn-brown position-relative"
-                >
+                    href="{{ route('store.cart') }}"
+                    class="btn btn-sm text-pn-brown position-relative">
 
                     <i class="bi bi-bag fs-5"></i>
 
@@ -149,8 +140,7 @@
                                translate-middle
                                badge
                                rounded-pill
-                               bg-pn-primary"
-                    >
+                               bg-pn-primary">
                         2
                     </span>
 
@@ -162,14 +152,12 @@
                            shadow-none"
                     type="button"
                     data-bs-toggle="offcanvas"
-                    data-bs-target="#mobileMenu"
-                >
+                    data-bs-target="#mobileMenu">
 
                     <i
                         class="bi bi-list
                                fs-2
-                               text-pn-primary"
-                    ></i>
+                               text-pn-primary"></i>
 
                 </button>
 
@@ -183,8 +171,7 @@
                     class="navbar-nav
                            mx-auto
                            align-items-xl-center
-                           gap-xl-1"
-                >
+                           gap-xl-1">
 
                     <li class="nav-item">
 
@@ -193,8 +180,7 @@
                             class="nav-link
                                    px-xl-3
                                    fw-semibold
-                                   text-pn-primary"
-                        >
+                                   text-pn-primary">
                             Home
                         </a>
 
@@ -203,68 +189,62 @@
 
                     <li class="nav-item dropdown">
 
-    <a
-        href="{{ route('pooja.ganapathi-homam') }}"
-        class="nav-link
+                        <a
+                            href="{{ route('pooja.index') }}"
+                            class="nav-link
                dropdown-toggle
                px-xl-3
                text-pn-brown"
-        id="poojasDropdown"
-        role="button"
-        data-bs-toggle="dropdown"
-        aria-expanded="false"
-    >
-        Poojas
-    </a>
+                            id="poojasDropdown"
+                            role="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Poojas
+                        </a>
 
-    <ul
-        class="dropdown-menu
+                        <ul
+                            class="dropdown-menu
                border-0
                shadow-sm
                rounded-3"
-        aria-labelledby="poojasDropdown"
-    >
+                            aria-labelledby="poojasDropdown">
 
-        <li>
-            <a
-                href="#"
-                class="dropdown-item py-2"
-            >
-                Popular Poojas
-            </a>
-        </li>
+                            <li>
+                                <a
+                                    href="{{ route('pooja.index') }}"
+                                    class="dropdown-item py-2">
+                                    Popular Poojas
+                                </a>
+                            </li>
 
-        <li>
-            <a
-                href="#"
-                class="dropdown-item py-2"
-            >
-                Pooja Categories
-            </a>
-        </li>
+                            <li>
+                                <a
+                                    href="{{ route('pooja.categories') }}"
+                                    class="dropdown-item py-2">
+                                    Pooja Categories
+                                </a>
+                            </li>
 
-        <li>
-            <a
-                href="#"
-                class="dropdown-item py-2"
-            >
-                Temple Poojas
-            </a>
-        </li>
+                            <li>
+                                <a
+                                    href="#"
+                                    class="dropdown-item py-2">
+                                    Temple Poojas
+                                </a>
+                            </li>
 
-    </ul>
+                        </ul>
 
-</li>
+                    </li>
 
 
                     <li class="nav-item">
 
                         <a
-                            href="#"
+                            href="{{ route('temple.index') }}"
                             class="nav-link
                                    px-xl-3
-                                   text-pn-brown"
-                        >
+                                   text-pn-brown">
                             Temples
                         </a>
 
@@ -274,11 +254,10 @@
                     <li class="nav-item">
 
                         <a
-                            href="#"
+                            href="{{ route('priest.index') }}"
                             class="nav-link
                                    px-xl-3
-                                   text-pn-brown"
-                        >
+                                   text-pn-brown">
                             Priests
                         </a>
 
@@ -288,11 +267,10 @@
                     <li class="nav-item">
 
                         <a
-                            href="#"
+                            href="{{ route('digital-pooja.index') }}"
                             class="nav-link
                                    px-xl-3
-                                   text-pn-brown"
-                        >
+                                   text-pn-brown">
                             Digital Pooja
                         </a>
 
@@ -302,11 +280,10 @@
                     <li class="nav-item">
 
                         <a
-                            href="#"
+                            href="{{ route('astrology.index') }}"
                             class="nav-link
                                    px-xl-3
-                                   text-pn-brown"
-                        >
+                                   text-pn-brown">
                             Astrology
                         </a>
 
@@ -316,11 +293,10 @@
                     <li class="nav-item">
 
                         <a
-                            href="#"
+                            href="{{ route('store.index') }}"
                             class="nav-link
                                    px-xl-3
-                                   text-pn-brown"
-                        >
+                                   text-pn-brown">
                             Store
                         </a>
 
@@ -334,39 +310,30 @@
                     class="d-none
                            d-xl-flex
                            align-items-center
-                           gap-1"
-                >
+                           gap-1">
 
                     <a
                         href="#"
-                        class="btn btn-sm text-pn-brown"
-                    >
+                        class="btn btn-sm text-pn-brown">
 
                         <i
                             class="bi bi-geo-alt
                                    text-pn-primary
-                                   me-1"
-                        ></i>
+                                   me-1"></i>
 
                         Hyderabad
 
                     </a>
 
 
-                    <a
-                        href="#"
-                        class="btn btn-sm text-pn-brown"
-                    >
-
-                        <i class="bi bi-heart fs-5"></i>
-
+                    <a href="{{ route('store.wishlist') }}" class="text-pn-brown fs-5" aria-label="Wishlist">
+                        <i class="bi bi-heart"></i>
                     </a>
 
 
                     <a
-                        href="#"
-                        class="btn btn-sm text-pn-brown position-relative"
-                    >
+                        href="{{ route('store.cart') }}"
+                        class="btn btn-sm text-pn-brown position-relative">
 
                         <i class="bi bi-bag fs-5"></i>
 
@@ -377,8 +344,7 @@
                                    translate-middle
                                    badge
                                    rounded-pill
-                                   bg-pn-primary"
-                        >
+                                   bg-pn-primary">
                             2
                         </span>
 
@@ -386,11 +352,10 @@
 
 
                     <a
-                        href="#"
+                        href="{{ route('auth.login') }}"
                         class="btn btn-pn
                                ms-2
-                               px-4"
-                    >
+                               px-4">
                         Login
                     </a>
 
@@ -408,8 +373,7 @@
         class="offcanvas
                offcanvas-end"
         tabindex="-1"
-        id="mobileMenu"
-    >
+        id="mobileMenu">
 
         <div class="offcanvas-header border-bottom">
 
@@ -417,16 +381,14 @@
                 class="offcanvas-title
                        font-serif
                        fw-bold
-                       text-pn-primary"
-            >
+                       text-pn-primary">
                 Pooja Nilayam
             </h5>
 
             <button
                 type="button"
                 class="btn-close"
-                data-bs-dismiss="offcanvas"
-            ></button>
+                data-bs-dismiss="offcanvas"></button>
 
         </div>
 
@@ -434,11 +396,10 @@
         <div class="offcanvas-body bg-pn-cream">
 
             <a
-                href="#"
+                href="{{ route('auth.login') }}"
                 class="btn btn-pn
                        w-100
-                       mb-4"
-            >
+                       mb-4">
                 Login / Register
             </a>
 
@@ -446,40 +407,37 @@
             <div class="list-group list-group-flush">
 
                 @foreach([
-                    ['icon'=>'bi-house','name'=>'Home'],
-                    ['icon'=>'bi-flower1','name'=>'Poojas'],
-                    ['icon'=>'bi-bank','name'=>'Temples'],
-                    ['icon'=>'bi-person','name'=>'Priests'],
-                    ['icon'=>'bi-camera-video','name'=>'Digital Pooja'],
-                    ['icon'=>'bi-stars','name'=>'Astrology'],
-                    ['icon'=>'bi-shop','name'=>'Online Store']
+                ['icon'=>'bi-house', 'name'=>'Home', 'route'=>'home'],
+                ['icon'=>'bi-flower1', 'name'=>'Poojas', 'route'=>'pooja.index'],
+                ['icon'=>'bi-bank', 'name'=>'Temples', 'route'=>'temple.index'],
+                ['icon'=>'bi-person', 'name'=>'Priests', 'route'=>'priest.index'],
+                ['icon'=>'bi-camera-video', 'name'=>'Digital Pooja', 'route'=>'digital-pooja.index'],
+                ['icon'=>'bi-stars', 'name'=>'Astrology', 'route'=>'astrology.index'],
+                ['icon'=>'bi-shop', 'name'=>'Online Store', 'route'=>'store.index']
                 ] as $item)
 
-                    <a
-                        href="#"
-                        class="list-group-item
+                <a
+                    href="{{ route($item['route']) }}"
+                    class="list-group-item
                                list-group-item-action
                                bg-transparent
                                border-0
                                border-bottom
-                               py-3"
-                    >
+                               py-3">
 
-                        <i
-                            class="bi {{ $item['icon'] }}
+                    <i
+                        class="bi {{ $item['icon'] }}
                                    text-pn-primary
-                                   me-3"
-                        ></i>
+                                   me-3"></i>
 
-                        {{ $item['name'] }}
+                    {{ $item['name'] }}
 
-                        <i
-                            class="bi bi-chevron-right
+                    <i
+                        class="bi bi-chevron-right
                                    float-end
-                                   text-secondary"
-                        ></i>
+                                   text-secondary"></i>
 
-                    </a>
+                </a>
 
                 @endforeach
 
