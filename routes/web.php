@@ -96,7 +96,7 @@ Route::prefix('digital-pooja')
     ->name('digital-pooja.')
     ->group(function () {
 
-        Route::view('/', 'frontend.digital-pooja.index')
+        Route::view('/', 'frontend.digital-poojas.index')
             ->name('index');
 
         Route::view('/{slug}', 'frontend.digital-pooja.show')
