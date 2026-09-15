@@ -99,22 +99,22 @@ Route::prefix('digital-pooja')
         Route::view('/', 'frontend.digital-poojas.index')
             ->name('index');
 
-        Route::view('/{slug}', 'frontend.digital-pooja.show')
+        Route::view('/{slug}', 'frontend.digital-poojas.show')
             ->name('show');
 
-        Route::view('/{slug}/schedule', 'frontend.digital-pooja.schedule')
+        Route::view('/{slug}/schedule', 'frontend.digital-poojas.schedule')
             ->name('schedule');
 
-        Route::view('/{slug}/join-live', 'frontend.digital-pooja.join-live')
+        Route::view('/{slug}/join-live', 'frontend.digital-poojas.join-live')
             ->name('join-live');
 
-        Route::view('/{slug}/live', 'frontend.digital-pooja.live')
+        Route::view('/{slug}/live', 'frontend.digital-poojas.live')
             ->name('live');
 
-        Route::view('/{slug}/recording', 'frontend.digital-pooja.recording')
+        Route::view('/{slug}/recording', 'frontend.digital-poojas.recording')
             ->name('recording');
 
-        Route::view('/{slug}/booking-success', 'frontend.digital-pooja.booking-success')
+        Route::view('/{slug}/booking-success', 'frontend.digital-poojas.booking-success')
             ->name('booking.success');
     });
 
@@ -231,7 +231,7 @@ Route::prefix('astrology')
         Route::view('/palm-reading', 'frontend.astrology.palm-reading')
             ->name('palm-reading');
 
-        Route::view('/vastu-consultation', 'frontend.astrology.vastu')
+        Route::view('/vastu-consultation', 'frontend.astrology.vastu-consultation')
             ->name('vastu');
 
         Route::view('/booking', 'frontend.astrology.booking')
@@ -249,10 +249,10 @@ Route::prefix('store')
     ->name('store.')
     ->group(function () {
 
-        Route::view('/', 'frontend.store.index')
+        Route::view('/', 'frontend.store.product-listing')
             ->name('index');
 
-        Route::view('/products', 'frontend.store.products')
+        Route::view('/products', 'frontend.store.product-listing')
             ->name('products');
 			
 		Route::view('/wishlist', 'frontend.store.wishlist')
@@ -261,10 +261,10 @@ Route::prefix('store')
         Route::view('/products/{slug}', 'frontend.store.product-details')
             ->name('product');
 
-        Route::view('/category/{slug}', 'frontend.store.category')
+        Route::view('/category/{slug}', 'frontend.store.product-category')
             ->name('category');
 
-        Route::view('/cart', 'frontend.store.cart')
+        Route::view('/cart', 'frontend.store.shopping-cart')
             ->name('cart');
 
         Route::view('/checkout', 'frontend.store.checkout')
@@ -377,7 +377,7 @@ Route::prefix('support')
 |--------------------------------------------------------------------------
 */
 
-Route::view('/search', 'frontend.search.index')
+Route::view('/search', 'frontend.search.results')
     ->name('search');
 
 
@@ -387,37 +387,34 @@ Route::view('/search', 'frontend.search.index')
 |--------------------------------------------------------------------------
 */
 
-Route::view('/pages/about-us', 'frontend.pages.about')
+Route::view('/pages/about-us', 'frontend.cms.about-us')
     ->name('about');
 
-Route::view('/pages/contact-us', 'frontend.pages.contact')
-    ->name('contact');
-
-Route::view('/pages/faq', 'frontend.pages.faq')
+Route::view('/pages/faq', 'frontend.cms.faq')
     ->name('faq');
 
-Route::view('/pages/privacy-policy', 'frontend.pages.privacy-policy')
+Route::view('/pages/privacy-policy', 'frontend.cms.privacy-policy')
     ->name('privacy');
 
-Route::view('/pages/terms-conditions', 'frontend.pages.terms')
+Route::view('/pages/terms-conditions', 'frontend.cms.terms-conditions')
     ->name('terms');
 
-Route::view('/pages/refund-policy', 'frontend.pages.refund-policy')
+Route::view('/pages/refund-policy', 'frontend.cms.refund-policy')
     ->name('refund');
 
-Route::view('/pages/shipping-policy', 'frontend.pages.shipping-policy')
+Route::view('/pages/shipping-policy', 'frontend.cms.shipping-policy')
     ->name('shipping');
 
-Route::view('/pages/disclaimer', 'frontend.pages.disclaimer')
+Route::view('/pages/disclaimer', 'frontend.cms.disclaimer')
     ->name('disclaimer');
 
-Route::view('/pages/careers', 'frontend.pages.careers')
+Route::view('/pages/careers', 'frontend.cms.careers')
     ->name('careers');
 
-Route::view('/pages/testimonials', 'frontend.pages.testimonials')
+Route::view('/pages/testimonials', 'frontend.cms.testimonials')
     ->name('testimonials');
 
-Route::view('/pages/resources', 'frontend.pages.resources')
+Route::view('/pages/resources', 'frontend.cms.resources')
     ->name('resources');
 
 
@@ -431,10 +428,10 @@ Route::prefix('system')
     ->name('system.')
     ->group(function () {
 
-        Route::view('/coming-soon', 'frontend.system.coming-soon')
+        Route::view('/coming-soon', 'frontend.cms.coming-soon')
             ->name('coming-soon');
 
-        Route::view('/maintenance', 'frontend.system.maintenance')
+        Route::view('/maintenance', 'frontend.cms.maintenance')
             ->name('maintenance');
     });
 
@@ -472,13 +469,13 @@ Route::prefix('dashboard')
 		Route::view('/profile/edit', 'frontend.dashboard.edit-profile')
 			->name('profile.edit');
 
-        Route::view('/addresses', 'frontend.dashboard.addresses')
+        Route::view('/addresses', 'frontend.dashboard.address-book')
             ->name('addresses');
 
         Route::view('/addresses/add', 'frontend.dashboard.add-address')
             ->name('addresses.add');
 
-        Route::view('/bookings', 'frontend.dashboard.bookings')
+        Route::view('/bookings', 'frontend.dashboard.my-bookings')
             ->name('bookings');
 
         Route::view('/digital-bookings', 'frontend.dashboard.digital-bookings')

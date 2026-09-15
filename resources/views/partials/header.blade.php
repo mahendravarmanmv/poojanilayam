@@ -40,7 +40,7 @@
 
                     <span class="text-white-50">|</span>
 
-                    <a href="{{ route('contact') }}" class="text-white">
+                    <a href="{{ route('support.contact') }}" class="text-white">
                         Contact
                     </a>
 
