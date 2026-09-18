@@ -923,7 +923,7 @@
                                 >
 
                                     <img
-                                        src="{{ Vite::asset('resources/images/home/' . $pooja['image']) }}"
+                                        src="{{ asset('images/home/' . $pooja['image']) }}"
                                         class="pn-pooja-image
                                                card-img-top"
                                         alt="{{ $pooja['name'] }}"

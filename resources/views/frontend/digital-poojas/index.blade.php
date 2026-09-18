@@ -651,7 +651,7 @@
                 >
 
                     <img
-                        src="{{ Vite::asset('resources/images/home/hero.jpg') }}"
+                        src="{{ asset('images/home/hero.jpg') }}"
                         class="img-fluid
                                w-100
                                object-fit-cover"
@@ -954,7 +954,7 @@
                         >
 
                             <img
-                                src="{{ Vite::asset('resources/images/home/' . $pooja['image']) }}"
+                                src="{{ asset('images/home/' . $pooja['image']) }}"
                                 class="card-img-top
                                        pn-pooja-image
                                        object-fit-cover"
@@ -1603,7 +1603,7 @@
                 >
 
                     <img
-                        src="{{ Vite::asset('resources/images/home/hero.jpg') }}"
+                        src="{{ asset('images/home/hero.jpg') }}"
                         class="img-fluid
                                w-100
                                object-fit-cover"

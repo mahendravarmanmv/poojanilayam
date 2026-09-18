@@ -643,7 +643,7 @@
                     >
 
                         <img
-                            src="{{ Vite::asset('resources/images/home/' . $pooja['image']) }}"
+                            src="{{ asset('images/home/' . $pooja['image']) }}"
                             class="pn-pooja-image
                                    card-img-top"
                             alt="{{ $pooja['name'] }}"
@@ -969,7 +969,7 @@
                     >
 
                         <img
-                            src="{{ Vite::asset('resources/images/home/' . $temple['image']) }}"
+                            src="{{ asset('images/home/' . $temple['image']) }}"
                             class="pn-temple-image
                                    card-img-top"
                             alt="{{ $temple['name'] }}"
@@ -1102,7 +1102,7 @@
                     >
 
                         <img
-                            src="{{ Vite::asset('resources/images/home/' . $priest['image']) }}"
+                            src="{{ asset('images/home/' . $priest['image']) }}"
                             class="rounded-circle
                                    mx-auto
                                    object-fit-cover"
@@ -1260,7 +1260,7 @@
                     <div class="ratio ratio-16x9">
 
                         <img
-    src="{{ Vite::asset('resources/images/home/hero.jpg') }}"
+    src="{{ asset('images/home/hero.jpg') }}"
     class="object-fit-cover"
     alt="Digital Pooja"
     loading="lazy"
@@ -1462,7 +1462,7 @@
                     >
 
                         <img
-                            src="{{ Vite::asset('resources/images/home/' . $product['image']) }}"
+                            src="{{ asset('images/home/' . $product['image']) }}"
                             class="pn-pooja-image
                                    card-img-top"
                             alt="{{ $product['name'] }}"
@@ -1574,7 +1574,7 @@
                 <div class="rounded-5 overflow-hidden">
 
                     <img
-                        src="{{ Vite::asset('resources/images/home/festival.jpg') }}"
+                        src="{{ asset('images/home/festival.jpg') }}"
                         class="img-fluid w-100"
                         alt="Festival Pooja"
                         loading="lazy"
@@ -1779,7 +1779,7 @@
                     >
 
                         <img
-                            src="{{ Vite::asset('resources/images/home/' . $blog['image']) }}"
+                            src="{{ asset('images/home/' . $blog['image']) }}"
                             class="pn-pooja-image
                                    card-img-top"
                             alt="{{ $blog['title'] }}"
