@@ -1260,7 +1260,7 @@
                     <div class="ratio ratio-16x9">
 
                         <img
-    src="{{ asset('images/home/hero.jpg') }}"
+    src="{{ asset('images/home/heroo.jpg') }}"
     class="object-fit-cover"
     alt="Digital Pooja"
     loading="lazy"
