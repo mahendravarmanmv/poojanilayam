@@ -31,7 +31,7 @@
             'old_price' => 399,
             'rating' => 4.9,
             'reviews' => 84,
-            'image' => 'images/home/hero.jpg',
+            'image' => 'images/home/hero.webp',
             'stock' => true,
             'stock_text' => 'In Stock',
             'badge' => 'Bestseller'
@@ -44,7 +44,7 @@
             'old_price' => 699,
             'rating' => 4.8,
             'reviews' => 67,
-            'image' => 'images/home/hero.jpg',
+            'image' => 'images/home/hero.webp',
             'stock' => true,
             'stock_text' => 'In Stock',
             'badge' => 'Popular'
@@ -57,7 +57,7 @@
             'old_price' => 299,
             'rating' => 4.9,
             'reviews' => 112,
-            'image' => 'images/home/hero.jpg',
+            'image' => 'images/home/hero.webp',
             'stock' => true,
             'stock_text' => 'In Stock',
             'badge' => 'Top Rated'
@@ -70,7 +70,7 @@
             'old_price' => 549,
             'rating' => 4.7,
             'reviews' => 46,
-            'image' => 'images/home/hero.jpg',
+            'image' => 'images/home/hero.webp',
             'stock' => false,
             'stock_text' => 'Currently Unavailable',
             'badge' => ''

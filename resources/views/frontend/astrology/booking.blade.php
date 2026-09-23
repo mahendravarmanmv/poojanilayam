@@ -39,7 +39,7 @@
             'reviews' => '128',
             'price' => '₹501',
             'status' => 'Available',
-            'image' => 'images/home/hero.jpg'
+            'image' => 'images/home/hero.webp'
         ],
 
         [
@@ -50,7 +50,7 @@
             'reviews' => '96',
             'price' => '₹601',
             'status' => 'Available',
-            'image' => 'images/home/hero.jpg'
+            'image' => 'images/home/hero.webp'
         ],
 
         [
@@ -61,7 +61,7 @@
             'reviews' => '154',
             'price' => '₹751',
             'status' => 'Available',
-            'image' => 'images/home/hero.jpg'
+            'image' => 'images/home/hero.webp'
         ]
 
     ];
@@ -336,7 +336,7 @@
                     <div class="ratio ratio-4x3">
 
                         <img
-                            src="{{ asset('images/home/hero.jpg') }}"
+                            src="{{ asset('images/home/hero.webp') }}"
                             class="object-fit-cover"
                             alt="Astrology consultation"
                             loading="eager"
@@ -1066,7 +1066,7 @@
                                         >
 
                                             <img
-                                                src="{{ asset('images/home/hero.jpg') }}"
+                                                src="{{ asset('images/home/hero.webp') }}"
                                                 class="w-100 h-100 object-fit-cover"
                                                 alt="Selected astrologer"
                                             >

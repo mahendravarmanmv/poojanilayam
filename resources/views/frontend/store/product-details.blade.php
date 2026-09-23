@@ -53,14 +53,14 @@
 
         'stock_text' => 'In Stock',
 
-        'main_image' => 'images/home/hero.jpg',
+        'main_image' => 'images/home/hero.webp',
 
         'images' => [
 
-            'images/home/hero.jpg',
-            'images/home/hero.jpg',
-            'images/home/hero.jpg',
-            'images/home/hero.jpg'
+            'images/home/hero.webp',
+            'images/home/hero.webp',
+            'images/home/hero.webp',
+            'images/home/hero.webp'
 
         ],
 
@@ -1631,7 +1631,7 @@
                         <div class="ratio ratio-1x1">
 
                             <img
-                                src="{{ asset('images/home/hero.jpg') }}"
+                                src="{{ asset('images/home/hero.webp') }}"
                                 class="object-fit-cover"
                                 alt="{{ $related['name'] }}"
                                 loading="lazy"

@@ -30,7 +30,7 @@
             'Discover thoughtfully selected pooja essentials
              for daily worship, festivals and sacred occasions.',
 
-        'image' => 'images/home/hero.jpg',
+        'image' => 'images/home/hero.webp',
 
         'product_count' => 48
 
@@ -99,7 +99,7 @@
             'old_price' => 399,
             'rating' => 4.9,
             'reviews' => 84,
-            'image' => 'images/home/hero.jpg',
+            'image' => 'images/home/hero.webp',
             'badge' => 'Bestseller'
         ],
 
@@ -110,7 +110,7 @@
             'old_price' => 699,
             'rating' => 4.8,
             'reviews' => 67,
-            'image' => 'images/home/hero.jpg',
+            'image' => 'images/home/hero.webp',
             'badge' => 'Popular'
         ],
 
@@ -121,7 +121,7 @@
             'old_price' => 249,
             'rating' => 4.7,
             'reviews' => 53,
-            'image' => 'images/home/hero.jpg',
+            'image' => 'images/home/hero.webp',
             'badge' => ''
         ],
 
@@ -132,7 +132,7 @@
             'old_price' => 299,
             'rating' => 4.9,
             'reviews' => 112,
-            'image' => 'images/home/hero.jpg',
+            'image' => 'images/home/hero.webp',
             'badge' => 'Top Rated'
         ],
 
@@ -143,7 +143,7 @@
             'old_price' => 549,
             'rating' => 4.7,
             'reviews' => 46,
-            'image' => 'images/home/hero.jpg',
+            'image' => 'images/home/hero.webp',
             'badge' => ''
         ],
 
@@ -154,7 +154,7 @@
             'old_price' => 999,
             'rating' => 4.8,
             'reviews' => 91,
-            'image' => 'images/home/hero.jpg',
+            'image' => 'images/home/hero.webp',
             'badge' => 'Featured'
         ],
 
@@ -165,7 +165,7 @@
             'old_price' => 849,
             'rating' => 4.6,
             'reviews' => 38,
-            'image' => 'images/home/hero.jpg',
+            'image' => 'images/home/hero.webp',
             'badge' => ''
         ],
 
@@ -176,7 +176,7 @@
             'old_price' => 219,
             'rating' => 4.8,
             'reviews' => 74,
-            'image' => 'images/home/hero.jpg',
+            'image' => 'images/home/hero.webp',
             'badge' => 'Popular'
         ]
 

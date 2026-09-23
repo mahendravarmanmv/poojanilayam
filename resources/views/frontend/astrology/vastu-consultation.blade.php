@@ -310,7 +310,7 @@
                         <div class="ratio ratio-4x3">
 
                             <img
-                                src="{{ asset('images/home/hero.jpg') }}"
+                                src="{{ asset('images/home/hero.webp') }}"
                                 class="object-fit-cover"
                                 alt="Vastu consultation"
                                 loading="eager"

@@ -556,7 +556,7 @@
                         >
 
                             <img
-                                src="{{ Vite::asset('resources/images/home/hero.jpg') }}"
+                                src="{{ asset('images/home/hero.webp') }}"
                                 class="object-fit-cover"
                                 alt="Astrology consultation"
                                 loading="eager"

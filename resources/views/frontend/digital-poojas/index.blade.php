@@ -651,7 +651,7 @@
                 >
 
                     <img
-                        src="{{ asset('images/home/hero.jpg') }}"
+                        src="{{ asset('images/home/hero.webp') }}"
                         class="img-fluid
                                w-100
                                object-fit-cover"
@@ -1603,7 +1603,7 @@
                 >
 
                     <img
-                        src="{{ asset('images/home/hero.jpg') }}"
+                        src="{{ asset('images/home/hero.webp') }}"
                         class="img-fluid
                                w-100
                                object-fit-cover"

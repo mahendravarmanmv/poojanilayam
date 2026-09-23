@@ -47,7 +47,7 @@
             'category' => 'Pooja Samagri',
             'price' => 999,
             'quantity' => 1,
-            'image' => 'images/home/hero.jpg'
+            'image' => 'images/home/hero.webp'
         ],
 
         [
@@ -55,7 +55,7 @@
             'category' => 'Pooja Essentials',
             'price' => 299,
             'quantity' => 2,
-            'image' => 'images/home/hero.jpg'
+            'image' => 'images/home/hero.webp'
         ],
 
         [
@@ -63,7 +63,7 @@
             'category' => 'Incense & Dhoop',
             'price' => 249,
             'quantity' => 1,
-            'image' => 'images/home/hero.jpg'
+            'image' => 'images/home/hero.webp'
         ]
 
     ];

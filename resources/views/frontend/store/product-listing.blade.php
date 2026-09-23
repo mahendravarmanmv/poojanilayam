@@ -68,7 +68,7 @@
             'old_price' => 399,
             'rating' => 4.8,
             'reviews' => 84,
-            'image' => 'images/home/hero.jpg',
+            'image' => 'images/home/hero.webp',
             'badge' => 'Bestseller',
             'stock' => true
         ],
@@ -81,7 +81,7 @@
             'old_price' => 249,
             'rating' => 4.7,
             'reviews' => 61,
-            'image' => 'images/home/hero.jpg',
+            'image' => 'images/home/hero.webp',
             'badge' => 'Popular',
             'stock' => true
         ],
@@ -94,7 +94,7 @@
             'old_price' => 299,
             'rating' => 4.9,
             'reviews' => 112,
-            'image' => 'images/home/hero.jpg',
+            'image' => 'images/home/hero.webp',
             'badge' => 'Top Rated',
             'stock' => true
         ],
@@ -107,7 +107,7 @@
             'old_price' => 999,
             'rating' => 4.9,
             'reviews' => 147,
-            'image' => 'images/home/hero.jpg',
+            'image' => 'images/home/hero.webp',
             'badge' => 'Featured',
             'stock' => true
         ],
@@ -120,7 +120,7 @@
             'old_price' => 699,
             'rating' => 4.6,
             'reviews' => 53,
-            'image' => 'images/home/hero.jpg',
+            'image' => 'images/home/hero.webp',
             'badge' => '',
             'stock' => true
         ],
@@ -133,7 +133,7 @@
             'old_price' => 449,
             'rating' => 4.9,
             'reviews' => 95,
-            'image' => 'images/home/hero.jpg',
+            'image' => 'images/home/hero.webp',
             'badge' => 'Recommended',
             'stock' => true
         ],
@@ -146,7 +146,7 @@
             'old_price' => 549,
             'rating' => 4.7,
             'reviews' => 46,
-            'image' => 'images/home/hero.jpg',
+            'image' => 'images/home/hero.webp',
             'badge' => '',
             'stock' => true
         ],
@@ -159,7 +159,7 @@
             'old_price' => 1099,
             'rating' => 4.8,
             'reviews' => 38,
-            'image' => 'images/home/hero.jpg',
+            'image' => 'images/home/hero.webp',
             'badge' => 'Gift Choice',
             'stock' => true
         ]
@@ -382,7 +382,7 @@
                     <div class="ratio ratio-4x3">
 
                         <img
-                            src="{{ asset('images/home/hero.jpg') }}"
+                            src="{{ asset('images/home/hero.webp') }}"
                             class="object-fit-cover"
                             alt="Pooja store products"
                             loading="eager"

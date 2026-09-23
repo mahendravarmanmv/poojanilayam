@@ -27,7 +27,7 @@
             'name' => 'Sri Venkateswara Temple',
             'location' => 'Tirumala, Andhra Pradesh',
             'description' => 'Support temple activities, worship services and spiritual initiatives.',
-            'image' => 'images/home/hero.jpg',
+            'image' => 'images/home/hero.webp',
             'tag' => 'Temple Support'
         ],
 
@@ -35,7 +35,7 @@
             'name' => 'Sri Durga Devi Temple',
             'location' => 'Hyderabad, Telangana',
             'description' => 'Contribute towards devotional activities and temple services.',
-            'image' => 'images/home/hero.jpg',
+            'image' => 'images/home/hero.webp',
             'tag' => 'Temple Seva'
         ],
 
@@ -43,7 +43,7 @@
             'name' => 'Sri Shiva Temple',
             'location' => 'Varanasi, Uttar Pradesh',
             'description' => 'Support sacred worship, temple maintenance and spiritual activities.',
-            'image' => 'images/home/hero.jpg',
+            'image' => 'images/home/hero.webp',
             'tag' => 'Temple Development'
         ]
 
@@ -339,7 +339,7 @@
                     >
 
                         <img
-                            src="{{ asset('images/home/hero.jpg') }}"
+                            src="{{ asset('images/home/hero.webp') }}"
                             class="w-100
                                    h-100
                                    object-fit-cover"
@@ -1424,7 +1424,7 @@
                     <div class="ratio ratio-4x3">
 
                         <img
-                            src="{{ asset('images/home/hero.jpg') }}"
+                            src="{{ asset('images/home/hero.webp') }}"
                             class="w-100
                                    h-100
                                    object-fit-cover"

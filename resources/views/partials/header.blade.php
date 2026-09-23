@@ -55,62 +55,27 @@
 
     {{-- Main Navigation --}}
     <nav
-        class="navbar
-               navbar-expand-xl
-               bg-pn-cream
-               border-bottom">
+    class="navbar
+           navbar-expand-xl
+           bg-pn-cream
+           border-bottom
+           py-0">
 
-        <div class="container py-2">
+        <div class="container py-0">
 
 
             {{-- Brand --}}
-            <a
-                href="{{ route('home') }}"
-                class="navbar-brand
-                       d-flex
-                       align-items-center
-                       gap-2">
+<a
+    href="{{ route('home') }}"
+    class="navbar-brand d-flex align-items-center">
 
-                <span
-                    class="d-flex
-                           align-items-center
-                           justify-content-center
-                           rounded-3
-                           bg-white
-                           border
-                           border-warning-subtle
-                           text-pn-primary
-                           fs-4"
-                    style="width:46px;height:46px;">
+    <img
+        src="{{ asset('images/pooja-nilayam-logo.png') }}"
+        alt="Pooja Nilayam"
+        class="img-fluid"
+        style="height: 80px; width: auto;">
 
-                    <i class="bi bi-flower1"></i>
-
-                </span>
-
-
-                <span>
-
-                    <span
-                        class="d-block
-                               font-serif
-                               fw-bold
-                               fs-4
-                               text-pn-brown
-                               lh-1">
-
-                        Pooja Nilayam
-
-                    </span>
-
-                    <small class="text-secondary">
-
-                        Bringing Devotion Closer
-
-                    </small>
-
-                </span>
-
-            </a>
+</a>
 
 
             {{-- Mobile Actions --}}
@@ -238,7 +203,7 @@
                     </li>
 
 
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
 
                         <a
                             href="{{ route('temple.index') }}"
@@ -248,7 +213,7 @@
                             Temples
                         </a>
 
-                    </li>
+                    </li> --}}
 
 
                     <li class="nav-item">

@@ -124,22 +124,22 @@
 
     $temples = [
         [
-            'image' => 'temple-1.jpg',
+            'image' => 'popular-temples/tirumala-tirupati.webp',
             'name' => 'Tirumala Tirupati',
             'location' => 'Tirupati, Andhra Pradesh'
         ],
         [
-            'image' => 'temple-2.jpg',
+            'image' => 'popular-temples/srisilam.webp',
             'name' => 'Srisailam Mallikarjuna',
             'location' => 'Srisailam, Andhra Pradesh'
         ],
         [
-            'image' => 'temple-3.jpg',
+            'image' => 'popular-temples/kanaka-durga.webp',
             'name' => 'Kanaka Durga Temple',
             'location' => 'Vijayawada, Andhra Pradesh'
         ],
         [
-            'image' => 'temple-4.jpg',
+            'image' => 'popular-temples/yadadri-lakshmi-narasimha.webp',
             'name' => 'Yadadri Lakshmi Narasimha',
             'location' => 'Yadadri, Telangana'
         ]
@@ -148,28 +148,28 @@
 
     $priests = [
         [
-            'image' => 'priest-1.jpg',
+            'image' => 'priests/priest-1.webp',
             'name' => 'Sri Venkatesh Sharma',
             'speciality' => 'Vedic Rituals',
             'experience' => '18+ Years',
             'rating' => '4.9'
         ],
         [
-            'image' => 'priest-2.jpg',
+            'image' => 'priests/priest-2.webp',
             'name' => 'Sri Ramesh Shastri',
             'speciality' => 'Homams & Poojas',
             'experience' => '15+ Years',
             'rating' => '4.9'
         ],
         [
-            'image' => 'priest-3.jpg',
+            'image' => 'priests/priest-3.webp',
             'name' => 'Sri Suresh Bhatt',
             'speciality' => 'Temple Rituals',
             'experience' => '20+ Years',
             'rating' => '4.8'
         ],
         [
-            'image' => 'priest-4.jpg',
+            'image' => 'priests/priest-4.webp',
             'name' => 'Sri Anand Sharma',
             'speciality' => 'Vedic Astrology',
             'experience' => '16+ Years',
@@ -190,22 +190,22 @@
 
     $products = [
         [
-            'image' => 'product-1.jpg',
+            'image' => 'pooja-samagri/pooja-samagri.webp',
             'name' => 'Pooja Kit',
             'price' => '₹499'
         ],
         [
-            'image' => 'product-2.jpg',
+            'image' => 'pooja-samagri/brassdiya-set.webp',
             'name' => 'Brass Diya Set',
             'price' => '₹699'
         ],
         [
-            'image' => 'product-3.jpg',
+            'image' => 'pooja-samagri/pancha-patra-set.webp',
             'name' => 'Panchapatra Set',
             'price' => '₹899'
         ],
         [
-            'image' => 'product-4.jpg',
+            'image' => 'pooja-samagri/premium-pooja-box.webp',
             'name' => 'Premium Pooja Box',
             'price' => '₹1,299'
         ]
@@ -1257,16 +1257,16 @@
 
                 <div class="col-lg-6">
 
-                    <div class="ratio ratio-16x9">
+                   <div class="w-100 h-100">
 
-                        <img
-    src="{{ asset('images/home/heroo.jpg') }}"
-    class="object-fit-cover"
-    alt="Digital Pooja"
-    loading="lazy"
->
+    <img
+        src="{{ asset('images/home/hero.webp') }}"
+        class="w-100 h-100 digital-pooja-image"
+        alt="Digital Pooja"
+        loading="lazy"
+    >
 
-                    </div>
+</div>
 
                 </div>
 

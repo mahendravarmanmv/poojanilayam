@@ -420,7 +420,7 @@
                         >
 
                             <img
-                                src="{{ asset('images/home/hero.jpg') }}"
+                                src="{{ asset('images/home/hero.webp') }}"
                                 class="object-fit-cover"
                                 alt="Horoscope and astrology"
                                 loading="eager"

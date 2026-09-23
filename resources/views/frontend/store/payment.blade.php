@@ -46,21 +46,21 @@
             'name' => 'Premium Pooja Samagri Kit',
             'price' => 999,
             'quantity' => 1,
-            'image' => 'images/home/hero.jpg'
+            'image' => 'images/home/hero.webp'
         ],
 
         [
             'name' => 'Premium Brass Diya',
             'price' => 299,
             'quantity' => 2,
-            'image' => 'images/home/hero.jpg'
+            'image' => 'images/home/hero.webp'
         ],
 
         [
             'name' => 'Sandalwood Dhoop',
             'price' => 249,
             'quantity' => 1,
-            'image' => 'images/home/hero.jpg'
+            'image' => 'images/home/hero.webp'
         ]
 
     ];

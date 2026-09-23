@@ -131,8 +131,8 @@ a {
             rgba(251, 246, 236, 0.55) 62%,
             rgba(251, 246, 236, 0.08) 100%
         ),
-        url("/images/home/hero.jpg")
-        center center /
+        url("/images/home/hero.webp")
+        right center /
         cover no-repeat;
 }
 
@@ -259,7 +259,7 @@ a {
                 rgba(251, 246, 236, 0.90) 52%,
                 rgba(251, 246, 236, 0.30) 100%
             ),
-            url("/images/home/hero.jpg")
+            url("/images/home/hero.webp")
             center center /
             cover
             no-repeat;

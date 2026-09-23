@@ -32,7 +32,7 @@
             'price' => 999,
             'old_price' => 1299,
             'quantity' => 1,
-            'image' => 'images/home/hero.jpg',
+            'image' => 'images/home/hero.webp',
             'stock' => true
         ],
 
@@ -44,7 +44,7 @@
             'price' => 299,
             'old_price' => 399,
             'quantity' => 2,
-            'image' => 'images/home/hero.jpg',
+            'image' => 'images/home/hero.webp',
             'stock' => true
         ],
 
@@ -56,7 +56,7 @@
             'price' => 249,
             'old_price' => 299,
             'quantity' => 1,
-            'image' => 'images/home/hero.jpg',
+            'image' => 'images/home/hero.webp',
             'stock' => true
         ]
 
