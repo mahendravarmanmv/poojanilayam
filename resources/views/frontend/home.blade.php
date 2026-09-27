@@ -1260,7 +1260,7 @@
                    <div class="w-100 h-100">
 
     <img
-        src="{{ asset('images/home/hero.webp') }}"
+        src="{{ asset('images/home/hero2.jpg') }}"
         class="w-100 h-100 digital-pooja-image"
         alt="Digital Pooja"
         loading="lazy"
