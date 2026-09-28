@@ -316,13 +316,30 @@
                     </a>
 
 
-                    <a
-                        href="{{ route('auth.login') }}"
-                        class="btn btn-pn
-                               ms-2
-                               px-4">
-                        Login
-                    </a>
+                    @auth
+                        <a
+                            href="{{ route('dashboard.index') }}"
+                            class="btn btn-pn-outline
+                                   ms-2
+                                   px-4">
+                            Dashboard
+                        </a>
+
+                        <form method="POST" action="{{ route('auth.logout') }}" class="d-inline">
+                            @csrf
+                            <button type="submit" class="btn btn-pn ms-1 px-4">
+                                Logout
+                            </button>
+                        </form>
+                    @else
+                        <a
+                            href="{{ route('auth.login') }}"
+                            class="btn btn-pn
+                                   ms-2
+                                   px-4">
+                            Login
+                        </a>
+                    @endauth
 
                 </div>
 
@@ -360,13 +377,29 @@
 
         <div class="offcanvas-body bg-pn-cream">
 
-            <a
-                href="{{ route('auth.login') }}"
-                class="btn btn-pn
-                       w-100
-                       mb-4">
-                Login / Register
-            </a>
+            @auth
+                <a
+                    href="{{ route('dashboard.index') }}"
+                    class="btn btn-pn-outline
+                           w-100
+                           mb-2">
+                    Dashboard
+                </a>
+                <form method="POST" action="{{ route('auth.logout') }}" class="mb-4">
+                    @csrf
+                    <button type="submit" class="btn btn-pn w-100">
+                        Logout
+                    </button>
+                </form>
+            @else
+                <a
+                    href="{{ route('auth.login') }}"
+                    class="btn btn-pn
+                           w-100
+                           mb-4">
+                    Login / Register
+                </a>
+            @endauth
 
 
             <div class="list-group list-group-flush">

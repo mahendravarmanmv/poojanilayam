@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class PaymentMethod extends Model
 {
@@ -19,6 +17,5 @@ class PaymentMethod extends Model
     protected $casts = ['configuration'=>'array','supports_refund'=>'boolean','active'=>'boolean','sort_order'=>'integer'];
 
     public function payments(): HasMany { return $this->hasMany(Payment::class); }
-    public function notificationDeliveries(): HasMany { return $this->hasMany(NotificationDelivery::class); }
 
 }

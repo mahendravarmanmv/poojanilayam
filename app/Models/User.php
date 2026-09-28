@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
@@ -63,19 +64,14 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class, 'role_user');
     }
 
-    public function permissions(): BelongsToMany
+    public function permissions(): Builder
     {
-        return $this->belongsToMany(
-            Permission::class,
-            'role_user',
-            'user_id',
-            'role_id'
-        )->join(
-            'permission_role',
-            'roles.id',
-            '=',
-            'permission_role.role_id'
-        );
+        return Permission::query()
+            ->select('permissions.*')
+            ->join('permission_role', 'permission_role.permission_id', '=', 'permissions.id')
+            ->join('role_user', 'role_user.role_id', '=', 'permission_role.role_id')
+            ->where('role_user.user_id', $this->getKey())
+            ->distinct();
     }
 
     public function customerProfile(): HasOne

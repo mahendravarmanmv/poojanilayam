@@ -29,29 +29,7 @@ Route::view('/', 'frontend.home')
 |--------------------------------------------------------------------------
 */
 
-Route::prefix('auth')
-    ->name('auth.')
-    ->group(function () {
-
-        Route::view('/login', 'frontend.auth.login')
-            ->name('login');
-
-        Route::view('/register', 'frontend.auth.register')
-            ->name('register');
-
-        Route::view('/forgot-password', 'frontend.auth.forgot-password')
-            ->name('forgot-password');
-
-        Route::view('/reset-password', 'frontend.auth.reset-password')
-            ->name('reset-password');
-
-        Route::view('/verify-email', 'frontend.auth.verify-email')
-            ->name('verify-email');
-			
-		Route::view('/otp-verification', 'frontend.auth.otp-verification')
-			->name('otp-verification');
-    });
-
+require __DIR__ . '/auth-web.php';
 
 /*
 |--------------------------------------------------------------------------
@@ -450,61 +428,11 @@ Route::view('/sitemap', 'frontend.sitemap')
 |--------------------------------------------------------------------------
 | Customer Dashboard
 |--------------------------------------------------------------------------
-|
-| Authentication middleware will be added during backend/auth phase.
-| For now these are static UI routes.
-|--------------------------------------------------------------------------
 */
 
-Route::prefix('dashboard')
-    ->name('dashboard.')
-    ->group(function () {
-
-        Route::view('/', 'frontend.dashboard.index')
-            ->name('index');
-
-        Route::view('/profile', 'frontend.dashboard.profile')
-            ->name('profile');
-			
-		Route::view('/profile/edit', 'frontend.dashboard.edit-profile')
-			->name('profile.edit');
-
-        Route::view('/addresses', 'frontend.dashboard.address-book')
-            ->name('addresses');
-
-        Route::view('/addresses/add', 'frontend.dashboard.add-address')
-            ->name('addresses.add');
-
-        Route::view('/bookings', 'frontend.dashboard.my-bookings')
-            ->name('bookings');
-
-        Route::view('/digital-bookings', 'frontend.dashboard.digital-bookings')
-            ->name('digital-bookings');
-
-        Route::view('/orders', 'frontend.dashboard.orders')
-            ->name('orders');
-
-        Route::view('/wishlist', 'frontend.dashboard.wishlist')
-            ->name('wishlist');
-
-        Route::view('/notifications', 'frontend.dashboard.notifications')
-            ->name('notifications');
-
-        Route::view('/notifications/{notification}', 'frontend.dashboard.notification-details')
-            ->name('notifications.show');
-
-        Route::view('/reviews', 'frontend.dashboard.reviews')
-            ->name('reviews');
-
-        Route::view('/coupons', 'frontend.dashboard.coupons')
-            ->name('coupons');
-
-        Route::view('/wallet', 'frontend.dashboard.wallet')
-            ->name('wallet');
-
-        Route::view('/change-password', 'frontend.dashboard.change-password')
-            ->name('change-password');
-    });
+require __DIR__ . '/customer-dashboard.php';
+require __DIR__ . '/customer-security.php';
+require __DIR__ . '/customer-family-members.php';
 
 
 /*
