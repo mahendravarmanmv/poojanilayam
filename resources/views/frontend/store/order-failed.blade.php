@@ -115,7 +115,7 @@
                 <li class="breadcrumb-item">
 
                     <a
-                        href="#"
+                        href="{{ route('store.index') }}"
                         class="text-pn-primary"
                     >
                         Store
@@ -127,7 +127,7 @@
                 <li class="breadcrumb-item">
 
                     <a
-                        href="#"
+                        href="{{ route('store.checkout') }}"
                         class="text-pn-primary"
                     >
                         Checkout
@@ -272,7 +272,7 @@
                     >
 
                         <a
-                            href="#"
+                            href="{{ route('store.payment') }}"
                             class="btn
                                    btn-pn
                                    btn-lg
@@ -289,7 +289,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('store.cart') }}"
                             class="btn
                                    btn-pn-outline
                                    btn-lg
@@ -772,7 +772,7 @@
 
 
                             <a
-                                href="#"
+                                href="{{ route('store.payment') }}"
                                 class="btn
                                        btn-pn"
                             >
@@ -1159,7 +1159,7 @@
                         >
 
                             <a
-                                href="#"
+                                href="{{ route('store.payment') }}"
                                 class="btn
                                        btn-pn
                                        btn-lg"
@@ -1175,7 +1175,7 @@
 
 
                             <a
-                                href="#"
+                                href="{{ route('store.cart') }}"
                                 class="btn
                                        btn-pn-outline"
                             >
@@ -1256,7 +1256,7 @@
 
 
                                 <a
-                                    href="#"
+                                    href="{{ route('support.contact') }}"
                                     class="small
                                            text-pn-primary
                                            fw-semibold
@@ -1570,7 +1570,7 @@
                 >
 
                     <a
-                        href="#"
+                        href="{{ route('store.cart') }}"
                         class="btn
                                btn-warning
                                text-dark

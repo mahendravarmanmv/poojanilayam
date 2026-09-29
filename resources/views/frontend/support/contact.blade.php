@@ -1337,7 +1337,7 @@
 
 
                                     <a
-                                        href="#"
+                                        href="{{ route('support.raise-ticket') }}"
                                         class="btn
                                                btn-sm
                                                btn-pn-outline"
@@ -1449,7 +1449,7 @@
 
 
                             <a
-                                href="#"
+                                href="https://www.google.com/maps/search/?api=1&query={{ urlencode('Pooja Nilayam Support Office') }}" target="_blank" rel="noopener noreferrer"
                                 class="btn
                                        btn-sm
                                        btn-pn-outline"
@@ -1707,7 +1707,7 @@
                     >
 
                         <a
-                            href="#"
+                            href="{{ route('support.help-center') }}"
                             class="btn
                                    btn-warning
                                    text-dark

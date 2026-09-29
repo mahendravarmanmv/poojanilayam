@@ -276,7 +276,7 @@
                 >
 
                     <a
-                        href="{{ url('/poojas') }}"
+                        href="{{ route('pooja.index') }}"
                         class="btn btn-pn"
                     >
 
@@ -290,7 +290,7 @@
 
 
                     <a
-                        href="{{ url('/contact-us') }}"
+                        href="{{ route('support.contact') }}"
                         class="btn btn-pn-outline"
                     >
 
@@ -886,7 +886,7 @@
 
 
                         <a
-                            href="{{ url('/digital-pooja') }}"
+                            href="{{ route('digital-pooja.index') }}"
                             class="btn
                                    btn-warning
                                    text-dark

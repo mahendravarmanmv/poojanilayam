@@ -111,7 +111,7 @@
                 <li class="breadcrumb-item">
 
                     <a
-                        href="#"
+                        href="{{ route('store.index') }}"
                         class="text-pn-primary"
                     >
                         Store
@@ -766,7 +766,7 @@
                 <div class="mt-4">
 
                     <a
-                        href="#"
+                        href="{{ route('store.index') }}"
                         class="btn
                                btn-pn-outline"
                     >
@@ -1054,7 +1054,7 @@
                         <div class="d-grid">
 
                             <a
-                                href="#"
+                                href="{{ route('store.checkout') }}"
                                 class="btn
                                        btn-pn
                                        btn-lg"
@@ -1390,7 +1390,7 @@
 
 
             <a
-                href="#"
+                href="{{ route('store.index') }}"
                 class="btn btn-pn"
             >
 

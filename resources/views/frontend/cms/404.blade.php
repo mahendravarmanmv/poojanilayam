@@ -283,7 +283,7 @@
 
 
                     <a
-                        href="{{ url('/contact-us') }}"
+                        href="{{ route('support.contact') }}"
                         class="btn
                                btn-pn-outline
                                btn-lg
@@ -430,7 +430,7 @@
 
 
                     <a
-                        href="{{ url('/contact-us') }}"
+                        href="{{ route('support.contact') }}"
                         class="small
                                fw-semibold
                                text-pn-primary

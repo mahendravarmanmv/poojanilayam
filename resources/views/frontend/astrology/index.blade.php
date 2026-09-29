@@ -295,7 +295,7 @@
                 {{-- Search --}}
 
                 <form
-                    action="#"
+                    action="{{ route('astrology.index') }}"
                     method="GET"
                 >
 
@@ -717,7 +717,7 @@
                 <div class="col">
 
                     <a
-                        href="#"
+                        href="{{ match (Str::slug($service['title'])) { 'horoscope' => route('astrology.horoscope'), 'kundli' => route('astrology.kundli'), 'match-making' => route('astrology.match-making'), 'numerology' => route('astrology.numerology'), 'palm-reading' => route('astrology.palm-reading'), 'vastu-consultation' => route('astrology.vastu'), default => route('astrology.index') } }}"
                         class="card
                                border
                                border-warning-subtle
@@ -965,7 +965,7 @@
 
 
                             <a
-                                href="#"
+                                href="{{ match (Str::slug($service['title'])) { 'horoscope' => route('astrology.horoscope'), 'kundli' => route('astrology.kundli'), 'match-making' => route('astrology.match-making'), 'numerology' => route('astrology.numerology'), 'palm-reading' => route('astrology.palm-reading'), 'vastu-consultation' => route('astrology.vastu'), default => route('astrology.index') } }}"
                                 class="btn
                                        btn-pn-outline
                                        w-100"
@@ -1209,7 +1209,7 @@
 
 
             <a
-                href="#"
+                href="{{ route('astrology.index') }}"
                 class="btn
                        btn-pn-outline
                        align-self-start
@@ -1406,7 +1406,7 @@
                             >
 
                                 <a
-                                    href="#"
+                                    href="{{ route('astrology.index') }}"
                                     class="btn
                                            btn-pn-outline"
                                 >
@@ -1417,7 +1417,7 @@
 
 
                                 <a
-                                    href="#"
+                                    href="{{ route('astrology.booking') }}"
                                     class="btn
                                            btn-pn"
                                 >

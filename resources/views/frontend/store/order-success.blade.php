@@ -133,7 +133,7 @@
                 <li class="breadcrumb-item">
 
                     <a
-                        href="#"
+                        href="{{ route('store.index') }}"
                         class="text-pn-primary"
                     >
 
@@ -1521,7 +1521,7 @@
                         >
 
                             <a
-                                href="#"
+                                href="{{ route('orders.show', ['order' => $order['number']]) }}"
                                 class="btn
                                        btn-pn
                                        btn-lg"
@@ -1537,7 +1537,7 @@
 
 
                             <a
-                                href="#"
+                                href="{{ route('store.index') }}"
                                 class="btn
                                        btn-pn-outline"
                             >
@@ -1565,7 +1565,7 @@
                                 Need help with your order?
 
                                 <a
-                                    href="#"
+                                    href="{{ route('support.contact') }}"
                                     class="text-pn-primary
                                            fw-semibold
                                            text-decoration-none"
@@ -1645,7 +1645,7 @@
 
 
                 <a
-                    href="#"
+                    href="{{ route('store.index') }}"
                     class="btn
                            btn-warning
                            text-dark

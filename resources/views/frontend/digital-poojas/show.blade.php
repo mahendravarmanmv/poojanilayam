@@ -275,7 +275,7 @@
                 <li class="breadcrumb-item">
 
                     <a
-                        href="#"
+                        href="{{ route('digital-pooja.index') }}"
                         class="text-pn-primary"
                     >
                         Digital Pooja
@@ -756,7 +756,7 @@
                 >
 
                     <a
-                        href="#"
+                        href="{{ route('digital-pooja.schedule', ['slug' => Str::slug($pooja['name'])]) }}"
                         class="btn
                                btn-pn
                                btn-lg
@@ -2040,7 +2040,7 @@
 
 
             <a
-                href="#"
+                href="{{ route('digital-pooja.index') }}"
                 class="btn btn-pn-outline"
             >
 
@@ -2130,7 +2130,7 @@
 
 
                                 <a
-                                    href="#"
+                                    href="{{ route('digital-pooja.show', ['slug' => Str::slug($related['name'])]) }}"
                                     class="btn
                                            btn-pn
                                            btn-sm"
@@ -2209,7 +2209,7 @@
 
 
                 <a
-                    href="#"
+                    href="{{ route('digital-pooja.schedule', ['slug' => Str::slug($pooja['name'])]) }}"
                     class="btn
                            btn-warning
                            text-dark

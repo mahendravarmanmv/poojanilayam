@@ -134,6 +134,22 @@ class BookingController extends Controller
     /**
      * Lightweight endpoint for AJAX slot refresh when temple/date changes.
      */
+    public function pujaris(Request $request, string $slug): JsonResponse
+    {
+        $validated = $request->validate(['temple_pooja_id' => ['required', 'integer']]);
+        $pooja = Pooja::query()->where('slug', $slug)->where('is_active', true)->firstOrFail();
+        $templePooja = TemplePooja::query()->whereKey($validated['temple_pooja_id'])->where('pooja_id', $pooja->id)->where('status', 'active')->firstOrFail();
+        $pujaris = PujariProfile::query()->where('is_active', true)->where('verification_status', 'approved')
+            ->whereHas('templeAssignments', function ($query) use ($templePooja) {
+                $query->where('temple_id', $templePooja->temple_id)->where('status', 'active')
+                    ->where(function ($query) { $query->whereNull('ended_at')->orWhere('ended_at', '>=', now()); });
+            })->orderBy('display_name')->get(['id', 'display_name', 'experience_years', 'bio']);
+        return response()->json(['pujaris' => $pujaris->map(fn ($pujari) => [
+            'id' => $pujari->id, 'display_name' => $pujari->display_name,
+            'experience_years' => $pujari->experience_years, 'bio' => $pujari->bio,
+        ])->values()]);
+    }
+
     public function slots(Request $request, string $slug): JsonResponse
     {
         $validated = $request->validate([
@@ -204,10 +220,14 @@ class BookingController extends Controller
             'address.longitude' => ['nullable', 'numeric'],
         ]);
 
-        $booking = $this->bookingService->createPendingBooking(
-            $request->user()->id,
-            $validated
-        );
+        try {
+            $booking = $this->bookingService->createPendingBooking(
+                $request->user()->id,
+                $validated
+            );
+        } catch (\DomainException $exception) {
+            return back()->withInput()->with('error', $exception->getMessage());
+        }
 
         return redirect()
             ->route('dashboard.bookings')

@@ -97,7 +97,7 @@
                 <li class="breadcrumb-item">
 
                     <a
-                        href="#"
+                        href="{{ route('support.index') }}"
                         class="text-pn-primary"
                     >
                         Support
@@ -1340,7 +1340,7 @@
                         >
 
                             <a
-                                href="{{ url('/contact-us') }}"
+                                href="{{ route('support.contact') }}"
                                 class="btn
                                        btn-pn-outline"
                             >
@@ -1349,7 +1349,7 @@
 
 
                             <a
-                                href="{{ url('/help-center') }}"
+                                href="{{ route('support.help-center') }}"
                                 class="btn
                                        btn-light
                                        border"

@@ -730,7 +730,7 @@
                         >
 
                             <a
-                                href="{{ url('/raise-ticket') }}"
+                                href="{{ route('support.raise-ticket') }}"
                                 class="btn btn-pn"
                             >
 
@@ -740,7 +740,7 @@
 
 
                             <a
-                                href="{{ url('/contact-us') }}"
+                                href="{{ route('support.contact') }}"
                                 class="btn
                                        btn-light
                                        border"
@@ -1065,7 +1065,7 @@
                     >
 
                         <a
-                            href="{{ url('/contact-us') }}"
+                            href="{{ route('support.contact') }}"
                             class="btn
                                    btn-warning
                                    text-dark
@@ -1078,7 +1078,7 @@
 
 
                         <a
-                            href="{{ url('/raise-ticket') }}"
+                            href="{{ route('support.raise-ticket') }}"
                             class="btn
                                    btn-outline-light"
                         >

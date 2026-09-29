@@ -166,7 +166,7 @@
                 <li class="breadcrumb-item">
 
                     <a
-                        href="#"
+                        href="{{ route('digital-pooja.index') }}"
                         class="text-pn-primary"
                     >
                         Digital Pooja

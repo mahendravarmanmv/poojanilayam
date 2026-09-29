@@ -279,7 +279,7 @@
                 >
 
                     <form
-                        action="#"
+                        action="{{ route('pooja.index') }}"
                         method="GET"
                     >
 
@@ -354,7 +354,7 @@
                 <div class="col">
 
                     <a
-                        href="#"
+                        href="{{ $category['name'] === 'All Poojas' ? route('pooja.index') : route('pooja.category', ['slug' => Str::slug($category['name'])]) }}"
                         class="card
                                border
                                border-warning-subtle
@@ -517,7 +517,7 @@
 
 
                                     <a
-                                        href="#"
+                                        href="{{ route('pooja.index') }}"
                                         class="small
                                                text-pn-primary"
                                     >
@@ -858,7 +858,7 @@
 
 
                     <a
-                        href="#"
+                        href="{{ route('pooja.category', ['slug' => Str::slug('Ganapathi')]) }}"
                         class="badge
                                rounded-pill
                                bg-pn-beige
@@ -871,7 +871,7 @@
 
 
                     <a
-                        href="#"
+                        href="{{ route('pooja.category', ['slug' => Str::slug('Homam')]) }}"
                         class="badge
                                rounded-pill
                                bg-pn-beige
@@ -884,7 +884,7 @@
 
 
                     <a
-                        href="#"
+                        href="{{ route('pooja.category', ['slug' => Str::slug('Prosperity')]) }}"
                         class="badge
                                rounded-pill
                                bg-pn-beige
@@ -900,11 +900,19 @@
 
                 {{-- Pooja Grid --}}
 
-                <div class="row g-4">
+                <div class="row g-4" data-pn-listing="poojas">
 
                     @foreach($poojas as $pooja)
 
-                        <div class="col-12 col-sm-6 col-xl-4">
+                        <div class="col-12 col-sm-6 col-xl-4 pn-listing-item"
+                             data-pn-item
+                             data-name="{{ $pooja['name'] }}"
+                             data-category="{{ $pooja['category'] }}"
+                             data-location="{{ $pooja['location'] }}"
+                             data-price="{{ preg_replace('/[^0-9.]/', '', $pooja['price']) }}"
+                             data-rating="{{ $pooja['rating'] }}"
+                             data-reviews="{{ $pooja['reviews'] }}"
+                             data-search="{{ $pooja['name'] . ' ' . $pooja['category'] . ' ' . $pooja['description'] . ' ' . $pooja['location'] }}">
 
                             <article
                                 class="pn-pooja-card
@@ -1146,7 +1154,7 @@
 
 
                                         <a
-                                            href="#"
+                                            href="{{ route('pooja.show', ['slug' => Str::slug($pooja['name'])]) }}"
                                             class="btn btn-pn btn-sm px-3"
                                         >
 
@@ -1174,6 +1182,8 @@
                 {{-- =================================================
                      PAGINATION
                 ================================================= --}}
+
+                <div class="alert alert-light border rounded-4 text-center d-none mt-4" data-pn-empty>No matching results found. Please adjust your filters.</div>
 
                 <nav
                     aria-label="Pooja pagination"
@@ -1462,7 +1472,7 @@
 
 
             <a
-                href="#"
+                href="{{ route('pooja.index') }}"
                 class="btn btn-warning
                        text-dark
                        fw-semibold

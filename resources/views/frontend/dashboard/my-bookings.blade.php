@@ -152,7 +152,7 @@
                 <li class="breadcrumb-item">
 
                     <a
-                        href="#"
+                        href="{{ route('dashboard.index') }}"
                         class="text-pn-primary"
                     >
                         My Dashboard
@@ -231,7 +231,7 @@
             >
 
                 <a
-                    href="#"
+                    href="{{ route('pooja.index') }}"
                     class="btn btn-pn"
                 >
 
@@ -327,7 +327,7 @@
                     <div class="list-group list-group-flush">
 
                         <a
-                            href="#"
+                            href="{{ route('dashboard.index') }}"
                             class="list-group-item
                                    list-group-item-action
                                    border-0
@@ -342,7 +342,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('dashboard.profile') }}"
                             class="list-group-item
                                    list-group-item-action
                                    border-0
@@ -357,7 +357,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('dashboard.bookings') }}"
                             class="list-group-item
                                    list-group-item-action
                                    active
@@ -373,7 +373,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('dashboard.digital-bookings') }}"
                             class="list-group-item
                                    list-group-item-action
                                    border-0
@@ -388,7 +388,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('dashboard.orders') }}"
                             class="list-group-item
                                    list-group-item-action
                                    border-0
@@ -403,7 +403,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('dashboard.wishlist') }}"
                             class="list-group-item
                                    list-group-item-action
                                    border-0
@@ -418,7 +418,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('dashboard.addresses') }}"
                             class="list-group-item
                                    list-group-item-action
                                    border-0
@@ -433,7 +433,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('dashboard.notifications') }}"
                             class="list-group-item
                                    list-group-item-action
                                    border-0
@@ -457,7 +457,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('dashboard.change-password') }}"
                             class="list-group-item
                                    list-group-item-action
                                    border-0
@@ -1369,7 +1369,7 @@
                                             >
 
                                                 <a
-                                                    href="#"
+                                                    href="{{ route('dashboard.bookings') }}"
                                                     class="btn
                                                            btn-pn-outline"
                                                 >
@@ -1453,7 +1453,7 @@
 
 
                                 <a
-                                    href="#"
+                                    href="{{ route('pooja.index') }}"
                                     class="btn btn-pn mt-2"
                                 >
                                     Book a Pooja

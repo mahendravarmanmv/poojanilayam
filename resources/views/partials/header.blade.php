@@ -28,7 +28,7 @@
                            gap-3
                            small">
 
-                    <a href="#" class="text-white">
+                    <a href="{{ route('dashboard.bookings') }}" class="text-white">
                         Track Booking
                     </a>
 
@@ -192,7 +192,7 @@
 
                             <li>
                                 <a
-                                    href="#"
+                                    href="{{ route('pooja.index') }}"
                                     class="dropdown-item py-2">
                                     Temple Poojas
                                 </a>

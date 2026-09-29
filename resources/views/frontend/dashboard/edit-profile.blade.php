@@ -58,7 +58,7 @@
                 <li class="breadcrumb-item">
 
                     <a
-                        href="#"
+                        href="{{ route('dashboard.index') }}"
                         class="text-pn-primary"
                     >
                         My Dashboard
@@ -70,7 +70,7 @@
                 <li class="breadcrumb-item">
 
                     <a
-                        href="#"
+                        href="{{ route('dashboard.profile') }}"
                         class="text-pn-primary"
                     >
                         My Profile
@@ -164,7 +164,7 @@
 
                 <form
                     method="POST"
-                    action="#"
+                    action="{{ route('dashboard.profile.update') }}"
                     id="editProfileForm"
                     class="needs-validation"
                     novalidate

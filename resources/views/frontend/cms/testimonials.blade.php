@@ -263,7 +263,7 @@
 
 
                     <a
-                        href="{{ url('/contact-us') }}"
+                        href="{{ route('support.contact') }}"
                         class="btn
                                btn-pn-outline
                                btn-lg"
@@ -1243,7 +1243,7 @@
 
 
                         <a
-                            href="{{ url('/contact-us') }}"
+                            href="{{ route('support.contact') }}"
                             class="btn btn-pn"
                         >
 
@@ -1346,7 +1346,7 @@
                     >
 
                         <a
-                            href="{{ url('/dashboard') }}"
+                            href="{{ route('dashboard.index') }}"
                             class="btn btn-pn"
                         >
 
@@ -1360,7 +1360,7 @@
 
 
                         <a
-                            href="{{ url('/help-center') }}"
+                            href="{{ route('support.help-center') }}"
                             class="btn btn-pn-outline"
                         >
 
@@ -1594,7 +1594,7 @@
 
 
                     <a
-                        href="{{ url('/contact-us') }}"
+                        href="{{ route('support.contact') }}"
                         class="btn
                                btn-outline-light
                                px-4"

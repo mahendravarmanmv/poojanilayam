@@ -120,7 +120,7 @@
                 <li class="breadcrumb-item">
 
                     <a
-                        href="#"
+                        href="{{ route('store.index') }}"
                         class="text-pn-primary"
                     >
                         Store
@@ -132,7 +132,7 @@
                 <li class="breadcrumb-item">
 
                     <a
-                        href="#"
+                        href="{{ route('store.cart') }}"
                         class="text-pn-primary"
                     >
                         Cart
@@ -1517,7 +1517,7 @@
                         <div class="d-grid">
 
                             <a
-                                href="#"
+                                href="{{ route('store.payment') }}"
                                 class="btn
                                        btn-pn
                                        btn-lg"

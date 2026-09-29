@@ -234,7 +234,7 @@
                 <li class="breadcrumb-item">
 
                     <a
-                        href="#"
+                        href="{{ route('priest.index') }}"
                         class="text-pn-primary"
                     >
                         Priests
@@ -1120,7 +1120,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('temple.show', ['slug' => Str::slug($priest['temple'])]) }}"
                             class="btn
                                    btn-pn-outline
                                    w-100"
@@ -1974,7 +1974,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('priest.book', ['slug' => Str::slug($priest['name'])]) }}"
                             class="btn
                                    btn-pn
                                    btn-lg

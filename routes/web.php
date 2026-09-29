@@ -80,7 +80,7 @@ Route::prefix('digital-pooja')
         Route::view('/{slug}/schedule', 'frontend.digital-poojas.schedule')
             ->name('schedule');
 
-        Route::view('/{slug}/join-live', 'frontend.digital-poojas.join-live')
+        Route::view('/{slug}/join-live', 'frontend.digital-poojas.join')
             ->name('join-live');
 
         Route::view('/{slug}/live', 'frontend.digital-poojas.live')
@@ -248,6 +248,10 @@ Route::prefix('store')
         Route::view('/payment', 'frontend.store.payment')
             ->name('payment');
 
+        // Public order tracking entry point.
+        Route::view('/track-order', 'frontend.orders.track')
+            ->name('track-order');
+
         Route::view('/order-success', 'frontend.store.order-success')
             ->name('order.success');
 
@@ -337,6 +341,9 @@ Route::prefix('support')
 
         Route::view('/raise-ticket', 'frontend.support.raise-ticket')
             ->name('raise-ticket');
+
+        Route::view('/tickets', 'frontend.support.tickets')
+            ->name('tickets');
 
         Route::view('/ticket/{ticket}', 'frontend.support.ticket-details')
             ->name('ticket');

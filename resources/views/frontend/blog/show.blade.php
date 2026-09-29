@@ -245,7 +245,7 @@
                 <li class="breadcrumb-item">
 
                     <a
-                        href="{{ url('/blog') }}"
+                        href="{{ route('blog.index') }}"
                         class="text-pn-primary"
                     >
                         Blog
@@ -1099,7 +1099,7 @@
 
 
                             <a
-                                href="{{ url('/blog') }}"
+                                href="{{ route('blog.index') }}"
                                 class="btn
                                        btn-pn-outline
                                        w-100
@@ -1257,7 +1257,7 @@
 
 
             <a
-                href="{{ url('/blog') }}"
+                href="{{ route('blog.index') }}"
                 class="btn btn-pn"
             >
 

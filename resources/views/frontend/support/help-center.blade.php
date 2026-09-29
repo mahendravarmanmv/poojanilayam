@@ -650,7 +650,7 @@
 
 
                                 <a
-                                    href="{{ url('/contact-us') }}"
+                                    href="{{ route('support.contact') }}"
                                     class="btn
                                            btn-sm
                                            btn-pn-outline"
@@ -821,7 +821,7 @@
 
 
                     <a
-                        href="{{ url('/contact-us') }}"
+                        href="{{ route('support.contact') }}"
                         class="btn btn-pn"
                     >
 
@@ -957,7 +957,7 @@
 
 
                         <a
-                            href="{{ url('/contact-us') }}"
+                            href="{{ route('support.contact') }}"
                             class="btn
                                    btn-pn-outline"
                         >
@@ -1036,7 +1036,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('support.raise-ticket') }}"
                             class="btn
                                    btn-pn-outline"
                         >
@@ -1115,7 +1115,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('support.tickets') }}"
                             class="btn
                                    btn-pn-outline"
                         >
@@ -1210,7 +1210,7 @@
                     >
 
                         <a
-                            href="{{ url('/contact-us') }}"
+                            href="{{ route('support.contact') }}"
                             class="btn
                                    btn-warning
                                    text-dark

@@ -189,7 +189,7 @@
                 <li class="breadcrumb-item">
 
                     <a
-                        href="#"
+                        href="{{ route('store.index') }}"
                         class="text-pn-primary"
                     >
 
@@ -438,7 +438,7 @@
                     {{-- Category --}}
 
                     <a
-                        href="#"
+                        href="{{ route('store.category', ['slug' => Str::slug($product['category'])]) }}"
                         class="small
                                text-pn-primary
                                fw-semibold
@@ -1567,7 +1567,7 @@
 
 
             <a
-                href="#"
+                href="{{ route('store.products') }}"
                 class="btn
                        btn-pn-outline
                        align-self-start
@@ -1763,7 +1763,7 @@
 
 
                 <a
-                    href="#"
+                    href="{{ route('store.index') }}"
                     class="btn
                            btn-warning
                            text-dark

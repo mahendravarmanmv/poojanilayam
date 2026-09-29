@@ -111,7 +111,7 @@
                 <li class="breadcrumb-item">
 
                     <a
-                        href="#"
+                        href="{{ route('pooja.index') }}"
                         class="text-pn-primary"
                     >
                         Poojas
@@ -123,7 +123,7 @@
                 <li class="breadcrumb-item">
 
                     <a
-                        href="#"
+                        href="{{ route('pooja.show', ['slug' => Str::slug($booking['pooja'])]) }}"
                         class="text-pn-primary"
                     >
                         {{ $booking['pooja'] }}
@@ -1688,7 +1688,7 @@
 
 
                 <a
-                    href="#"
+                    href="{{ route('pooja.index') }}"
                     class="btn btn-pn-outline px-4"
                 >
 

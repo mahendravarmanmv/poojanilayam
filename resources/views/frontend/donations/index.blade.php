@@ -698,7 +698,7 @@
             >
 
                 <a
-                    href="#"
+                    href="{{ route('temple.index') }}"
                     class="text-pn-primary
                            fw-semibold
                            text-decoration-none"
@@ -823,7 +823,7 @@
                             >
 
                                 <a
-                                    href="#"
+                                    href="{{ route('donation.donate', ['temple' => Str::slug($temple['name'])]) }}"
                                     class="btn
                                            btn-pn-outline"
                                 >
@@ -1037,7 +1037,7 @@
                     <div class="d-grid mt-3">
 
                         <a
-                            href="#"
+                            href="{{ route('donation.donate') }}"
                             class="btn
                                    btn-pn
                                    btn-lg"

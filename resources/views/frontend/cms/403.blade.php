@@ -221,7 +221,7 @@
                     @auth
 
                         <a
-                            href="{{ url('/dashboard') }}"
+                            href="{{ route('dashboard.index') }}"
                             class="btn
                                    btn-pn-outline
                                    btn-lg
@@ -239,7 +239,7 @@
                     @else
 
                         <a
-                            href="{{ url('/login') }}"
+                            href="{{ route('auth.login') }}"
                             class="btn
                                    btn-pn-outline
                                    btn-lg
@@ -283,7 +283,7 @@
 
 
                     <a
-                        href="{{ url('/contact-us') }}"
+                        href="{{ route('support.contact') }}"
                         class="small
                                fw-semibold
                                text-pn-primary

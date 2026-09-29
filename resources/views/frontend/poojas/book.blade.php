@@ -10,298 +10,49 @@
 @section('content')
 
 @php
-
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY UI DATA
-    |--------------------------------------------------------------------------
-    | Frontend prototype only.
-    | These values will later come from Controllers / Services / Database.
-    |--------------------------------------------------------------------------
-    */
-
-    $pooja = [
-        'name' => 'Ganapathi Homam',
-        'image' => 'ganapathi.jpg',
-        'category' => 'Homam',
-        'duration' => '60 Mins',
-        'base_price' => 501,
-        'location' => 'Hyderabad'
+    $customer = auth()->user();
+    $poojaCategory = $pooja->category?->name ?? 'Pooja';
+    $poojaImage = $pooja->media()->where('is_active', true)->orderByDesc('is_featured')->orderBy('sort_order')->value('file_path');
+    $poojaData = [
+        'name' => $pooja->name,
+        'image' => $poojaImage,
+        'category' => $poojaCategory,
+        'duration' => $pooja->duration_minutes ? $pooja->duration_minutes . ' Mins' : 'Duration not specified',
+        'base_price' => $selectedTemplePooja?->pricing->where('is_active', true)->sortByDesc('is_default')->first()?->amount ?? 0,
+        'location' => $selectedTemplePooja?->temple?->name ?? 'Select a temple',
     ];
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Booking Steps
-    |--------------------------------------------------------------------------
-    */
 
     $steps = [
-        [
-            'number' => 1,
-            'title' => 'Date & Time',
-            'icon' => 'bi-calendar-check'
-        ],
-        [
-            'number' => 2,
-            'title' => 'Priest',
-            'icon' => 'bi-person-check'
-        ],
-        [
-            'number' => 3,
-            'title' => 'Devotee Details',
-            'icon' => 'bi-person-vcard'
-        ],
-        [
-            'number' => 4,
-            'title' => 'Extras',
-            'icon' => 'bi-plus-circle'
-        ],
-        [
-            'number' => 5,
-            'title' => 'Review & Payment',
-            'icon' => 'bi-credit-card'
-        ]
+        ['number' => 1, 'title' => 'Date & Time', 'icon' => 'bi-calendar-check'],
+        ['number' => 2, 'title' => 'Priest', 'icon' => 'bi-person-check'],
+        ['number' => 3, 'title' => 'Devotee Details', 'icon' => 'bi-person-vcard'],
+        ['number' => 4, 'title' => 'Extras', 'icon' => 'bi-plus-circle'],
+        ['number' => 5, 'title' => 'Review & Payment', 'icon' => 'bi-credit-card'],
     ];
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | Available Priests
-    |--------------------------------------------------------------------------
-    */
-
-    $priests = [
-        [
-            'id' => 1,
-            'name' => 'Sri Venkatesh Sharma',
-            'image' => 'priest-1.jpg',
-            'experience' => '18+ Years',
-            'rating' => '4.9',
-            'languages' => 'Telugu, Sanskrit, English',
-            'available_slots' => 'Morning, Evening',
-            'temple' => 'Sri Venkateswara Temple',
-            'live_available' => true,
-            'recording_available' => true,
-            'prasadam_available' => true
-        ],
-
-        [
-            'id' => 2,
-            'name' => 'Sri Ramesh Shastri',
-            'image' => 'priest-2.jpg',
-            'experience' => '15+ Years',
-            'rating' => '4.9',
-            'languages' => 'Telugu, Sanskrit',
-            'available_slots' => 'Morning, Afternoon',
-            'temple' => 'Sri Ganapathi Temple',
-            'live_available' => true,
-            'recording_available' => true,
-            'prasadam_available' => true
-        ],
-
-        [
-            'id' => 3,
-            'name' => 'Sri Suresh Bhatt',
-            'image' => 'priest-3.jpg',
-            'experience' => '20+ Years',
-            'rating' => '4.8',
-            'languages' => 'Telugu, Kannada, Sanskrit',
-            'available_slots' => 'Afternoon, Evening',
-            'temple' => 'Sri Shiva Temple',
-            'live_available' => true,
-            'recording_available' => false,
-            'prasadam_available' => true
-        ]
-    ];
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Date Options
-    |--------------------------------------------------------------------------
-    */
-
-    $dates = [
-        [
-            'day' => '10',
-            'weekday' => 'MON',
-            'month' => 'AUG'
-        ],
-        [
-            'day' => '11',
-            'weekday' => 'TUE',
-            'month' => 'AUG'
-        ],
-        [
-            'day' => '12',
-            'weekday' => 'WED',
-            'month' => 'AUG'
-        ],
-        [
-            'day' => '13',
-            'weekday' => 'THU',
-            'month' => 'AUG'
-        ],
-        [
-            'day' => '14',
-            'weekday' => 'FRI',
-            'month' => 'AUG'
-        ],
-        [
-            'day' => '15',
-            'weekday' => 'SAT',
-            'month' => 'AUG'
-        ],
-        [
-            'day' => '16',
-            'weekday' => 'SUN',
-            'month' => 'AUG'
-        ]
-    ];
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Time Slots
-    |--------------------------------------------------------------------------
-    */
-
-    $timeSlots = [
-        'Morning' => [
-            '06:00 AM',
-            '07:00 AM',
-            '08:00 AM',
-            '09:00 AM'
-        ],
-
-        'Afternoon' => [
-            '12:00 PM',
-            '01:00 PM',
-            '02:00 PM',
-            '03:00 PM'
-        ],
-
-        'Evening' => [
-            '05:00 PM',
-            '06:00 PM',
-            '07:00 PM',
-            '08:00 PM'
-        ]
-    ];
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Sankalpam Purposes
-    |--------------------------------------------------------------------------
-    */
-
-    $purposes = [
-        'Health',
-        'Business',
-        'Marriage',
-        'Education',
-        'Birthday',
-        'Anniversary'
-    ];
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Add-on Services
-    |--------------------------------------------------------------------------
-    */
-
-    $addons = [
-        [
-            'id' => 'premium_flowers',
-            'icon' => 'bi-flower1',
-            'name' => 'Premium Flowers',
-            'description' => 'Premium flower offering for the pooja.',
-            'price' => 101
-        ],
-
-        [
-            'id' => 'extra_deepams',
-            'icon' => 'bi-brightness-high',
-            'name' => 'Extra Deepams',
-            'description' => 'Additional traditional deepam offering.',
-            'price' => 51
-        ],
-
-        [
-            'id' => 'premium_prasadam',
-            'icon' => 'bi-gift',
-            'name' => 'Premium Prasadam',
-            'description' => 'Premium prasadam package after the pooja.',
-            'price' => 201
-        ],
-
-        [
-            'id' => 'extra_family_members',
-            'icon' => 'bi-people',
-            'name' => 'Extra Family Members',
-            'description' => 'Include additional family members in Sankalpam.',
-            'price' => 101
-        ],
-
-        [
-            'id' => 'live_recording',
-            'icon' => 'bi-camera-video',
-            'name' => 'Live Recording',
-            'description' => 'Receive a recording of the live pooja.',
-            'price' => 151
-        ],
-
-        [
-            'id' => 'premium_camera',
-            'icon' => 'bi-camera',
-            'name' => 'Premium Camera',
-            'description' => 'Enhanced camera experience for the pooja.',
-            'price' => 251
-        ]
-    ];
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Payment Methods
-    |--------------------------------------------------------------------------
-    */
-
+    $dates = collect(range(0, 13))->map(function ($offset) {
+        $d = today()->addDays($offset);
+        return ['value' => $d->toDateString(), 'day' => $d->format('d'), 'weekday' => strtoupper($d->format('D')), 'month' => strtoupper($d->format('M'))];
+    });
+    $selectedDate = ($date ?? today())->toDateString();
+    $slotsByPeriod = collect($slots ?? [])->groupBy(function ($slot) {
+        $hour = (int) substr($slot->start_time, 0, 2);
+        return $hour < 12 ? 'Morning' : ($hour < 17 ? 'Afternoon' : 'Evening');
+    });
+    $purposes = ['Health', 'Business', 'Marriage', 'Education', 'Birthday', 'Anniversary'];
+    $addonOptions = collect($extras ?? [])->flatMap(function ($extra) {
+        return $extra->options->map(function ($option) use ($extra) {
+            return ['id' => $option->id, 'extra_id' => $extra->id, 'icon' => 'bi-plus-circle', 'name' => $option->name, 'description' => $option->description, 'price' => (float) $option->price];
+        });
+    })->values();
+    $defaultCurrency = $selectedTemplePooja?->pricing->where('is_active', true)->sortByDesc('is_default')->first()?->currency;
     $paymentMethods = [
-        [
-            'id' => 'upi',
-            'name' => 'UPI',
-            'icon' => 'bi-phone'
-        ],
-
-        [
-            'id' => 'cards',
-            'name' => 'Cards',
-            'icon' => 'bi-credit-card'
-        ],
-
-        [
-            'id' => 'netbanking',
-            'name' => 'Net Banking',
-            'icon' => 'bi-bank'
-        ],
-
-        [
-            'id' => 'wallet',
-            'name' => 'Wallet',
-            'icon' => 'bi-wallet2'
-        ],
-
-        [
-            'id' => 'international',
-            'name' => 'International Cards',
-            'icon' => 'bi-globe'
-        ]
+        ['id' => 'upi', 'name' => 'UPI', 'icon' => 'bi-phone'],
+        ['id' => 'cards', 'name' => 'Cards', 'icon' => 'bi-credit-card'],
+        ['id' => 'netbanking', 'name' => 'Net Banking', 'icon' => 'bi-bank'],
+        ['id' => 'wallet', 'name' => 'Wallet', 'icon' => 'bi-wallet2'],
+        ['id' => 'international', 'name' => 'International Cards', 'icon' => 'bi-globe'],
     ];
-
 @endphp
 
 
@@ -331,7 +82,7 @@
                 <li class="breadcrumb-item">
 
                     <a
-                        href="#"
+                        href="{{ route('pooja.index') }}"
                         class="text-pn-primary"
                     >
                         Poojas
@@ -342,10 +93,10 @@
                 <li class="breadcrumb-item">
 
                     <a
-                        href="#"
+                        href="{{ route('pooja.show', ['slug' => Str::slug($poojaData['name'])]) }}"
                         class="text-pn-primary"
                     >
-                        {{ $pooja['name'] }}
+                        {{ $poojaData['name'] }}
                     </a>
 
                 </li>
@@ -385,11 +136,11 @@
                 >
 
                     <img
-                        src="{{ Vite::asset('resources/images/home/' . $pooja['image']) }}"
+                        src="{{ $poojaData['image'] ? asset($poojaData['image']) : Vite::asset('resources/images/home/ganapathi.jpg') }}"
                         class="rounded-3
                                object-fit-cover"
                         style="width:72px;height:72px;"
-                        alt="{{ $pooja['name'] }}"
+                        alt="{{ $poojaData['name'] }}"
                     >
 
 
@@ -400,7 +151,7 @@
                                    text-pn-primary
                                    fw-semibold"
                         >
-                            {{ $pooja['category'] }}
+                            {{ $poojaData['category'] }}
                         </span>
 
 
@@ -410,7 +161,7 @@
                                    h3
                                    mb-1"
                         >
-                            Book {{ $pooja['name'] }}
+                            Book {{ $poojaData['name'] }}
                         </h1>
 
 
@@ -421,13 +172,13 @@
 
                             <i class="bi bi-clock me-1"></i>
 
-                            {{ $pooja['duration'] }}
+                            {{ $poojaData['duration'] }}
 
                             <span class="mx-2">•</span>
 
                             <i class="bi bi-geo-alt me-1"></i>
 
-                            {{ $pooja['location'] }}
+                            {{ $poojaData['location'] }}
 
                         </div>
 
@@ -453,7 +204,7 @@
                            font-serif
                            text-pn-primary"
                 >
-                    ₹{{ number_format($pooja['base_price']) }}
+                    ₹{{ number_format($poojaData['base_price']) }}
                 </strong>
 
             </div>
@@ -554,6 +305,10 @@
             ================================================= --}}
 
             <div class="col-12 col-lg-8">
+                <form id="bookingForm" method="POST" action="{{ route('pooja.book.store', ['slug' => $pooja->slug]) }}" data-slug="{{ $pooja->slug }}" data-booking-base="{{ url('/') }}" data-base-amount="{{ (float) $poojaData['base_price'] }}" data-currency-symbol="{{ $defaultCurrency?->symbol ?? '₹' }}">
+                    @csrf
+                    @if(session('error'))<div class="alert alert-danger">{{ session('error') }}</div>@endif
+                    @if($errors->any())<div class="alert alert-danger"><strong>Please correct the following:</strong><ul class="mb-0 mt-2">@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>@endif
 
 
                 {{-- =================================================
@@ -631,74 +386,29 @@
 
                         {{-- Date --}}
 
-                        <h6
-                            class="fw-semibold
-                                   text-pn-brown
-                                   mb-3"
-                        >
-                            Select Date
-                        </h6>
-
-
-                        <div
-                            class="row
-                                   row-cols-3
-                                   row-cols-sm-4
-                                   row-cols-md-7
-                                   g-2
-                                   mb-4"
-                        >
-
-                            @foreach($dates as $index => $date)
-
-                                <div class="col">
-
-                                    <input
-                                        type="radio"
-                                        class="btn-check"
-                                        name="booking_date"
-                                        id="date{{ $index }}"
-                                        value="{{ $date['day'] }} {{ $date['month'] }}"
-                                        {{ $index === 1 ? 'checked' : '' }}
-                                    >
-
-
-                                    <label
-                                        for="date{{ $index }}"
-                                        class="btn
-                                               btn-outline-secondary
-                                               w-100
-                                               py-3"
-                                    >
-
-                                        <small
-                                            class="d-block
-                                                   text-uppercase"
-                                        >
-                                            {{ $date['weekday'] }}
-                                        </small>
-
-
-                                        <strong
-                                            class="d-block
-                                                   fs-4"
-                                        >
-                                            {{ $date['day'] }}
-                                        </strong>
-
-
-                                        <small>
-                                            {{ $date['month'] }}
-                                        </small>
-
-                                    </label>
-
-                                </div>
-
+                        <h6 class="fw-semibold text-pn-brown mb-3">Select Temple</h6>
+                        <select class="form-select form-select-lg mb-4" name="temple_pooja_id" id="templePoojaId" required>
+                            <option value="">Select Temple</option>
+                            @foreach($templePoojas as $templePooja)
+                                <option value="{{ $templePooja->id }}" data-currency="{{ $templePooja->pricing->where('is_active', true)->sortByDesc('is_default')->first()?->currency?->code }}" {{ $selectedTemplePooja?->id === $templePooja->id ? 'selected' : '' }}>
+                                    {{ $templePooja->temple?->name }}
+                                </option>
                             @endforeach
+                        </select>
 
+                        <h6 class="fw-semibold text-pn-brown mb-3">Select Date</h6>
+                        <div class="row row-cols-3 row-cols-sm-4 row-cols-md-7 g-2 mb-4">
+                            @foreach($dates as $index => $dateOption)
+                                <div class="col">
+                                    <input type="radio" class="btn-check booking-date" name="booking_date" id="date{{ $index }}" value="{{ $dateOption['value'] }}" {{ $dateOption['value'] === $selectedDate ? 'checked' : '' }}>
+                                    <label for="date{{ $index }}" class="btn btn-outline-secondary w-100 py-3">
+                                        <small class="d-block text-uppercase">{{ $dateOption['weekday'] }}</small>
+                                        <strong class="d-block fs-4">{{ $dateOption['day'] }}</strong>
+                                        <small>{{ $dateOption['month'] }}</small>
+                                    </label>
+                                </div>
+                            @endforeach
                         </div>
-
 
                         {{-- Calendar button --}}
 
@@ -719,88 +429,24 @@
 
                         {{-- Time --}}
 
-                        <h6
-                            class="fw-semibold
-                                   text-pn-brown
-                                   mb-3"
-                        >
-                            Available Time Slots
-                        </h6>
-
-
-                        @foreach($timeSlots as $period => $slots)
-
+                        <h6 class="fw-semibold text-pn-brown mb-3">Available Time Slots</h6>
+                        @foreach(['Morning', 'Afternoon', 'Evening'] as $period)
                             <div class="mb-4">
-
-                                <div
-                                    class="d-flex
-                                           align-items-center
-                                           gap-2
-                                           mb-2"
-                                >
-
-                                    <i
-                                        class="bi
-                                            {{ $period === 'Morning'
-                                                ? 'bi-sunrise'
-                                                : ($period === 'Afternoon'
-                                                    ? 'bi-sun'
-                                                    : 'bi-sunset') }}
-                                            text-pn-primary"
-                                    ></i>
-
-
-                                    <span
-                                        class="small
-                                               fw-semibold
-                                               text-pn-brown"
-                                    >
-
-                                        {{ $period }}
-
-                                    </span>
-
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <i class="bi {{ $period === 'Morning' ? 'bi-sunrise' : ($period === 'Afternoon' ? 'bi-sun' : 'bi-sunset') }} text-pn-primary"></i>
+                                    <span class="small fw-semibold text-pn-brown">{{ $period }}</span>
                                 </div>
-
-
-                                <div
-                                    class="d-flex
-                                           flex-wrap
-                                           gap-2"
-                                >
-
-                                    @foreach($slots as $slotIndex => $slot)
-
+                                <div class="d-flex flex-wrap gap-2 booking-slots" data-period="{{ $period }}">
+                                    @forelse($slotsByPeriod->get($period, collect()) as $slot)
                                         <div>
-
-                                            <input
-                                                type="radio"
-                                                class="btn-check"
-                                                name="booking_time"
-                                                id="time{{ $period }}{{ $slotIndex }}"
-                                                value="{{ $slot }}"
-                                                {{ $period === 'Morning' && $slotIndex === 1 ? 'checked' : '' }}
-                                            >
-
-
-                                            <label
-                                                for="time{{ $period }}{{ $slotIndex }}"
-                                                class="btn
-                                                       btn-outline-secondary"
-                                            >
-
-                                                {{ $slot }}
-
-                                            </label>
-
+                                            <input type="radio" class="btn-check booking-slot" name="booking_slot_id" id="slot{{ $slot->id }}" value="{{ $slot->id }}" data-start="{{ $slot->start_time }}" data-end="{{ $slot->end_time }}">
+                                            <label for="slot{{ $slot->id }}" class="btn btn-outline-secondary">{{ \Carbon\Carbon::parse($slot->start_time)->format('h:i A') }}</label>
                                         </div>
-
-                                    @endforeach
-
+                                    @empty
+                                        <div class="small text-secondary slot-empty">No available slots for this period.</div>
+                                    @endforelse
                                 </div>
-
                             </div>
-
                         @endforeach
 
                     </div>
@@ -956,215 +602,23 @@
 
                         <div class="vstack gap-3">
 
-                            @foreach($priests as $priest)
-
+                            @forelse($pujaris as $priest)
                                 <div>
-
-                                    <input
-                                        type="radio"
-                                        class="btn-check"
-                                        name="priest_id"
-                                        id="priest{{ $priest['id'] }}"
-                                        value="{{ $priest['id'] }}"
-                                    >
-
-
-                                    <label
-                                        for="priest{{ $priest['id'] }}"
-                                        class="card
-                                               border
-                                               border-warning-subtle
-                                               rounded-4
-                                               p-3
-                                               w-100"
-                                    >
-
-                                        <div
-                                            class="d-flex
-                                                   flex-column
-                                                   flex-sm-row
-                                                   align-items-start
-                                                   gap-3"
-                                        >
-
-                                            <img
-                                                src="{{ Vite::asset('resources/images/home/' . $priest['image']) }}"
-                                                class="rounded-circle
-                                                       object-fit-cover
-                                                       flex-shrink-0"
-                                                style="width:72px;height:72px;"
-                                                alt="{{ $priest['name'] }}"
-                                            >
-
-
+                                    <input type="radio" class="btn-check pujari-option" name="pujari_profile_id" id="priest{{ $priest->id }}" value="{{ $priest->id }}">
+                                    <label for="priest{{ $priest->id }}" class="card border border-warning-subtle rounded-4 p-3 w-100">
+                                        <div class="d-flex flex-column flex-sm-row align-items-start gap-3">
+                                            <div class="rounded-circle d-flex align-items-center justify-content-center bg-pn-beige text-pn-primary flex-shrink-0" style="width:72px;height:72px;"><i class="bi bi-person fs-3"></i></div>
                                             <div class="flex-grow-1">
-
-                                                <div
-                                                    class="d-flex
-                                                           flex-wrap
-                                                           align-items-center
-                                                           gap-2"
-                                                >
-
-                                                    <h5
-                                                        class="font-serif
-                                                               text-pn-brown
-                                                               mb-0"
-                                                    >
-
-                                                        {{ $priest['name'] }}
-
-                                                    </h5>
-
-
-                                                    <span
-                                                        class="badge
-                                                               rounded-pill
-                                                               bg-pn-beige
-                                                               text-pn-primary"
-                                                    >
-
-                                                        Verified
-
-                                                    </span>
-
-                                                </div>
-
-
-                                                <div
-                                                    class="small
-                                                           text-secondary
-                                                           mt-1"
-                                                >
-
-                                                    {{ $priest['experience'] }}
-
-                                                    <span class="mx-1">•</span>
-
-                                                    <i
-                                                        class="bi bi-star-fill
-                                                               text-pn-gold"
-                                                    ></i>
-
-                                                    {{ $priest['rating'] }}
-
-                                                </div>
-
-
-                                                <div
-                                                    class="small
-                                                           text-secondary
-                                                           mt-2"
-                                                >
-
-                                                    <i
-                                                        class="bi bi-translate
-                                                               text-pn-primary
-                                                               me-1"
-                                                    ></i>
-
-                                                    {{ $priest['languages'] }}
-
-                                                </div>
-
-
-                                                <div
-                                                    class="d-flex
-                                                           flex-wrap
-                                                           gap-2
-                                                           mt-3"
-                                                >
-
-                                                    <span
-                                                        class="badge
-                                                               bg-light
-                                                               text-secondary
-                                                               border"
-                                                    >
-                                                        {{ $priest['available_slots'] }}
-                                                    </span>
-
-
-                                                    <span
-                                                        class="badge
-                                                               bg-light
-                                                               text-secondary
-                                                               border"
-                                                    >
-                                                        {{ $priest['temple'] }}
-                                                    </span>
-
-
-                                                    @if($priest['live_available'])
-
-                                                        <span
-                                                            class="badge
-                                                                   bg-light
-                                                                   text-success
-                                                                   border"
-                                                        >
-
-                                                            <i
-                                                                class="bi bi-camera-video me-1"
-                                                            ></i>
-
-                                                            Live Available
-
-                                                        </span>
-
-                                                    @endif
-
-
-                                                    @if($priest['recording_available'])
-
-                                                        <span
-                                                            class="badge
-                                                                   bg-light
-                                                                   text-success
-                                                                   border"
-                                                        >
-
-                                                            <i
-                                                                class="bi bi-record-circle me-1"
-                                                            ></i>
-
-                                                            Recording
-
-                                                        </span>
-
-                                                    @endif
-
-
-                                                    @if($priest['prasadam_available'])
-
-                                                        <span
-                                                            class="badge
-                                                                   bg-light
-                                                                   text-success
-                                                                   border"
-                                                        >
-
-                                                            <i
-                                                                class="bi bi-gift me-1"
-                                                            ></i>
-
-                                                            Prasadam
-
-                                                        </span>
-
-                                                    @endif
-
-                                                </div>
-
+                                                <div class="d-flex flex-wrap align-items-center gap-2"><h5 class="font-serif text-pn-brown mb-0">{{ $priest->display_name }}</h5><span class="badge rounded-pill bg-pn-beige text-pn-primary">Verified</span></div>
+                                                <div class="small text-secondary mt-1">{{ $priest->experience_years ? $priest->experience_years . '+ Years' : 'Experience not specified' }}</div>
+                                                @if($priest->bio)<div class="small text-secondary mt-2">{{ \Illuminate\Support\Str::limit($priest->bio, 140) }}</div>@endif
                                             </div>
-
                                         </div>
-
                                     </label>
-
                                 </div>
-
-                            @endforeach
+                            @empty
+                                <div class="alert alert-light border mb-0">No approved priests are currently assigned to the selected temple. You can continue with <strong>No Preference</strong>.</div>
+                            @endforelse
 
                         </div>
 
@@ -1265,6 +719,7 @@
                                     type="text"
                                     id="devoteeName"
                                     name="devotee_name"
+                                    value="{{ old('devotee_name', $customer->name ?? '') }}"
                                     class="form-control
                                            form-control-lg"
                                     placeholder="Enter full name"
@@ -1291,6 +746,7 @@
                                     type="tel"
                                     id="devoteePhone"
                                     name="devotee_phone"
+                                    value="{{ old('devotee_phone', $customer->mobile ?? '') }}"
                                     class="form-control
                                            form-control-lg"
                                     placeholder="Enter mobile number"
@@ -1317,6 +773,7 @@
                                     type="email"
                                     id="devoteeEmail"
                                     name="devotee_email"
+                                    value="{{ old('devotee_email', $customer->email ?? '') }}"
                                     class="form-control
                                            form-control-lg"
                                     placeholder="Enter email address"
@@ -1363,7 +820,7 @@
 
                                 <select
                                     id="nakshatram"
-                                    name="nakshatram"
+                                    name="sankalpam[nakshatram]"
                                     class="form-select
                                            form-select-lg"
                                 >
@@ -1405,7 +862,7 @@
                                 <input
                                     type="text"
                                     id="gotram"
-                                    name="gotram"
+                                    name="sankalpam[gotram]"
                                     class="form-control
                                            form-control-lg"
                                     placeholder="Enter gotram"
@@ -1417,23 +874,16 @@
                             {{-- Address --}}
 
                             <div class="col-12">
-
-                                <label
-                                    for="devoteeAddress"
-                                    class="form-label fw-semibold"
-                                >
-                                    Address
-                                </label>
-
-
-                                <textarea
-                                    id="devoteeAddress"
-                                    name="devotee_address"
-                                    rows="3"
-                                    class="form-control"
-                                    placeholder="Enter your address"
-                                ></textarea>
-
+                                <label for="bookingAddress" class="form-label fw-semibold">Booking Address</label>
+                                <select id="bookingAddress" name="address_id" class="form-select form-select-lg">
+                                    <option value="">No address selected</option>
+                                    @foreach($addresses as $address)
+                                        <option value="{{ $address->id }}" {{ $address->is_default ? 'selected' : '' }}>
+                                            {{ $address->name ?: $address->address_line_1 }} — {{ $address->postal_code }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <small class="text-secondary d-block mt-2">Select a saved address from your Address Book.</small>
                             </div>
 
 
@@ -1451,19 +901,15 @@
 
                                 <select
                                     id="language"
-                                    name="language"
+                                    name="sankalpam[language_id]"
                                     class="form-select
                                            form-select-lg"
                                 >
 
-                                    <option value="">
-                                        Select Language
-                                    </option>
-
-                                    <option>Telugu</option>
-                                    <option>English</option>
-                                    <option>Hindi</option>
-                                    <option>Sanskrit</option>
+                                    <option value="">Select Language</option>
+                                    @foreach($languages as $language)
+                                        <option value="{{ $language->id }}">{{ $language->native_name ?: $language->name }}</option>
+                                    @endforeach
 
                                 </select>
 
@@ -1474,80 +920,25 @@
 
                         {{-- Family Members --}}
 
-                        <div
-                            class="border-top
-                                   border-warning-subtle
-                                   mt-4
-                                   pt-4"
-                        >
-
-                            <div
-                                class="d-flex
-                                       align-items-center
-                                       justify-content-between
-                                       mb-3"
-                            >
-
-                                <div>
-
-                                    <h6
-                                        class="fw-semibold
-                                               text-pn-brown
-                                               mb-1"
-                                    >
-
-                                        Family Members
-
-                                    </h6>
-
-
-                                    <small
-                                        class="text-secondary"
-                                    >
-
-                                        Optionally include family members
-                                        in the Sankalpam.
-
-                                    </small>
-
-                                </div>
-
-
-                                <button
-                                    type="button"
-                                    class="btn
-                                           btn-pn-outline
-                                           btn-sm"
-                                >
-
-                                    <i class="bi bi-plus me-1"></i>
-
-                                    Add Member
-
-                                </button>
-
+                        <div class="border-top border-warning-subtle mt-4 pt-4">
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <div><h6 class="fw-semibold text-pn-brown mb-1">Family Members</h6><small class="text-secondary">Optionally include saved family members in the Sankalpam.</small></div>
                             </div>
-
-
-                            <div
-                                class="alert
-                                       alert-light
-                                       border
-                                       mb-0"
-                            >
-
-                                <i
-                                    class="bi bi-info-circle
-                                           text-pn-primary
-                                           me-2"
-                                ></i>
-
-                                Additional family members can be added
-                                during booking.
-
+                            <div class="row g-2">
+                                @forelse($familyMembers as $memberIndex => $member)
+                                    <div class="col-12 col-md-6">
+                                        <input class="btn-check family-member" type="checkbox" id="family{{ $member->id }}" name="sankalpam[members][{{ $memberIndex }}][family_member_id]" value="{{ $member->id }}">
+                                        <label for="family{{ $member->id }}" class="btn btn-outline-secondary w-100 text-start">{{ trim($member->first_name . ' ' . $member->last_name) }} @if($member->relation?->name)<small class="d-block text-secondary">{{ $member->relation->name }}</small>@endif</label>
+                                        <input type="hidden" class="family-member-dependent" name="sankalpam[members][{{ $memberIndex }}][name]" value="{{ trim($member->first_name . ' ' . $member->last_name) }}" disabled>
+                                        <input type="hidden" class="family-member-dependent" name="sankalpam[members][{{ $memberIndex }}][relationship]" value="{{ $member->relation?->name ?? '' }}" disabled>
+                                    </div>
+                                @empty
+                                    <div class="col-12"><div class="alert alert-light border mb-0">No saved family members found. Add them from your dashboard if needed.</div></div>
+                                @endforelse
                             </div>
-
                         </div>
+
+                    </div>
 
                     </div>
 
@@ -1620,7 +1011,7 @@
                                     <input
                                         type="radio"
                                         class="btn-check"
-                                        name="purpose"
+                                        name="sankalpam[purpose_type]"
                                         id="purpose{{ $index }}"
                                         value="{{ $purpose }}"
                                     >
@@ -1670,16 +1061,16 @@
                                 for="familyNames"
                                 class="form-label fw-semibold"
                             >
-                                Family Names
+                                Purpose Details
                             </label>
 
 
                             <textarea
                                 id="familyNames"
-                                name="family_names"
+                                name="sankalpam[purpose_details]"
                                 rows="3"
                                 class="form-control"
-                                placeholder="Enter family names to be included in the Sankalpam"
+                                placeholder="Enter additional details for the selected Sankalpam purpose"
                             ></textarea>
 
                         </div>
@@ -1699,7 +1090,7 @@
 
                             <textarea
                                 id="specialInstructions"
-                                name="special_instructions"
+                                name="sankalpam[special_instructions]"
                                 rows="4"
                                 class="form-control"
                                 placeholder="Enter any special instructions or requests"
@@ -1786,104 +1177,16 @@
 
                         <div class="row g-3">
 
-                            @foreach($addons as $addon)
-
+                            @foreach($addonOptions as $addonIndex => $addon)
                                 <div class="col-12 col-md-6">
-
-                                    <input
-                                        type="checkbox"
-                                        class="btn-check addon-checkbox"
-                                        name="addons[]"
-                                        id="{{ $addon['id'] }}"
-                                        value="{{ $addon['id'] }}"
-                                    >
-
-
-                                    <label
-                                        for="{{ $addon['id'] }}"
-                                        class="card
-                                               border
-                                               border-warning-subtle
-                                               rounded-4
-                                               p-3
-                                               h-100"
-                                    >
-
-                                        <div
-                                            class="d-flex
-                                                   align-items-start
-                                                   gap-3"
-                                        >
-
-                                            <div
-                                                class="rounded-circle
-                                                       d-flex
-                                                       align-items-center
-                                                       justify-content-center
-                                                       bg-pn-beige
-                                                       text-pn-primary
-                                                       flex-shrink-0"
-                                                style="width:46px;height:46px;"
-                                            >
-
-                                                <i
-                                                    class="bi {{ $addon['icon'] }}"
-                                                ></i>
-
-                                            </div>
-
-
-                                            <div class="flex-grow-1">
-
-                                                <div
-                                                    class="d-flex
-                                                           align-items-start
-                                                           justify-content-between
-                                                           gap-2"
-                                                >
-
-                                                    <h6
-                                                        class="fw-semibold
-                                                               text-pn-brown
-                                                               mb-1"
-                                                    >
-
-                                                        {{ $addon['name'] }}
-
-                                                    </h6>
-
-
-                                                    <strong
-                                                        class="small
-                                                               text-pn-primary
-                                                               text-nowrap"
-                                                    >
-
-                                                        +₹{{ number_format($addon['price']) }}
-
-                                                    </strong>
-
-                                                </div>
-
-
-                                                <p
-                                                    class="small
-                                                           text-secondary
-                                                           mb-0"
-                                                >
-
-                                                    {{ $addon['description'] }}
-
-                                                </p>
-
-                                            </div>
-
+                                    <input type="checkbox" class="btn-check addon-checkbox" name="extras[{{ $addonIndex }}][pooja_extra_option_id]" id="addon{{ $addon['id'] }}" value="{{ $addon['id'] }}" data-price="{{ $addon['price'] }}">
+                                    <label for="addon{{ $addon['id'] }}" class="card border border-warning-subtle rounded-4 p-3 h-100">
+                                        <div class="d-flex align-items-start gap-3">
+                                            <div class="rounded-circle d-flex align-items-center justify-content-center bg-pn-beige text-pn-primary flex-shrink-0" style="width:46px;height:46px;"><i class="bi {{ $addon['icon'] }}"></i></div>
+                                            <div class="flex-grow-1"><div class="d-flex align-items-start justify-content-between gap-2"><h6 class="fw-semibold text-pn-brown mb-1">{{ $addon['name'] }}</h6><strong class="small text-pn-primary text-nowrap">+{{ $defaultCurrency?->symbol ?? '₹' }}{{ number_format($addon['price'], 2) }}</strong></div><p class="small text-secondary mb-0">{{ $addon['description'] }}</p></div>
                                         </div>
-
                                     </label>
-
                                 </div>
-
                             @endforeach
 
                         </div>
@@ -2077,6 +1380,7 @@
                                         type="radio"
                                         class="btn-check"
                                         name="payment_method"
+                                        disabled
                                         id="payment{{ $method['id'] }}"
                                         value="{{ $method['id'] }}"
                                         {{ $index === 0 ? 'checked' : '' }}
@@ -2134,6 +1438,9 @@
                 </div>
 
 
+                <input type="hidden" name="currency_code" id="currencyCode" value="{{ $defaultCurrency?->code }}">
+                <input type="hidden" name="customer_notes" id="customerNotes" value="">
+
                 {{-- Terms --}}
 
                 <div class="form-check mb-4">
@@ -2142,6 +1449,8 @@
                         class="form-check-input"
                         type="checkbox"
                         id="bookingTerms"
+                        name="booking_terms"
+                        value="1"
                         required
                     >
 
@@ -2167,14 +1476,14 @@
                 <div class="d-lg-none">
 
                     <button
-                        type="button"
+                        type="submit"
                         class="btn
                                btn-pn
                                btn-lg
                                w-100"
                     >
 
-                        Proceed to Payment
+                        Create Booking
 
                         <i
                             class="bi bi-arrow-right ms-2"
@@ -2186,6 +1495,8 @@
 
             </div>
 
+
+                </form>
 
             {{-- =================================================
                  RIGHT SUMMARY
@@ -2230,11 +1541,11 @@
                             >
 
                                 <img
-                                    src="{{ Vite::asset('resources/images/home/' . $pooja['image']) }}"
+                                    src="{{ $poojaData['image'] ? asset($poojaData['image']) : Vite::asset('resources/images/home/ganapathi.jpg') }}"
                                     class="rounded-3
                                            object-fit-cover"
                                     style="width:64px;height:64px;"
-                                    alt="{{ $pooja['name'] }}"
+                                    alt="{{ $poojaData['name'] }}"
                                 >
 
 
@@ -2246,7 +1557,7 @@
                                                mb-1"
                                     >
 
-                                        {{ $pooja['name'] }}
+                                        {{ $poojaData['name'] }}
 
                                     </h6>
 
@@ -2255,7 +1566,7 @@
                                         class="text-secondary"
                                     >
 
-                                        {{ $pooja['duration'] }}
+                                        {{ $poojaData['duration'] }}
 
                                     </small>
 
@@ -2291,11 +1602,7 @@
                                 </span>
 
 
-                                <strong class="small text-end">
-
-                                    11 Aug 2026
-
-                                </strong>
+                                <strong class="small text-end" id="summaryDate">{{ \Carbon\Carbon::parse($selectedDate)->format('d M Y') }}</strong>
 
                             </div>
 
@@ -2322,11 +1629,7 @@
                                 </span>
 
 
-                                <strong class="small">
-
-                                    07:00 AM
-
-                                </strong>
+                                <strong class="small" id="summaryTime">--</strong>
 
                             </div>
 
@@ -2353,14 +1656,7 @@
                                 </span>
 
 
-                                <strong
-                                    class="small
-                                           text-end"
-                                >
-
-                                    No Preference
-
-                                </strong>
+                                <strong class="small text-end" id="summaryPriest">No Preference</strong>
 
                             </div>
 
@@ -2389,7 +1685,7 @@
 
                                 <strong class="small">
 
-                                    {{ $pooja['location'] }}
+                                    {{ $poojaData['location'] }}
 
                                 </strong>
 
@@ -2417,11 +1713,7 @@
                                 </span>
 
 
-                                <span class="small">
-
-                                    ₹{{ number_format($pooja['base_price']) }}
-
-                                </span>
+                                <span class="small" id="summaryPoojaFee">{{ $defaultCurrency?->symbol ?? '₹' }}{{ number_format((float) $poojaData['base_price'], 2) }}</span>
 
                             </div>
 
@@ -2440,11 +1732,7 @@
                                 </span>
 
 
-                                <span class="small">
-
-                                    ₹0
-
-                                </span>
+                                <span class="small" id="summaryAddons">{{ $defaultCurrency?->symbol ?? '₹' }}0.00</span>
 
                             </div>
 
@@ -2490,15 +1778,7 @@
                                 </strong>
 
 
-                                <strong
-                                    class="fs-4
-                                           font-serif
-                                           text-pn-primary"
-                                >
-
-                                    ₹{{ number_format($pooja['base_price']) }}
-
-                                </strong>
+                                <strong class="fs-4 font-serif text-pn-primary" id="summaryTotal">{{ $defaultCurrency?->symbol ?? '₹' }}{{ number_format((float) $poojaData['base_price'], 2) }}</strong>
 
                             </div>
 
@@ -2654,14 +1934,15 @@
                     <div class="d-none d-lg-block mt-3">
 
                         <button
-                            type="button"
+                            type="submit"
+                            form="bookingForm"
                             class="btn
                                    btn-pn
                                    btn-lg
                                    w-100"
                         >
 
-                            Proceed to Payment
+                            Create Booking
 
                             <i
                                 class="bi bi-arrow-right ms-2"

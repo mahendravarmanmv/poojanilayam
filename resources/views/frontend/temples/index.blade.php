@@ -281,7 +281,7 @@
                 {{-- Search --}}
 
                 <form
-                    action="#"
+                    action="{{ route('temple.index') }}"
                     method="GET"
                 >
 
@@ -767,11 +767,20 @@
                    row-cols-md-2
                    row-cols-xl-3
                    g-4"
+            data-pn-listing="temples"
         >
 
             @foreach($temples as $temple)
 
-                <div class="col">
+                <div class="col pn-listing-item"
+                     data-pn-item
+                     data-name="{{ $temple['name'] }}"
+                     data-location="{{ $temple['location'] }}"
+                     data-deity="{{ $temple['deity'] }}"
+                     data-rating="{{ $temple['rating'] }}"
+                     data-reviews="{{ str_replace(',', '', $temple['reviews']) }}"
+                     data-services="{{ implode(' ', $temple['services']) }}"
+                     data-search="{{ $temple['name'] . ' ' . $temple['location'] . ' ' . $temple['deity'] . ' ' . implode(' ', $temple['services']) }}">
 
                     <article
                         class="card
@@ -970,7 +979,7 @@
                             {{-- Action --}}
 
                             <a
-                                href="#"
+                                href="{{ route('temple.show', ['slug' => Str::slug($temple['name'])]) }}"
                                 class="btn
                                        btn-pn-outline
                                        w-100"
@@ -1005,7 +1014,9 @@
                    mt-5"
         >
 
-            <nav aria-label="Temple pagination">
+            <div class="alert alert-light border rounded-4 text-center d-none mt-4" data-pn-empty>No matching results found. Please adjust your filters.</div>
+
+                <nav aria-label="Temple pagination">
 
                 <ul class="pagination mb-0">
 
@@ -1139,7 +1150,7 @@
 
 
                 <a
-                    href="#"
+                    href="{{ route('pooja.index') }}"
                     class="btn btn-pn"
                 >
 
@@ -1544,7 +1555,7 @@
 
 
             <a
-                href="#"
+                href="{{ route('pooja.index') }}"
                 class="btn btn-pn"
             >
 

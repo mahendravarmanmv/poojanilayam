@@ -275,7 +275,7 @@
 
                 {{-- Search --}}
 
-                <form action="#" method="GET">
+                <form action="{{ route('priest.index') }}" method="GET">
 
                     <div
                         class="input-group
@@ -856,12 +856,22 @@
                    row-cols-1
                    row-cols-md-2
                    row-cols-xl-3
-                   g-4"
+                   g-4
+            data-pn-listing="priests"
         >
 
             @foreach($priests as $priest)
 
-                <div class="col">
+                <div class="col pn-listing-item"
+                     data-pn-item
+                     data-name="{{ $priest['name'] }}"
+                     data-location="{{ $priest['location'] }}"
+                     data-specializations="{{ implode(' ', $priest['specializations']) }}"
+                     data-languages="{{ implode(' ', $priest['languages']) }}"
+                     data-rating="{{ $priest['rating'] }}"
+                     data-reviews="{{ $priest['reviews'] }}"
+                     data-available="{{ $priest['available'] ? '1' : '0' }}"
+                     data-search="{{ $priest['name'] . ' ' . $priest['title'] . ' ' . $priest['location'] . ' ' . implode(' ', $priest['specializations']) . ' ' . implode(' ', $priest['languages']) }}">
 
                     <article
                         class="card
@@ -1158,7 +1168,7 @@
                             >
 
                                 <a
-                                    href="#"
+                                    href="{{ route('priest.show', ['slug' => Str::slug($priest['name'])]) }}"
                                     class="btn
                                            btn-pn-outline
                                            w-100"
@@ -1176,7 +1186,7 @@
                                 @if($priest['available'])
 
                                     <a
-                                        href="#"
+                                        href="{{ route('priest.book', ['slug' => Str::slug($priest['name'])]) }}"
                                         class="btn
                                                btn-pn
                                                w-100"
@@ -1229,7 +1239,9 @@
                    mt-5"
         >
 
-            <nav aria-label="Priest pagination">
+            <div class="alert alert-light border rounded-4 text-center d-none mt-4" data-pn-empty>No matching results found. Please adjust your filters.</div>
+
+                <nav aria-label="Priest pagination">
 
                 <ul class="pagination mb-0">
 
@@ -1601,7 +1613,7 @@
 
 
                 <a
-                    href="#"
+                    href="{{ route('priest.index') }}"
                     class="btn btn-pn"
                 >
 
@@ -1945,7 +1957,7 @@
 
 
                 <a
-                    href="#"
+                    href="{{ route('priest.index') }}"
                     class="btn
                            btn-warning
                            text-dark

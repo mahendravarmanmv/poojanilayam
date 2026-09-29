@@ -114,7 +114,7 @@
                 <li class="breadcrumb-item">
 
                     <a
-                        href="#"
+                        href="{{ route('astrology.index') }}"
                         class="text-pn-primary"
                     >
                         Astrology

@@ -108,7 +108,7 @@
                 <li class="breadcrumb-item">
 
                     <a
-                        href="#"
+                        href="{{ route('store.index') }}"
                         class="text-pn-primary"
                     >
                         Store
@@ -312,7 +312,7 @@
 
 
             <a
-                href="#"
+                href="{{ route('auth.login') }}"
                 class="btn
                        btn-pn
                        btn-sm
@@ -648,7 +648,7 @@
                             >
 
                                 <a
-                                    href="#"
+                                    href="{{ route('store.product', ['slug' => Str::slug($product['name'])]) }}"
                                     class="btn
                                            btn-pn-outline
                                            flex-grow-1"
@@ -770,7 +770,7 @@
 
 
             <a
-                href="#"
+                href="{{ route('store.index') }}"
                 class="btn btn-pn"
             >
 
@@ -1084,7 +1084,7 @@
 
 
                 <a
-                    href="#"
+                    href="{{ route('store.index') }}"
                     class="btn
                            btn-warning
                            text-dark

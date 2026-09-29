@@ -1669,7 +1669,7 @@
 
 
                                     <a
-                                        href="#"
+                                        href="{{ route('support.contact') }}"
                                         class="btn btn-pn-outline btn-sm"
                                     >
 
@@ -1758,7 +1758,7 @@
             >
 
                 <a
-                    href="#"
+                    href="{{ route('pooja.index') }}"
                     class="btn btn-pn px-4"
                 >
 
@@ -1772,7 +1772,7 @@
 
 
                 <a
-                    href="#"
+                    href="{{ route('dashboard.index') }}"
                     class="btn btn-pn-outline px-4"
                 >
 

@@ -196,7 +196,7 @@
                 <li class="breadcrumb-item">
 
                     <a
-                        href="#"
+                        href="{{ route('store.index') }}"
                         class="text-pn-primary"
                     >
                         Store
@@ -1170,11 +1170,20 @@
                            row-cols-sm-2
                            row-cols-xl-3
                            g-4"
+                    data-pn-listing="products"
                 >
 
                     @foreach($products as $product)
 
-                        <div class="col">
+                        <div class="col pn-listing-item"
+                             data-pn-item
+                             data-name="{{ $product['name'] }}"
+                             data-category="{{ $product['category'] }}"
+                             data-price="{{ $product['price'] }}"
+                             data-rating="{{ $product['rating'] }}"
+                             data-reviews="{{ $product['reviews'] }}"
+                             data-stock="{{ $product['stock'] ? '1' : '0' }}"
+                             data-search="{{ $product['name'] . ' ' . $product['category'] . ' ' . $product['description'] }}">
 
                             <article
                                 class="card
@@ -1363,7 +1372,7 @@
                                         >
 
                                             <a
-                                                href="#"
+                                                href="{{ route('store.product', ['slug' => Str::slug($product['name'])]) }}"
                                                 class="btn
                                                        btn-pn-outline
                                                        flex-grow-1"
@@ -1424,6 +1433,8 @@
                 {{-- ====================================================
                      PAGINATION
                 ===================================================== --}}
+
+                <div class="alert alert-light border rounded-4 text-center d-none mt-4" data-pn-empty>No matching results found. Please adjust your filters.</div>
 
                 <nav
                     class="mt-5"

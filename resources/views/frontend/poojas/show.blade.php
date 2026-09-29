@@ -211,7 +211,7 @@
                 <li class="breadcrumb-item">
 
                     <a
-                        href="#"
+                        href="{{ route('pooja.index') }}"
                         class="text-pn-primary"
                     >
                         Poojas
@@ -638,7 +638,7 @@
                 >
 
                     <a
-                        href="#"
+                        href="{{ route('pooja.book', ['slug' => Str::slug($pooja['name'])]) }}"
                         class="btn
                                btn-pn
                                btn-lg
@@ -1362,7 +1362,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('priest.show', ['slug' => Str::slug($pooja['priest']['name'])]) }}"
                             class="btn btn-pn-outline btn-sm"
                         >
 
@@ -1439,7 +1439,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('pooja.book', ['slug' => Str::slug($pooja['name'])]) }}"
                             class="btn btn-warning
                                    text-dark
                                    fw-semibold
@@ -1676,7 +1676,7 @@
 
 
             <a
-                href="#"
+                href="{{ route('pooja.index') }}"
                 class="btn btn-pn-outline"
             >
 
@@ -1786,7 +1786,7 @@
 
 
                                 <a
-                                    href="#"
+                                    href="{{ route('pooja.show', ['slug' => Str::slug($related['name'])]) }}"
                                     class="btn btn-pn btn-sm"
                                 >
 
@@ -1861,7 +1861,7 @@
 
 
             <a
-                href="#"
+                href="{{ route('pooja.index') }}"
                 class="btn btn-pn px-4"
             >
 

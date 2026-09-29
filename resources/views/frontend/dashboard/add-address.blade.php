@@ -57,7 +57,7 @@
                 <li class="breadcrumb-item">
 
                     <a
-                        href="#"
+                        href="{{ route('dashboard.index') }}"
                         class="text-pn-primary"
                     >
                         My Dashboard
@@ -69,7 +69,7 @@
                 <li class="breadcrumb-item">
 
                     <a
-                        href="#"
+                        href="{{ route('dashboard.addresses') }}"
                         class="text-pn-primary"
                     >
                         Address Book
@@ -216,7 +216,7 @@
                     <div class="list-group list-group-flush">
 
                         <a
-                            href="#"
+                            href="{{ route('dashboard.index') }}"
                             class="list-group-item
                                    list-group-item-action
                                    border-0
@@ -231,7 +231,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('dashboard.profile') }}"
                             class="list-group-item
                                    list-group-item-action
                                    border-0
@@ -246,7 +246,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('dashboard.bookings') }}"
                             class="list-group-item
                                    list-group-item-action
                                    border-0
@@ -261,7 +261,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('dashboard.digital-bookings') }}"
                             class="list-group-item
                                    list-group-item-action
                                    border-0
@@ -276,7 +276,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('dashboard.orders') }}"
                             class="list-group-item
                                    list-group-item-action
                                    border-0
@@ -291,7 +291,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('dashboard.wishlist') }}"
                             class="list-group-item
                                    list-group-item-action
                                    border-0
@@ -306,7 +306,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('dashboard.addresses') }}"
                             class="list-group-item
                                    list-group-item-action
                                    active
@@ -322,7 +322,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('dashboard.notifications') }}"
                             class="list-group-item
                                    list-group-item-action
                                    border-0
@@ -346,7 +346,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('dashboard.change-password') }}"
                             class="list-group-item
                                    list-group-item-action
                                    border-0
@@ -396,7 +396,7 @@
                 <form
                     id="addAddressForm"
                     method="POST"
-                    action="#"
+                    action="{{ route('dashboard.addresses.store') }}"
                     class="needs-validation"
                     novalidate
                 >

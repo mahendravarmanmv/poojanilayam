@@ -195,7 +195,7 @@
                 <li class="breadcrumb-item">
 
                     <a
-                        href="#"
+                        href="{{ route('priest.index') }}"
                         class="text-pn-primary"
                     >
                         Priests
@@ -207,7 +207,7 @@
                 <li class="breadcrumb-item">
 
                     <a
-                        href="#"
+                        href="{{ route('priest.show', ['slug' => Str::slug($priest['name'])]) }}"
                         class="text-pn-primary"
                     >
                         {{ $priest['name'] }}
@@ -624,7 +624,7 @@
 
 
                             <a
-                                href="#"
+                                href="{{ route('priest.show', ['slug' => Str::slug($priest['name'])]) }}"
                                 class="btn
                                        btn-pn-outline
                                        btn-sm
@@ -2249,7 +2249,7 @@
 
 
                                     <a
-                                        href="#"
+                                        href="{{ route('support.contact') }}"
                                         class="small
                                                text-pn-primary
                                                fw-semibold

@@ -696,7 +696,7 @@
 
 
                             <a
-                                href="#"
+                                href="{{ route('priest.show', ['slug' => Str::slug($priest['name'])]) }}"
                                 class="btn
                                        btn-pn-outline
                                        btn-sm"
@@ -1611,7 +1611,7 @@
 
 
                                 <a
-                                    href="#"
+                                    href="{{ route('dashboard.bookings') }}"
                                     class="btn
                                            btn-pn-outline"
                                 >
@@ -1626,7 +1626,7 @@
 
 
                                 <a
-                                    href="#"
+                                    href="{{ route('home') }}"
                                     class="btn
                                            btn-light
                                            border"
@@ -1697,7 +1697,7 @@
 
 
                                     <a
-                                        href="#"
+                                        href="{{ route('support.contact') }}"
                                         class="small
                                                text-pn-primary
                                                fw-semibold
@@ -1795,7 +1795,7 @@
                 >
 
                     <a
-                        href="#"
+                        href="{{ route('dashboard.bookings') }}"
                         class="btn
                                btn-warning
                                text-dark

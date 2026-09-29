@@ -183,7 +183,7 @@
                 <li class="breadcrumb-item">
 
                     <a
-                        href="#"
+                        href="{{ route('temple.index') }}"
                         class="text-pn-primary"
                     >
                         Temples
@@ -195,7 +195,7 @@
                 <li class="breadcrumb-item">
 
                     <a
-                        href="#"
+                        href="{{ route('temple.show', ['slug' => Str::slug($temple['name'])]) }}"
                         class="text-pn-primary"
                     >
                         {{ $temple['name'] }}
@@ -427,7 +427,7 @@
             >
 
                 <a
-                    href="#"
+                    href="{{ route('temple.show', ['slug' => Str::slug($temple['name'])]) }}"
                     class="btn
                            btn-pn-outline"
                 >
@@ -1087,7 +1087,7 @@
                     >
 
                         <a
-                            href="#"
+                            href="{{ route('temple.poojas', ['slug' => Str::slug($temple['name'])]) }}"
                             class="btn
                                    btn-warning
                                    text-dark
@@ -1104,7 +1104,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('temple.events', ['slug' => Str::slug($temple['name'])]) }}"
                             class="btn
                                    btn-outline-light"
                         >
@@ -1144,7 +1144,7 @@
             <div class="col">
 
                 <a
-                    href="#"
+                    href="{{ route('temple.poojas', ['slug' => Str::slug($temple['name'])]) }}"
                     class="card
                            border
                            border-warning-subtle
@@ -1212,7 +1212,7 @@
             <div class="col">
 
                 <a
-                    href="#"
+                    href="{{ route('temple.events', ['slug' => Str::slug($temple['name'])]) }}"
                     class="card
                            border
                            border-warning-subtle
@@ -1280,7 +1280,7 @@
             <div class="col">
 
                 <a
-                    href="#"
+                    href="{{ route('temple.poojas', ['slug' => Str::slug($temple['name'])]) }}"
                     class="card
                            border
                            border-warning-subtle
@@ -1528,7 +1528,7 @@
                 >
 
                     <a
-                        href="#"
+                        href="{{ route('temple.poojas', ['slug' => Str::slug($temple['name'])]) }}"
                         class="btn
                                btn-warning
                                text-dark
@@ -1546,7 +1546,7 @@
 
 
                     <a
-                        href="#"
+                        href="{{ route('temple.events', ['slug' => Str::slug($temple['name'])]) }}"
                         class="btn
                                btn-outline-light
                                px-4"

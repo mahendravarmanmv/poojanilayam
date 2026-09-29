@@ -326,7 +326,7 @@
 
 
                     <a
-                        href="{{ url('/contact-us') }}"
+                        href="{{ route('support.contact') }}"
                         class="small
                                fw-semibold
                                text-pn-primary

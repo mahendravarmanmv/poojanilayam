@@ -59,7 +59,7 @@
                 <li class="breadcrumb-item">
 
                     <a
-                        href="#"
+                        href="{{ route('dashboard.index') }}"
                         class="text-pn-primary"
                     >
                         My Dashboard
@@ -138,7 +138,7 @@
             >
 
                 <a
-                    href="#"
+                    href="{{ route('dashboard.profile.edit') }}"
                     class="btn btn-pn"
                 >
 
@@ -231,7 +231,7 @@
                     <div class="list-group list-group-flush">
 
                         <a
-                            href="#"
+                            href="{{ route('dashboard.index') }}"
                             class="list-group-item
                                    list-group-item-action
                                    border-0
@@ -246,7 +246,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('dashboard.profile') }}"
                             class="list-group-item
                                    list-group-item-action
                                    active
@@ -262,7 +262,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('dashboard.bookings') }}"
                             class="list-group-item
                                    list-group-item-action
                                    border-0
@@ -277,7 +277,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('dashboard.digital-bookings') }}"
                             class="list-group-item
                                    list-group-item-action
                                    border-0
@@ -292,7 +292,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('dashboard.orders') }}"
                             class="list-group-item
                                    list-group-item-action
                                    border-0
@@ -307,7 +307,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('dashboard.wishlist') }}"
                             class="list-group-item
                                    list-group-item-action
                                    border-0
@@ -322,7 +322,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('dashboard.addresses') }}"
                             class="list-group-item
                                    list-group-item-action
                                    border-0
@@ -337,7 +337,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('dashboard.notifications') }}"
                             class="list-group-item
                                    list-group-item-action
                                    border-0
@@ -361,7 +361,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('dashboard.change-password') }}"
                             class="list-group-item
                                    list-group-item-action
                                    border-0
@@ -951,7 +951,7 @@
 
 
                             <a
-                                href="#"
+                                href="{{ route('dashboard.profile.edit') }}"
                                 class="btn
                                        btn-sm
                                        btn-pn-outline"
@@ -1145,7 +1145,7 @@
                             <div class="col">
 
                                 <a
-                                    href="#"
+                                    href="{{ route('dashboard.change-password') }}"
                                     class="text-decoration-none"
                                 >
 
@@ -1346,7 +1346,7 @@
                         >
 
                             <a
-                                href="#"
+                                href="{{ route('dashboard.addresses') }}"
                                 class="btn btn-pn"
                             >
 
@@ -1439,7 +1439,7 @@
                     >
 
                         <a
-                            href="#"
+                            href="{{ route('support.contact') }}"
                             class="btn
                                    btn-warning
                                    text-dark

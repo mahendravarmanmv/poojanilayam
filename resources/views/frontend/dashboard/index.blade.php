@@ -265,7 +265,7 @@
             >
 
                 <a
-                    href="#"
+                    href="{{ route('dashboard.profile') }}"
                     class="btn
                            btn-pn
                            px-4"
@@ -368,7 +368,7 @@
                     <div class="list-group list-group-flush">
 
                         <a
-                            href="#"
+                            href="{{ route('dashboard.index') }}"
                             class="list-group-item
                                    list-group-item-action
                                    active
@@ -386,7 +386,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('dashboard.profile') }}"
                             class="list-group-item
                                    list-group-item-action
                                    border-0
@@ -403,7 +403,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('dashboard.bookings') }}"
                             class="list-group-item
                                    list-group-item-action
                                    border-0
@@ -420,7 +420,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('dashboard.digital-bookings') }}"
                             class="list-group-item
                                    list-group-item-action
                                    border-0
@@ -437,7 +437,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('dashboard.orders') }}"
                             class="list-group-item
                                    list-group-item-action
                                    border-0
@@ -454,7 +454,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('dashboard.wishlist') }}"
                             class="list-group-item
                                    list-group-item-action
                                    border-0
@@ -471,7 +471,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('dashboard.addresses') }}"
                             class="list-group-item
                                    list-group-item-action
                                    border-0
@@ -488,7 +488,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('dashboard.notifications') }}"
                             class="list-group-item
                                    list-group-item-action
                                    border-0
@@ -514,7 +514,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('dashboard.change-password') }}"
                             class="list-group-item
                                    list-group-item-action
                                    border-0
@@ -726,7 +726,7 @@
                             <div class="col">
 
                                 <a
-                                    href="#"
+                                    href="{{ route('pooja.index') }}"
                                     class="text-decoration-none"
                                 >
 
@@ -775,7 +775,7 @@
                             <div class="col">
 
                                 <a
-                                    href="#"
+                                    href="{{ route('digital-pooja.index') }}"
                                     class="text-decoration-none"
                                 >
 
@@ -824,7 +824,7 @@
                             <div class="col">
 
                                 <a
-                                    href="#"
+                                    href="{{ route('store.index') }}"
                                     class="text-decoration-none"
                                 >
 
@@ -873,7 +873,7 @@
                             <div class="col">
 
                                 <a
-                                    href="#"
+                                    href="{{ route('donation.index') }}"
                                     class="text-decoration-none"
                                 >
 
@@ -973,7 +973,7 @@
 
 
                             <a
-                                href="#"
+                                href="{{ route('dashboard.bookings') }}"
                                 class="small
                                        text-pn-primary
                                        fw-semibold
@@ -1150,7 +1150,7 @@
 
 
                             <a
-                                href="#"
+                                href="{{ route('dashboard.orders') }}"
                                 class="small
                                        text-pn-primary
                                        fw-semibold
@@ -1390,7 +1390,7 @@
 
 
                             <a
-                                href="#"
+                                href="{{ route('dashboard.notifications') }}"
                                 class="small
                                        text-pn-primary
                                        fw-semibold
@@ -1554,7 +1554,7 @@
                     >
 
                         <a
-                            href="#"
+                            href="{{ route('support.help-center') }}"
                             class="btn
                                    btn-warning
                                    text-dark

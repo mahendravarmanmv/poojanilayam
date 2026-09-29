@@ -42,7 +42,7 @@
                             <li class="mb-2"><a href="{{ route('about') }}" class="text-pn-brown">About Us</a></li>
                             <li class="mb-2"><a href="{{ route('faq') }}" class="text-pn-brown">FAQs</a></li>
                             <li class="mb-2"><a href="{{ route('testimonials') }}" class="text-pn-brown">Testimonials</a></li>
-                            <li><a href="{{ route('contact') }}" class="text-pn-brown">Contact Us</a></li>
+                            <li><a href="{{ route('support.contact') }}" class="text-pn-brown">Contact Us</a></li>
                         </ul>
                     </div>
                 </div>

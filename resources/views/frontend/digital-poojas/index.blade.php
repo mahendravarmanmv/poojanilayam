@@ -1185,7 +1185,7 @@
 
 
                                 <a
-                                    href="#"
+                                    href="{{ route('digital-pooja.show', ['slug' => Str::slug($pooja['name'])]) }}"
                                     class="btn btn-pn"
                                 >
 

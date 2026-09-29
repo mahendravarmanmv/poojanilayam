@@ -343,7 +343,7 @@
                 <div class="pn-search">
 
                     <form
-                        action="#"
+                        action="{{ route('pooja.index') }}"
                         method="GET"
                     >
 
@@ -503,7 +503,7 @@
                 <div class="col">
 
                     <a
-                        href="#"
+                        href="{{ match (Str::slug($service['title'])) { 'poojas' => route('pooja.index'), 'temples' => route('temple.index'), 'priests' => route('priest.index'), 'digital-pooja' => route('digital-pooja.index'), 'astrology' => route('astrology.index'), 'store' => route('store.index'), default => route('home') } }}"
                         class="pn-service-card
                                card
                                border-0
@@ -613,7 +613,7 @@
 
 
             <a
-                href="#"
+                href="{{ route('pooja.index') }}"
                 class="btn btn-pn-outline"
             >
 
@@ -754,7 +754,7 @@
 
 
                                     <a
-                                        href="#"
+                                        href="{{ route('pooja.book', ['slug' => Str::slug($pooja['name'])]) }}"
                                         class="btn btn-pn btn-sm"
                                     >
                                         Book
@@ -838,7 +838,7 @@
                 <div class="col">
 
                     <a
-                        href="#"
+                        href="{{ route('pooja.index', ['occasion' => Str::slug($occasion['title'])]) }}"
                         class="card
                                border-0
                                bg-white
@@ -940,7 +940,7 @@
 
 
             <a
-                href="#"
+                href="{{ route('temple.index') }}"
                 class="btn btn-pn-outline"
             >
 
@@ -1008,7 +1008,7 @@
 
 
                             <a
-                                href="#"
+                                href="{{ route('temple.show', ['slug' => Str::slug($temple['name'])]) }}"
                                 class="small
                                        fw-semibold
                                        text-pn-primary"
@@ -1235,7 +1235,7 @@
 
 
                         <a
-                            href="#"
+                            href="{{ route('digital-pooja.index') }}"
                             class="btn btn-warning
                                    text-dark
                                    fw-semibold
@@ -1340,7 +1340,7 @@
                 <div class="col">
 
                     <a
-                        href="#"
+                        href="{{ match (Str::slug($service)) { 'horoscope' => route('astrology.horoscope'), 'kundli' => route('astrology.kundli'), 'match-making' => route('astrology.match-making'), 'numerology' => route('astrology.numerology'), 'palm-reading' => route('astrology.palm-reading'), 'vastu' => route('astrology.vastu'), default => route('astrology.index') } }}"
                         class="card
                                border-0
                                rounded-4
@@ -1433,7 +1433,7 @@
 
 
             <a
-                href="#"
+                href="{{ route('store.index') }}"
                 class="btn btn-pn-outline"
             >
 
@@ -1554,7 +1554,7 @@
 
 
                 <a
-                    href="#"
+                    href="{{ route('festival.index') }}"
                     class="btn btn-pn mt-2"
                 >
 
@@ -1753,7 +1753,7 @@
 
 
             <a
-                href="#"
+                href="{{ route('blog.index') }}"
                 class="btn btn-pn-outline"
             >
 
@@ -1811,7 +1811,7 @@
 
 
                             <a
-                                href="#"
+                                href="{{ route('blog.show', ['slug' => Str::slug($blog['title'])]) }}"
                                 class="small
                                        fw-semibold
                                        text-pn-primary"
@@ -2109,7 +2109,7 @@
 
 
             <a
-                href="#"
+                href="{{ route('pooja.index') }}"
                 class="btn btn-pn px-4"
             >
 

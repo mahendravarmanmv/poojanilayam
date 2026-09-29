@@ -252,7 +252,7 @@
 
 
                     <a
-                        href="{{ url('/contact-us') }}"
+                        href="{{ route('support.contact') }}"
                         class="btn
                                btn-pn-outline
                                btn-lg
@@ -293,7 +293,7 @@
                     >
 
                         <a
-                            href="{{ url('/pooja') }}"
+                            href="{{ route('pooja.index') }}"
                             class="coming-soon-service-link"
                         >
                             Pooja
@@ -301,7 +301,7 @@
 
 
                         <a
-                            href="{{ url('/digital-pooja') }}"
+                            href="{{ route('digital-pooja.index') }}"
                             class="coming-soon-service-link"
                         >
                             Digital Pooja
@@ -309,7 +309,7 @@
 
 
                         <a
-                            href="{{ url('/temples') }}"
+                            href="{{ route('temple.index') }}"
                             class="coming-soon-service-link"
                         >
                             Temples
@@ -317,7 +317,7 @@
 
 
                         <a
-                            href="{{ url('/astrology') }}"
+                            href="{{ route('astrology.index') }}"
                             class="coming-soon-service-link"
                         >
                             Astrology
@@ -325,7 +325,7 @@
 
 
                         <a
-                            href="{{ url('/shop') }}"
+                            href="{{ route('store.index') }}"
                             class="coming-soon-service-link"
                         >
                             Pooja Store
@@ -333,7 +333,7 @@
 
 
                         <a
-                            href="{{ url('/donations') }}"
+                            href="{{ route('donation.index') }}"
                             class="coming-soon-service-link"
                         >
                             Donations

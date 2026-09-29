@@ -202,7 +202,7 @@
                 <li class="breadcrumb-item">
 
                     <a
-                        href="#"
+                        href="{{ route('astrology.index') }}"
                         class="text-pn-primary"
                     >
                         Astrology
@@ -1080,7 +1080,7 @@
 
 
                         <a
-                            href="#"
+                            href="#zodiac"
                             class="btn
                                    btn-pn"
                         >
@@ -1167,7 +1167,7 @@
             >
 
                 <a
-                    href="#"
+                    href="{{ route('priest.index') }}"
                     class="btn
                            btn-pn
                            btn-lg"

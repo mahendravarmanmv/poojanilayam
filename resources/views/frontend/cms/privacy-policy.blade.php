@@ -488,7 +488,7 @@
 
 
                         <a
-                            href="{{ url('/contact-us') }}"
+                            href="{{ route('support.contact') }}"
                             class="btn
                                    btn-pn-outline
                                    w-100"
@@ -1419,7 +1419,7 @@
 
 
                                     <a
-                                        href="{{ url('/contact-us') }}"
+                                        href="{{ route('support.contact') }}"
                                         class="btn btn-pn"
                                     >
 
@@ -1485,7 +1485,7 @@
             >
 
                 <a
-                    href="{{ url('/terms-conditions') }}"
+                    href="{{ route('terms') }}"
                     class="btn
                            btn-sm
                            btn-pn-outline"
@@ -1497,7 +1497,7 @@
 
 
                 <a
-                    href="{{ url('/refund-policy') }}"
+                    href="{{ route('refund') }}"
                     class="btn
                            btn-sm
                            btn-pn-outline"
@@ -1509,7 +1509,7 @@
 
 
                 <a
-                    href="{{ url('/shipping-policy') }}"
+                    href="{{ route('shipping') }}"
                     class="btn
                            btn-sm
                            btn-pn-outline"
@@ -1521,7 +1521,7 @@
 
 
                 <a
-                    href="{{ url('/disclaimer') }}"
+                    href="{{ route('disclaimer') }}"
                     class="btn
                            btn-sm
                            btn-pn-outline"

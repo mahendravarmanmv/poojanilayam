@@ -184,7 +184,7 @@
                 <li class="breadcrumb-item">
 
                     <a
-                        href="{{ url('/terms-conditions') }}"
+                        href="{{ route('terms') }}"
                         class="text-pn-primary"
                     >
                         Legal
@@ -736,7 +736,7 @@
                         >
 
                             <a
-                                href="{{ url('/raise-ticket') }}"
+                                href="{{ route('support.raise-ticket') }}"
                                 class="btn btn-pn"
                             >
 
@@ -746,7 +746,7 @@
 
 
                             <a
-                                href="{{ url('/contact-us') }}"
+                                href="{{ route('support.contact') }}"
                                 class="btn
                                        btn-light
                                        border"
@@ -1494,7 +1494,7 @@
 
 
                                     <a
-                                        href="{{ url('/dashboard/orders') }}"
+                                        href="{{ route('dashboard.orders') }}"
                                         class="btn btn-pn"
                                     >
 
@@ -1767,7 +1767,7 @@
 
 
                                     <a
-                                        href="{{ url('/refund-policy') }}"
+                                        href="{{ route('refund') }}"
                                         class="btn
                                                btn-sm
                                                btn-pn-outline"
@@ -2108,7 +2108,7 @@
                                     >
 
                                         <a
-                                            href="{{ url('/raise-ticket') }}"
+                                            href="{{ route('support.raise-ticket') }}"
                                             class="btn btn-pn"
                                         >
 
@@ -2118,7 +2118,7 @@
 
 
                                         <a
-                                            href="{{ url('/contact-us') }}"
+                                            href="{{ route('support.contact') }}"
                                             class="btn btn-pn-outline"
                                         >
 
@@ -2242,7 +2242,7 @@
 
 
                                     <a
-                                        href="{{ url('/contact-us') }}"
+                                        href="{{ route('support.contact') }}"
                                         class="btn btn-pn"
                                     >
 
@@ -2308,7 +2308,7 @@
             >
 
                 <a
-                    href="{{ url('/privacy-policy') }}"
+                    href="{{ route('privacy') }}"
                     class="btn
                            btn-sm
                            btn-pn-outline"
@@ -2318,7 +2318,7 @@
 
 
                 <a
-                    href="{{ url('/terms-conditions') }}"
+                    href="{{ route('terms') }}"
                     class="btn
                            btn-sm
                            btn-pn-outline"
@@ -2328,7 +2328,7 @@
 
 
                 <a
-                    href="{{ url('/refund-policy') }}"
+                    href="{{ route('refund') }}"
                     class="btn
                            btn-sm
                            btn-pn-outline"
@@ -2338,7 +2338,7 @@
 
 
                 <a
-                    href="{{ url('/disclaimer') }}"
+                    href="{{ route('disclaimer') }}"
                     class="btn
                            btn-sm
                            btn-pn-outline"
