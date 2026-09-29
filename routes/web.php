@@ -53,9 +53,6 @@ Route::prefix('poojas')
         Route::view('/{slug}', 'frontend.poojas.show')
             ->name('show');
 
-        Route::view('/{slug}/book', 'frontend.poojas.book')
-            ->name('book');
-
         Route::view('/{slug}/booking-success', 'frontend.poojas.booking-success')
             ->name('booking.success');
 
@@ -436,6 +433,8 @@ require __DIR__ . '/customer-family-members.php';
 require __DIR__ . '/customer-profile-completion.php';
 require __DIR__ . '/customer-preferences.php';
 require __DIR__ . '/customer-notifications.php';
+require __DIR__ . '/booking.php';
+require __DIR__ . '/customer-bookings.php';
 
 
 /*
