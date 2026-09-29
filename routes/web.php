@@ -433,6 +433,9 @@ Route::view('/sitemap', 'frontend.sitemap')
 require __DIR__ . '/customer-dashboard.php';
 require __DIR__ . '/customer-security.php';
 require __DIR__ . '/customer-family-members.php';
+require __DIR__ . '/customer-profile-completion.php';
+require __DIR__ . '/customer-preferences.php';
+require __DIR__ . '/customer-notifications.php';
 
 
 /*
