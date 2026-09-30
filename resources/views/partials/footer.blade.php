@@ -30,7 +30,7 @@
 
                 <div class="col-lg-5">
 
-                    <form>
+                    <form class="pn-newsletter-form">
 
                         <div class="input-group input-group-lg">
 
@@ -205,6 +205,12 @@
                     <li class="mb-2">
                         <a href="{{ route('blog.index') }}" class="text-white-50">
                             Spiritual Blogs
+                        </a>
+                    </li>
+
+                    <li class="mb-2">
+                        <a href="{{ route('sitemap') }}" class="text-white-50">
+                            Sitemap
                         </a>
                     </li>
 

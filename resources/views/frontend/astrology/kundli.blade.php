@@ -1730,7 +1730,7 @@
             >
 
                 <a
-                    href="#"
+                    href="{{ route('priest.index') }}"
                     class="btn
                            btn-pn
                            btn-lg"

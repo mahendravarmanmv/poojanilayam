@@ -159,7 +159,7 @@
             >
 
                 <a
-                    href="#"
+                    href="{{ route('dashboard.addresses.add') }}"
                     class="btn btn-pn"
                 >
 
@@ -401,22 +401,31 @@
                         <div class="border-top"></div>
 
 
-                        <a
-                            href="#"
-                            class="list-group-item
-                                   list-group-item-action
-                                   border-0
-                                   py-3
-                                   text-danger"
-                        >
+                        <form method="POST" action="{{ route('auth.logout') }}" class="m-0">
 
-                            <i
-                                class="bi bi-box-arrow-right me-3"
-                            ></i>
+                            @csrf
 
-                            Logout
+                            <button
+                                type="submit"
+                                class="list-group-item
+                                       list-group-item-action
+                                       border-0
+                                       py-3
+                                       text-danger
+                                       w-100
+                                       text-start
+                                       bg-transparent"
+                            >
 
-                        </a>
+                                <i
+                                    class="bi bi-box-arrow-right me-3"
+                                ></i>
+
+                                Logout
+
+                            </button>
+
+                        </form>
 
                     </div>
 
@@ -1020,7 +1029,7 @@
 
 
                     <a
-                        href="#"
+                        href="{{ route('dashboard.addresses.add') }}"
                         class="btn btn-pn"
                     >
 
@@ -1129,7 +1138,7 @@
                     >
 
                         <a
-                            href="#"
+                            href="{{ route('support.help-center') }}"
                             class="btn
                                    btn-warning
                                    text-dark

@@ -25,6 +25,44 @@ a {
     text-decoration: none;
 }
 
+/* -------------------------------------------------------
+   Responsive Safety
+------------------------------------------------------- */
+
+img,
+svg,
+video,
+canvas {
+    max-width: 100%;
+}
+
+iframe {
+    max-width: 100%;
+}
+
+.row > * {
+    min-width: 0;
+}
+
+.d-flex,
+.d-inline-flex {
+    min-width: 0;
+}
+
+.text-break {
+    overflow-wrap: anywhere;
+}
+
+.form-control,
+.form-select,
+.input-group {
+    min-width: 0;
+}
+
+.table-responsive {
+    -webkit-overflow-scrolling: touch;
+}
+
 
 /* -------------------------------------------------------
    Brand Utilities
@@ -279,6 +317,43 @@ a {
         font-size: 2.8rem;
     }
 
+    .pn-brand-logo {
+        height: 62px;
+    }
+
+    .pn-newsletter-form .input-group {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .pn-newsletter-form .form-control,
+    .pn-newsletter-form .btn {
+        width: 100%;
+        border-radius: 0.5rem !important;
+    }
+
+    .pagination {
+        flex-wrap: wrap;
+        gap: 0.25rem;
+    }
+
+    .pagination .page-item {
+        margin-bottom: 0.15rem;
+    }
+
+}
+
+.pn-brand-logo {
+    height: 80px;
+    width: auto;
+}
+
+.pn-mobile-menu {
+    --bs-offcanvas-width: min(400px, 92vw);
+}
+
+.pn-newsletter-form {
+    min-width: 0;
 }
 
 .icon-circle-58 {

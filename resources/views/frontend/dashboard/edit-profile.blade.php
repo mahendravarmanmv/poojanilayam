@@ -1127,7 +1127,7 @@
                                 >
 
                                     <a
-                                        href="#"
+                                        href="{{ route('dashboard.profile') }}"
                                         class="btn
                                                btn-outline-secondary
                                                px-4"

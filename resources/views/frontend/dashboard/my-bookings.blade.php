@@ -13,114 +13,107 @@
 
     /*
     |--------------------------------------------------------------------------
-    | TEMPORARY UI DATA
+    | UI data source
     |--------------------------------------------------------------------------
-    | These values will later come from the authenticated customer's
-    | booking records.
+    | The standalone prototype page still supports temporary preview data.
+    | The live customer booking route passes normalized booking data into
+    | this same presentation template.
     |--------------------------------------------------------------------------
     */
 
-    $bookings = [
+    if (!isset($bookings)) {
+        $bookings = [
+            [
+                'id' => 'PN-BKG-2026-00124',
+                'type' => 'Online Pooja',
+                'name' => 'Ganapathi Homam',
+                'date' => '15 August 2026',
+                'time' => '10:00 AM',
+                'duration' => '60 Mins',
+                'status' => 'Confirmed',
+                'status_class' => 'success',
+                'icon' => 'bi-flower1',
+                'priest' => 'Assigned Priest',
+                'location' => 'Online',
+                'amount' => 501,
+                'is_upcoming' => true,
+            ],
+            [
+                'id' => 'PN-BKG-2026-00108',
+                'type' => 'Temple Pooja',
+                'name' => 'Sri Satyanarayana Pooja',
+                'date' => '21 August 2026',
+                'time' => '9:30 AM',
+                'duration' => '90 Mins',
+                'status' => 'Pending Confirmation',
+                'status_class' => 'warning',
+                'icon' => 'bi-building',
+                'priest' => 'To be assigned',
+                'location' => 'Temple',
+                'amount' => 601,
+                'is_upcoming' => true,
+            ],
+            [
+                'id' => 'PN-BKG-2026-00087',
+                'type' => 'Online Pooja',
+                'name' => 'Rudrabhishekam',
+                'date' => '02 August 2026',
+                'time' => '8:00 AM',
+                'duration' => '90 Mins',
+                'status' => 'Completed',
+                'status_class' => 'success',
+                'icon' => 'bi-flower1',
+                'priest' => 'Assigned Priest',
+                'location' => 'Online',
+                'amount' => 1101,
+                'is_upcoming' => false,
+            ],
+            [
+                'id' => 'PN-BKG-2026-00061',
+                'type' => 'Temple Pooja',
+                'name' => 'Lakshmi Pooja',
+                'date' => '25 July 2026',
+                'time' => '6:00 PM',
+                'duration' => '60 Mins',
+                'status' => 'Completed',
+                'status_class' => 'success',
+                'icon' => 'bi-building',
+                'priest' => 'Assigned Priest',
+                'location' => 'Temple',
+                'amount' => 501,
+                'is_upcoming' => false,
+            ],
+            [
+                'id' => 'PN-BKG-2026-00042',
+                'type' => 'Online Pooja',
+                'name' => 'Navagraha Pooja',
+                'date' => '18 July 2026',
+                'time' => '11:00 AM',
+                'duration' => '90 Mins',
+                'status' => 'Cancelled',
+                'status_class' => 'danger',
+                'icon' => 'bi-flower1',
+                'priest' => 'Not Assigned',
+                'location' => 'Online',
+                'amount' => 901,
+                'is_upcoming' => false,
+            ],
+        ];
+    }
 
-        [
-            'id' => 'PN-BKG-2026-00124',
-            'type' => 'Online Pooja',
-            'name' => 'Ganapathi Homam',
-            'date' => '15 August 2026',
-            'time' => '10:00 AM',
-            'duration' => '60 Mins',
-            'status' => 'Confirmed',
-            'status_class' => 'success',
-            'icon' => 'bi-flower1',
-            'priest' => 'Assigned Priest',
-            'location' => 'Online',
-            'amount' => 501,
-            'is_upcoming' => true
-        ],
+    $upcomingBookings = array_values(
+        array_filter(
+            $bookings,
+            fn ($booking) => $booking['is_upcoming']
+        )
+    );
 
-        [
-            'id' => 'PN-BKG-2026-00108',
-            'type' => 'Temple Pooja',
-            'name' => 'Sri Satyanarayana Pooja',
-            'date' => '21 August 2026',
-            'time' => '9:30 AM',
-            'duration' => '90 Mins',
-            'status' => 'Pending Confirmation',
-            'status_class' => 'warning',
-            'icon' => 'bi-building',
-            'priest' => 'To be assigned',
-            'location' => 'Temple',
-            'amount' => 601,
-            'is_upcoming' => true
-        ],
-
-        [
-            'id' => 'PN-BKG-2026-00087',
-            'type' => 'Online Pooja',
-            'name' => 'Rudrabhishekam',
-            'date' => '02 August 2026',
-            'time' => '8:00 AM',
-            'duration' => '90 Mins',
-            'status' => 'Completed',
-            'status_class' => 'success',
-            'icon' => 'bi-flower1',
-            'priest' => 'Assigned Priest',
-            'location' => 'Online',
-            'amount' => 1101,
-            'is_upcoming' => false
-        ],
-
-        [
-            'id' => 'PN-BKG-2026-00061',
-            'type' => 'Temple Pooja',
-            'name' => 'Lakshmi Pooja',
-            'date' => '25 July 2026',
-            'time' => '6:00 PM',
-            'duration' => '60 Mins',
-            'status' => 'Completed',
-            'status_class' => 'success',
-            'icon' => 'bi-building',
-            'priest' => 'Assigned Priest',
-            'location' => 'Temple',
-            'amount' => 501,
-            'is_upcoming' => false
-        ],
-
-        [
-            'id' => 'PN-BKG-2026-00042',
-            'type' => 'Online Pooja',
-            'name' => 'Navagraha Pooja',
-            'date' => '18 July 2026',
-            'time' => '11:00 AM',
-            'duration' => '90 Mins',
-            'status' => 'Cancelled',
-            'status_class' => 'danger',
-            'icon' => 'bi-flower1',
-            'priest' => 'Not Assigned',
-            'location' => 'Online',
-            'amount' => 901,
-            'is_upcoming' => false
-        ]
-
-    ];
-
-
-    $upcomingBookings =
-        array_values(
-            array_filter(
-                $bookings,
-                fn ($booking) => $booking['is_upcoming']
-            )
-        );
-
-
-    $pastBookings =
-        array_values(
-            array_filter(
-                $bookings,
-                fn ($booking) => !$booking['is_upcoming']
-            )
-        );
+    $pastBookings = array_values(
+        array_filter(
+            $bookings,
+            fn ($booking) => !$booking['is_upcoming']
+        )
+    );
 
 @endphp
 
@@ -474,22 +467,31 @@
                         <div class="border-top"></div>
 
 
-                        <a
-                            href="#"
-                            class="list-group-item
-                                   list-group-item-action
-                                   border-0
-                                   py-3
-                                   text-danger"
-                        >
+                        <form method="POST" action="{{ route('auth.logout') }}" class="m-0">
 
-                            <i
-                                class="bi bi-box-arrow-right me-3"
-                            ></i>
+                            @csrf
 
-                            Logout
+                            <button
+                                type="submit"
+                                class="list-group-item
+                                       list-group-item-action
+                                       border-0
+                                       py-3
+                                       text-danger
+                                       w-100
+                                       text-start
+                                       bg-transparent"
+                            >
 
-                        </a>
+                                <i
+                                    class="bi bi-box-arrow-right me-3"
+                                ></i>
+
+                                Logout
+
+                            </button>
+
+                        </form>
 
                     </div>
 

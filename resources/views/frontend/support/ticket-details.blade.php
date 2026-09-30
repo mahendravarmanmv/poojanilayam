@@ -262,7 +262,7 @@
             >
 
                 <a
-                    href="#"
+                    href="{{ route('support.tickets') }}"
                     class="btn
                            btn-pn-outline"
                 >

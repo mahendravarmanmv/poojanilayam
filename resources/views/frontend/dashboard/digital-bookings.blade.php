@@ -438,19 +438,31 @@
                         <div class="border-top"></div>
 
 
-                        <a
-                            href="#"
-                            class="list-group-item
-                                   list-group-item-action
-                                   border-0
-                                   py-3
-                                   text-danger"
-                        >
-                            <i
-                                class="bi bi-box-arrow-right me-3"
-                            ></i>
-                            Logout
-                        </a>
+                        <form method="POST" action="{{ route('auth.logout') }}" class="m-0">
+
+                            @csrf
+
+                            <button
+                                type="submit"
+                                class="list-group-item
+                                       list-group-item-action
+                                       border-0
+                                       py-3
+                                       text-danger
+                                       w-100
+                                       text-start
+                                       bg-transparent"
+                            >
+
+                                <i
+                                    class="bi bi-box-arrow-right me-3"
+                                ></i>
+
+                                Logout
+
+                            </button>
+
+                        </form>
 
                     </div>
 
@@ -1432,7 +1444,7 @@
                                 >
 
                                     <a
-                                        href="#"
+                                        href="{{ route('digital-pooja.show', ['slug' => \Illuminate\Support\Str::slug($booking['pooja'])]) }}"
                                         class="btn
                                                btn-pn-outline"
                                     >
@@ -1451,7 +1463,7 @@
                                     )
 
                                         <a
-                                            href="#"
+                                            href="{{ route('digital-pooja.join-live', ['slug' => \Illuminate\Support\Str::slug($booking['pooja'])]) }}"
                                             class="btn
                                                    btn-pn"
                                         >

@@ -65,4 +65,5 @@ Route::prefix('dashboard')
 
         Route::delete('/addresses/{address}', [CustomerDashboardController::class, 'destroyAddress'])
             ->name('addresses.destroy');
+
     });

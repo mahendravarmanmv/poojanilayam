@@ -233,17 +233,17 @@
 
     $blogs = [
         [
-            'image' => 'blog-1.jpg',
+            'image' => 'from-our-blog/ganapathi-homam.webp',
             'title' => 'Why Ganapathi Homam Is Performed',
             'category' => 'Pooja Knowledge'
         ],
         [
-            'image' => 'blog-2.jpg',
+            'image' => 'from-our-blog/ekadashi.webp',
             'title' => 'Understanding the Importance of Ekadashi',
             'category' => 'Festivals'
         ],
         [
-            'image' => 'blog-3.jpg',
+            'image' => 'from-our-blog/traditional-pooja-preparation.webp',
             'title' => 'How to Prepare for a Traditional Pooja',
             'category' => 'Devotional Guide'
         ]

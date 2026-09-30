@@ -72,8 +72,7 @@
     <img
         src="{{ asset('images/pooja-nilayam-logo.png') }}"
         alt="Pooja Nilayam"
-        class="img-fluid"
-        style="height: 80px; width: auto;">
+        class="img-fluid pn-brand-logo">
 
 </a>
 
@@ -353,7 +352,8 @@
     {{-- Mobile Menu --}}
     <div
         class="offcanvas
-               offcanvas-end"
+               offcanvas-end
+               pn-mobile-menu"
         tabindex="-1"
         id="mobileMenu">
 
@@ -370,7 +370,8 @@
             <button
                 type="button"
                 class="btn-close"
-                data-bs-dismiss="offcanvas"></button>
+                data-bs-dismiss="offcanvas"
+                aria-label="Close menu"></button>
 
         </div>
 

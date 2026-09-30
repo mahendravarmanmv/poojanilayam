@@ -203,7 +203,7 @@
                 <li class="breadcrumb-item">
 
                     <a
-                        href="#"
+                        href="{{ route('store.category', ['slug' => \Illuminate\Support\Str::slug($product['category'])]) }}"
                         class="text-pn-primary"
                     >
 
