@@ -9,164 +9,7 @@
 
 @section('content')
 
-@php
 
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY PRODUCT LISTING DATA
-    |--------------------------------------------------------------------------
-    | UI prototype only.
-    |
-    | Actual products, categories, brands, pricing, stock,
-    | reviews and images will come from the backend later.
-    |--------------------------------------------------------------------------
-    */
-
-
-    $categories = [
-
-        [
-            'name' => 'Pooja Samagri',
-            'icon' => 'bi-flower1'
-        ],
-
-        [
-            'name' => 'Idols',
-            'icon' => 'bi-stars'
-        ],
-
-        [
-            'name' => 'Incense & Dhoop',
-            'icon' => 'bi-fire'
-        ],
-
-        [
-            'name' => 'Pooja Essentials',
-            'icon' => 'bi-box-seam'
-        ],
-
-        [
-            'name' => 'Books & Guides',
-            'icon' => 'bi-book'
-        ],
-
-        [
-            'name' => 'Spiritual Gifts',
-            'icon' => 'bi-gift'
-        ]
-
-    ];
-
-
-    $products = [
-
-        [
-            'name' => 'Brass Pooja Diya',
-            'category' => 'Pooja Essentials',
-            'description' => 'Traditional brass diya for daily worship.',
-            'price' => 299,
-            'old_price' => 399,
-            'rating' => 4.8,
-            'reviews' => 84,
-            'image' => 'images/home/hero.webp',
-            'badge' => 'Bestseller',
-            'stock' => true
-        ],
-
-        [
-            'name' => 'Premium Kumkum Set',
-            'category' => 'Pooja Samagri',
-            'description' => 'A traditional kumkum set for devotional rituals.',
-            'price' => 199,
-            'old_price' => 249,
-            'rating' => 4.7,
-            'reviews' => 61,
-            'image' => 'images/home/hero.webp',
-            'badge' => 'Popular',
-            'stock' => true
-        ],
-
-        [
-            'name' => 'Sandalwood Dhoop',
-            'category' => 'Incense & Dhoop',
-            'description' => 'Fragrant sandalwood dhoop for your prayer space.',
-            'price' => 249,
-            'old_price' => 299,
-            'rating' => 4.9,
-            'reviews' => 112,
-            'image' => 'images/home/hero.webp',
-            'badge' => 'Top Rated',
-            'stock' => true
-        ],
-
-        [
-            'name' => 'Lord Ganesha Idol',
-            'category' => 'Idols',
-            'description' => 'Beautiful devotional Ganesha idol for your home.',
-            'price' => 799,
-            'old_price' => 999,
-            'rating' => 4.9,
-            'reviews' => 147,
-            'image' => 'images/home/hero.webp',
-            'badge' => 'Featured',
-            'stock' => true
-        ],
-
-        [
-            'name' => 'Daily Pooja Kit',
-            'category' => 'Pooja Samagri',
-            'description' => 'A convenient collection of everyday pooja essentials.',
-            'price' => 599,
-            'old_price' => 699,
-            'rating' => 4.6,
-            'reviews' => 53,
-            'image' => 'images/home/hero.webp',
-            'badge' => '',
-            'stock' => true
-        ],
-
-        [
-            'name' => 'Bhagavad Gita',
-            'category' => 'Books & Guides',
-            'description' => 'A devotional edition for spiritual learning.',
-            'price' => 399,
-            'old_price' => 449,
-            'rating' => 4.9,
-            'reviews' => 95,
-            'image' => 'images/home/hero.webp',
-            'badge' => 'Recommended',
-            'stock' => true
-        ],
-
-        [
-            'name' => 'Brass Bell',
-            'category' => 'Pooja Essentials',
-            'description' => 'Traditional brass bell for your prayer space.',
-            'price' => 449,
-            'old_price' => 549,
-            'rating' => 4.7,
-            'reviews' => 46,
-            'image' => 'images/home/hero.webp',
-            'badge' => '',
-            'stock' => true
-        ],
-
-        [
-            'name' => 'Spiritual Gift Box',
-            'category' => 'Spiritual Gifts',
-            'description' => 'A thoughtfully arranged devotional gift collection.',
-            'price' => 899,
-            'old_price' => 1099,
-            'rating' => 4.8,
-            'reviews' => 38,
-            'image' => 'images/home/hero.webp',
-            'badge' => 'Gift Choice',
-            'stock' => true
-        ]
-
-    ];
-
-@endphp
 
 
 {{-- ============================================================
@@ -1182,7 +1025,7 @@
                              data-price="{{ $product['price'] }}"
                              data-rating="{{ $product['rating'] }}"
                              data-reviews="{{ $product['reviews'] }}"
-                             data-stock="{{ $product['stock'] ? '1' : '0' }}"
+                             data-stock="{{ $product['stock_status'] === 'in_stock' ? '1' : '0' }}"
                              data-search="{{ $product['name'] . ' ' . $product['category'] . ' ' . $product['description'] }}">
 
                             <article
@@ -1204,7 +1047,7 @@
                                     <div class="ratio ratio-1x1">
 
                                         <img
-                                            src="{{ asset($product['image']) }}"
+                                            src="{{ asset($product['image'] ?: 'images/home/hero.webp') }}"
                                             class="object-fit-cover"
                                             alt="{{ $product['name'] }}"
                                             loading="lazy"
@@ -1244,6 +1087,7 @@
                                                top-0
                                                end-0
                                                m-3"
+                                        data-wishlist-add data-product-id="{{ $product['id'] }}"
                                         aria-label="Add {{ $product['name'] }} to wishlist"
                                     >
 
@@ -1347,7 +1191,7 @@
                                                        text-pn-brown"
                                             >
 
-                                                ₹{{ number_format($product['price']) }}
+                                                {{ $product['currency_symbol'] }}{{ number_format($product['price'], 2) }}
 
                                             </strong>
 
@@ -1357,7 +1201,7 @@
                                                        text-secondary"
                                             >
 
-                                                ₹{{ number_format($product['old_price']) }}
+                                                {{ $product['currency_symbol'] }}{{ number_format($product['old_price'], 2) }}
 
                                             </del>
 
@@ -1372,7 +1216,7 @@
                                         >
 
                                             <a
-                                                href="{{ route('store.product', ['slug' => Str::slug($product['name'])]) }}"
+                                                href="{{ route('store.product', ['slug' => $product['slug']]) }}"
                                                 class="btn
                                                        btn-pn-outline
                                                        flex-grow-1"
@@ -1383,7 +1227,7 @@
                                             </a>
 
 
-                                            @if($product['stock'])
+                                            @if($product['stock_status'] === 'in_stock')
 
                                                 <button
                                                     type="button"
@@ -1815,3 +1659,24 @@
 </section>
 
 @endsection
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const csrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    document.querySelectorAll('[data-wishlist-add]').forEach(button => {
+        button.addEventListener('click', async function () {
+            try {
+                const response = await fetch('{{ route('store.wishlist.add') }}', {
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': csrf, 'Accept': 'application/json', 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ product_id: this.dataset.productId })
+                });
+                const data = await response.json().catch(() => ({}));
+                if (!response.ok) throw new Error(data.message || 'Unable to update wishlist.');
+                this.innerHTML = '<i class="bi bi-heart-fill text-danger"></i>';
+            } catch (error) { alert(error.message); }
+        });
+    });
+});
+</script>
+@endpush

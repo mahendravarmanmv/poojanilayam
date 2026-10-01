@@ -9,26 +9,7 @@
 
 @section('content')
 
-@php
 
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY UI DATA
-    |--------------------------------------------------------------------------
-    | These values will later come from the authenticated user.
-    |--------------------------------------------------------------------------
-    */
-
-    $user = [
-        'first_name' => 'Mahendra',
-        'last_name' => 'Varma',
-        'email' => 'customer@example.com',
-        'mobile' => '9876543210',
-        'gender' => '',
-        'date_of_birth' => '',
-    ];
-
-@endphp
 
 
 {{-- ============================================================
@@ -277,7 +258,7 @@
                                         type="text"
                                         id="firstName"
                                         name="first_name"
-                                        value="{{ $user['first_name'] }}"
+                                        value="{{ old('first_name', $profile?->first_name ?? '') }}"
                                         class="form-control
                                                form-control-lg"
                                         placeholder="Enter first name"
@@ -317,7 +298,7 @@
                                         type="text"
                                         id="lastName"
                                         name="last_name"
-                                        value="{{ $user['last_name'] }}"
+                                        value="{{ old('last_name', $profile?->last_name ?? '') }}"
                                         class="form-control
                                                form-control-lg"
                                         placeholder="Enter last name"
@@ -354,25 +335,22 @@
                                                form-select-lg"
                                     >
 
-                                        <option
-                                            value=""
-                                            selected
-                                        >
+                                        <option value="" {{ old('gender', $profile?->gender) ? '' : 'selected' }}>
                                             Prefer not to say
                                         </option>
 
 
-                                        <option value="male">
+                                        <option value="male" {{ old('gender', $profile?->gender) === 'male' ? 'selected' : '' }}>
                                             Male
                                         </option>
 
 
-                                        <option value="female">
+                                        <option value="female" {{ old('gender', $profile?->gender) === 'female' ? 'selected' : '' }}>
                                             Female
                                         </option>
 
 
-                                        <option value="other">
+                                        <option value="other" {{ old('gender', $profile?->gender) === 'other' ? 'selected' : '' }}>
                                             Other
                                         </option>
 
@@ -399,7 +377,7 @@
                                         type="date"
                                         id="dateOfBirth"
                                         name="date_of_birth"
-                                        value="{{ $user['date_of_birth'] }}"
+                                        value="{{ old('date_of_birth', optional($profile?->date_of_birth)->format('Y-m-d')) }}"
                                         class="form-control
                                                form-control-lg"
                                         autocomplete="bday"
@@ -407,6 +385,48 @@
 
                                 </div>
 
+
+                                {{-- Preferred Language --}}
+
+                                <div class="col-12 col-md-6">
+
+                                    <label
+                                        for="preferredLanguage"
+                                        class="form-label
+                                               fw-semibold
+                                               text-pn-brown"
+                                    >
+                                        Preferred Language
+                                        <span class="text-danger">*</span>
+                                    </label>
+
+                                    <select
+                                        id="preferredLanguage"
+                                        name="preferred_language_id"
+                                        class="form-select form-select-lg @error('preferred_language_id') is-invalid @enderror"
+                                        required
+                                    >
+                                        <option value="">Select your preferred language</option>
+
+                                        @foreach ($languages as $language)
+                                            <option
+                                                value="{{ $language->id }}"
+                                                {{ (string) old('preferred_language_id', $customerProfile?->preferred_language_id ?? $profile?->preferred_language_id) === (string) $language->id ? 'selected' : '' }}
+                                            >
+                                                {{ $language->name }}{{ $language->native_name ? ' (' . $language->native_name . ')' : '' }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+
+                                    @error('preferred_language_id')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @else
+                                        <div class="form-text">
+                                            We'll use this language for your pooja and service experience.
+                                        </div>
+                                    @enderror
+
+                                </div>
                             </div>
 
                         </div>
@@ -518,7 +538,7 @@
                                         type="email"
                                         id="email"
                                         name="email"
-                                        value="{{ $user['email'] }}"
+                                        value="{{ old('email', $user->email) }}"
                                         class="form-control
                                                form-control-lg"
                                         placeholder="you@example.com"
@@ -584,7 +604,7 @@
                                             type="tel"
                                             id="mobile"
                                             name="mobile"
-                                            value="{{ $user['mobile'] }}"
+                                            value="{{ old('mobile', $user->mobile) }}"
                                             class="form-control"
                                             placeholder="Enter 10-digit mobile number"
                                             inputmode="numeric"

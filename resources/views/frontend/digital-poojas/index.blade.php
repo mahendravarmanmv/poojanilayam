@@ -21,237 +21,9 @@
     */
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | Digital Pooja Services
-    |--------------------------------------------------------------------------
-    */
+    // Digital Poojas are supplied by DigitalPoojaController.
 
-    $digitalPoojas = [
-
-        [
-            'name' => 'Ganapathi Digital Pooja',
-
-            'god' => 'Lord Ganesha',
-
-            'image' => 'ganapathi.jpg',
-
-            'description' =>
-                'Begin your spiritual journey with a personalized Ganapathi pooja experience.',
-
-            'price' => 251,
-
-            'duration' => '20 Mins',
-
-            'rating' => '4.9',
-
-            'reviews' => 186,
-
-            'language' => 'Telugu / English',
-
-            'tag' => 'Popular',
-
-            'features' => [
-                'AI Sankalpam',
-                'Personalized Mantra',
-                'Flower Selection'
-            ]
-
-        ],
-
-        [
-            'name' => 'Lakshmi Digital Pooja',
-
-            'god' => 'Goddess Lakshmi',
-
-            'image' => 'lakshmi.jpg',
-
-            'description' =>
-                'Create a personalized devotional experience seeking blessings for prosperity and wellbeing.',
-
-            'price' => 301,
-
-            'duration' => '25 Mins',
-
-            'rating' => '4.9',
-
-            'reviews' => 154,
-
-            'language' => 'Telugu / English',
-
-            'tag' => 'Popular',
-
-            'features' => [
-                'AI Sankalpam',
-                'Deepam Selection',
-                'Personalized Blessings'
-            ]
-
-        ],
-
-        [
-            'name' => 'Shiva Digital Pooja',
-
-            'god' => 'Lord Shiva',
-
-            'image' => 'shiva.jpg',
-
-            'description' =>
-                'Experience a personalized Shiva devotional journey with sacred mantras and offerings.',
-
-            'price' => 351,
-
-            'duration' => '25 Mins',
-
-            'rating' => '4.8',
-
-            'reviews' => 129,
-
-            'language' => 'Telugu / English',
-
-            'tag' => 'Featured',
-
-            'features' => [
-                'AI Sankalpam',
-                'Sacred Mantras',
-                'Digital Deepam'
-            ]
-
-        ],
-
-        [
-            'name' => 'Durga Digital Pooja',
-
-            'god' => 'Goddess Durga',
-
-            'image' => 'durga.jpg',
-
-            'description' =>
-                'Offer your prayers through a personalized digital Durga pooja experience.',
-
-            'price' => 301,
-
-            'duration' => '20 Mins',
-
-            'rating' => '4.8',
-
-            'reviews' => 112,
-
-            'language' => 'Telugu / English',
-
-            'tag' => 'Featured',
-
-            'features' => [
-                'Personalized Prayer',
-                'Flower Selection',
-                'Blessings'
-            ]
-
-        ],
-
-        [
-            'name' => 'Hanuman Digital Pooja',
-
-            'god' => 'Lord Hanuman',
-
-            'image' => 'hanuman.jpg',
-
-            'description' =>
-                'A personalized devotional experience dedicated to Lord Hanuman.',
-
-            'price' => 251,
-
-            'duration' => '20 Mins',
-
-            'rating' => '4.9',
-
-            'reviews' => 98,
-
-            'language' => 'Telugu / English',
-
-            'tag' => 'Popular',
-
-            'features' => [
-                'AI Sankalpam',
-                'Personalized Mantra',
-                'Blessings'
-            ]
-
-        ],
-
-        [
-            'name' => 'Balaji Digital Pooja',
-
-            'god' => 'Lord Venkateswara',
-
-            'image' => 'balaji.jpg',
-
-            'description' =>
-                'Offer your prayers to Lord Venkateswara through a personalized digital temple experience.',
-
-            'price' => 351,
-
-            'duration' => '25 Mins',
-
-            'rating' => '4.9',
-
-            'reviews' => 141,
-
-            'language' => 'Telugu / English',
-
-            'tag' => 'Featured',
-
-            'features' => [
-                'AI Sankalpam',
-                'Temple Experience',
-                'Certificate'
-            ]
-
-        ]
-
-    ];
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Gods
-    |--------------------------------------------------------------------------
-    */
-
-    $gods = [
-
-        [
-            'name' => 'Ganesha',
-            'icon' => 'bi-flower1'
-        ],
-
-        [
-            'name' => 'Shiva',
-            'icon' => 'bi-circle'
-        ],
-
-        [
-            'name' => 'Lakshmi',
-            'icon' => 'bi-stars'
-        ],
-
-        [
-            'name' => 'Durga',
-            'icon' => 'bi-shield'
-        ],
-
-        [
-            'name' => 'Hanuman',
-            'icon' => 'bi-heart'
-        ],
-
-        [
-            'name' => 'Balaji',
-            'icon' => 'bi-building'
-        ]
-
-    ];
-
+    // Gods are derived from the active Digital Pooja catalogue.
 
     /*
     |--------------------------------------------------------------------------
@@ -954,7 +726,7 @@
                         >
 
                             <img
-                                src="{{ asset('images/home/' . $pooja['image']) }}"
+                                src="{{ asset($pooja['image']) }}"
                                 class="card-img-top
                                        pn-pooja-image
                                        object-fit-cover"
@@ -1041,12 +813,12 @@
                                                text-pn-gold"
                                     ></i>
 
-                                    {{ $pooja['rating'] }}
+                                    {{ $pooja['rating'] ?? '—' }}
 
                                     <span
                                         class="text-secondary"
                                     >
-                                        ({{ $pooja['reviews'] }})
+                                        ({{ $pooja['reviews'] ?? '—' }})
                                     </span>
 
                                 </span>
@@ -1177,7 +949,7 @@
                                                text-pn-brown"
                                     >
 
-                                        ₹{{ number_format($pooja['price']) }}
+                                        {{ $pooja['price'] !== null ? '₹' . number_format($pooja['price']) : 'Price on scheduling' }}
 
                                     </strong>
 
@@ -1185,7 +957,7 @@
 
 
                                 <a
-                                    href="{{ route('digital-pooja.show', ['slug' => Str::slug($pooja['name'])]) }}"
+                                    href="{{ route('digital-pooja.show', ['slug' => $pooja['slug']]) }}"
                                     class="btn btn-pn"
                                 >
 

@@ -9,183 +9,7 @@
 
 @section('content')
 
-@php
 
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY ASTROLOGY SERVICE DATA
-    |--------------------------------------------------------------------------
-    | These values will later come from the database / controller.
-    |--------------------------------------------------------------------------
-    */
-
-    $services = [
-
-        [
-            'title' => 'Horoscope',
-            'subtitle' => 'Personal guidance',
-            'description' =>
-                'Explore horoscope-based guidance and
-                 insights for your journey.',
-            'icon' => 'bi-stars',
-            'color' => 'bg-pn-cream'
-        ],
-
-        [
-            'title' => 'Kundli',
-            'subtitle' => 'Birth chart',
-            'description' =>
-                'Explore your birth chart with guidance
-                 based on your birth details.',
-            'icon' => 'bi-diagram-3',
-            'color' => 'bg-pn-cream'
-        ],
-
-        [
-            'title' => 'Match Making',
-            'subtitle' => 'Compatibility',
-            'description' =>
-                'Explore compatibility and traditional
-                 match-making guidance.',
-            'icon' => 'bi-heart',
-            'color' => 'bg-pn-cream'
-        ],
-
-        [
-            'title' => 'Numerology',
-            'subtitle' => 'Numbers & guidance',
-            'description' =>
-                'Discover number-based insights and
-                 personalized guidance.',
-            'icon' => 'bi-123',
-            'color' => 'bg-pn-cream'
-        ],
-
-        [
-            'title' => 'Palm Reading',
-            'subtitle' => 'Palm insights',
-            'description' =>
-                'Explore palm-reading services and
-                 traditional interpretations.',
-            'icon' => 'bi-hand-index-thumb',
-            'color' => 'bg-pn-cream'
-        ],
-
-        [
-            'title' => 'Vastu Consultation',
-            'subtitle' => 'Space & harmony',
-            'description' =>
-                'Explore traditional Vastu consultation
-                 for your spaces.',
-            'icon' => 'bi-house-heart',
-            'color' => 'bg-pn-cream'
-        ]
-
-    ];
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | SAMPLE ASTROLOGERS
-    |--------------------------------------------------------------------------
-    */
-
-    $astrologers = [
-
-        [
-            'name' => 'Acharya Ravi Shankar',
-            'specialization' => 'Vedic Astrology',
-            'experience' => '20+ Years',
-            'rating' => '4.9',
-            'reviews' => '386',
-            'languages' => 'Telugu · Hindi · English',
-            'image' => 'astrologer-1.jpg',
-            'verified' => true
-        ],
-
-        [
-            'name' => 'Dr. Meera Sharma',
-            'specialization' => 'Vedic Astrology & Numerology',
-            'experience' => '15+ Years',
-            'rating' => '4.8',
-            'reviews' => '274',
-            'languages' => 'Hindi · English',
-            'image' => 'astrologer-2.jpg',
-            'verified' => true
-        ],
-
-        [
-            'name' => 'Sri Prakash Acharya',
-            'specialization' => 'Kundli & Match Making',
-            'experience' => '18+ Years',
-            'rating' => '4.9',
-            'reviews' => '421',
-            'languages' => 'Telugu · Sanskrit · English',
-            'image' => 'astrologer-3.jpg',
-            'verified' => true
-        ]
-
-    ];
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | CONSULTATION TYPES
-    |--------------------------------------------------------------------------
-    | These directly follow the documented Astrology Consultation Flow:
-    | Video / Audio / Chat.
-    |--------------------------------------------------------------------------
-    */
-
-    $consultationTypes = [
-
-        [
-            'title' => 'Video Consultation',
-            'icon' => 'bi-camera-video',
-            'description' =>
-                'Connect with an astrologer through
-                 a video consultation.'
-        ],
-
-        [
-            'title' => 'Audio Consultation',
-            'icon' => 'bi-telephone',
-            'description' =>
-                'Speak directly with an astrologer
-                 through an audio consultation.'
-        ],
-
-        [
-            'title' => 'Chat Consultation',
-            'icon' => 'bi-chat-dots',
-            'description' =>
-                'Discuss your questions through
-                 a convenient chat consultation.'
-        ]
-
-    ];
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | ASTROLOGY TOPICS
-    |--------------------------------------------------------------------------
-    */
-
-    $topics = [
-
-        'Career',
-        'Marriage',
-        'Relationships',
-        'Finance',
-        'Family',
-        'Education',
-        'Health',
-        'Business'
-
-    ];
-
-@endphp
 
 
 {{-- ============================================================
@@ -1254,14 +1078,32 @@
                             class="position-relative"
                         >
 
-                            <img
-                                src="{{ asset('images/astrology/' . $astrologer['image']) }}"
-                                class="card-img-top
-                                       object-fit-cover"
-                                style="height:280px;"
-                                alt="{{ $astrologer['name'] }}"
-                                loading="lazy"
-                            >
+                            @if(!empty($astrologer['image']))
+
+                                <img
+                                    src="{{ asset($astrologer['image']) }}"
+                                    class="card-img-top
+                                           object-fit-cover"
+                                    style="height:280px;"
+                                    alt="{{ $astrologer['name'] }}"
+                                    loading="lazy"
+                                >
+
+                            @else
+
+                                <div
+                                    class="d-flex
+                                           align-items-center
+                                           justify-content-center
+                                           bg-pn-cream
+                                           text-pn-primary"
+                                    style="height:280px;"
+                                    aria-label="Astrologer image unavailable"
+                                >
+                                    <i class="bi bi-person-circle display-1"></i>
+                                </div>
+
+                            @endif
 
 
                             @if($astrologer['verified'])
@@ -1317,19 +1159,23 @@
                                 </span>
 
 
-                                <span
-                                    class="small
-                                           text-secondary"
-                                >
+                                @if($astrologer['rating'] !== null)
 
-                                    <i
-                                        class="bi bi-star-fill
-                                               text-warning"
-                                    ></i>
+                                    <span
+                                        class="small
+                                               text-secondary"
+                                    >
 
-                                    {{ $astrologer['rating'] }}
+                                        <i
+                                            class="bi bi-star-fill
+                                                   text-warning"
+                                        ></i>
 
-                                </span>
+                                        {{ $astrologer['rating'] }}
+
+                                    </span>
+
+                                @endif
 
                             </div>
 
@@ -1391,8 +1237,11 @@
                                                me-1"
                                     ></i>
 
-                                    {{ $astrologer['reviews'] }}
-                                    reviews
+                                    @if($astrologer['reviews'] > 0)
+                                        {{ $astrologer['reviews'] }} reviews
+                                    @else
+                                        No reviews yet
+                                    @endif
 
                                 </small>
 

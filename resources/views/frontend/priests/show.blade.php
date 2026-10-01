@@ -9,202 +9,7 @@
 
 @section('content')
 
-@php
 
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY PRIEST DATA
-    |--------------------------------------------------------------------------
-    | These values will later come from the Priest model/controller.
-    |--------------------------------------------------------------------------
-    */
-
-    $priest = [
-
-        'name' => 'Sri Ananda Sharma',
-
-        'title' => 'Vedic Priest',
-
-        'location' => 'Hyderabad, Telangana',
-
-        'experience' => '18+ Years',
-
-        'languages' => [
-            'Telugu',
-            'Sanskrit',
-            'English'
-        ],
-
-        'specializations' => [
-            'Vedic Poojas',
-            'Griha Pravesh',
-            'Homam',
-            'Abhishekam',
-            'Traditional Rituals'
-        ],
-
-        'rating' => '4.9',
-
-        'reviews' => '428',
-
-        'image' => 'priest-1.jpg',
-
-        'verified' => true,
-
-        'available' => true,
-
-        'price_from' => '₹1,500',
-
-        'temple' => 'Sri Venkateswara Temple',
-
-        'temple_location' => 'Hyderabad, Telangana',
-
-        'live_available' => true,
-
-        'recording_available' => true,
-
-        'prasadam_available' => true,
-
-        'bio' =>
-            'An experienced Vedic priest with extensive knowledge
-             of traditional poojas, homams and devotional rituals.
-             Available for selected spiritual services and
-             traditional ceremonies.',
-
-        'qualification' => 'Vedic Studies',
-
-        'availability' => 'Available for selected dates',
-
-        'member_since' => '2024'
-
-    ];
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | SAMPLE AVAILABLE SLOTS
-    |--------------------------------------------------------------------------
-    */
-
-    $slots = [
-
-        [
-            'date' => '18',
-            'month' => 'Aug',
-            'day' => 'Tuesday',
-            'slots' => [
-                '07:00 AM',
-                '10:00 AM',
-                '06:00 PM'
-            ]
-        ],
-
-        [
-            'date' => '19',
-            'month' => 'Aug',
-            'day' => 'Wednesday',
-            'slots' => [
-                '08:00 AM',
-                '11:00 AM',
-                '05:30 PM'
-            ]
-        ],
-
-        [
-            'date' => '20',
-            'month' => 'Aug',
-            'day' => 'Thursday',
-            'slots' => [
-                '07:30 AM',
-                '04:00 PM',
-                '06:30 PM'
-            ]
-        ]
-
-    ];
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | SAMPLE SERVICES
-    |--------------------------------------------------------------------------
-    */
-
-    $services = [
-
-        [
-            'title' => 'Vedic Poojas',
-            'icon' => 'bi-flower1',
-            'description' =>
-                'Traditional poojas performed according to
-                 the prescribed rituals.'
-        ],
-
-        [
-            'title' => 'Homam',
-            'icon' => 'bi-fire',
-            'description' =>
-                'Sacred fire rituals for selected devotional
-                 and spiritual purposes.'
-        ],
-
-        [
-            'title' => 'Griha Pravesh',
-            'icon' => 'bi-house-heart',
-            'description' =>
-                'Traditional housewarming rituals and ceremonies.'
-        ],
-
-        [
-            'title' => 'Abhishekam',
-            'icon' => 'bi-droplet',
-            'description' =>
-                'Devotional Abhishekam services for selected deities.'
-        ]
-
-    ];
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | SAMPLE REVIEWS
-    |--------------------------------------------------------------------------
-    */
-
-    $reviews = [
-
-        [
-            'name' => 'Srinivas R.',
-            'rating' => '5.0',
-            'date' => '2 weeks ago',
-            'text' =>
-                'Very professional and explained the pooja
-                 process clearly. The overall experience was
-                 peaceful and well organized.'
-        ],
-
-        [
-            'name' => 'Lakshmi K.',
-            'rating' => '5.0',
-            'date' => '1 month ago',
-            'text' =>
-                'We were very happy with the traditional
-                 arrangements and the way the ceremony was
-                 conducted.'
-        ],
-
-        [
-            'name' => 'Ramesh V.',
-            'rating' => '4.8',
-            'date' => '2 months ago',
-            'text' =>
-                'Good experience. The priest was knowledgeable
-                 and punctual.'
-        ]
-
-    ];
-
-@endphp
 
 
 {{-- ============================================================
@@ -286,7 +91,7 @@
                 >
 
                     <img
-                        src="{{ asset('images/priests/' . $priest['image']) }}"
+                        src="{{ $priest['image'] ? (filter_var($priest['image'], FILTER_VALIDATE_URL) ? $priest['image'] : asset($priest['image'])) : asset('images/priests/default.jpg') }}"
                         class="img-fluid
                                w-100
                                object-fit-cover"
@@ -1120,7 +925,7 @@
 
 
                         <a
-                            href="{{ route('temple.show', ['slug' => Str::slug($priest['temple'])]) }}"
+                            href="{{ $priest['temple_slug'] ? route('temple.show', ['slug' => $priest['temple_slug']]) : '#' }}"
                             class="btn
                                    btn-pn-outline
                                    w-100"
@@ -1974,7 +1779,7 @@
 
 
                         <a
-                            href="{{ route('priest.book', ['slug' => Str::slug($priest['name'])]) }}"
+                            href="{{ route('priest.book', ['slug' => $priest['slug']]) }}"
                             class="btn
                                    btn-pn
                                    btn-lg

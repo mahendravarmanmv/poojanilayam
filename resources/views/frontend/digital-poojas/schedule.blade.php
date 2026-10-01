@@ -11,24 +11,7 @@
 
 @php
 
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY FRONTEND DATA
-    |--------------------------------------------------------------------------
-    | These values will later come from the selected Digital Pooja
-    | and authenticated/customer booking data.
-    |--------------------------------------------------------------------------
-    */
-
-    $pooja = [
-        'name' => 'Ganapathi Digital Pooja',
-        'god' => 'Lord Ganesha',
-        'image' => 'ganapathi.jpg',
-        'duration' => '20 Minutes',
-        'price' => 251,
-        'language' => 'Telugu',
-    ];
-
+    // $pooja and $template are supplied by DigitalPoojaController.
 
     /*
     |--------------------------------------------------------------------------
@@ -1482,7 +1465,7 @@
                             >
 
                                 <img
-                                    src="{{ Vite::asset('resources/images/home/' . $pooja['image']) }}"
+                                    src="{{ asset($pooja['image']) }}"
                                     class="rounded-3
                                            object-fit-cover"
                                     style="width:72px;height:72px;"
@@ -1623,7 +1606,7 @@
                                            fs-4
                                            text-pn-primary"
                                 >
-                                    ₹{{ number_format($pooja['price']) }}
+                                    {{ $pooja['price'] !== null ? '₹' . number_format($pooja['price']) : 'Price on scheduling' }}
                                 </strong>
 
                             </div>

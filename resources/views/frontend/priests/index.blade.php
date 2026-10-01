@@ -9,172 +9,7 @@
 
 @section('content')
 
-@php
 
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY PRIEST DATA
-    |--------------------------------------------------------------------------
-    | These values will later come from the Priest model/controller.
-    |--------------------------------------------------------------------------
-    */
-
-    $priests = [
-
-        [
-            'name' => 'Sri Ananda Sharma',
-            'title' => 'Vedic Priest',
-            'location' => 'Hyderabad, Telangana',
-            'experience' => '18+ Years',
-            'languages' => ['Telugu', 'Sanskrit', 'English'],
-            'specializations' => [
-                'Vedic Poojas',
-                'Griha Pravesh',
-                'Homam'
-            ],
-            'rating' => '4.9',
-            'reviews' => '428',
-            'image' => 'priest-1.jpg',
-            'verified' => true,
-            'available' => true
-        ],
-
-        [
-            'name' => 'Sri Raghavendra Sastry',
-            'title' => 'Vedic & Temple Priest',
-            'location' => 'Bengaluru, Karnataka',
-            'experience' => '22+ Years',
-            'languages' => ['Kannada', 'Telugu', 'Sanskrit'],
-            'specializations' => [
-                'Pooja',
-                'Abhishekam',
-                'Marriage Rituals'
-            ],
-            'rating' => '4.8',
-            'reviews' => '356',
-            'image' => 'priest-2.jpg',
-            'verified' => true,
-            'available' => true
-        ],
-
-        [
-            'name' => 'Sri Suresh Bhattacharya',
-            'title' => 'Traditional Priest',
-            'location' => 'Chennai, Tamil Nadu',
-            'experience' => '15+ Years',
-            'languages' => ['Tamil', 'Sanskrit', 'English'],
-            'specializations' => [
-                'Pooja',
-                'Homam',
-                'Special Rituals'
-            ],
-            'rating' => '4.8',
-            'reviews' => '291',
-            'image' => 'priest-3.jpg',
-            'verified' => true,
-            'available' => false
-        ],
-
-        [
-            'name' => 'Sri Madhusudan Acharya',
-            'title' => 'Vedic Scholar & Priest',
-            'location' => 'Vijayawada, Andhra Pradesh',
-            'experience' => '20+ Years',
-            'languages' => ['Telugu', 'Sanskrit'],
-            'specializations' => [
-                'Satyanarayana Pooja',
-                'Homam',
-                'Griha Pooja'
-            ],
-            'rating' => '4.9',
-            'reviews' => '512',
-            'image' => 'priest-4.jpg',
-            'verified' => true,
-            'available' => true
-        ],
-
-        [
-            'name' => 'Sri Venkatakrishna Rao',
-            'title' => 'Vedic Ritual Specialist',
-            'location' => 'Tirupati, Andhra Pradesh',
-            'experience' => '25+ Years',
-            'languages' => ['Telugu', 'Sanskrit', 'English'],
-            'specializations' => [
-                'Temple Poojas',
-                'Abhishekam',
-                'Homas'
-            ],
-            'rating' => '4.9',
-            'reviews' => '684',
-            'image' => 'priest-5.jpg',
-            'verified' => true,
-            'available' => true
-        ],
-
-        [
-            'name' => 'Sri Narayana Dikshith',
-            'title' => 'Traditional Pujari',
-            'location' => 'Hyderabad, Telangana',
-            'experience' => '12+ Years',
-            'languages' => ['Telugu', 'Sanskrit'],
-            'specializations' => [
-                'Pooja',
-                'Naming Ceremony',
-                'Housewarming'
-            ],
-            'rating' => '4.7',
-            'reviews' => '214',
-            'image' => 'priest-6.jpg',
-            'verified' => true,
-            'available' => true
-        ]
-
-    ];
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | FILTER OPTIONS
-    |--------------------------------------------------------------------------
-    */
-
-    $locations = [
-
-        'All Locations',
-        'Hyderabad',
-        'Vijayawada',
-        'Tirupati',
-        'Bengaluru',
-        'Chennai'
-
-    ];
-
-
-    $specializations = [
-
-        'All Services',
-        'Vedic Poojas',
-        'Homam',
-        'Abhishekam',
-        'Griha Pravesh',
-        'Marriage Rituals',
-        'Temple Poojas'
-
-    ];
-
-
-    $languages = [
-
-        'All Languages',
-        'Telugu',
-        'Sanskrit',
-        'English',
-        'Tamil',
-        'Kannada'
-
-    ];
-
-@endphp
 
 
 {{-- ============================================================
@@ -889,7 +724,7 @@
                         >
 
                             <img
-                                src="{{ asset('images/priests/' . $priest['image']) }}"
+                                src="{{ $priest['image'] ? (filter_var($priest['image'], FILTER_VALIDATE_URL) ? $priest['image'] : asset($priest['image'])) : asset('images/priests/default.jpg') }}"
                                 class="card-img-top
                                        object-fit-cover"
                                 style="height:300px;"
@@ -1168,7 +1003,7 @@
                             >
 
                                 <a
-                                    href="{{ route('priest.show', ['slug' => Str::slug($priest['name'])]) }}"
+                                    href="{{ route('priest.show', ['slug' => $priest['slug']]) }}"
                                     class="btn
                                            btn-pn-outline
                                            w-100"
@@ -1186,7 +1021,7 @@
                                 @if($priest['available'])
 
                                     <a
-                                        href="{{ route('priest.book', ['slug' => Str::slug($priest['name'])]) }}"
+                                        href="{{ route('priest.book', ['slug' => $priest['slug']]) }}"
                                         class="btn
                                                btn-pn
                                                w-100"

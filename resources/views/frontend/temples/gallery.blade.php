@@ -9,151 +9,7 @@
 
 @section('content')
 
-@php
 
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY TEMPLE DATA
-    |--------------------------------------------------------------------------
-    | These values will later come from the Temple model/controller.
-    |--------------------------------------------------------------------------
-    */
-
-    $temple = [
-
-        'name' => 'Sri Venkateswara Temple',
-
-        'deity' => 'Lord Venkateswara',
-
-        'location' => 'Tirumala, Andhra Pradesh',
-
-        'image' => 'temple-1.jpg',
-
-        'verified' => true
-
-    ];
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY GALLERY DATA
-    |--------------------------------------------------------------------------
-    | Actual gallery records will later come from the database.
-    |--------------------------------------------------------------------------
-    */
-
-    $gallery = [
-
-        [
-            'image' => 'temple-1.jpg',
-            'title' => 'Temple Entrance',
-            'category' => 'Temple',
-            'featured' => true
-        ],
-
-        [
-            'image' => 'temple-2.jpg',
-            'title' => 'Sacred Temple View',
-            'category' => 'Temple',
-            'featured' => true
-        ],
-
-        [
-            'image' => 'temple-3.jpg',
-            'title' => 'Main Shrine',
-            'category' => 'Deity',
-            'featured' => false
-        ],
-
-        [
-            'image' => 'temple-4.jpg',
-            'title' => 'Devotional Offering',
-            'category' => 'Pooja',
-            'featured' => false
-        ],
-
-        [
-            'image' => 'temple-5.jpg',
-            'title' => 'Sacred Courtyard',
-            'category' => 'Temple',
-            'featured' => false
-        ],
-
-        [
-            'image' => 'temple-6.jpg',
-            'title' => 'Evening Darshan',
-            'category' => 'Darshan',
-            'featured' => true
-        ],
-
-        [
-            'image' => 'pooja-1.jpg',
-            'title' => 'Pooja Ceremony',
-            'category' => 'Pooja',
-            'featured' => false
-        ],
-
-        [
-            'image' => 'pooja-2.jpg',
-            'title' => 'Devotional Ritual',
-            'category' => 'Pooja',
-            'featured' => false
-        ],
-
-        [
-            'image' => 'pooja-3.jpg',
-            'title' => 'Sacred Offering',
-            'category' => 'Pooja',
-            'featured' => false
-        ],
-
-        [
-            'image' => 'temple-1.jpg',
-            'title' => 'Temple Architecture',
-            'category' => 'Architecture',
-            'featured' => false
-        ],
-
-        [
-            'image' => 'temple-2.jpg',
-            'title' => 'Temple Details',
-            'category' => 'Architecture',
-            'featured' => false
-        ],
-
-        [
-            'image' => 'temple-3.jpg',
-            'title' => 'Divine Atmosphere',
-            'category' => 'Darshan',
-            'featured' => false
-        ]
-
-    ];
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Gallery Categories
-    |--------------------------------------------------------------------------
-    */
-
-    $categories = [
-
-        'All',
-
-        'Temple',
-
-        'Deity',
-
-        'Pooja',
-
-        'Darshan',
-
-        'Architecture'
-
-    ];
-
-@endphp
 
 
 {{-- ============================================================
@@ -195,7 +51,7 @@
                 <li class="breadcrumb-item">
 
                     <a
-                        href="{{ route('temple.show', ['slug' => Str::slug($temple['name'])]) }}"
+                        href="{{ route('temple.show', ['slug' => $temple['slug']]) }}"
                         class="text-pn-primary"
                     >
                         {{ $temple['name'] }}
@@ -427,7 +283,7 @@
             >
 
                 <a
-                    href="{{ route('temple.show', ['slug' => Str::slug($temple['name'])]) }}"
+                    href="{{ route('temple.show', ['slug' => $temple['slug']]) }}"
                     class="btn
                            btn-pn-outline"
                 >
@@ -512,6 +368,8 @@
         >
 
             {{-- Large Feature --}}
+
+            @if(!empty($gallery))
 
             <div class="col-12 col-lg-7">
 
@@ -692,6 +550,18 @@
             </div>
 
         </div>
+
+            @else
+                <div class="col-12">
+                    <div class="bg-pn-cream rounded-5 d-flex align-items-center justify-content-center text-center p-5" style="min-height:420px;">
+                        <div>
+                            <i class="bi bi-images display-4 text-pn-primary"></i>
+                            <h3 class="font-serif h3 text-pn-brown mt-3">Gallery Coming Soon</h3>
+                            <p class="text-secondary mb-0">No gallery images are currently available for this temple.</p>
+                        </div>
+                    </div>
+                </div>
+            @endif
 
     </div>
 
@@ -1087,7 +957,7 @@
                     >
 
                         <a
-                            href="{{ route('temple.poojas', ['slug' => Str::slug($temple['name'])]) }}"
+                            href="{{ route('temple.poojas', ['slug' => $temple['slug']]) }}"
                             class="btn
                                    btn-warning
                                    text-dark
@@ -1104,7 +974,7 @@
 
 
                         <a
-                            href="{{ route('temple.events', ['slug' => Str::slug($temple['name'])]) }}"
+                            href="{{ route('temple.events', ['slug' => $temple['slug']]) }}"
                             class="btn
                                    btn-outline-light"
                         >
@@ -1144,7 +1014,7 @@
             <div class="col">
 
                 <a
-                    href="{{ route('temple.poojas', ['slug' => Str::slug($temple['name'])]) }}"
+                    href="{{ route('temple.poojas', ['slug' => $temple['slug']]) }}"
                     class="card
                            border
                            border-warning-subtle
@@ -1212,7 +1082,7 @@
             <div class="col">
 
                 <a
-                    href="{{ route('temple.events', ['slug' => Str::slug($temple['name'])]) }}"
+                    href="{{ route('temple.events', ['slug' => $temple['slug']]) }}"
                     class="card
                            border
                            border-warning-subtle
@@ -1280,7 +1150,7 @@
             <div class="col">
 
                 <a
-                    href="{{ route('temple.poojas', ['slug' => Str::slug($temple['name'])]) }}"
+                    href="{{ route('temple.poojas', ['slug' => $temple['slug']]) }}"
                     class="card
                            border
                            border-warning-subtle
@@ -1528,7 +1398,7 @@
                 >
 
                     <a
-                        href="{{ route('temple.poojas', ['slug' => Str::slug($temple['name'])]) }}"
+                        href="{{ route('temple.poojas', ['slug' => $temple['slug']]) }}"
                         class="btn
                                btn-warning
                                text-dark
@@ -1546,7 +1416,7 @@
 
 
                     <a
-                        href="{{ route('temple.events', ['slug' => Str::slug($temple['name'])]) }}"
+                        href="{{ route('temple.events', ['slug' => $temple['slug']]) }}"
                         class="btn
                                btn-outline-light
                                px-4"

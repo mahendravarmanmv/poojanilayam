@@ -9,66 +9,7 @@
 
 @section('content')
 
-@php
-    $priest = [
-        'name' => 'Sri Anantha Sharma',
-        'specialization' => 'Vedic Poojas & Homams',
-        'experience' => '15+ Years',
-        'rating' => '4.9',
-        'reviews' => '128',
-    ];
 
-    $poojas = [
-        [
-            'name' => 'Ganapathi Homam',
-            'description' => 'A sacred homam performed for removing obstacles and seeking auspicious beginnings.',
-            'duration' => '90 mins',
-            'price' => '₹2,501',
-            'rating' => '4.9',
-            'category' => 'Ganapathi',
-        ],
-        [
-            'name' => 'Rudrabhishekam',
-            'description' => 'Traditional Shiva worship for peace, wellbeing and spiritual blessings.',
-            'duration' => '75 mins',
-            'price' => '₹2,101',
-            'rating' => '4.9',
-            'category' => 'Shiva',
-        ],
-        [
-            'name' => 'Satyanarayana Pooja',
-            'description' => 'A devotional pooja traditionally performed for blessings, harmony and prosperity.',
-            'duration' => '120 mins',
-            'price' => '₹2,801',
-            'rating' => '4.8',
-            'category' => 'Vishnu',
-        ],
-        [
-            'name' => 'Lakshmi Pooja',
-            'description' => 'A sacred Lakshmi worship service seeking prosperity, abundance and family wellbeing.',
-            'duration' => '60 mins',
-            'price' => '₹1,801',
-            'rating' => '4.9',
-            'category' => 'Lakshmi',
-        ],
-        [
-            'name' => 'Navagraha Shanti Pooja',
-            'description' => 'Traditional prayers dedicated to the Navagrahas for peace and auspiciousness.',
-            'duration' => '120 mins',
-            'price' => '₹3,501',
-            'rating' => '4.8',
-            'category' => 'Navagraha',
-        ],
-        [
-            'name' => 'Ayushya Homam',
-            'description' => 'A traditional homam performed with prayers for wellbeing, longevity and blessings.',
-            'duration' => '90 mins',
-            'price' => '₹2,901',
-            'rating' => '4.9',
-            'category' => 'Homam',
-        ],
-    ];
-@endphp
 
 {{-- Breadcrumb --}}
 <section class="bg-pn-cream border-bottom">
@@ -215,7 +156,7 @@
         {{-- Pooja Cards --}}
         <div class="row g-4">
 
-            @foreach($poojas as $pooja)
+            @forelse($poojas as $pooja)
                 <div class="col-12 col-sm-6 col-lg-4">
 
                     <article class="card h-100 border-0 rounded-4 shadow-sm overflow-hidden">
@@ -285,7 +226,13 @@
                     </article>
 
                 </div>
-            @endforeach
+            @empty
+                <div class="col-12">
+                    <div class="alert alert-light border rounded-4 text-center text-secondary mb-0">
+                        No priest-specific Pooja assignments are available in the current database.
+                    </div>
+                </div>
+            @endforelse
 
         </div>
 

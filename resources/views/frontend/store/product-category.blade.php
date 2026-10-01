@@ -9,180 +9,7 @@
 
 @section('content')
 
-@php
 
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY CATEGORY DATA
-    |--------------------------------------------------------------------------
-    | UI prototype only.
-    | These values will later come from the Product Category model.
-    |--------------------------------------------------------------------------
-    */
-
-    $category = [
-
-        'name' => 'Pooja Samagri',
-
-        'slug' => 'pooja-samagri',
-
-        'description' =>
-            'Discover thoughtfully selected pooja essentials
-             for daily worship, festivals and sacred occasions.',
-
-        'image' => 'images/home/hero.webp',
-
-        'product_count' => 48
-
-    ];
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY SUB-CATEGORIES
-    |--------------------------------------------------------------------------
-    */
-
-    $subCategories = [
-
-        [
-            'name' => 'Daily Pooja Essentials',
-            'icon' => 'bi-flower1',
-            'count' => 14
-        ],
-
-        [
-            'name' => 'Diyas & Lamps',
-            'icon' => 'bi-lightbulb',
-            'count' => 8
-        ],
-
-        [
-            'name' => 'Kumkum & Chandan',
-            'icon' => 'bi-droplet',
-            'count' => 7
-        ],
-
-        [
-            'name' => 'Incense & Dhoop',
-            'icon' => 'bi-fire',
-            'count' => 9
-        ],
-
-        [
-            'name' => 'Pooja Accessories',
-            'icon' => 'bi-box-seam',
-            'count' => 6
-        ],
-
-        [
-            'name' => 'Festival Pooja Kits',
-            'icon' => 'bi-stars',
-            'count' => 4
-        ]
-
-    ];
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY PRODUCTS
-    |--------------------------------------------------------------------------
-    */
-
-    $products = [
-
-        [
-            'name' => 'Premium Brass Diya',
-            'category' => 'Diyas & Lamps',
-            'price' => 299,
-            'old_price' => 399,
-            'rating' => 4.9,
-            'reviews' => 84,
-            'image' => 'images/home/hero.webp',
-            'badge' => 'Bestseller'
-        ],
-
-        [
-            'name' => 'Daily Pooja Essentials Kit',
-            'category' => 'Daily Pooja Essentials',
-            'price' => 599,
-            'old_price' => 699,
-            'rating' => 4.8,
-            'reviews' => 67,
-            'image' => 'images/home/hero.webp',
-            'badge' => 'Popular'
-        ],
-
-        [
-            'name' => 'Premium Kumkum Set',
-            'category' => 'Kumkum & Chandan',
-            'price' => 199,
-            'old_price' => 249,
-            'rating' => 4.7,
-            'reviews' => 53,
-            'image' => 'images/home/hero.webp',
-            'badge' => ''
-        ],
-
-        [
-            'name' => 'Sandalwood Dhoop',
-            'category' => 'Incense & Dhoop',
-            'price' => 249,
-            'old_price' => 299,
-            'rating' => 4.9,
-            'reviews' => 112,
-            'image' => 'images/home/hero.webp',
-            'badge' => 'Top Rated'
-        ],
-
-        [
-            'name' => 'Traditional Pooja Bell',
-            'category' => 'Pooja Accessories',
-            'price' => 449,
-            'old_price' => 549,
-            'rating' => 4.7,
-            'reviews' => 46,
-            'image' => 'images/home/hero.webp',
-            'badge' => ''
-        ],
-
-        [
-            'name' => 'Festival Pooja Kit',
-            'category' => 'Festival Pooja Kits',
-            'price' => 799,
-            'old_price' => 999,
-            'rating' => 4.8,
-            'reviews' => 91,
-            'image' => 'images/home/hero.webp',
-            'badge' => 'Featured'
-        ],
-
-        [
-            'name' => 'Brass Pooja Plate',
-            'category' => 'Pooja Accessories',
-            'price' => 699,
-            'old_price' => 849,
-            'rating' => 4.6,
-            'reviews' => 38,
-            'image' => 'images/home/hero.webp',
-            'badge' => ''
-        ],
-
-        [
-            'name' => 'Natural Chandan Powder',
-            'category' => 'Kumkum & Chandan',
-            'price' => 179,
-            'old_price' => 219,
-            'rating' => 4.8,
-            'reviews' => 74,
-            'image' => 'images/home/hero.webp',
-            'badge' => 'Popular'
-        ]
-
-    ];
-
-@endphp
 
 
 {{-- ============================================================
@@ -1033,7 +860,7 @@
                                     <div class="ratio ratio-1x1">
 
                                         <img
-                                            src="{{ asset($product['image']) }}"
+                                            src="{{ asset($product['image'] ?: 'images/home/hero.webp') }}"
                                             class="object-fit-cover"
                                             alt="{{ $product['name'] }}"
                                             loading="lazy"
@@ -1071,6 +898,7 @@
                                                top-0
                                                end-0
                                                m-3"
+                                        data-wishlist-add data-product-id="{{ $product['id'] }}"
                                         aria-label="Add {{ $product['name'] }} to wishlist"
                                     >
 
@@ -1161,7 +989,7 @@
                                                        text-pn-brown"
                                             >
 
-                                                ₹{{ number_format($product['price']) }}
+                                                {{ $product['currency_symbol'] }}{{ number_format($product['price'], 2) }}
 
                                             </strong>
 
@@ -1171,7 +999,7 @@
                                                        text-secondary"
                                             >
 
-                                                ₹{{ number_format($product['old_price']) }}
+                                                {{ $product['currency_symbol'] }}{{ number_format($product['old_price'], 2) }}
 
                                             </del>
 
@@ -1184,7 +1012,7 @@
                                         >
 
                                             <a
-                                                href="{{ route('store.product', ['slug' => Str::slug($product['name'])]) }}"
+                                                href="{{ route('store.product', ['slug' => $product['slug']]) }}"
                                                 class="btn
                                                        btn-pn-outline
                                                        flex-grow-1"
@@ -1866,3 +1694,24 @@
 </section>
 
 @endsection
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const csrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    document.querySelectorAll('[data-wishlist-add]').forEach(button => {
+        button.addEventListener('click', async function () {
+            try {
+                const response = await fetch('{{ route('store.wishlist.add') }}', {
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': csrf, 'Accept': 'application/json', 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ product_id: this.dataset.productId })
+                });
+                const data = await response.json().catch(() => ({}));
+                if (!response.ok) throw new Error(data.message || 'Unable to update wishlist.');
+                this.innerHTML = '<i class="bi bi-heart-fill text-danger"></i>';
+            } catch (error) { alert(error.message); }
+        });
+    });
+});
+</script>
+@endpush

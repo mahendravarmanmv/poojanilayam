@@ -1,5 +1,13 @@
 <?php
 
+use App\Http\Controllers\Web\PoojaController;
+use App\Http\Controllers\Web\DigitalPoojaController;
+use App\Http\Controllers\Web\PriestController;
+use App\Http\Controllers\Web\TempleController;
+use App\Http\Controllers\Web\StoreCatalogController;
+use App\Http\Controllers\Web\StoreCartController;
+use App\Http\Controllers\Web\StoreWishlistController;
+use App\Http\Controllers\Web\DonationController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -41,16 +49,16 @@ Route::prefix('poojas')
     ->name('pooja.')
     ->group(function () {
 
-        Route::view('/', 'frontend.poojas.index')
+        Route::get('/', [PoojaController::class, 'index'])
             ->name('index');
 
-        Route::view('/categories', 'frontend.poojas.categories')
+        Route::get('/categories', [PoojaController::class, 'categories'])
             ->name('categories');
 
-        Route::view('/category/{slug}', 'frontend.poojas.category')
+        Route::get('/category/{slug}', [PoojaController::class, 'category'])
             ->name('category');
 
-        Route::view('/{slug}', 'frontend.poojas.show')
+        Route::get('/{slug}', [PoojaController::class, 'show'])
             ->name('show');
 
         Route::view('/{slug}/booking-success', 'frontend.poojas.booking-success')
@@ -71,13 +79,13 @@ Route::prefix('digital-pooja')
     ->name('digital-pooja.')
     ->group(function () {
 
-        Route::view('/', 'frontend.digital-poojas.index')
+        Route::get('/', [DigitalPoojaController::class, 'index'])
             ->name('index');
 
-        Route::view('/{slug}', 'frontend.digital-poojas.show')
+        Route::get('/{slug}', [DigitalPoojaController::class, 'show'])
             ->name('show');
 
-        Route::view('/{slug}/schedule', 'frontend.digital-poojas.schedule')
+        Route::get('/{slug}/schedule', [DigitalPoojaController::class, 'schedule'])
             ->name('schedule');
 
         Route::view('/{slug}/join-live', 'frontend.digital-poojas.join')
@@ -104,13 +112,13 @@ Route::prefix('festivals')
     ->name('festival.')
     ->group(function () {
 
-        Route::view('/', 'frontend.festivals.index')
+        Route::get('/', [\App\Http\Controllers\FestivalController::class, 'index'])
             ->name('index');
 
-        Route::view('/calendar', 'frontend.festivals.calendar')
+        Route::get('/calendar', [\App\Http\Controllers\FestivalController::class, 'calendar'])
             ->name('calendar');
 
-        Route::view('/{slug}', 'frontend.festivals.show')
+        Route::get('/{slug}', [\App\Http\Controllers\FestivalController::class, 'show'])
             ->name('show');
     });
 
@@ -125,28 +133,28 @@ Route::prefix('temples')
     ->name('temple.')
     ->group(function () {
 
-        Route::view('/', 'frontend.temples.index')
+        Route::get('/', [TempleController::class, 'index'])
             ->name('index');
 
-        Route::view('/{slug}', 'frontend.temples.show')
+        Route::get('/{slug}', [TempleController::class, 'show'])
             ->name('show');
 
-        Route::view('/{slug}/gallery', 'frontend.temples.gallery')
+        Route::get('/{slug}/gallery', [TempleController::class, 'gallery'])
             ->name('gallery');
 
-        Route::view('/{slug}/events', 'frontend.temples.events')
+        Route::get('/{slug}/events', [TempleController::class, 'events'])
             ->name('events');
 
         Route::view('/{slug}/events/{event}/register', 'frontend.temples.event-register')
             ->name('event.register');
 
-        Route::view('/{slug}/poojas', 'frontend.temples.poojas')
+        Route::get('/{slug}/poojas', [TempleController::class, 'poojas'])
             ->name('poojas');
 
-        Route::view('/{slug}/donations', 'frontend.temples.donations')
+        Route::get('/{slug}/donations', [TempleController::class, 'donations'])
             ->name('donations');
 
-        Route::view('/{slug}/timings', 'frontend.temples.timings')
+        Route::get('/{slug}/timings', [TempleController::class, 'timings'])
             ->name('timings');
     });
 
@@ -161,19 +169,19 @@ Route::prefix('priests')
     ->name('priest.')
     ->group(function () {
 
-        Route::view('/', 'frontend.priests.index')
+        Route::get('/', [PriestController::class, 'index'])
             ->name('index');
 
-        Route::view('/{slug}', 'frontend.priests.show')
+        Route::get('/{slug}', [PriestController::class, 'show'])
             ->name('show');
 
-        Route::view('/{slug}/book', 'frontend.priests.book')
+        Route::get('/{slug}/book', [PriestController::class, 'book'])
             ->name('book');
 
         Route::view('/{slug}/booking-success', 'frontend.priests.booking-success')
             ->name('booking.success');
 
-        Route::view('/{slug}/poojas', 'frontend.priests.poojas')
+        Route::get('/{slug}/poojas', [PriestController::class, 'poojas'])
             ->name('poojas');
     });
 
@@ -188,7 +196,7 @@ Route::prefix('astrology')
     ->name('astrology.')
     ->group(function () {
 
-        Route::view('/', 'frontend.astrology.index')
+        Route::get('/', [\App\Http\Controllers\Web\AstrologyController::class, 'index'])
             ->name('index');
 
         Route::view('/horoscope', 'frontend.astrology.horoscope')
@@ -224,23 +232,29 @@ Route::prefix('store')
     ->name('store.')
     ->group(function () {
 
-        Route::view('/', 'frontend.store.product-listing')
+        Route::get('/', [StoreCatalogController::class, 'index'])
             ->name('index');
 
-        Route::view('/products', 'frontend.store.product-listing')
+        Route::get('/products', [StoreCatalogController::class, 'index'])
             ->name('products');
 			
-		Route::view('/wishlist', 'frontend.store.wishlist')
-			->name('wishlist');
+        Route::middleware('auth')->group(function () {
+            Route::get('/wishlist', [StoreWishlistController::class, 'index'])->name('wishlist');
+            Route::post('/wishlist/items', [StoreWishlistController::class, 'add'])->name('wishlist.add');
+            Route::delete('/wishlist/items', [StoreWishlistController::class, 'remove'])->name('wishlist.remove');
 
-        Route::view('/products/{slug}', 'frontend.store.product-details')
+            Route::get('/cart', [StoreCartController::class, 'index'])->name('cart');
+            Route::post('/cart/items', [StoreCartController::class, 'add'])->name('cart.add');
+            Route::patch('/cart/items', [StoreCartController::class, 'update'])->name('cart.update');
+            Route::delete('/cart/items', [StoreCartController::class, 'remove'])->name('cart.remove');
+            Route::delete('/cart', [StoreCartController::class, 'clear'])->name('cart.clear');
+        });
+
+        Route::get('/products/{slug}', [StoreCatalogController::class, 'show'])
             ->name('product');
 
-        Route::view('/category/{slug}', 'frontend.store.product-category')
+        Route::get('/category/{slug}', [StoreCatalogController::class, 'category'])
             ->name('category');
-
-        Route::view('/cart', 'frontend.store.shopping-cart')
-            ->name('cart');
 
         Route::view('/checkout', 'frontend.store.checkout')
             ->name('checkout');
@@ -291,10 +305,10 @@ Route::prefix('donations')
     ->name('donation.')
     ->group(function () {
 
-        Route::view('/', 'frontend.donations.index')
+        Route::get('/', [DonationController::class, 'index'])
             ->name('index');
 
-        Route::view('/donate', 'frontend.donations.donate')
+        Route::get('/donate', [DonationController::class, 'donate'])
             ->name('donate');
 
         Route::view('/success', 'frontend.donations.success')

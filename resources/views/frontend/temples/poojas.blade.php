@@ -72,7 +72,7 @@
                     <a href="{{ route('temple.index') }}" class="text-pn-primary">Temples</a>
                 </li>
                 <li class="breadcrumb-item">
-                    <a href="{{ route('temple.show', ['slug' => 'sri-venkateswara-temple']) }}"
+                    <a href="{{ route('temple.show', ['slug' => $temple->slug]) }}"
                        class="text-pn-primary">
                         {{ $templeName }}
                     </a>
@@ -170,7 +170,7 @@
                 Showing {{ count($poojas) }} temple services
             </span>
 
-            <a href="{{ route('temple.show', ['slug' => 'sri-venkateswara-temple']) }}"
+            <a href="{{ route('temple.show', ['slug' => $temple->slug]) }}"
                class="small text-pn-primary fw-semibold">
                 <i class="bi bi-bank me-1"></i>
                 Back to Temple
@@ -272,7 +272,7 @@
 
             <div class="col-lg-4 text-lg-end">
                 <a
-                    href="{{ route('temple.show', ['slug' => 'sri-venkateswara-temple']) }}"
+                    href="{{ route('temple.show', ['slug' => $temple->slug]) }}"
                     class="btn btn-pn px-4"
                 >
                     View Temple

@@ -1,61 +1,14 @@
 @extends('layouts.app')
 
-@section('title', 'Ganapathi Homam | Pooja Nilayam')
+@section('title', ($pooja['name'] ?? 'Pooja') . ' | Pooja Nilayam')
 
 @section(
     'meta_description',
-    'Learn about Ganapathi Homam, its benefits, procedure, materials and booking options with Pooja Nilayam.'
+    ($pooja['short_description'] ?? 'Learn about this Pooja, its benefits, procedure, materials and booking options with Pooja Nilayam.')
 )
 
 @section('content')
-
 @php
-
-    /*
-    |--------------------------------------------------------------------------
-    | Temporary UI Data
-    |--------------------------------------------------------------------------
-    | Frontend prototype data only.
-    | This will later come from Controller / Service / Database.
-    |--------------------------------------------------------------------------
-    */
-
-    $pooja = [
-        'name' => 'Ganapathi Homam',
-
-        'category' => 'Homam',
-
-        'image' => 'ganapathi.jpg',
-
-        'short_description' =>
-            'A sacred Vedic ritual performed to seek the blessings of Lord Ganesha for success, prosperity and removal of obstacles.',
-
-        'description' =>
-            'Ganapathi Homam is a traditional Vedic fire ritual dedicated to Lord Ganesha. It is traditionally performed before beginning important activities and is associated with seeking blessings for success, wisdom, prosperity and the removal of obstacles.',
-
-        'rating' => '4.9',
-
-        'reviews' => '128',
-
-        'duration' => '60 Mins',
-
-        'starting_price' => '₹501',
-
-        'location' => 'Hyderabad',
-
-        'language' => 'Sanskrit & Telugu',
-
-        'mode' => 'Online / In-Person',
-
-        'priest' => [
-            'name' => 'Sri Venkatesh Sharma',
-            'image' => 'priest-1.jpg',
-            'experience' => '18+ Years',
-            'speciality' => 'Vedic Rituals',
-            'rating' => '4.9'
-        ]
-    ];
-
 
     $benefits = [
 
@@ -85,7 +38,6 @@
 
     ];
 
-
     $procedure = [
 
         [
@@ -114,7 +66,6 @@
 
     ];
 
-
     $materials = [
 
         'Turmeric',
@@ -126,7 +77,6 @@
         'Ghee',
         'Homa Samagri'
     ];
-
 
     $faqs = [
 
@@ -151,37 +101,9 @@
         ]
 
     ];
-
-
-    $relatedPoojas = [
-
-        [
-            'image' => 'rudrabhishekam.jpg',
-            'name' => 'Rudrabhishekam',
-            'description' => 'For peace, health and wellbeing.',
-            'price' => '₹1,101',
-            'rating' => '4.8'
-        ],
-
-        [
-            'image' => 'lakshmi.jpg',
-            'name' => 'Lakshmi Pooja',
-            'description' => 'For prosperity and family happiness.',
-            'price' => '₹501',
-            'rating' => '4.9'
-        ],
-
-        [
-            'image' => 'satyanarayana.jpg',
-            'name' => 'Satyanarayana Pooja',
-            'description' => 'For peace, blessings and harmony.',
-            'price' => '₹601',
-            'rating' => '4.8'
-        ]
-
-    ];
-
 @endphp
+
+
 
 
 {{-- ============================================================
@@ -261,7 +183,7 @@
                 >
 
                     <img
-                        src="{{ Vite::asset('resources/images/home/' . $pooja['image']) }}"
+                        src="{{ asset($pooja['image']) }}"
                         class="img-fluid
                                w-100
                                object-fit-cover"
@@ -1273,7 +1195,7 @@
                     >
 
                         <img
-                            src="{{ Vite::asset('resources/images/home/' . $pooja['priest']['image']) }}"
+                            src="{{ asset($pooja['priest']['image']) }}"
                             class="rounded-circle
                                    object-fit-cover"
                             style="width:110px;height:110px;"
@@ -1361,14 +1283,14 @@
                         </div>
 
 
-                        <a
-                            href="{{ route('priest.show', ['slug' => Str::slug($pooja['priest']['name'])]) }}"
-                            class="btn btn-pn-outline btn-sm"
-                        >
-
-                            View Profile
-
-                        </a>
+                        @if(!empty($pooja['priest']['slug']))
+                            <a
+                                href="{{ route('priest.show', ['slug' => $pooja['priest']['slug']]) }}"
+                                class="btn btn-pn-outline btn-sm"
+                            >
+                                View Profile
+                            </a>
+                        @endif
 
                     </div>
 
@@ -1708,7 +1630,7 @@
                     >
 
                         <img
-                            src="{{ Vite::asset('resources/images/home/' . $related['image']) }}"
+                            src="{{ asset($related['image']) }}"
                             class="pn-pooja-image
                                    card-img-top"
                             alt="{{ $related['name'] }}"
@@ -1786,7 +1708,7 @@
 
 
                                 <a
-                                    href="{{ route('pooja.show', ['slug' => Str::slug($related['name'])]) }}"
+                                    href="{{ route('pooja.show', ['slug' => $related['slug']]) }}"
                                     class="btn btn-pn btn-sm"
                                 >
 

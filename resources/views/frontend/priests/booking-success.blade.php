@@ -696,7 +696,7 @@
 
 
                             <a
-                                href="{{ route('priest.show', ['slug' => Str::slug($priest['name'])]) }}"
+                                href="{{ route('priest.show', ['slug' => Str::slug($booking['priest_name'])]) }}"
                                 class="btn
                                        btn-pn-outline
                                        btn-sm"

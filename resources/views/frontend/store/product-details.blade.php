@@ -9,155 +9,7 @@
 
 @section('content')
 
-@php
 
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY PRODUCT DETAIL DATA
-    |--------------------------------------------------------------------------
-    | UI prototype only.
-    |
-    | Actual product information will come from the Product model
-    | and admin-managed Product Management module.
-    |--------------------------------------------------------------------------
-    */
-
-    $product = [
-
-        'name' => 'Premium Pooja Samagri Kit',
-
-        'category' => 'Pooja Samagri',
-
-        'sku' => 'PN-PSK-001',
-
-        'short_description' =>
-            'A thoughtfully assembled collection of essential
-             pooja items for your daily worship and special
-             devotional occasions.',
-
-        'description' =>
-            'This product is designed as a convenient collection
-             of devotional essentials. The final product contents,
-             specifications, pricing and availability will be
-             managed through the Pooja Nilayam Store.',
-
-        'price' => 999,
-
-        'mrp' => 1299,
-
-        'rating' => 4.8,
-
-        'reviews' => 124,
-
-        'stock' => true,
-
-        'stock_text' => 'In Stock',
-
-        'main_image' => 'images/home/hero.webp',
-
-        'images' => [
-
-            'images/home/hero.webp',
-            'images/home/hero.webp',
-            'images/home/hero.webp',
-            'images/home/hero.webp'
-
-        ],
-
-        'features' => [
-
-            [
-                'icon' => 'bi-shield-check',
-                'title' => 'Quality Assured',
-                'description' => 'Carefully selected products'
-            ],
-
-            [
-                'icon' => 'bi-box-seam',
-                'title' => 'Secure Packaging',
-                'description' => 'Packed carefully for delivery'
-            ],
-
-            [
-                'icon' => 'bi-truck',
-                'title' => 'Reliable Delivery',
-                'description' => 'Delivery based on location'
-            ],
-
-            [
-                'icon' => 'bi-headset',
-                'title' => 'Customer Support',
-                'description' => 'Support when you need it'
-            ]
-
-        ]
-
-    ];
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY PRODUCT OPTIONS
-    |--------------------------------------------------------------------------
-    */
-
-    $options = [
-
-        [
-            'title' => 'Standard Pack',
-            'description' =>
-                'Essential pooja items for everyday worship.',
-            'price' => 999,
-            'selected' => true
-        ],
-
-        [
-            'title' => 'Premium Pack',
-            'description' =>
-                'An expanded collection for special occasions.',
-            'price' => 1299,
-            'selected' => false
-        ]
-
-    ];
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY REVIEWS
-    |--------------------------------------------------------------------------
-    */
-
-    $reviews = [
-
-        [
-            'name' => 'Priya',
-            'rating' => 5,
-            'date' => 'Recently',
-            'comment' =>
-                'The product arrived nicely packed and was
-                 convenient for our pooja.'
-        ],
-
-        [
-            'name' => 'Ramesh',
-            'rating' => 5,
-            'date' => 'Recently',
-            'comment' =>
-                'Good quality and neatly presented.'
-        ],
-
-        [
-            'name' => 'Anita',
-            'rating' => 4,
-            'date' => 'Recently',
-            'comment' =>
-                'A useful collection for regular worship.'
-        ]
-
-    ];
-
-@endphp
 
 
 {{-- ============================================================
@@ -203,7 +55,7 @@
                 <li class="breadcrumb-item">
 
                     <a
-                        href="{{ route('store.category', ['slug' => \Illuminate\Support\Str::slug($product['category'])]) }}"
+                        href="{{ route('store.category', ['slug' => $product['category_slug']]) }}"
                         class="text-pn-primary"
                     >
 
@@ -276,7 +128,7 @@
 
                                 <img
                                     id="productMainImage"
-                                    src="{{ asset($product['main_image']) }}"
+                                    src="{{ asset($product['main_image'] ?: 'images/home/hero.webp') }}"
                                     class="object-fit-cover"
                                     alt="{{ $product['name'] }}"
                                     loading="eager"
@@ -310,6 +162,7 @@
                                        top-0
                                        end-0
                                        m-3"
+                                data-wishlist-add data-product-id="{{ $product['id'] }}"
                                 aria-label="Add product to wishlist"
                             >
 
@@ -438,7 +291,7 @@
                     {{-- Category --}}
 
                     <a
-                        href="{{ route('store.category', ['slug' => Str::slug($product['category'])]) }}"
+                        href="{{ route('store.category', ['slug' => $product['category_slug']]) }}"
                         class="small
                                text-pn-primary
                                fw-semibold
@@ -557,7 +410,7 @@
                                        text-pn-brown"
                             >
 
-                                ₹{{ number_format($product['price']) }}
+                                {{ $product['currency_symbol'] }}{{ number_format($product['price'], 2) }}
 
                             </strong>
 
@@ -567,7 +420,7 @@
                                        mb-2"
                             >
 
-                                ₹{{ number_format($product['mrp']) }}
+                                {{ $product['currency_symbol'] }}{{ number_format($product['mrp'], 2) }}
 
                             </del>
 
@@ -581,7 +434,7 @@
                             >
 
                                 Save
-                                ₹{{ number_format($product['mrp'] - $product['price']) }}
+                                {{ $product['currency_symbol'] }}{{ number_format($product['mrp'] - $product['price'], 2) }}
 
                             </span>
 
@@ -601,6 +454,8 @@
                     {{-- ====================================================
                          PRODUCT OPTIONS
                     ===================================================== --}}
+
+                    @if(!empty($options))
 
                     <div class="mb-4">
 
@@ -743,7 +598,7 @@
                                                        text-pn-primary"
                                             >
 
-                                                ₹{{ number_format($option['price']) }}
+                                                {{ $product['currency_symbol'] }}{{ number_format($option['price'], 2) }}
 
                                             </strong>
 
@@ -829,11 +684,14 @@
                     </div>
 
 
+                    @endif
+
+
                     {{-- ====================================================
                          STOCK
                     ===================================================== --}}
 
-                    @if($product['stock'])
+                    @if($product['stock_status'] === 'in_stock')
 
                         <div
                             class="d-flex
@@ -966,7 +824,7 @@
                                        btn-pn
                                        btn-lg
                                        w-100"
-                                @disabled(!$product['stock'])
+                                @disabled($product['stock_status'] !== 'in_stock')
                             >
 
                                 <i
@@ -992,6 +850,7 @@
                                 class="btn
                                        btn-pn-outline
                                        btn-lg"
+                                data-wishlist-add data-product-id="{{ $product['id'] }}"
                                 aria-label="Add to wishlist"
                             >
 
@@ -1013,7 +872,7 @@
                                btn-lg
                                w-100
                                mb-4"
-                        @disabled(!$product['stock'])
+                        @disabled($product['stock_status'] !== 'in_stock')
                     >
 
                         Buy Now
@@ -1593,29 +1452,7 @@
                    g-4"
         >
 
-            @foreach([
-
-                [
-                    'name' => 'Brass Diya',
-                    'price' => 299
-                ],
-
-                [
-                    'name' => 'Sandalwood Dhoop',
-                    'price' => 249
-                ],
-
-                [
-                    'name' => 'Pooja Kumkum Set',
-                    'price' => 199
-                ],
-
-                [
-                    'name' => 'Brass Bell',
-                    'price' => 449
-                ]
-
-            ] as $related)
+            @foreach($related as $related)
 
                 <div class="col">
 
@@ -1631,7 +1468,7 @@
                         <div class="ratio ratio-1x1">
 
                             <img
-                                src="{{ asset('images/home/hero.webp') }}"
+                                src="{{ asset($related['image'] ?: 'images/home/hero.webp') }}"
                                 class="object-fit-cover"
                                 alt="{{ $related['name'] }}"
                                 loading="lazy"
@@ -1647,7 +1484,7 @@
                                        fw-semibold"
                             >
 
-                                Pooja Essentials
+                                {{ $related['category'] }}
 
                             </small>
 
@@ -1675,7 +1512,7 @@
                                     class="text-pn-brown"
                                 >
 
-                                    ₹{{ number_format($related['price']) }}
+                                    {{ $related['currency_symbol'] }}{{ number_format($related['price'], 2) }}
 
                                 </strong>
 
@@ -1904,3 +1741,24 @@ document.addEventListener('DOMContentLoaded', function () {
 @endpush
 
 @endsection
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const csrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    document.querySelectorAll('[data-wishlist-add]').forEach(button => {
+        button.addEventListener('click', async function () {
+            try {
+                const response = await fetch('{{ route('store.wishlist.add') }}', {
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': csrf, 'Accept': 'application/json', 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ product_id: this.dataset.productId })
+                });
+                const data = await response.json().catch(() => ({}));
+                if (!response.ok) throw new Error(data.message || 'Unable to update wishlist.');
+                this.innerHTML = '<i class="bi bi-heart-fill text-danger"></i>';
+            } catch (error) { alert(error.message); }
+        });
+    });
+});
+</script>
+@endpush

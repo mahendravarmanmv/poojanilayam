@@ -1,70 +1,17 @@
 @extends('layouts.app')
 
-@section('title', 'Ganapathi Digital Pooja | Pooja Nilayam')
+@section('title', 'Digital Pooja | Pooja Nilayam')
 
 @section(
     'meta_description',
-    'Experience a personalized Ganapathi Digital Pooja with AI Sankalpam, flowers, deepam, personalized mantras and blessings.'
+    'Experience personalized Digital Pooja services with guided devotional experiences and configurable offerings.'
 )
 
 @section('content')
 
 @php
 
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY UI DATA
-    |--------------------------------------------------------------------------
-    | Frontend prototype only.
-    | These values will later come from the Digital Pooja model/controller.
-    |--------------------------------------------------------------------------
-    */
-
-    $pooja = [
-
-        'name' => 'Ganapathi Digital Pooja',
-
-        'god' => 'Lord Ganesha',
-
-        'category' => 'Digital Pooja',
-
-        'image' => 'ganapathi.jpg',
-
-        'price' => 251,
-
-        'duration' => '20 Minutes',
-
-        'rating' => '4.9',
-
-        'reviews' => 186,
-
-        'languages' => [
-            'Telugu',
-            'English'
-        ],
-
-        'short_description' =>
-            'A personalized devotional experience dedicated to Lord Ganesha, designed to help you participate in a meaningful digital pooja from wherever you are.',
-
-        'description' =>
-            'Begin your spiritual journey with Lord Ganesha through a personalized Digital Pooja experience. Select your offerings, language and family details and experience a devotional journey designed around your Sankalpam.',
-
-        'benefits' => [
-
-            'Seek blessings for success and removal of obstacles.',
-
-            'Create a personalized Sankalpam based on your details.',
-
-            'Choose flowers and deepam as part of your digital offering.',
-
-            'Experience personalized devotional mantras.',
-
-            'Receive blessings and certificate generation where applicable.'
-
-        ]
-
-    ];
-
+    // $pooja and $relatedPoojas are supplied by DigitalPoojaController.
 
     /*
     |--------------------------------------------------------------------------
@@ -214,36 +161,7 @@
     ];
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | Related Digital Poojas
-    |--------------------------------------------------------------------------
-    */
-
-    $relatedPoojas = [
-
-        [
-            'name' => 'Lakshmi Digital Pooja',
-            'god' => 'Goddess Lakshmi',
-            'image' => 'lakshmi.jpg',
-            'price' => 301
-        ],
-
-        [
-            'name' => 'Shiva Digital Pooja',
-            'god' => 'Lord Shiva',
-            'image' => 'shiva.jpg',
-            'price' => 351
-        ],
-
-        [
-            'name' => 'Hanuman Digital Pooja',
-            'god' => 'Lord Hanuman',
-            'image' => 'hanuman.jpg',
-            'price' => 251
-        ]
-
-    ];
+    // Related Digital Poojas are supplied by DigitalPoojaController.
 
 @endphp
 
@@ -324,7 +242,7 @@
                 >
 
                     <img
-                        src="{{ Vite::asset('resources/images/home/' . $pooja['image']) }}"
+                        src="{{ asset($pooja['image']) }}"
                         class="img-fluid
                                w-100
                                object-fit-cover"
@@ -435,7 +353,7 @@
                                                text-warning"
                                     >
 
-                                        ₹{{ number_format($pooja['price']) }}
+                                        {{ $pooja['price'] !== null ? '₹' . number_format($pooja['price']) : 'Price on scheduling' }}
 
                                     </strong>
 
@@ -497,12 +415,12 @@
                         ></i>
 
                         <strong>
-                            {{ $pooja['rating'] }}
+                            {{ $pooja['rating'] ?? '—' }}
                         </strong>
 
                         <span class="text-secondary">
 
-                            ({{ $pooja['reviews'] }} reviews)
+                            ({{ $pooja['reviews'] ?? '—' }} reviews)
 
                         </span>
 
@@ -561,7 +479,7 @@
                                text-pn-primary"
                     >
 
-                        ₹{{ number_format($pooja['price']) }}
+                        {{ $pooja['price'] !== null ? '₹' . number_format($pooja['price']) : 'Price on scheduling' }}
 
                     </strong>
 
@@ -717,7 +635,7 @@
                                gap-2"
                     >
 
-                        @foreach($pooja['languages'] as $language)
+                        @forelse($pooja['languages'] as $language)
 
                             <span
                                 class="badge
@@ -740,7 +658,9 @@
 
                             </span>
 
-                        @endforeach
+                        @empty
+                                <span class="text-muted">Language options are configured during scheduling.</span>
+                            @endforelse
 
                     </div>
 
@@ -756,7 +676,7 @@
                 >
 
                     <a
-                        href="{{ route('digital-pooja.schedule', ['slug' => Str::slug($pooja['name'])]) }}"
+                        href="{{ route('digital-pooja.schedule', ['slug' => $pooja['slug']]) }}"
                         class="btn
                                btn-pn
                                btn-lg
@@ -1131,7 +1051,7 @@
                                                text-pn-gold"
                                     ></i>
 
-                                    {{ $pooja['rating'] }}
+                                    {{ $pooja['rating'] ?? '—' }}
 
                                 </strong>
 
@@ -1162,7 +1082,7 @@
                                            text-pn-primary"
                                 >
 
-                                    ₹{{ number_format($pooja['price']) }}
+                                    {{ $pooja['price'] !== null ? '₹' . number_format($pooja['price']) : 'Price on scheduling' }}
 
                                 </strong>
 
@@ -2076,7 +1996,7 @@
                     >
 
                         <img
-                            src="{{ Vite::asset('resources/images/home/' . $related['image']) }}"
+                            src="{{ asset($related['image']) }}"
                             class="card-img-top
                                    object-fit-cover"
                             style="height:240px;"
@@ -2124,13 +2044,13 @@
                                            text-pn-primary"
                                 >
 
-                                    ₹{{ number_format($related['price']) }}
+                                    {{ $related['price'] !== null ? '₹' . number_format($related['price']) : 'Price on scheduling' }}
 
                                 </strong>
 
 
                                 <a
-                                    href="{{ route('digital-pooja.show', ['slug' => Str::slug($related['name'])]) }}"
+                                    href="{{ route('digital-pooja.show', ['slug' => $related['slug']]) }}"
                                     class="btn
                                            btn-pn
                                            btn-sm"
@@ -2209,7 +2129,7 @@
 
 
                 <a
-                    href="{{ route('digital-pooja.schedule', ['slug' => Str::slug($pooja['name'])]) }}"
+                    href="{{ route('digital-pooja.schedule', ['slug' => $pooja['slug']]) }}"
                     class="btn
                            btn-warning
                            text-dark

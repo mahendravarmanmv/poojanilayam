@@ -3,6 +3,20 @@
 use App\Http\Controllers\Web\Auth\AuthenticationController;
 use Illuminate\Support\Facades\Route;
 
+/*
+|--------------------------------------------------------------------------
+| Compatibility login route
+|--------------------------------------------------------------------------
+|
+| Laravel's default Authenticate middleware redirects guests to the route
+| named `login`. The application uses `auth.login` as the canonical login
+| route, so keep this named alias to avoid RouteNotFoundException on any
+| authenticated page.
+|
+*/
+Route::get('/login', fn () => redirect()->route('auth.login'))
+    ->name('login');
+
 Route::prefix('auth')->name('auth.')->group(function () {
     Route::middleware('guest')->group(function () {
         Route::get('/login', [AuthenticationController::class, 'showLogin'])->name('login');

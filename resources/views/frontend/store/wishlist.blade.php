@@ -10,74 +10,7 @@
 @section('content')
 
 @php
-
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY WISHLIST DATA
-    |--------------------------------------------------------------------------
-    | UI prototype only.
-    |
-    | Actual wishlist products will come from the authenticated
-    | user's wishlist relationship later.
-    |--------------------------------------------------------------------------
-    */
-
-    $wishlistProducts = [
-
-        [
-            'name' => 'Premium Brass Diya',
-            'category' => 'Pooja Essentials',
-            'price' => 299,
-            'old_price' => 399,
-            'rating' => 4.9,
-            'reviews' => 84,
-            'image' => 'images/home/hero.webp',
-            'stock' => true,
-            'stock_text' => 'In Stock',
-            'badge' => 'Bestseller'
-        ],
-
-        [
-            'name' => 'Daily Pooja Essentials Kit',
-            'category' => 'Pooja Samagri',
-            'price' => 599,
-            'old_price' => 699,
-            'rating' => 4.8,
-            'reviews' => 67,
-            'image' => 'images/home/hero.webp',
-            'stock' => true,
-            'stock_text' => 'In Stock',
-            'badge' => 'Popular'
-        ],
-
-        [
-            'name' => 'Sandalwood Dhoop',
-            'category' => 'Incense & Dhoop',
-            'price' => 249,
-            'old_price' => 299,
-            'rating' => 4.9,
-            'reviews' => 112,
-            'image' => 'images/home/hero.webp',
-            'stock' => true,
-            'stock_text' => 'In Stock',
-            'badge' => 'Top Rated'
-        ],
-
-        [
-            'name' => 'Traditional Pooja Bell',
-            'category' => 'Pooja Accessories',
-            'price' => 449,
-            'old_price' => 549,
-            'rating' => 4.7,
-            'reviews' => 46,
-            'image' => 'images/home/hero.webp',
-            'stock' => false,
-            'stock_text' => 'Currently Unavailable',
-            'badge' => ''
-        ]
-
-    ];
-
+    // Wishlist data is supplied by StoreWishlistController.
 @endphp
 
 
@@ -227,7 +160,7 @@
                                text-pn-brown"
                     >
 
-                        {{ count($wishlistProducts) }}
+                        <span data-wishlist-count>{{ count($wishlistProducts) }}</span>
 
                     </strong>
 
@@ -493,6 +426,7 @@
                                        end-0
                                        m-3"
                                 data-wishlist-remove
+                                data-product-id="{{ $product['id'] }}"
                                 aria-label="Remove {{ $product['name'] }} from wishlist"
                             >
 
@@ -555,14 +489,14 @@
                                                text-warning"
                                     ></i>
 
-                                    {{ $product['rating'] }}
+                                    {{ $product['rating'] !== null ? number_format($product['rating'], 1) : '—' }}
 
                                 </span>
 
 
                                 <small class="text-secondary">
 
-                                    ({{ $product['reviews'] }})
+                                    @if($product['reviews'] !== null)({{ $product['reviews'] }})@endif
 
                                 </small>
 
@@ -583,7 +517,7 @@
                                            text-pn-brown"
                                 >
 
-                                    ₹{{ number_format($product['price']) }}
+                                    {{ $product['price'] !== null ? $product['currency_symbol'] . number_format($product['price'], 2) : 'Price not available' }}
 
                                 </strong>
 
@@ -593,7 +527,7 @@
                                            text-secondary"
                                 >
 
-                                    ₹{{ number_format($product['old_price']) }}
+                                    @if($product['old_price'] !== null){{ $product['currency_symbol'] . number_format($product['old_price'], 2) }}@endif
 
                                 </del>
 
@@ -648,7 +582,7 @@
                             >
 
                                 <a
-                                    href="{{ route('store.product', ['slug' => Str::slug($product['name'])]) }}"
+                                    href="{{ route('store.product', ['slug' => $product['slug']]) }}"
                                     class="btn
                                            btn-pn-outline
                                            flex-grow-1"
@@ -666,6 +600,7 @@
                                         class="btn
                                                btn-pn"
                                         data-add-cart
+                                        data-product-id="{{ $product['id'] }}"
                                         aria-label="Add {{ $product['name'] }} to cart"
                                     >
 
@@ -1117,82 +1052,44 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    const csrf = document.querySelector('meta[name=\"csrf-token\"]')?.getAttribute('content');
+    const request = (url, method, body) => fetch(url, {
+        method,
+        headers: { 'X-CSRF-TOKEN': csrf, 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        body: body ? JSON.stringify(body) : undefined
+    }).then(async response => {
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(data.message || 'Request failed.');
+        return data;
+    });
 
-    /*
-    |--------------------------------------------------------------------------
-    | Wishlist Remove — UI Prototype
-    |--------------------------------------------------------------------------
-    */
-
-    document
-        .querySelectorAll('[data-wishlist-remove]')
-        .forEach(function (button) {
-
-            button.addEventListener('click', function () {
-
-                const card =
-                    this.closest('.col');
-
-                if (!card) {
-                    return;
-                }
-
-                card.remove();
-
-                const remaining =
-                    document.querySelectorAll(
-                        '[data-wishlist-remove]'
-                    ).length;
-
-                const emptyState =
-                    document.getElementById(
-                        'wishlist-empty-state'
-                    );
-
-                if (remaining === 0 && emptyState) {
-
-                    emptyState.classList.remove('d-none');
-
-                }
-
-            });
-
+    document.querySelectorAll('[data-wishlist-remove]').forEach(button => {
+        button.addEventListener('click', async function () {
+            try {
+                await request('{{ route('store.wishlist.remove') }}', 'DELETE', { product_id: this.dataset.productId });
+                this.closest('.col')?.remove();
+                const count = document.querySelectorAll('[data-wishlist-remove]').length;
+                const counter = document.querySelector('[data-wishlist-count]');
+                if (counter) counter.textContent = count;
+                if (!count) document.getElementById('wishlist-empty-state')?.classList.remove('d-none');
+            } catch (error) { alert(error.message); }
         });
+    });
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | Add to Cart — UI Prototype
-    |--------------------------------------------------------------------------
-    */
-
-    document
-        .querySelectorAll('[data-add-cart]')
-        .forEach(function (button) {
-
-            button.addEventListener('click', function () {
-
-                const originalHTML =
-                    this.innerHTML;
-
-                this.innerHTML =
-                    '<i class="bi bi-check-lg"></i>';
-
-                this.disabled = true;
-
-                setTimeout(function () {
-
-                    button.innerHTML =
-                        originalHTML;
-
-                    button.disabled = false;
-
-                }, 1200);
-
-            });
-
+    document.querySelectorAll('[data-add-cart]').forEach(button => {
+        button.addEventListener('click', async function () {
+            const original = this.innerHTML;
+            this.disabled = true;
+            try {
+                await request('{{ route('store.cart.add') }}', 'POST', { product_id: this.dataset.productId, quantity: 1 });
+                this.innerHTML = '<i class="bi bi-check-lg"></i>';
+            } catch (error) {
+                alert(error.message);
+            } finally {
+                setTimeout(() => { this.innerHTML = original; this.disabled = false; }, 1000);
+            }
         });
-
+    });
 });
 </script>
 

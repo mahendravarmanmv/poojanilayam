@@ -8,52 +8,17 @@
 )
 
 @section('content')
-
 @php
-
-    /*
-    |--------------------------------------------------------------------------
-    | Temporary UI Data
-    |--------------------------------------------------------------------------
-    | Frontend prototype data only.
-    | This will later come from Controllers / Services / Database.
-    |--------------------------------------------------------------------------
-    */
-
-    $categories = [
-        [
-            'icon' => 'bi-flower1',
-            'name' => 'All Poojas',
-            'count' => 24
-        ],
-        [
-            'icon' => 'bi-sun',
-            'name' => 'Daily Poojas',
-            'count' => 8
-        ],
-        [
-            'icon' => 'bi-fire',
-            'name' => 'Homams',
-            'count' => 12
-        ],
-        [
-            'icon' => 'bi-heart',
-            'name' => 'Special Poojas',
-            'count' => 16
-        ],
-        [
-            'icon' => 'bi-house-heart',
-            'name' => 'Griha Pooja',
-            'count' => 10
-        ],
-        [
-            'icon' => 'bi-stars',
-            'name' => 'Festival Poojas',
-            'count' => 14
-        ]
+    $locations = [
+        'Hyderabad',
+        'Bengaluru',
+        'Chennai',
+        'Tirupati',
+        'Vijayawada',
+        'Srisailam'
     ];
-
-
+@endphp
+@php
     $occasions = [
         'Health',
         'Prosperity',
@@ -64,125 +29,9 @@
         'House Warming',
         'Birthday'
     ];
-
-
-    $locations = [
-        'Hyderabad',
-        'Bengaluru',
-        'Chennai',
-        'Tirupati',
-        'Vijayawada',
-        'Srisailam'
-    ];
-
-
-    $poojas = [
-        [
-            'image' => 'ganapathi.jpg',
-            'name' => 'Ganapathi Homam',
-            'category' => 'Homam',
-            'description' => 'A sacred ritual performed for success, prosperity and removal of obstacles.',
-            'duration' => '60 Mins',
-            'rating' => '4.9',
-            'reviews' => '128',
-            'price' => '₹501',
-            'location' => 'Hyderabad',
-            'featured' => true
-        ],
-
-        [
-            'image' => 'rudrabhishekam.jpg',
-            'name' => 'Rudrabhishekam',
-            'category' => 'Special Pooja',
-            'description' => 'A traditional Shiva worship ceremony for peace, health and spiritual wellbeing.',
-            'duration' => '90 Mins',
-            'rating' => '4.8',
-            'reviews' => '96',
-            'price' => '₹1,101',
-            'location' => 'Hyderabad',
-            'featured' => true
-        ],
-
-        [
-            'image' => 'lakshmi.jpg',
-            'name' => 'Lakshmi Pooja',
-            'category' => 'Prosperity',
-            'description' => 'A devotional ceremony seeking the blessings of Goddess Lakshmi for prosperity.',
-            'duration' => '60 Mins',
-            'rating' => '4.9',
-            'reviews' => '152',
-            'price' => '₹501',
-            'location' => 'Bengaluru',
-            'featured' => false
-        ],
-
-        [
-            'image' => 'satyanarayana.jpg',
-            'name' => 'Satyanarayana Pooja',
-            'category' => 'Special Pooja',
-            'description' => 'A traditional pooja performed for peace, blessings and family wellbeing.',
-            'duration' => '90 Mins',
-            'rating' => '4.8',
-            'reviews' => '84',
-            'price' => '₹601',
-            'location' => 'Vijayawada',
-            'featured' => true
-        ],
-
-        [
-            'image' => 'ganapathi.jpg',
-            'name' => 'Sankashta Hara Ganapathi Pooja',
-            'category' => 'Ganapathi Pooja',
-            'description' => 'Seek the blessings of Lord Ganesha for overcoming challenges and obstacles.',
-            'duration' => '45 Mins',
-            'rating' => '4.9',
-            'reviews' => '73',
-            'price' => '₹401',
-            'location' => 'Chennai',
-            'featured' => false
-        ],
-
-        [
-            'image' => 'rudrabhishekam.jpg',
-            'name' => 'Maha Mrityunjaya Homam',
-            'category' => 'Homam',
-            'description' => 'A powerful Vedic ritual traditionally performed for wellbeing and peace.',
-            'duration' => '120 Mins',
-            'rating' => '4.9',
-            'reviews' => '61',
-            'price' => '₹1,501',
-            'location' => 'Srisailam',
-            'featured' => true
-        ],
-
-        [
-            'image' => 'lakshmi.jpg',
-            'name' => 'Dhanalakshmi Pooja',
-            'category' => 'Prosperity',
-            'description' => 'A devotional offering seeking blessings for abundance and financial wellbeing.',
-            'duration' => '60 Mins',
-            'rating' => '4.7',
-            'reviews' => '55',
-            'price' => '₹701',
-            'location' => 'Hyderabad',
-            'featured' => false
-        ],
-
-        [
-            'image' => 'satyanarayana.jpg',
-            'name' => 'Navagraha Pooja',
-            'category' => 'Special Pooja',
-            'description' => 'A traditional ritual dedicated to the Navagrahas for harmony and wellbeing.',
-            'duration' => '90 Mins',
-            'rating' => '4.8',
-            'reviews' => '48',
-            'price' => '₹1,201',
-            'location' => 'Tirupati',
-            'featured' => false
-        ]
-    ];
-
 @endphp
+
+
 
 
 {{-- ============================================================
@@ -931,7 +780,7 @@
                                 >
 
                                     <img
-                                        src="{{ asset('images/home/' . $pooja['image']) }}"
+                                        src="{{ asset($pooja['image']) }}"
                                         class="pn-pooja-image
                                                card-img-top"
                                         alt="{{ $pooja['name'] }}"

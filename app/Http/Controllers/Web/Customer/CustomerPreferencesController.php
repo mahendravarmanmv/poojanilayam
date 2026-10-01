@@ -20,7 +20,7 @@ class CustomerPreferencesController extends Controller
     {
         $user = $request->user();
 
-        $preference = $user->userPreference;
+        $preference = $user->preferences;
 
         $languages = Language::query()
             ->where('is_active', true)
@@ -77,6 +77,12 @@ class CustomerPreferencesController extends Controller
             'timezone_id' => ['nullable', 'integer', 'exists:timezones,id'],
             'currency_code' => ['nullable', 'string', 'size:3'],
             'preferences' => ['nullable', 'array'],
+            'notifications' => ['nullable', 'array'],
+            'notifications.*' => ['nullable', 'array'],
+            'notifications.*.email' => ['nullable', 'boolean'],
+            'notifications.*.sms' => ['nullable', 'boolean'],
+            'notifications.*.whatsapp' => ['nullable', 'boolean'],
+            'notifications.*.push' => ['nullable', 'boolean'],
         ]);
 
         if (!empty($validated['language_id'])) {
@@ -111,7 +117,7 @@ class CustomerPreferencesController extends Controller
                     'language_id' => $validated['language_id'] ?? null,
                     'timezone_id' => $validated['timezone_id'] ?? null,
                     'currency_code' => $validated['currency_code'] ?? null,
-                    'preferences' => $validated['preferences'] ?? ($user->userPreference?->preferences ?? null),
+                    'preferences' => $validated['preferences'] ?? ($user->preferences?->preferences ?? null),
                 ]
             );
 

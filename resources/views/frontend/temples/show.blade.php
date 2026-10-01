@@ -9,167 +9,7 @@
 
 @section('content')
 
-@php
 
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY TEMPLE DATA
-    |--------------------------------------------------------------------------
-    | These values will later come from the Temple model/controller.
-    |--------------------------------------------------------------------------
-    */
-
-    $temple = [
-
-        'name' => 'Sri Venkateswara Temple',
-
-        'deity' => 'Lord Venkateswara',
-
-        'location' => 'Tirumala, Andhra Pradesh',
-
-        'address' =>
-            'Tirumala Hills, Tirupati, Andhra Pradesh, India',
-
-        'description' =>
-            'A sacred destination dedicated to Lord Venkateswara.
-             Explore temple services, devotional experiences,
-             pooja offerings and other available spiritual services.',
-
-        'image' => 'temple-1.jpg',
-
-        'verified' => true,
-
-        'rating' => '4.9',
-
-        'reviews' => '2,840',
-
-        'established' => 'Traditional Sacred Temple',
-
-        'language' => 'Telugu',
-
-        'status' => 'Active'
-
-    ];
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPLE SERVICES
-    |--------------------------------------------------------------------------
-    */
-
-    $services = [
-
-        [
-            'icon' => 'bi-calendar-check',
-            'title' => 'Pooja Booking',
-            'text' =>
-                'Explore available temple poojas and booking options.'
-        ],
-
-        [
-            'icon' => 'bi-heart',
-            'title' => 'Donations',
-            'text' =>
-                'Support the temple through available donation services.'
-        ],
-
-        [
-            'icon' => 'bi-images',
-            'title' => 'Temple Gallery',
-            'text' =>
-                'Explore photos and sacred moments from the temple.'
-        ],
-
-        [
-            'icon' => 'bi-calendar-event',
-            'title' => 'Temple Events',
-            'text' =>
-                'Discover upcoming devotional events and activities.'
-        ]
-
-    ];
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | SAMPLE POOJAS
-    |--------------------------------------------------------------------------
-    */
-
-    $poojas = [
-
-        [
-            'name' => 'Suprabhatham Seva',
-
-            'description' =>
-                'Begin the day with a traditional devotional experience.',
-
-            'timing' => 'Early Morning',
-
-            'image' => 'pooja-1.jpg'
-        ],
-
-        [
-            'name' => 'Archana',
-
-            'description' =>
-                'A devotional offering performed in the name of devotees.',
-
-            'timing' => 'Morning / Evening',
-
-            'image' => 'pooja-2.jpg'
-        ],
-
-        [
-            'name' => 'Special Pooja',
-
-            'description' =>
-                'Explore available special temple pooja offerings.',
-
-            'timing' => 'As Scheduled',
-
-            'image' => 'pooja-3.jpg'
-        ]
-
-    ];
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPLE INFORMATION
-    |--------------------------------------------------------------------------
-    */
-
-    $information = [
-
-        [
-            'icon' => 'bi-geo-alt',
-            'title' => 'Location',
-            'value' => $temple['location']
-        ],
-
-        [
-            'icon' => 'bi-translate',
-            'title' => 'Language',
-            'value' => $temple['language']
-        ],
-
-        [
-            'icon' => 'bi-check-circle',
-            'title' => 'Status',
-            'value' => $temple['status']
-        ],
-
-        [
-            'icon' => 'bi-shield-check',
-            'title' => 'Verification',
-            'value' => 'Verified Temple'
-        ]
-
-    ];
-
-@endphp
 
 
 {{-- ============================================================
@@ -957,7 +797,7 @@
 
 
                             <a
-                                href="{{ route('temple.poojas', ['slug' => Str::slug($temple['name'])]) }}"
+                                href="{{ route('temple.poojas', ['slug' => $temple['slug']]) }}"
                                 class="small
                                        text-pn-primary
                                        fw-semibold
@@ -1036,7 +876,7 @@
 
 
             <a
-                href="{{ route('temple.poojas', ['slug' => Str::slug($temple['name'])]) }}"
+                href="{{ route('temple.poojas', ['slug' => $temple['slug']]) }}"
                 class="btn
                        btn-pn-outline"
             >
@@ -1352,7 +1192,7 @@
             <div class="col">
 
                 <a
-                    href="{{ route('temple.gallery', ['slug' => Str::slug($temple['name'])]) }}"
+                    href="{{ route('temple.gallery', ['slug' => $temple['slug']]) }}"
                     class="card
                            border
                            border-warning-subtle
@@ -1420,7 +1260,7 @@
             <div class="col">
 
                 <a
-                    href="{{ route('temple.events', ['slug' => Str::slug($temple['name'])]) }}"
+                    href="{{ route('temple.events', ['slug' => $temple['slug']]) }}"
                     class="card
                            border
                            border-warning-subtle
@@ -1488,7 +1328,7 @@
             <div class="col">
 
                 <a
-                    href="{{ route('temple.donations', ['slug' => Str::slug($temple['name'])]) }}"
+                    href="{{ route('temple.donations', ['slug' => $temple['slug']]) }}"
                     class="card
                            border
                            border-warning-subtle
@@ -1637,7 +1477,7 @@
 
 
                     <a
-                        href="{{ route('temple.gallery', ['slug' => Str::slug($temple['name'])]) }}"
+                        href="{{ route('temple.gallery', ['slug' => $temple['slug']]) }}"
                         class="btn
                                btn-outline-light
                                px-4"

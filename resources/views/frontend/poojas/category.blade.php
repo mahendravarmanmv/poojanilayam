@@ -5,18 +5,7 @@
 
 @section('content')
 
-@php
-    $categoryName = 'Ganapathi Poojas';
 
-    $poojas = [
-        ['slug'=>'ganapathi-homam','name'=>'Ganapathi Homam','description'=>'A traditional fire ritual seeking auspicious beginnings and the blessings of Lord Ganesha.','duration'=>'60–90 mins','price'=>'₹1,501','rating'=>'4.9'],
-        ['slug'=>'ganapathi-pooja','name'=>'Ganapathi Pooja','description'=>'A devotional pooja performed to invoke Lord Ganesha before important beginnings and occasions.','duration'=>'45–60 mins','price'=>'₹901','rating'=>'4.8'],
-        ['slug'=>'sankashta-hara-chaturthi-pooja','name'=>'Sankashta Hara Chaturthi Pooja','description'=>'A traditional Ganapathi worship service associated with devotion and seeking divine grace.','duration'=>'45–60 mins','price'=>'₹751','rating'=>'4.9'],
-        ['slug'=>'varasiddhi-vinayaka-pooja','name'=>'Varasiddhi Vinayaka Pooja','description'=>'A sacred worship service dedicated to Lord Vinayaka for an auspicious and devotional observance.','duration'=>'60 mins','price'=>'₹1,101','rating'=>'4.8'],
-        ['slug'=>'ganesha-atharvashirsha','name'=>'Ganesha Atharvashirsha','description'=>'A devotional recitation and worship experience centred around Ganesha Atharvashirsha.','duration'=>'30–45 mins','price'=>'₹601','rating'=>'4.8'],
-        ['slug'=>'vinayaka-chavithi-pooja','name'=>'Vinayaka Chavithi Pooja','description'=>'A traditional Ganapathi worship service for the sacred Vinayaka Chavithi occasion.','duration'=>'60–90 mins','price'=>'₹1,201','rating'=>'4.9'],
-    ];
-@endphp
 
 <section class="bg-pn-cream py-4">
     <div class="container">

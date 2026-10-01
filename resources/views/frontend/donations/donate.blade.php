@@ -9,67 +9,7 @@
 
 @section('content')
 
-@php
-
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY UI DATA
-    |--------------------------------------------------------------------------
-    | These values will later come from the database / controller.
-    |--------------------------------------------------------------------------
-    */
-
-    $temples = [
-        [
-            'id' => 1,
-            'name' => 'Sri Venkateswara Temple',
-            'location' => 'Tirumala, Andhra Pradesh'
-        ],
-        [
-            'id' => 2,
-            'name' => 'Sri Durga Devi Temple',
-            'location' => 'Hyderabad, Telangana'
-        ],
-        [
-            'id' => 3,
-            'name' => 'Sri Shiva Temple',
-            'location' => 'Varanasi, Uttar Pradesh'
-        ]
-    ];
-
-
-    $donationTypes = [
-        [
-            'id' => 1,
-            'name' => 'Temple Support',
-            'description' => 'Support temple worship and activities.'
-        ],
-        [
-            'id' => 2,
-            'name' => 'Annadanam',
-            'description' => 'Support devotional food and community service.'
-        ],
-        [
-            'id' => 3,
-            'name' => 'Pooja & Seva',
-            'description' => 'Support sacred poojas and seva activities.'
-        ],
-        [
-            'id' => 4,
-            'name' => 'Temple Development',
-            'description' => 'Support development of sacred spaces.'
-        ]
-    ];
-
-
-    $suggestedAmounts = [
-        501,
-        1001,
-        2501,
-        5001
-    ];
-
-@endphp
+{{-- Donation data is supplied by DonationController@donate. --}}
 
 
 {{-- ============================================================
@@ -409,6 +349,10 @@
             action="#"
         >
 
+            @if($selectedCampaign)
+                <input type="hidden" name="donation_campaign_id" value="{{ $selectedCampaign->id }}">
+            @endif
+
             @csrf
 
             <div class="row g-4 g-xl-5">
@@ -516,7 +460,7 @@
 
                                 <option
                                     value=""
-                                    selected
+                                    @selected(! $selectedTemple)
                                     disabled
                                 >
                                     Select a temple
@@ -527,6 +471,7 @@
 
                                     <option
                                         value="{{ $temple['id'] }}"
+                                        @selected($selectedTemple?->id === $temple['id'])
                                     >
                                         {{ $temple['name'] }}
                                         —
@@ -638,6 +583,7 @@
                                             name="donation_type"
                                             id="donationType{{ $type['id'] }}"
                                             value="{{ $type['id'] }}"
+                                            @checked($selectedDonationTypeId === $type['id'])
                                             required
                                         >
 

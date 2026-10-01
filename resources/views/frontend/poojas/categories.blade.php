@@ -42,22 +42,7 @@
 
 <section class="py-5">
     <div class="container py-lg-3">
-        @php
-            $categories = [
-                ['icon'=>'bi-sunrise','name'=>'Daily Poojas','description'=>'Begin your day with traditional prayers and divine blessings.','count'=>'8 Poojas','slug'=>'daily-poojas'],
-                ['icon'=>'bi-stars','name'=>'Festival Poojas','description'=>'Celebrate sacred festivals with traditional rituals and offerings.','count'=>'12 Poojas','slug'=>'festival-poojas'],
-                ['icon'=>'bi-flower1','name'=>'Ganapathi Poojas','description'=>'Seek the blessings of Lord Ganesha for auspicious beginnings.','count'=>'6 Poojas','slug'=>'ganapathi-poojas'],
-                ['icon'=>'bi-heart','name'=>'Lakshmi Poojas','description'=>'Traditional worship dedicated to prosperity, abundance and wellbeing.','count'=>'7 Poojas','slug'=>'lakshmi-poojas'],
-                ['icon'=>'bi-moon-stars','name'=>'Shiva Poojas','description'=>'Sacred rituals devoted to Lord Shiva and spiritual wellbeing.','count'=>'9 Poojas','slug'=>'shiva-poojas'],
-                ['icon'=>'bi-brightness-high','name'=>'Vishnu Poojas','description'=>'Traditional prayers seeking protection, peace and divine grace.','count'=>'6 Poojas','slug'=>'vishnu-poojas'],
-                ['icon'=>'bi-circle-half','name'=>'Navagraha Poojas','description'=>'Rituals traditionally performed for planetary blessings and harmony.','count'=>'5 Poojas','slug'=>'navagraha-poojas'],
-                ['icon'=>'bi-fire','name'=>'Homam & Havan','description'=>'Sacred fire rituals performed with traditional offerings and mantras.','count'=>'8 Poojas','slug'=>'homam-havan'],
-                ['icon'=>'bi-gift','name'=>'Special Occasions','description'=>'Mark important milestones and family occasions with sacred rituals.','count'=>'10 Poojas','slug'=>'special-occasions'],
-                ['icon'=>'bi-heart-pulse','name'=>'Health & Wellbeing','description'=>'Traditional prayers performed with wishes for health and wellbeing.','count'=>'6 Poojas','slug'=>'health-wellbeing'],
-                ['icon'=>'bi-coin','name'=>'Prosperity & Wealth','description'=>'Poojas associated with prosperity, abundance and financial wellbeing.','count'=>'7 Poojas','slug'=>'prosperity-wealth'],
-                ['icon'=>'bi-people','name'=>'Marriage & Family','description'=>'Sacred rituals for harmony, relationships and family blessings.','count'=>'6 Poojas','slug'=>'marriage-family'],
-            ];
-        @endphp
+        
 
         <div class="row g-4">
             @foreach($categories as $category)

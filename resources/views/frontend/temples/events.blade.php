@@ -9,264 +9,7 @@
 
 @section('content')
 
-@php
 
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY TEMPLE DATA
-    |--------------------------------------------------------------------------
-    | These values will later come from the Temple model/controller.
-    |--------------------------------------------------------------------------
-    */
-
-    $temple = [
-
-        'name' => 'Sri Venkateswara Temple',
-
-        'deity' => 'Lord Venkateswara',
-
-        'location' => 'Tirumala, Andhra Pradesh',
-
-        'image' => 'temple-1.jpg',
-
-        'verified' => true
-
-    ];
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY EVENT DATA
-    |--------------------------------------------------------------------------
-    | These records will later come from the database.
-    |--------------------------------------------------------------------------
-    */
-
-    $events = [
-
-        [
-            'title' => 'Sri Venkateswara Brahmotsavam',
-
-            'category' => 'Festival',
-
-            'date' => '18 September 2026',
-
-            'day' => 'Friday',
-
-            'time' => '06:00 AM onwards',
-
-            'location' => 'Temple Premises',
-
-            'image' => 'temple-1.jpg',
-
-            'description' =>
-                'A special devotional celebration at the temple
-                 with sacred rituals and spiritual activities.',
-
-            'registration' => true,
-
-            'payment' => false,
-
-            'status' => 'Upcoming',
-
-            'featured' => true
-
-        ],
-
-        [
-            'title' => 'Special Abhishekam',
-
-            'category' => 'Pooja',
-
-            'date' => '25 September 2026',
-
-            'day' => 'Friday',
-
-            'time' => '07:30 AM',
-
-            'location' => 'Main Shrine',
-
-            'image' => 'pooja-1.jpg',
-
-            'description' =>
-                'Participate in a special devotional ceremony
-                 conducted at the temple.',
-
-            'registration' => true,
-
-            'payment' => true,
-
-            'status' => 'Upcoming',
-
-            'featured' => false
-
-        ],
-
-        [
-            'title' => 'Navaratri Celebrations',
-
-            'category' => 'Festival',
-
-            'date' => '10 October 2026',
-
-            'day' => 'Saturday',
-
-            'time' => '05:30 PM onwards',
-
-            'location' => 'Temple Premises',
-
-            'image' => 'temple-2.jpg',
-
-            'description' =>
-                'Experience devotional celebrations and sacred
-                 activities during the festive season.',
-
-            'registration' => true,
-
-            'payment' => false,
-
-            'status' => 'Upcoming',
-
-            'featured' => true
-
-        ],
-
-        [
-            'title' => 'Deepa Alankaram',
-
-            'category' => 'Devotional',
-
-            'date' => '22 October 2026',
-
-            'day' => 'Thursday',
-
-            'time' => '06:30 PM',
-
-            'location' => 'Temple Courtyard',
-
-            'image' => 'temple-3.jpg',
-
-            'description' =>
-                'A peaceful evening devotional experience
-                 surrounded by sacred light.',
-
-            'registration' => true,
-
-            'payment' => false,
-
-            'status' => 'Upcoming',
-
-            'featured' => false
-
-        ],
-
-        [
-            'title' => 'Special Darshan',
-
-            'category' => 'Darshan',
-
-            'date' => '01 November 2026',
-
-            'day' => 'Sunday',
-
-            'time' => '07:00 AM',
-
-            'location' => 'Temple Premises',
-
-            'image' => 'temple-4.jpg',
-
-            'description' =>
-                'Explore the available special darshan experience
-                 and scheduled temple arrangements.',
-
-            'registration' => true,
-
-            'payment' => true,
-
-            'status' => 'Upcoming',
-
-            'featured' => false
-
-        ],
-
-        [
-            'title' => 'Devotional Music Evening',
-
-            'category' => 'Cultural',
-
-            'date' => '14 November 2026',
-
-            'day' => 'Saturday',
-
-            'time' => '06:00 PM',
-
-            'location' => 'Temple Hall',
-
-            'image' => 'temple-5.jpg',
-
-            'description' =>
-                'An evening dedicated to devotional music and
-                 spiritual reflection.',
-
-            'registration' => true,
-
-            'payment' => false,
-
-            'status' => 'Upcoming',
-
-            'featured' => false
-
-        ]
-
-    ];
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | EVENT CATEGORIES
-    |--------------------------------------------------------------------------
-    */
-
-    $categories = [
-
-        'All Events',
-
-        'Festivals',
-
-        'Poojas',
-
-        'Darshan',
-
-        'Devotional',
-
-        'Cultural'
-
-    ];
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | MONTHS
-    |--------------------------------------------------------------------------
-    */
-
-    $months = [
-
-        'All Months',
-
-        'August 2026',
-
-        'September 2026',
-
-        'October 2026',
-
-        'November 2026',
-
-        'December 2026'
-
-    ];
-
-@endphp
 
 
 {{-- ============================================================
@@ -308,7 +51,7 @@
                 <li class="breadcrumb-item">
 
                     <a
-                        href="{{ route('temple.show', ['slug' => Str::slug($temple['name'])]) }}"
+                        href="{{ route('temple.show', ['slug' => $temple['slug']]) }}"
                         class="text-pn-primary"
                     >
                         {{ $temple['name'] }}
@@ -547,7 +290,7 @@
         >
 
             <a
-                href="{{ route('temple.show', ['slug' => Str::slug($temple['name'])]) }}"
+                href="{{ route('temple.show', ['slug' => $temple['slug']]) }}"
                 class="btn
                        btn-pn-outline
                        btn-sm
@@ -564,7 +307,7 @@
 
 
             <a
-                href="{{ route('temple.gallery', ['slug' => Str::slug($temple['name'])]) }}"
+                href="{{ route('temple.gallery', ['slug' => $temple['slug']]) }}"
                 class="btn
                        btn-pn-outline
                        btn-sm
@@ -597,7 +340,7 @@
 
 
             <a
-                href="{{ route('temple.poojas', ['slug' => Str::slug($temple['name'])]) }}"
+                href="{{ route('temple.poojas', ['slug' => $temple['slug']]) }}"
                 class="btn
                        btn-pn-outline
                        btn-sm
@@ -841,7 +584,7 @@
                                     >
 
                                         <a
-                                            href="{{ route('temple.show', ['slug' => Str::slug($temple['name'])]) }}"
+                                            href="{{ route('temple.show', ['slug' => $temple['slug']]) }}"
                                             class="btn
                                                    btn-pn"
                                         >
@@ -858,7 +601,7 @@
                                         @if($event['registration'])
 
                                             <a
-                                                href="{{ route('temple.event.register', ['slug' => Str::slug($temple['name']), 'event' => Str::slug($event['title'])]) }}"
+                                                href="{{ route('temple.event.register', ['slug' => $temple['slug'], 'event' => Str::slug($event['title'])]) }}"
                                                 class="btn
                                                        btn-pn-outline"
                                             >
@@ -1434,7 +1177,7 @@
                             >
 
                                 <a
-                                    href="{{ route('temple.show', ['slug' => Str::slug($temple['name'])]) }}"
+                                    href="{{ route('temple.show', ['slug' => $temple['slug']]) }}"
                                     class="btn
                                            btn-pn-outline"
                                 >
@@ -1447,7 +1190,7 @@
                                 @if($event['registration'])
 
                                     <a
-                                        href="{{ route('temple.event.register', ['slug' => Str::slug($temple['name']), 'event' => Str::slug($event['title'])]) }}"
+                                        href="{{ route('temple.event.register', ['slug' => $temple['slug'], 'event' => Str::slug($event['title'])]) }}"
                                         class="btn
                                                btn-pn"
                                     >
@@ -1917,7 +1660,7 @@
             <div class="col">
 
                 <a
-                    href="{{ route('temple.show', ['slug' => Str::slug($temple['name'])]) }}"
+                    href="{{ route('temple.show', ['slug' => $temple['slug']]) }}"
                     class="card
                            border
                            border-warning-subtle
@@ -1985,7 +1728,7 @@
             <div class="col">
 
                 <a
-                    href="{{ route('temple.gallery', ['slug' => Str::slug($temple['name'])]) }}"
+                    href="{{ route('temple.gallery', ['slug' => $temple['slug']]) }}"
                     class="card
                            border
                            border-warning-subtle
@@ -2053,7 +1796,7 @@
             <div class="col">
 
                 <a
-                    href="{{ route('temple.poojas', ['slug' => Str::slug($temple['name'])]) }}"
+                    href="{{ route('temple.poojas', ['slug' => $temple['slug']]) }}"
                     class="card
                            border
                            border-warning-subtle
@@ -2184,7 +1927,7 @@
                 >
 
                     <a
-                        href="{{ route('temple.poojas', ['slug' => Str::slug($temple['name'])]) }}"
+                        href="{{ route('temple.poojas', ['slug' => $temple['slug']]) }}"
                         class="btn
                                btn-warning
                                text-dark
@@ -2202,7 +1945,7 @@
 
 
                     <a
-                        href="{{ route('temple.show', ['slug' => Str::slug($temple['name'])]) }}"
+                        href="{{ route('temple.show', ['slug' => $temple['slug']]) }}"
                         class="btn
                                btn-outline-light
                                px-4"

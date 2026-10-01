@@ -10,78 +10,7 @@
 @section('content')
 
 @php
-
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY CART DATA
-    |--------------------------------------------------------------------------
-    | UI prototype only.
-    |
-    | Actual cart items, quantities, prices, discounts, taxes and
-    | delivery charges will be calculated by the backend later.
-    |--------------------------------------------------------------------------
-    */
-
-    $cartItems = [
-
-        [
-            'id' => 1,
-            'name' => 'Premium Pooja Samagri Kit',
-            'category' => 'Pooja Samagri',
-            'description' => 'Essential devotional items for daily worship.',
-            'price' => 999,
-            'old_price' => 1299,
-            'quantity' => 1,
-            'image' => 'images/home/hero.webp',
-            'stock' => true
-        ],
-
-        [
-            'id' => 2,
-            'name' => 'Premium Brass Diya',
-            'category' => 'Pooja Essentials',
-            'description' => 'Traditional brass diya for your sacred space.',
-            'price' => 299,
-            'old_price' => 399,
-            'quantity' => 2,
-            'image' => 'images/home/hero.webp',
-            'stock' => true
-        ],
-
-        [
-            'id' => 3,
-            'name' => 'Sandalwood Dhoop',
-            'category' => 'Incense & Dhoop',
-            'description' => 'Fragrant sandalwood dhoop for daily prayer.',
-            'price' => 249,
-            'old_price' => 299,
-            'quantity' => 1,
-            'image' => 'images/home/hero.webp',
-            'stock' => true
-        ]
-
-    ];
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY SUMMARY
-    |--------------------------------------------------------------------------
-    */
-
-    $subtotal = collect($cartItems)->sum(
-        fn ($item) => $item['price'] * $item['quantity']
-    );
-
-    $discount = collect($cartItems)->sum(
-        fn ($item) =>
-            ($item['old_price'] - $item['price']) * $item['quantity']
-    );
-
-    $delivery = 0;
-
-    $total = $subtotal + $delivery;
-
+    // Cart data and totals are supplied by StoreCartController.
 @endphp
 
 
@@ -519,7 +448,7 @@
                                         >
 
                                             <img
-                                                src="{{ asset($item['image']) }}"
+                                                src="{{ $item['image'] ? asset($item['image']) : asset('images/home/hero.webp') }}"
                                                 class="object-fit-cover"
                                                 alt="{{ $item['name'] }}"
                                                 loading="lazy"
@@ -729,24 +658,12 @@
                                                    cart-item-total"
                                         >
 
-                                            ₹{{ number_format(
-                                                $item['price'] * $item['quantity']
-                                            ) }}
+                                            {{ number_format($item['price'] * $item['quantity'], 2) }}
 
                                         </strong>
 
 
-                                        <del
-                                            class="small
-                                                   text-secondary
-                                                   d-block"
-                                        >
-
-                                            ₹{{ number_format(
-                                                $item['old_price'] * $item['quantity']
-                                            ) }}
-
-                                        </del>
+                                        
 
                                     </div>
 
@@ -1417,331 +1334,62 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    const csrf = document.querySelector('meta[name=\"csrf-token\"]')?.getAttribute('content');
+    const request = (url, method, body) => fetch(url, {
+        method, headers: { 'X-CSRF-TOKEN': csrf, 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        body: body ? JSON.stringify(body) : undefined
+    }).then(async response => {
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(data.message || 'Request failed.');
+        return data;
+    });
 
-    const cartContainer =
-        document.getElementById('cartItemsContainer');
+    const cartContainer = document.getElementById('cartItemsContainer');
+    const emptyCartState = document.getElementById('emptyCartState');
+    const subtotalElement = document.getElementById('cartSubtotal');
+    const totalElement = document.getElementById('cartTotal');
 
-    const emptyCartState =
-        document.getElementById('emptyCartState');
+    function formatCurrency(value) { return '₹' + Number(value).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
 
-    const subtotalElement =
-        document.getElementById('cartSubtotal');
-
-    const totalElement =
-        document.getElementById('cartTotal');
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Format Currency
-    |--------------------------------------------------------------------------
-    */
-
-    function formatCurrency(value) {
-
-        return '₹' + Number(value).toLocaleString('en-IN');
-
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Update Cart Summary
-    |--------------------------------------------------------------------------
-    */
-
-    function updateCartSummary() {
-
-        const items =
-            document.querySelectorAll('[data-cart-item]');
-
+    function updateSummary() {
         let subtotal = 0;
-
-
-        items.forEach(function (item) {
-
-            const price =
-                Number(item.dataset.price) || 0;
-
-            const quantityInput =
-                item.querySelector('.cart-quantity');
-
-            const quantity =
-                Number(quantityInput?.value) || 1;
-
-            subtotal += price * quantity;
-
-
-            const itemTotal =
-                item.querySelector('.cart-item-total');
-
-            if (itemTotal) {
-
-                itemTotal.textContent =
-                    formatCurrency(price * quantity);
-
-            }
-
+        document.querySelectorAll('[data-cart-item]').forEach(item => {
+            const price = Number(item.dataset.price) || 0;
+            const qty = Number(item.querySelector('.cart-quantity')?.value) || 1;
+            subtotal += price * qty;
+            const total = item.querySelector('.cart-item-total');
+            if (total) total.textContent = formatCurrency(price * qty);
         });
-
-
-        if (subtotalElement) {
-
-            subtotalElement.textContent =
-                formatCurrency(subtotal);
-
-        }
-
-
-        if (totalElement) {
-
-            totalElement.textContent =
-                formatCurrency(subtotal);
-
-        }
-
-
-        if (items.length === 0) {
-
-            if (cartContainer) {
-
-                cartContainer.classList.add('d-none');
-
-            }
-
-            if (emptyCartState) {
-
-                emptyCartState.classList.remove('d-none');
-
-            }
-
-        }
-
+        if (subtotalElement) subtotalElement.textContent = formatCurrency(subtotal);
+        if (totalElement) totalElement.textContent = formatCurrency(subtotal);
+        const hasItems = document.querySelectorAll('[data-cart-item]').length > 0;
+        cartContainer?.classList.toggle('d-none', !hasItems);
+        emptyCartState?.classList.toggle('d-none', hasItems);
     }
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | Quantity Controls
-    |--------------------------------------------------------------------------
-    */
-
-    document
-        .querySelectorAll('[data-cart-item]')
-        .forEach(function (item) {
-
-            const minusButton =
-                item.querySelector('.cart-minus');
-
-            const plusButton =
-                item.querySelector('.cart-plus');
-
-            const quantityInput =
-                item.querySelector('.cart-quantity');
-
-
-            if (minusButton && quantityInput) {
-
-                minusButton.addEventListener(
-                    'click',
-                    function () {
-
-                        let quantity =
-                            Number(quantityInput.value) || 1;
-
-                        quantity =
-                            Math.max(1, quantity - 1);
-
-                        quantityInput.value =
-                            quantity;
-
-                        updateCartSummary();
-
-                    }
-                );
-
-            }
-
-
-            if (plusButton && quantityInput) {
-
-                plusButton.addEventListener(
-                    'click',
-                    function () {
-
-                        let quantity =
-                            Number(quantityInput.value) || 1;
-
-                        quantity =
-                            Math.min(99, quantity + 1);
-
-                        quantityInput.value =
-                            quantity;
-
-                        updateCartSummary();
-
-                    }
-                );
-
-            }
-
-
-            if (quantityInput) {
-
-                quantityInput.addEventListener(
-                    'change',
-                    function () {
-
-                        let quantity =
-                            Number(this.value) || 1;
-
-                        quantity =
-                            Math.min(
-                                99,
-                                Math.max(1, quantity)
-                            );
-
-                        this.value =
-                            quantity;
-
-                        updateCartSummary();
-
-                    }
-                );
-
-            }
-
+    document.querySelectorAll('[data-cart-item]').forEach(item => {
+        const input = item.querySelector('.cart-quantity');
+        const change = async quantity => {
+            quantity = Math.max(1, Math.min(999, Number(quantity) || 1));
+            try {
+                await request('{{ route('store.cart.update') }}', 'PATCH', { item_id: item.dataset.itemId, quantity });
+                input.value = quantity;
+                updateSummary();
+            } catch (error) { alert(error.message); }
+        };
+        item.querySelector('.cart-minus')?.addEventListener('click', () => change((Number(input.value) || 1) - 1));
+        item.querySelector('.cart-plus')?.addEventListener('click', () => change((Number(input.value) || 1) + 1));
+        input?.addEventListener('change', () => change(input.value));
+        item.querySelector('.cart-remove')?.addEventListener('click', async () => {
+            try { await request('{{ route('store.cart.remove') }}', 'DELETE', { item_id: item.dataset.itemId }); item.remove(); updateSummary(); }
+            catch (error) { alert(error.message); }
         });
+    });
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | Remove Cart Item
-    |--------------------------------------------------------------------------
-    */
-
-    document
-        .querySelectorAll('.cart-remove')
-        .forEach(function (button) {
-
-            button.addEventListener(
-                'click',
-                function () {
-
-                    const item =
-                        this.closest('[data-cart-item]');
-
-                    if (item) {
-
-                        item.remove();
-
-                        updateCartSummary();
-
-                    }
-
-                }
-            );
-
-        });
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Clear Cart
-    |--------------------------------------------------------------------------
-    */
-
-    const clearCart =
-        document.getElementById('clearCart');
-
-
-    if (clearCart) {
-
-        clearCart.addEventListener(
-            'click',
-            function () {
-
-                if (!cartContainer) {
-                    return;
-                }
-
-                cartContainer.innerHTML = '';
-
-                updateCartSummary();
-
-            }
-        );
-
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Coupon UI
-    |--------------------------------------------------------------------------
-    */
-
-    const applyCoupon =
-        document.getElementById('applyCoupon');
-
-    const couponCode =
-        document.getElementById('couponCode');
-
-    const couponMessage =
-        document.getElementById('couponMessage');
-
-
-    if (applyCoupon) {
-
-        applyCoupon.addEventListener(
-            'click',
-            function () {
-
-                const code =
-                    couponCode?.value.trim() || '';
-
-
-                if (!code) {
-
-                    if (couponMessage) {
-
-                        couponMessage.textContent =
-                            'Please enter a coupon code.';
-
-                        couponMessage.className =
-                            'text-danger small d-block mt-2';
-
-                    }
-
-                    return;
-
-                }
-
-
-                if (couponMessage) {
-
-                    couponMessage.textContent =
-                        'Coupon validation will be connected during checkout implementation.';
-
-                    couponMessage.className =
-                        'text-secondary small d-block mt-2';
-
-                }
-
-            }
-        );
-
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Initial Summary
-    |--------------------------------------------------------------------------
-    */
-
-    updateCartSummary();
-
+    document.getElementById('clearCart')?.addEventListener('click', async () => {
+        try { await request('{{ route('store.cart.clear') }}', 'DELETE'); if (cartContainer) cartContainer.innerHTML = ''; updateSummary(); }
+        catch (error) { alert(error.message); }
+    });
 });
 </script>
 

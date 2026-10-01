@@ -9,163 +9,7 @@
 
 @section('content')
 
-@php
 
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY BOOKING DATA
-    |--------------------------------------------------------------------------
-    | These values will later come from the selected priest,
-    | availability engine and booking controller.
-    |--------------------------------------------------------------------------
-    */
-
-    $priest = [
-
-        'name' => 'Sri Ananda Sharma',
-
-        'title' => 'Vedic Priest',
-
-        'image' => 'priest-1.jpg',
-
-        'rating' => '4.9',
-
-        'reviews' => '428',
-
-        'experience' => '18+ Years',
-
-        'location' => 'Hyderabad, Telangana',
-
-        'languages' => [
-            'Telugu',
-            'Sanskrit',
-            'English'
-        ],
-
-        'service' => 'Vedic Pooja',
-
-        'price' => 1500,
-
-        'temple' => 'Sri Venkateswara Temple'
-
-    ];
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | SAMPLE SELECTED SLOT
-    |--------------------------------------------------------------------------
-    */
-
-    $selectedDate = '18 August 2026';
-
-    $selectedDay = 'Tuesday';
-
-    $selectedTime = '07:00 AM';
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY PRICING
-    |--------------------------------------------------------------------------
-    */
-
-    $serviceFee = 1500;
-
-    $platformFee = 75;
-
-    $tax = 157.50;
-
-    $total = $serviceFee + $platformFee + $tax;
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | SAMPLE AVAILABLE DATES
-    |--------------------------------------------------------------------------
-    */
-
-    $availableDates = [
-
-        [
-            'date' => '18',
-            'month' => 'Aug',
-            'day' => 'Tue',
-            'active' => true
-        ],
-
-        [
-            'date' => '19',
-            'month' => 'Aug',
-            'day' => 'Wed',
-            'active' => false
-        ],
-
-        [
-            'date' => '20',
-            'month' => 'Aug',
-            'day' => 'Thu',
-            'active' => false
-        ],
-
-        [
-            'date' => '21',
-            'month' => 'Aug',
-            'day' => 'Fri',
-            'active' => false
-        ],
-
-        [
-            'date' => '22',
-            'month' => 'Aug',
-            'day' => 'Sat',
-            'active' => false
-        ]
-
-    ];
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | SAMPLE TIME SLOTS
-    |--------------------------------------------------------------------------
-    */
-
-    $timeSlots = [
-
-        [
-            'time' => '07:00 AM',
-            'available' => true,
-            'active' => true
-        ],
-
-        [
-            'time' => '10:00 AM',
-            'available' => true,
-            'active' => false
-        ],
-
-        [
-            'time' => '01:00 PM',
-            'available' => false,
-            'active' => false
-        ],
-
-        [
-            'time' => '04:00 PM',
-            'available' => true,
-            'active' => false
-        ],
-
-        [
-            'time' => '06:00 PM',
-            'available' => true,
-            'active' => false
-        ]
-
-    ];
-
-@endphp
 
 
 {{-- ============================================================
@@ -207,7 +51,7 @@
                 <li class="breadcrumb-item">
 
                     <a
-                        href="{{ route('priest.show', ['slug' => Str::slug($priest['name'])]) }}"
+                        href="{{ route('priest.show', ['slug' => $priest['slug']]) }}"
                         class="text-pn-primary"
                     >
                         {{ $priest['name'] }}
@@ -509,7 +353,7 @@
                         >
 
                             <img
-                                src="{{ asset('images/priests/' . $priest['image']) }}"
+                                src="{{ $priest['image'] ? (filter_var($priest['image'], FILTER_VALIDATE_URL) ? $priest['image'] : asset($priest['image'])) : asset('images/priests/default.jpg') }}"
                                 width="92"
                                 height="92"
                                 class="rounded-4
@@ -624,7 +468,7 @@
 
 
                             <a
-                                href="{{ route('priest.show', ['slug' => Str::slug($priest['name'])]) }}"
+                                href="{{ route('priest.show', ['slug' => $priest['slug']]) }}"
                                 class="btn
                                        btn-pn-outline
                                        btn-sm
@@ -2049,7 +1893,7 @@
                                            text-pn-brown"
                                 >
 
-                                    ₹{{ number_format($serviceFee, 2) }}
+                                    {{ $priest['price_from'] }}
 
                                 </span>
 
@@ -2080,7 +1924,7 @@
                                            text-pn-brown"
                                 >
 
-                                    ₹{{ number_format($platformFee, 2) }}
+                                    Not specified
 
                                 </span>
 
@@ -2111,7 +1955,7 @@
                                            text-pn-brown"
                                 >
 
-                                    ₹{{ number_format($tax, 2) }}
+                                    Not specified
 
                                 </span>
 
@@ -2146,7 +1990,7 @@
                                            text-pn-primary"
                                 >
 
-                                    ₹{{ number_format($total, 2) }}
+                                    Calculated at booking
 
                                 </strong>
 

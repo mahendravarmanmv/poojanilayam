@@ -9,86 +9,7 @@
 
 @section('content')
 
-@php
-
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY DONATION DATA
-    |--------------------------------------------------------------------------
-    | UI prototype only.
-    |
-    | These values will later come from the database / CMS.
-    |--------------------------------------------------------------------------
-    */
-
-    $temples = [
-
-        [
-            'name' => 'Sri Venkateswara Temple',
-            'location' => 'Tirumala, Andhra Pradesh',
-            'description' => 'Support temple activities, worship services and spiritual initiatives.',
-            'image' => 'images/home/hero.webp',
-            'tag' => 'Temple Support'
-        ],
-
-        [
-            'name' => 'Sri Durga Devi Temple',
-            'location' => 'Hyderabad, Telangana',
-            'description' => 'Contribute towards devotional activities and temple services.',
-            'image' => 'images/home/hero.webp',
-            'tag' => 'Temple Seva'
-        ],
-
-        [
-            'name' => 'Sri Shiva Temple',
-            'location' => 'Varanasi, Uttar Pradesh',
-            'description' => 'Support sacred worship, temple maintenance and spiritual activities.',
-            'image' => 'images/home/hero.webp',
-            'tag' => 'Temple Development'
-        ]
-
-    ];
-
-
-    $donationTypes = [
-
-        [
-            'title' => 'Temple Support',
-            'description' => 'Support temple worship, maintenance and spiritual activities.',
-            'icon' => 'bi-bank2'
-        ],
-
-        [
-            'title' => 'Annadanam',
-            'description' => 'Support devotional food and community service initiatives.',
-            'icon' => 'bi-people'
-        ],
-
-        [
-            'title' => 'Pooja & Seva',
-            'description' => 'Contribute towards sacred poojas and temple seva activities.',
-            'icon' => 'bi-flower1'
-        ],
-
-        [
-            'title' => 'Temple Development',
-            'description' => 'Support development and improvement of sacred spaces.',
-            'icon' => 'bi-building'
-        ]
-
-    ];
-
-
-    $suggestedAmounts = [
-
-        501,
-        1001,
-        2501,
-        5001
-
-    ];
-
-@endphp
+{{-- Donation data is supplied by DonationController@index. --}}
 
 
 {{-- ============================================================
@@ -823,7 +744,7 @@
                             >
 
                                 <a
-                                    href="{{ route('donation.donate', ['temple' => Str::slug($temple['name'])]) }}"
+                                    href="{{ route('donation.donate', ['temple' => $temple['slug']]) }}"
                                     class="btn
                                            btn-pn-outline"
                                 >
