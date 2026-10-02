@@ -9,125 +9,6 @@
 
 @section('content')
 
-@php
-
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY UI DATA
-    |--------------------------------------------------------------------------
-    | These products will later come from the authenticated customer's
-    | wishlist records.
-    |--------------------------------------------------------------------------
-    */
-
-    $wishlistItems = [
-
-        [
-            'id' => 1,
-            'name' => 'Ganapathi Pooja Kit',
-            'category' => 'Pooja Kits',
-            'price' => 1201,
-            'old_price' => 1450,
-            'discount' => 17,
-            'rating' => 4.8,
-            'reviews' => 124,
-            'stock' => 'In Stock',
-            'stock_class' => 'success',
-            'image' => null,
-            'badge' => 'Popular',
-            'description' =>
-                'A complete pooja kit prepared for Ganapathi Pooja.'
-        ],
-
-        [
-            'id' => 2,
-            'name' => 'Brass Diya Set',
-            'category' => 'Pooja Samagri',
-            'price' => 699,
-            'old_price' => 899,
-            'discount' => 22,
-            'rating' => 4.7,
-            'reviews' => 86,
-            'stock' => 'In Stock',
-            'stock_class' => 'success',
-            'image' => null,
-            'badge' => 'Bestseller',
-            'description' =>
-                'Traditional brass diyas suitable for daily worship.'
-        ],
-
-        [
-            'id' => 3,
-            'name' => 'Sri Lakshmi Pooja Kit',
-            'category' => 'Pooja Kits',
-            'price' => 999,
-            'old_price' => 1199,
-            'discount' => 17,
-            'rating' => 4.9,
-            'reviews' => 91,
-            'stock' => 'In Stock',
-            'stock_class' => 'success',
-            'image' => null,
-            'badge' => 'Recommended',
-            'description' =>
-                'A devotional kit curated for Lakshmi Pooja.'
-        ],
-
-        [
-            'id' => 4,
-            'name' => 'Natural Incense Collection',
-            'category' => 'Devotional Essentials',
-            'price' => 449,
-            'old_price' => 549,
-            'discount' => 18,
-            'rating' => 4.6,
-            'reviews' => 53,
-            'stock' => 'Only 3 Left',
-            'stock_class' => 'warning',
-            'image' => null,
-            'badge' => null,
-            'description' =>
-                'A collection of naturally scented devotional incense.'
-        ],
-
-        [
-            'id' => 5,
-            'name' => 'Copper Kalash',
-            'category' => 'Pooja Samagri',
-            'price' => 849,
-            'old_price' => null,
-            'discount' => null,
-            'rating' => 4.5,
-            'reviews' => 37,
-            'stock' => 'In Stock',
-            'stock_class' => 'success',
-            'image' => null,
-            'badge' => null,
-            'description' =>
-                'Traditional copper kalash for auspicious rituals.'
-        ],
-
-        [
-            'id' => 6,
-            'name' => 'Panchapatra & Uddharini Set',
-            'category' => 'Pooja Samagri',
-            'price' => 599,
-            'old_price' => 749,
-            'discount' => 20,
-            'rating' => 4.7,
-            'reviews' => 41,
-            'stock' => 'Out of Stock',
-            'stock_class' => 'danger',
-            'image' => null,
-            'badge' => null,
-            'description' =>
-                'Traditional metal set for devotional rituals.'
-        ]
-
-    ];
-
-@endphp
-
 
 {{-- ============================================================
      BREADCRUMB
@@ -300,7 +181,7 @@
                                    fs-5"
                             style="width:64px;height:64px;"
                         >
-                            MV
+                            {{ collect(preg_split('/\s+/', trim(auth()->user()->profile?->display_name ?: auth()->user()->name)))->filter()->map(fn ($part) => strtoupper(substr($part, 0, 1)))->take(2)->implode('') }}
                         </div>
 
 
@@ -310,7 +191,7 @@
                                    text-pn-brown
                                    mb-1"
                         >
-                            Mahendra Varma
+                            {{ auth()->user()->profile?->display_name ?: auth()->user()->name }}
                         </h2>
 
 
@@ -318,7 +199,7 @@
                             class="text-secondary
                                    text-break"
                         >
-                            customer@example.com
+                            {{ auth()->user()->email }}
                         </small>
 
                     </div>

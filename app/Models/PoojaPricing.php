@@ -10,6 +10,13 @@ class PoojaPricing extends Model
 {
     use HasFactory;
 
+    /**
+     * The database table is intentionally singular.
+     * The migration creates `pooja_pricing`, not Laravel's default
+     * pluralized `pooja_pricings`.
+     */
+    protected $table = 'pooja_pricing';
+
     protected $fillable = [
         'pooja_id',
         'currency_id',

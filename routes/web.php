@@ -8,6 +8,10 @@ use App\Http\Controllers\Web\StoreCatalogController;
 use App\Http\Controllers\Web\StoreCartController;
 use App\Http\Controllers\Web\StoreWishlistController;
 use App\Http\Controllers\Web\DonationController;
+use App\Http\Controllers\Web\BlogController;
+use App\Http\Controllers\Web\CmsController;
+use App\Http\Controllers\Web\SupportController;
+use App\Http\Controllers\Web\SearchController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -326,10 +330,10 @@ Route::prefix('blog')
     ->name('blog.')
     ->group(function () {
 
-        Route::view('/', 'frontend.blog.index')
+        Route::get('/', [BlogController::class, 'index'])
             ->name('index');
 
-        Route::view('/{slug}', 'frontend.blog.show')
+        Route::get('/{slug}', [BlogController::class, 'show'])
             ->name('show');
     });
 
@@ -344,26 +348,43 @@ Route::prefix('support')
     ->name('support.')
     ->group(function () {
 
-        Route::view('/', 'frontend.support.help-center')
+        Route::get('/', [SupportController::class, 'index'])
             ->name('index');
 
-        Route::view('/help-center', 'frontend.support.help-center')
+        Route::get('/help-center', [SupportController::class, 'helpCenter'])
             ->name('help-center');
 
-        Route::view('/contact', 'frontend.support.contact')
+        Route::get('/contact', [SupportController::class, 'contact'])
             ->name('contact');
 
-        Route::view('/raise-ticket', 'frontend.support.raise-ticket')
-            ->name('raise-ticket');
+        Route::post('/contact', [SupportController::class, 'submitContact'])
+            ->name('contact.submit');
 
-        Route::view('/tickets', 'frontend.support.tickets')
-            ->name('tickets');
+        Route::middleware('auth')->group(function () {
+            Route::get('/raise-ticket', [SupportController::class, 'raiseTicket'])
+                ->name('raise-ticket');
 
-        Route::view('/ticket/{ticket}', 'frontend.support.ticket-details')
-            ->name('ticket');
+            Route::post('/raise-ticket', [SupportController::class, 'storeTicket'])
+                ->name('raise-ticket.store');
 
-        Route::view('/feedback', 'frontend.support.feedback')
-            ->name('feedback');
+            Route::get('/tickets', [SupportController::class, 'tickets'])
+                ->name('tickets');
+
+            Route::get('/ticket/{ticket}', [SupportController::class, 'showTicket'])
+                ->name('ticket');
+
+            Route::post('/ticket/{ticket}/reply', [SupportController::class, 'replyToTicket'])
+                ->name('ticket.reply');
+
+            Route::post('/ticket/{ticket}/close', [SupportController::class, 'closeTicket'])
+                ->name('ticket.close');
+
+            Route::get('/feedback', [SupportController::class, 'feedback'])
+                ->name('feedback');
+
+            Route::post('/feedback', [SupportController::class, 'submitFeedback'])
+                ->name('feedback.submit');
+        });
     });
 
 
@@ -373,7 +394,7 @@ Route::prefix('support')
 |--------------------------------------------------------------------------
 */
 
-Route::view('/search', 'frontend.search.results')
+Route::get('/search', [SearchController::class, 'index'])
     ->name('search');
 
 
@@ -383,31 +404,31 @@ Route::view('/search', 'frontend.search.results')
 |--------------------------------------------------------------------------
 */
 
-Route::view('/pages/about-us', 'frontend.cms.about-us')
+Route::get('/pages/about-us', [CmsController::class, 'about'])
     ->name('about');
 
-Route::view('/pages/faq', 'frontend.cms.faq')
+Route::get('/pages/faq', [CmsController::class, 'faq'])
     ->name('faq');
 
-Route::view('/pages/privacy-policy', 'frontend.cms.privacy-policy')
+Route::get('/pages/privacy-policy', [CmsController::class, 'privacyPolicy'])
     ->name('privacy');
 
-Route::view('/pages/terms-conditions', 'frontend.cms.terms-conditions')
+Route::get('/pages/terms-conditions', [CmsController::class, 'termsConditions'])
     ->name('terms');
 
-Route::view('/pages/refund-policy', 'frontend.cms.refund-policy')
+Route::get('/pages/refund-policy', [CmsController::class, 'refundPolicy'])
     ->name('refund');
 
-Route::view('/pages/shipping-policy', 'frontend.cms.shipping-policy')
+Route::get('/pages/shipping-policy', [CmsController::class, 'shippingPolicy'])
     ->name('shipping');
 
-Route::view('/pages/disclaimer', 'frontend.cms.disclaimer')
+Route::get('/pages/disclaimer', [CmsController::class, 'disclaimer'])
     ->name('disclaimer');
 
-Route::view('/pages/careers', 'frontend.cms.careers')
+Route::get('/pages/careers', [CmsController::class, 'careers'])
     ->name('careers');
 
-Route::view('/pages/testimonials', 'frontend.cms.testimonials')
+Route::get('/pages/testimonials', [CmsController::class, 'testimonials'])
     ->name('testimonials');
 
 Route::view('/pages/resources', 'frontend.cms.resources')
@@ -430,6 +451,25 @@ Route::prefix('system')
         Route::view('/maintenance', 'frontend.cms.maintenance')
             ->name('maintenance');
     });
+
+/*
+|--------------------------------------------------------------------------
+| Error / Utility Pages
+|--------------------------------------------------------------------------
+| These routes expose the designed frontend error pages for direct QA and
+| controlled links. Laravel's global exception rendering is intentionally
+| left unchanged in this phase.
+|--------------------------------------------------------------------------
+*/
+
+Route::view('/403', 'frontend.cms.403')
+    ->name('system.403');
+
+Route::view('/404', 'frontend.cms.404')
+    ->name('system.404');
+
+Route::view('/500', 'frontend.cms.500')
+    ->name('system.500');
 
 
 /*

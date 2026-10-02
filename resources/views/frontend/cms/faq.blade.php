@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Frequently Asked Questions | Pooja Nilayam')
+@section('title', $cmsPage?->title ? $cmsPage->title . ' | Pooja Nilayam' : 'Frequently Asked Questions | Pooja Nilayam')
 
 @section(
     'meta_description',
-    'Find answers to frequently asked questions about Pooja Nilayam, pooja bookings, digital pooja, temples, astrology, donations, orders and customer support.'
+    $cmsPage?->excerpt ?: 'Find answers to frequently asked questions about Pooja Nilayam, pooja bookings, digital pooja, temples, astrology, donations, orders and customer support.'
 )
 
 @section('content')
@@ -22,7 +22,7 @@
     |--------------------------------------------------------------------------
     */
 
-    $faqCategories = [
+    $fallbackFaqCategories = [
 
         [
             'key' => 'general',
@@ -75,7 +75,7 @@
     ];
 
 
-    $faqs = [
+    $fallbackFaqs = [
 
         /*
         |--------------------------------------------------------------------------
@@ -384,6 +384,15 @@
         ]
 
     ];
+
+
+    $faqCategories = !empty($faqCategories ?? null)
+        ? $faqCategories
+        : $fallbackFaqCategories;
+
+    $faqs = !empty($faqs ?? null)
+        ? $faqs
+        : $fallbackFaqs;
 
 @endphp
 

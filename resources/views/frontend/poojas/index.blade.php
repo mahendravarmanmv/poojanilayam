@@ -707,7 +707,7 @@
 
 
                     <a
-                        href="{{ route('pooja.category', ['slug' => Str::slug('Ganapathi')]) }}"
+                        href="{{ route('pooja.index', ['search' => 'Ganapathi']) }}"
                         class="badge
                                rounded-pill
                                bg-pn-beige
@@ -720,7 +720,7 @@
 
 
                     <a
-                        href="{{ route('pooja.category', ['slug' => Str::slug('Homam')]) }}"
+                        href="{{ route('pooja.index', ['search' => 'Homam']) }}"
                         class="badge
                                rounded-pill
                                bg-pn-beige
@@ -733,7 +733,7 @@
 
 
                     <a
-                        href="{{ route('pooja.category', ['slug' => Str::slug('Prosperity')]) }}"
+                        href="{{ route('pooja.index', ['search' => 'Prosperity']) }}"
                         class="badge
                                rounded-pill
                                bg-pn-beige
@@ -1043,86 +1043,7 @@
                         class="pagination
                                justify-content-center
                                mb-0"
-                    >
-
-                        <li class="page-item disabled">
-
-                            <span class="page-link">
-
-                                <i class="bi bi-chevron-left"></i>
-
-                            </span>
-
-                        </li>
-
-
-                        <li class="page-item active">
-
-                            <span
-                                class="page-link
-                                       bg-pn-primary
-                                       border-pn-primary"
-                            >
-                                1
-                            </span>
-
-                        </li>
-
-
-                        <li class="page-item">
-
-                            <a
-                                href="#"
-                                class="page-link
-                                       text-pn-primary"
-                            >
-                                2
-                            </a>
-
-                        </li>
-
-
-                        <li class="page-item">
-
-                            <a
-                                href="#"
-                                class="page-link
-                                       text-pn-primary"
-                            >
-                                3
-                            </a>
-
-                        </li>
-
-
-                        <li class="page-item">
-
-                            <a
-                                href="#"
-                                class="page-link
-                                       text-pn-primary"
-                            >
-                                4
-                            </a>
-
-                        </li>
-
-
-                        <li class="page-item">
-
-                            <a
-                                href="#"
-                                class="page-link
-                                       text-pn-primary"
-                            >
-
-                                <i class="bi bi-chevron-right"></i>
-
-                            </a>
-
-                        </li>
-
-                    </ul>
+                    ></ul>
 
                 </nav>
 

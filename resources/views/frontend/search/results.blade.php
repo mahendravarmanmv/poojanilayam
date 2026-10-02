@@ -9,127 +9,7 @@
 
 @section('content')
 
-@php
 
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY SEARCH DATA
-    |--------------------------------------------------------------------------
-    | These values will later come from the search controller / database.
-    |--------------------------------------------------------------------------
-    */
-
-    $keyword = request('q', 'Pooja');
-
-
-    $results = [
-
-        [
-            'type' => 'Pooja',
-            'icon' => 'bi-flower1',
-            'title' => 'Ganapathi Pooja',
-            'description' =>
-                'Perform Ganapathi Pooja with authentic rituals
-                and experienced priests.',
-            'url' => '#',
-            'image' => null
-        ],
-
-        [
-            'type' => 'Pooja',
-            'icon' => 'bi-flower1',
-            'title' => 'Lakshmi Pooja',
-            'description' =>
-                'A sacred pooja performed for prosperity,
-                abundance and divine blessings.',
-            'url' => '#',
-            'image' => null
-        ],
-
-        [
-            'type' => 'Digital Pooja',
-            'icon' => 'bi-camera-video',
-            'title' => 'AI Personalized Digital Pooja',
-            'description' =>
-                'Experience a personalized digital spiritual
-                journey with customized sankalpam, flowers,
-                deepam and mantras.',
-            'url' => '#',
-            'image' => null
-        ],
-
-        [
-            'type' => 'Temple',
-            'icon' => 'bi-building',
-            'title' => 'Sri Venkateswara Temple',
-            'description' =>
-                'Explore temple information, poojas, timings,
-                events and devotional services.',
-            'url' => '#',
-            'image' => null
-        ],
-
-        [
-            'type' => 'Priest',
-            'icon' => 'bi-person-badge',
-            'title' => 'Verified Pooja Priests',
-            'description' =>
-                'Find experienced priests available for online
-                and temple pooja services.',
-            'url' => '#',
-            'image' => null
-        ],
-
-        [
-            'type' => 'Astrology',
-            'icon' => 'bi-stars',
-            'title' => 'Astrology Services',
-            'description' =>
-                'Explore horoscope, kundli, numerology, vastu
-                and other astrology consultation services.',
-            'url' => '#',
-            'image' => null
-        ],
-
-        [
-            'type' => 'Product',
-            'icon' => 'bi-bag',
-            'title' => 'Pooja Samagri Kit',
-            'description' =>
-                'Shop essential pooja materials and devotional
-                products from the Pooja Nilayam marketplace.',
-            'url' => '#',
-            'image' => null
-        ],
-
-        [
-            'type' => 'Blog',
-            'icon' => 'bi-journal-text',
-            'title' => 'Importance of Daily Pooja',
-            'description' =>
-                'Learn about devotional practices, pooja
-                traditions and spiritual significance.',
-            'url' => '#',
-            'image' => null
-        ]
-
-    ];
-
-
-    $categories = [
-
-        'All',
-        'Pooja',
-        'Digital Pooja',
-        'Temples',
-        'Priests',
-        'Astrology',
-        'Products',
-        'Blogs'
-
-    ];
-
-@endphp
 
 
 {{-- ============================================================
@@ -606,6 +486,7 @@
                                 $result['title']
                             ) }}"
                             data-index="{{ $index }}"
+                            data-date="{{ $result['date'] ?? 0 }}"
                         >
 
                             <div
@@ -827,91 +708,11 @@
                 >
 
                     <ul
+                        id="searchPaginationList"
                         class="pagination
                                justify-content-center
                                mb-0"
-                    >
-
-                        <li
-                            class="page-item disabled"
-                            id="previousPage"
-                        >
-
-                            <button
-                                class="page-link"
-                                type="button"
-                            >
-
-                                <i
-                                    class="bi bi-chevron-left"
-                                ></i>
-
-                            </button>
-
-                        </li>
-
-
-                        <li
-                            class="page-item active"
-                        >
-
-                            <button
-                                class="page-link"
-                                type="button"
-                            >
-                                1
-                            </button>
-
-                        </li>
-
-
-                        <li
-                            class="page-item"
-                        >
-
-                            <button
-                                class="page-link"
-                                type="button"
-                            >
-                                2
-                            </button>
-
-                        </li>
-
-
-                        <li
-                            class="page-item"
-                        >
-
-                            <button
-                                class="page-link"
-                                type="button"
-                            >
-                                3
-                            </button>
-
-                        </li>
-
-
-                        <li
-                            class="page-item"
-                            id="nextPage"
-                        >
-
-                            <button
-                                class="page-link"
-                                type="button"
-                            >
-
-                                <i
-                                    class="bi bi-chevron-right"
-                                ></i>
-
-                            </button>
-
-                        </li>
-
-                    </ul>
+                    ></ul>
 
                 </nav>
 
@@ -1030,345 +831,167 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    const searchInput =
-        document.getElementById(
-            'globalSearchInput'
-        );
+    const searchInput = document.getElementById('globalSearchInput');
+    const clearSearch = document.getElementById('clearSearch');
+    const resultCards = Array.from(document.querySelectorAll('.search-result-card'));
+    const filterInputs = document.querySelectorAll('.search-type-filter');
+    const clearFilters = document.getElementById('clearFilters');
+    const resultCount = document.getElementById('resultCount');
+    const emptyState = document.getElementById('searchEmptyState');
+    const resultsContainer = document.getElementById('searchResults');
+    const pagination = document.getElementById('searchPagination');
+    const paginationList = document.getElementById('searchPaginationList');
+    const sortResults = document.getElementById('sortResults');
+    const pageSize = 8;
+    let currentPage = 1;
 
-
-    const clearSearch =
-        document.getElementById(
-            'clearSearch'
-        );
-
-
-    const resultCards =
-        document.querySelectorAll(
-            '.search-result-card'
-        );
-
-
-    const filterInputs =
-        document.querySelectorAll(
-            '.search-type-filter'
-        );
-
-
-    const clearFilters =
-        document.getElementById(
-            'clearFilters'
-        );
-
-
-    const resultCount =
-        document.getElementById(
-            'resultCount'
-        );
-
-
-    const emptyState =
-        document.getElementById(
-            'searchEmptyState'
-        );
-
-
-    const resultsContainer =
-        document.getElementById(
-            'searchResults'
-        );
-
-
-    const pagination =
-        document.getElementById(
-            'searchPagination'
-        );
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Apply Search Filter
-    |--------------------------------------------------------------------------
-    */
-
-    function applyFilter() {
-
+    function filteredCards() {
         const selectedFilter =
-            document.querySelector(
-                '.search-type-filter:checked'
-            )?.value
-            || 'all';
+            document.querySelector('.search-type-filter:checked')?.value || 'all';
 
-
-        let visibleCount =
-            0;
-
-
-        resultCards.forEach(
-            function (card) {
-
-                const type =
-                    (
-                        card.dataset.type
-                        || ''
-                    ).toLowerCase();
-
-
-                const matchesType =
-                    selectedFilter === 'all'
-                    ||
-                    type === selectedFilter;
-
-
-                const visible =
-                    matchesType;
-
-
-                card.classList.toggle(
-                    'd-none',
-                    !visible
-                );
-
-
-                if (visible) {
-
-                    visibleCount++;
-
-                }
-
-            }
-        );
-
-
-        if (resultCount) {
-
-            resultCount.textContent =
-                visibleCount;
-
-        }
-
-
-        if (visibleCount === 0) {
-
-            resultsContainer?.classList.add(
-                'd-none'
-            );
-
-
-            emptyState?.classList.remove(
-                'd-none'
-            );
-
-
-            pagination?.classList.add(
-                'd-none'
-            );
-
-        } else {
-
-            resultsContainer?.classList.remove(
-                'd-none'
-            );
-
-
-            emptyState?.classList.add(
-                'd-none'
-            );
-
-
-            pagination?.classList.remove(
-                'd-none'
-            );
-
-        }
-
+        return resultCards.filter(function (card) {
+            const type = (card.dataset.type || '').toLowerCase();
+            return selectedFilter === 'all' || type === selectedFilter;
+        });
     }
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | Category Filters
-    |--------------------------------------------------------------------------
-    */
-
-    filterInputs.forEach(
-        function (input) {
-
-            input.addEventListener(
-                'change',
-                applyFilter
-            );
-
+    function renderPagination(totalItems) {
+        if (!pagination || !paginationList) {
+            return;
         }
-    );
 
+        const totalPages = Math.ceil(totalItems / pageSize);
+        paginationList.innerHTML = '';
 
-    /*
-    |--------------------------------------------------------------------------
-    | Clear Filters
-    |--------------------------------------------------------------------------
-    */
+        if (totalPages <= 1) {
+            pagination.classList.add('d-none');
+            return;
+        }
 
-    clearFilters?.addEventListener(
-        'click',
-        function () {
+        pagination.classList.remove('d-none');
 
-            const allFilter =
-                document.getElementById(
-                    'filter0'
-                );
+        const addButton = function (label, page, disabled, active) {
+            const item = document.createElement('li');
+            item.className = 'page-item' + (disabled ? ' disabled' : '') + (active ? ' active' : '');
 
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'page-link';
+            button.textContent = label;
+            button.disabled = disabled;
 
-            if (allFilter) {
-
-                allFilter.checked =
-                    true;
-
+            if (!disabled) {
+                button.addEventListener('click', function () {
+                    currentPage = page;
+                    renderResults();
+                    window.scrollTo({
+                        top: resultsContainer?.offsetTop ? resultsContainer.offsetTop - 120 : 0,
+                        behavior: 'smooth'
+                    });
+                });
             }
 
+            item.appendChild(button);
+            paginationList.appendChild(item);
+        };
 
-            applyFilter();
+        addButton('‹', Math.max(1, currentPage - 1), currentPage === 1, false);
 
+        for (let page = 1; page <= totalPages; page++) {
+            addButton(String(page), page, false, page === currentPage);
         }
-    );
 
+        addButton('›', Math.min(totalPages, currentPage + 1), currentPage === totalPages, false);
+    }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Clear Search
-    |--------------------------------------------------------------------------
-    */
+    function renderResults() {
+        const cards = filteredCards();
+        const totalItems = cards.length;
+        const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
 
-    clearSearch?.addEventListener(
-        'click',
-        function () {
+        if (currentPage > totalPages) {
+            currentPage = totalPages;
+        }
 
-            if (searchInput) {
+        resultCards.forEach(function (card) {
+            card.classList.add('d-none');
+        });
 
-                searchInput.value =
-                    '';
+        if (resultCount) {
+            resultCount.textContent = totalItems;
+        }
 
+        if (totalItems === 0) {
+            resultsContainer?.classList.add('d-none');
+            emptyState?.classList.remove('d-none');
+            pagination?.classList.add('d-none');
+            return;
+        }
 
-                searchInput.focus();
+        resultsContainer?.classList.remove('d-none');
+        emptyState?.classList.add('d-none');
 
+        const start = (currentPage - 1) * pageSize;
+        cards.slice(start, start + pageSize).forEach(function (card) {
+            card.classList.remove('d-none');
+        });
+
+        renderPagination(totalItems);
+    }
+
+    filterInputs.forEach(function (input) {
+        input.addEventListener('change', function () {
+            currentPage = 1;
+            renderResults();
+        });
+    });
+
+    clearFilters?.addEventListener('click', function () {
+        const allFilter = document.getElementById('filter0');
+
+        if (allFilter) {
+            allFilter.checked = true;
+        }
+
+        currentPage = 1;
+        renderResults();
+    });
+
+    clearSearch?.addEventListener('click', function () {
+        if (searchInput) {
+            searchInput.value = '';
+            searchInput.focus();
+        }
+
+        this.classList.add('d-none');
+    });
+
+    searchInput?.addEventListener('input', function () {
+        clearSearch?.classList.toggle('d-none', !this.value.trim());
+    });
+
+    sortResults?.addEventListener('change', function () {
+        resultCards.sort(function (a, b) {
+            if (this.value === 'az') {
+                return (a.dataset.title || '').localeCompare(b.dataset.title || '');
             }
 
-
-            this.classList.add(
-                'd-none'
-            );
-
-        }
-    );
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Search Input
-    |--------------------------------------------------------------------------
-    */
-
-    searchInput?.addEventListener(
-        'input',
-        function () {
-
-            clearSearch?.classList.toggle(
-                'd-none',
-                !this.value.trim()
-            );
-
-        }
-    );
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Sort Results
-    |--------------------------------------------------------------------------
-    */
-
-    const sortResults =
-        document.getElementById(
-            'sortResults'
-        );
-
-
-    sortResults?.addEventListener(
-        'change',
-        function () {
-
-            const cards =
-                Array.from(
-                    resultCards
-                );
-
-
-            if (
-                this.value === 'az'
-            ) {
-
-                cards.sort(
-                    function (a, b) {
-
-                        return (
-                            a.dataset.title
-                            || ''
-                        ).localeCompare(
-                            b.dataset.title
-                            || ''
-                        );
-
-                    }
-                );
-
+            if (this.value === 'newest') {
+                return Number(b.dataset.date || 0) - Number(a.dataset.date || 0);
             }
 
+            return Number(a.dataset.index || 0) - Number(b.dataset.index || 0);
+        }.bind(this));
 
-            if (
-                this.value === 'relevance'
-                ||
-                this.value === 'newest'
-            ) {
+        resultCards.forEach(function (card) {
+            resultsContainer?.appendChild(card);
+        });
 
-                cards.sort(
-                    function (a, b) {
+        currentPage = 1;
+        renderResults();
+    });
 
-                        return (
-                            Number(
-                                a.dataset.index
-                            )
-                            -
-                            Number(
-                                b.dataset.index
-                            )
-                        );
-
-                    }
-                );
-
-            }
-
-
-            cards.forEach(
-                function (card) {
-
-                    resultsContainer.appendChild(
-                        card
-                    );
-
-                }
-            );
-
-        }
-    );
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Initial Filter
-    |--------------------------------------------------------------------------
-    */
-
-    applyFilter();
+    renderResults();
 
 });
 </script>

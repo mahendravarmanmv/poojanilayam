@@ -9,111 +9,7 @@
 
 @section('content')
 
-@php
 
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY TICKET DATA
-    |--------------------------------------------------------------------------
-    | This will later come from the authenticated user's support ticket.
-    |--------------------------------------------------------------------------
-    */
-
-    $ticket = [
-
-        'id' => 'PN-TKT-102458',
-
-        'status' => 'In Progress',
-
-        'status_class' => 'warning',
-
-        'priority' => 'Normal',
-
-        'category' => 'Booking Issue',
-
-        'subject' => 'Unable to confirm my pooja booking',
-
-        'reference_id' => 'PN-BKG-45821',
-
-        'created_at' => '08 August 2026, 10:35 AM',
-
-        'updated_at' => '08 August 2026, 02:15 PM',
-
-        'description' =>
-            'I completed the booking process but have not yet
-            received the final booking confirmation. Please check
-            the status of my booking.',
-
-        'assigned_to' => 'Pooja Nilayam Support Team'
-
-    ];
-
-
-    $messages = [
-
-        [
-            'sender' => 'You',
-
-            'type' => 'customer',
-
-            'date' => '08 August 2026, 10:35 AM',
-
-            'message' =>
-                'I completed the booking process but have not yet
-                received the final booking confirmation.'
-        ],
-
-        [
-            'sender' => 'Support Team',
-
-            'type' => 'support',
-
-            'date' => '08 August 2026, 02:15 PM',
-
-            'message' =>
-                'Thank you for contacting Pooja Nilayam support.
-                We are checking the booking information associated
-                with your reference ID.'
-        ]
-
-    ];
-
-
-    $statusSteps = [
-
-        [
-            'title' => 'Ticket Raised',
-            'description' => 'Your support request was submitted.',
-            'completed' => true
-        ],
-
-        [
-            'title' => 'Support Review',
-            'description' => 'Support team is reviewing your request.',
-            'completed' => true
-        ],
-
-        [
-            'title' => 'Investigation',
-            'description' => 'The issue is being investigated.',
-            'completed' => false
-        ],
-
-        [
-            'title' => 'Resolution',
-            'description' => 'A resolution will be provided.',
-            'completed' => false
-        ],
-
-        [
-            'title' => 'Closed',
-            'description' => 'Ticket will close after resolution.',
-            'completed' => false
-        ]
-
-    ];
-
-@endphp
 
 
 {{-- ============================================================
@@ -298,6 +194,15 @@
     </div>
 
 </section>
+
+
+@if(session('success'))
+<section class="container pt-4">
+    <div class="alert alert-success rounded-4 mb-0" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
+    </div>
+</section>
+@endif
 
 
 {{-- ============================================================
@@ -874,13 +779,17 @@
                             </label>
 
 
-                            <textarea
-                                id="ticketReply"
-                                class="form-control"
-                                rows="4"
-                                maxlength="1000"
-                                placeholder="Write your message..."
-                            ></textarea>
+                            <form method="POST" action="{{ route('support.ticket.reply', $ticket['id']) }}">
+                                @csrf
+                                <textarea
+                                    id="ticketReply"
+                                    name="message"
+                                    class="form-control"
+                                    rows="4"
+                                    maxlength="1000"
+                                    placeholder="Write your message..."
+                                    required
+                                ></textarea>
 
 
                             <div
@@ -904,7 +813,7 @@
 
 
                                 <button
-                                    type="button"
+                                    type="submit"
                                     id="sendReply"
                                     class="btn
                                            btn-pn"
@@ -919,6 +828,7 @@
                                 </button>
 
                             </div>
+                            </form>
 
                         </div>
 
@@ -1391,16 +1301,19 @@
                 </button>
 
 
-                <button
-                    type="button"
-                    class="btn
-                           btn-danger"
-                    id="confirmCloseTicket"
-                >
+                <form method="POST" action="{{ route('support.ticket.close', $ticket['id']) }}">
+                    @csrf
+                    <button
+                        type="submit"
+                        class="btn
+                               btn-danger"
+                        id="confirmCloseTicket"
+                    >
 
-                    Close Ticket
+                        Close Ticket
 
-                </button>
+                    </button>
+                </form>
 
             </div>
 
@@ -1466,38 +1379,7 @@ document.addEventListener('DOMContentLoaded', function () {
         );
 
 
-        confirmClose?.addEventListener(
-            'click',
-            function () {
 
-                /*
-                |--------------------------------------------------------------------------
-                | Backend status update will be connected later.
-                |--------------------------------------------------------------------------
-                */
-
-                closeModal.hide();
-
-
-                closeButton.disabled =
-                    true;
-
-
-                closeButton.innerHTML =
-                    '<i class="bi bi-check-circle me-1"></i> Ticket Closed';
-
-
-                closeButton.classList.remove(
-                    'btn-outline-danger'
-                );
-
-
-                closeButton.classList.add(
-                    'btn-outline-success'
-                );
-
-            }
-        );
 
     }
 
@@ -1508,105 +1390,7 @@ document.addEventListener('DOMContentLoaded', function () {
     |--------------------------------------------------------------------------
     */
 
-    const replyInput =
-        document.getElementById(
-            'ticketReply'
-        );
 
-
-    const sendReply =
-        document.getElementById(
-            'sendReply'
-        );
-
-
-    sendReply?.addEventListener(
-        'click',
-        function () {
-
-            const message =
-                replyInput
-                    ?.value
-                    ?.trim();
-
-
-            if (
-                !message
-            ) {
-
-                replyInput?.classList.add(
-                    'is-invalid'
-                );
-
-
-                return;
-
-            }
-
-
-            if (
-                message.length < 3
-            ) {
-
-                replyInput?.classList.add(
-                    'is-invalid'
-                );
-
-
-                return;
-
-            }
-
-
-            replyInput?.classList.remove(
-                'is-invalid'
-            );
-
-
-            const originalHTML =
-                this.innerHTML;
-
-
-            this.disabled =
-                true;
-
-
-            this.innerHTML =
-                '<span class="spinner-border spinner-border-sm me-2"></span>' +
-                'Sending...';
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Backend reply submission will be connected later.
-            |--------------------------------------------------------------------------
-            */
-
-            setTimeout(
-                function () {
-
-                    this.disabled =
-                        false;
-
-
-                    this.innerHTML =
-                        originalHTML;
-
-
-                    replyInput.value =
-                        '';
-
-
-                    alert(
-                        'Your reply has been submitted.'
-                    );
-
-                }.bind(this),
-                700
-            );
-
-        }
-    );
 
 });
 </script>

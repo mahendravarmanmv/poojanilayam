@@ -31,7 +31,7 @@ class ComingSoonMiddleware
 
         // Coming Soon
         if ($comingSoon) {
-            return response()->view('coming-soon');
+            return response()->view('frontend.cms.coming-soon');
         }
 
         return $next($request);

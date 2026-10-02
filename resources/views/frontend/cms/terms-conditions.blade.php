@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Terms & Conditions | Pooja Nilayam')
+@section('title', $cmsPage?->title ? $cmsPage->title . ' | Pooja Nilayam' : 'Terms & Conditions | Pooja Nilayam')
 
 @section(
     'meta_description',
-    'Read the Terms & Conditions for using the Pooja Nilayam website and its spiritual services.'
+    $cmsPage?->excerpt ?: 'Read the Pooja Nilayam Terms & Conditions governing use of the platform and its services.'
 )
 
 @section('content')
@@ -23,7 +23,7 @@
     |--------------------------------------------------------------------------
     */
 
-    $lastUpdated = 'To be updated by Pooja Nilayam';
+    $lastUpdated = data_get($cmsPage?->metadata, 'last_updated', 'To be updated by Pooja Nilayam');
 
 
     $sections = [

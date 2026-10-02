@@ -9,65 +9,7 @@
 
 @section('content')
 
-@php
 
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY FEEDBACK DATA
-    |--------------------------------------------------------------------------
-    | This will later come from the completed booking / service.
-    |--------------------------------------------------------------------------
-    */
-
-    $service = [
-
-        'booking_id' => 'PN-BKG-45821',
-
-        'reference_id' => 'PN-REF-45821',
-
-        'service_name' => 'Ganapathi Pooja',
-
-        'service_type' => 'Online Pooja',
-
-        'date' => '08 August 2026',
-
-        'priest' => 'Sri Venkatesh Sharma',
-
-        'status' => 'Completed'
-
-    ];
-
-
-    $ratingLabels = [
-
-        1 => 'Very Poor',
-
-        2 => 'Poor',
-
-        3 => 'Average',
-
-        4 => 'Good',
-
-        5 => 'Excellent'
-
-    ];
-
-
-    $feedbackTopics = [
-
-        'Pooja Experience',
-
-        'Priest Experience',
-
-        'Booking Experience',
-
-        'Communication',
-
-        'Overall Service'
-
-    ];
-
-@endphp
 
 
 {{-- ============================================================
@@ -214,7 +156,7 @@
 
                         <div
                             id="feedbackSuccess"
-                            class="d-none
+                            class="{{ session('success') ? '' : 'd-none' }}
                                    text-center
                                    py-4"
                         >
@@ -288,7 +230,8 @@
 
                         {{-- Feedback Form --}}
 
-                        <div id="feedbackFormWrapper">
+                        <div id="feedbackFormWrapper"
+                             style="{{ session('success') ? 'display:none;' : '' }}">
 
                             <div class="mb-4">
 
@@ -365,12 +308,13 @@
                             <form
                                 id="feedbackForm"
                                 method="POST"
-                                action="#"
+                                action="{{ route('support.feedback.submit') }}"
                                 novalidate
                             >
 
                                 @csrf
 
+                                <input type="hidden" name="booking_id" value="{{ $service['booking_id'] ?? '' }}">
 
                                 {{-- ==================================================
                                      OVERALL RATING
@@ -1747,55 +1691,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
 
-            /*
-            |--------------------------------------------------------------------------
-            | Backend feedback submission will be connected later.
-            |--------------------------------------------------------------------------
-            */
-
-            setTimeout(
-                function () {
-
-                    if (submitButton) {
-
-                        submitButton.disabled =
-                            false;
-
-
-                        submitButton.innerHTML =
-                            originalHTML;
-
-                    }
-
-
-                    formWrapper?.classList.add(
-                        'd-none'
-                    );
-
-
-                    successState?.classList.remove(
-                        'd-none'
-                    );
-
-
-                    window.scrollTo({
-
-                        top:
-                            successState
-                                ?.getBoundingClientRect()
-                                .top
-                            +
-                            window.scrollY
-                            -
-                            120,
-
-                        behavior: 'smooth'
-
-                    });
-
-                },
-                900
-            );
+            form.submit();
 
         }
     );

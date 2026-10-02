@@ -9,36 +9,7 @@
 
 @section('content')
 
-@php
 
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY SUPPORT DATA
-    |--------------------------------------------------------------------------
-    | These values will later come from the logged-in customer,
-    | bookings, orders and support configuration.
-    |--------------------------------------------------------------------------
-    */
-
-    $issueTypes = [
-        'Booking Issue',
-        'Digital Pooja Issue',
-        'Temple Service Issue',
-        'Priest Service Issue',
-        'Payment Issue',
-        'Order / Delivery Issue',
-        'Refund Issue',
-        'Other'
-    ];
-
-
-    $priorities = [
-        'low' => 'Low',
-        'normal' => 'Normal',
-        'high' => 'High'
-    ];
-
-@endphp
 
 
 {{-- ============================================================
@@ -327,7 +298,7 @@
                         <form
                             id="raiseTicketForm"
                             method="POST"
-                            action="#"
+                            action="{{ route('support.raise-ticket.store') }}"
                             enctype="multipart/form-data"
                             novalidate
                         >
@@ -451,22 +422,10 @@
                                     </option>
 
 
-                                    @foreach(
-                                        $issueTypes as $issueType
-                                    )
+                                    @foreach($issueTypes as $issueType)
 
-                                        <option
-                                            value="{{ strtolower(
-                                                str_replace(
-                                                    ' ',
-                                                    '_',
-                                                    $issueType
-                                                )
-                                            ) }}"
-                                        >
-
-                                            {{ $issueType }}
-
+                                        <option value="{{ $issueType->id }}">
+                                            {{ $issueType->name }}
                                         </option>
 
                                     @endforeach
@@ -610,9 +569,11 @@
                                            g-2"
                                 >
 
-                                    @foreach(
-                                        $priorities as $value => $label
-                                    )
+                                    @foreach($priorities as $priority)
+                                        @php
+                                            $value = $priority->priority_code;
+                                            $label = $priority->name;
+                                        @endphp
 
                                         <div class="col-12 col-sm-4">
 
@@ -1770,101 +1731,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
 
-            /*
-            |--------------------------------------------------------------------------
-            | Backend ticket creation will be connected later.
-            |--------------------------------------------------------------------------
-            */
-
-            setTimeout(
-                function () {
-
-                    const ticketId =
-                        'PN-TKT-'
-                        +
-                        String(
-                            Math.floor(
-                                100000
-                                +
-                                Math.random()
-                                * 900000
-                            )
-                        );
-
-
-                    const generatedTicket =
-                        document.getElementById(
-                            'generatedTicketId'
-                        );
-
-
-                    if (generatedTicket) {
-
-                        generatedTicket.textContent =
-                            ticketId;
-
-                    }
-
-
-                    if (submitButton) {
-
-                        submitButton.disabled =
-                            false;
-
-
-                        submitButton.innerHTML =
-                            originalHTML;
-
-                    }
-
-
-                    form.reset();
-
-
-                    form.classList.remove(
-                        'was-validated'
-                    );
-
-
-                    if (descriptionCounter) {
-
-                        descriptionCounter.textContent =
-                            '0 / 2000';
-
-                    }
-
-
-                    if (attachmentFeedback) {
-
-                        attachmentFeedback.textContent =
-                            '';
-
-                    }
-
-
-                    successAlert?.classList.remove(
-                        'd-none'
-                    );
-
-
-                    window.scrollTo({
-
-                        top:
-                            successAlert
-                                ?.getBoundingClientRect()
-                                .top
-                            +
-                            window.scrollY
-                            -
-                            120,
-
-                        behavior: 'smooth'
-
-                    });
-
-                },
-                900
-            );
+            form.submit();
 
         }
     );

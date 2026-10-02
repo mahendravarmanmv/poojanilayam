@@ -9,159 +9,7 @@
 
 @section('content')
 
-@php
 
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY BLOG DATA
-    |--------------------------------------------------------------------------
-    | This will later come from the Blog / CMS database.
-    |--------------------------------------------------------------------------
-    */
-
-    $featuredPost = [
-        'title' => 'The Sacred Meaning Behind Ganapathi Pooja',
-        'excerpt' =>
-            'Discover the spiritual significance of Ganapathi Pooja,
-            its traditional practices and why devotees seek the
-            blessings of Lord Ganesha before beginning new journeys.',
-        'category' => 'Pooja & Rituals',
-        'date' => '08 August 2026',
-        'author' => 'Pooja Nilayam',
-        'read_time' => '6 min read',
-        'image' => null,
-        'slug' => 'sacred-meaning-behind-ganapathi-pooja'
-    ];
-
-
-    $posts = [
-
-        [
-            'title' =>
-                'How to Prepare for a Traditional Home Pooja',
-            'excerpt' =>
-                'A simple guide to preparing your home,
-                essentials and mindset before a traditional pooja.',
-            'category' => 'Pooja Guides',
-            'date' => '06 August 2026',
-            'author' => 'Pooja Nilayam',
-            'read_time' => '5 min read',
-            'image' => null,
-            'slug' => 'how-to-prepare-for-home-pooja'
-        ],
-
-        [
-            'title' =>
-                'Understanding the Importance of Prasadam',
-            'excerpt' =>
-                'Learn about the spiritual meaning of prasadam
-                and its place in Hindu devotional traditions.',
-            'category' => 'Traditions',
-            'date' => '04 August 2026',
-            'author' => 'Pooja Nilayam',
-            'read_time' => '4 min read',
-            'image' => null,
-            'slug' => 'importance-of-prasadam'
-        ],
-
-        [
-            'title' =>
-                'Why Temple Visits Hold a Special Place in Devotion',
-            'excerpt' =>
-                'Explore the spiritual and cultural significance
-                of visiting sacred temples.',
-            'category' => 'Temples',
-            'date' => '02 August 2026',
-            'author' => 'Pooja Nilayam',
-            'read_time' => '7 min read',
-            'image' => null,
-            'slug' => 'importance-of-temple-visits'
-        ],
-
-        [
-            'title' =>
-                'Simple Daily Practices for a Peaceful Morning',
-            'excerpt' =>
-                'Start your day with meaningful devotional
-                practices that encourage calm and gratitude.',
-            'category' => 'Spirituality',
-            'date' => '30 July 2026',
-            'author' => 'Pooja Nilayam',
-            'read_time' => '5 min read',
-            'image' => null,
-            'slug' => 'daily-practices-peaceful-morning'
-        ],
-
-        [
-            'title' =>
-                'The Significance of Lighting a Diya',
-            'excerpt' =>
-                'Understand why lighting a diya is an important
-                part of daily worship and sacred rituals.',
-            'category' => 'Traditions',
-            'date' => '28 July 2026',
-            'author' => 'Pooja Nilayam',
-            'read_time' => '4 min read',
-            'image' => null,
-            'slug' => 'significance-of-lighting-diya'
-        ],
-
-        [
-            'title' =>
-                'Choosing the Right Pooja for Your Special Occasion',
-            'excerpt' =>
-                'A practical guide to selecting devotional
-                rituals for important moments in life.',
-            'category' => 'Pooja Guides',
-            'date' => '25 July 2026',
-            'author' => 'Pooja Nilayam',
-            'read_time' => '6 min read',
-            'image' => null,
-            'slug' => 'choosing-right-pooja'
-        ],
-
-        [
-            'title' =>
-                'Sacred Festivals and Their Spiritual Significance',
-            'excerpt' =>
-                'Discover the meaning and traditions behind
-                some of the most important Hindu festivals.',
-            'category' => 'Festivals',
-            'date' => '22 July 2026',
-            'author' => 'Pooja Nilayam',
-            'read_time' => '8 min read',
-            'image' => null,
-            'slug' => 'sacred-festivals-significance'
-        ],
-
-        [
-            'title' =>
-                'Creating a Peaceful Pooja Space at Home',
-            'excerpt' =>
-                'Ideas for creating a simple and meaningful
-                devotional space in your home.',
-            'category' => 'Spirituality',
-            'date' => '19 July 2026',
-            'author' => 'Pooja Nilayam',
-            'read_time' => '5 min read',
-            'image' => null,
-            'slug' => 'peaceful-pooja-space-at-home'
-        ]
-
-    ];
-
-
-    $categories = [
-        'All',
-        'Pooja Guides',
-        'Pooja & Rituals',
-        'Temples',
-        'Festivals',
-        'Traditions',
-        'Spirituality'
-    ];
-
-@endphp
 
 
 {{-- ============================================================
@@ -268,6 +116,8 @@
 
 </section>
 
+
+@if($featuredPost)
 
 {{-- ============================================================
      FEATURED ARTICLE
@@ -500,6 +350,8 @@
     </div>
 
 </section>
+
+@endif
 
 
 {{-- ============================================================

@@ -9,116 +9,6 @@
 
 @section('content')
 
-@php
-
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY UI DATA
-    |--------------------------------------------------------------------------
-    | These values will later come from the authenticated customer's
-    | digital booking records.
-    |--------------------------------------------------------------------------
-    */
-
-    $digitalBookings = [
-
-        [
-            'id' => 'PN-DIG-2026-00118',
-            'pooja' => 'Ganapathi Homam',
-            'date' => '15 August 2026',
-            'time' => '10:00 AM',
-            'status' => 'Scheduled',
-            'status_class' => 'primary',
-            'priest' => 'Sri Venkateswara Sharma',
-            'sankalp' => 'Mahendra Varma & Family',
-            'photo_video' => false,
-            'meeting_available' => false,
-            'amount' => 501,
-            'icon' => 'bi-flower1'
-        ],
-
-        [
-            'id' => 'PN-DIG-2026-00096',
-            'pooja' => 'Rudrabhishekam',
-            'date' => '05 August 2026',
-            'time' => '8:00 AM',
-            'status' => 'Completed',
-            'status_class' => 'success',
-            'priest' => 'Sri Siva Prasad',
-            'sankalp' => 'Mahendra Varma',
-            'photo_video' => true,
-            'meeting_available' => false,
-            'amount' => 1101,
-            'icon' => 'bi-droplet'
-        ],
-
-        [
-            'id' => 'PN-DIG-2026-00071',
-            'pooja' => 'Lakshmi Pooja',
-            'date' => '28 July 2026',
-            'time' => '6:00 PM',
-            'status' => 'Completed',
-            'status_class' => 'success',
-            'priest' => 'Sri Ramesh Sharma',
-            'sankalp' => 'Mahendra Varma & Family',
-            'photo_video' => true,
-            'meeting_available' => false,
-            'amount' => 501,
-            'icon' => 'bi-stars'
-        ],
-
-        [
-            'id' => 'PN-DIG-2026-00052',
-            'pooja' => 'Navagraha Pooja',
-            'date' => '18 July 2026',
-            'time' => '11:00 AM',
-            'status' => 'Cancelled',
-            'status_class' => 'danger',
-            'priest' => 'Not Assigned',
-            'sankalp' => 'Mahendra Varma',
-            'photo_video' => false,
-            'meeting_available' => false,
-            'amount' => 901,
-            'icon' => 'bi-moon-stars'
-        ]
-
-    ];
-
-
-    $scheduledBookings =
-        array_values(
-            array_filter(
-                $digitalBookings,
-                fn ($booking) =>
-                    in_array(
-                        $booking['status'],
-                        ['Scheduled', 'Live']
-                    )
-            )
-        );
-
-
-    $completedBookings =
-        array_values(
-            array_filter(
-                $digitalBookings,
-                fn ($booking) =>
-                    $booking['status'] === 'Completed'
-            )
-        );
-
-
-    $mediaAvailable =
-        array_values(
-            array_filter(
-                $digitalBookings,
-                fn ($booking) =>
-                    $booking['photo_video']
-            )
-        );
-
-@endphp
-
 
 {{-- ============================================================
      BREADCRUMB
@@ -291,7 +181,7 @@
                                    fs-5"
                             style="width:64px;height:64px;"
                         >
-                            MV
+                            {{ collect(preg_split('/\s+/', trim(auth()->user()->profile?->display_name ?: auth()->user()->name)))->filter()->map(fn ($part) => strtoupper(substr($part, 0, 1)))->take(2)->implode('') }}
                         </div>
 
 
@@ -301,7 +191,7 @@
                                    text-pn-brown
                                    mb-1"
                         >
-                            Mahendra Varma
+                            {{ auth()->user()->profile?->display_name ?: auth()->user()->name }}
                         </h2>
 
 
@@ -309,7 +199,7 @@
                             class="text-secondary
                                    text-break"
                         >
-                            customer@example.com
+                            {{ auth()->user()->email }}
                         </small>
 
                     </div>

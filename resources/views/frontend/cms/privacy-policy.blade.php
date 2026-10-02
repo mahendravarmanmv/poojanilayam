@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Privacy Policy | Pooja Nilayam')
+@section('title', $cmsPage?->title ? $cmsPage->title . ' | Pooja Nilayam' : 'Privacy Policy | Pooja Nilayam')
 
 @section(
     'meta_description',
-    'Read the Pooja Nilayam Privacy Policy and learn how privacy information is presented and managed.'
+    $cmsPage?->excerpt ?: 'Read the Pooja Nilayam Privacy Policy and learn how privacy information is presented and managed.'
 )
 
 @section('content')
@@ -24,7 +24,7 @@
     |--------------------------------------------------------------------------
     */
 
-    $lastUpdated = 'To be updated by Pooja Nilayam';
+    $lastUpdated = data_get($cmsPage?->metadata, 'last_updated', 'To be updated by Pooja Nilayam');
 
 
     $sections = [

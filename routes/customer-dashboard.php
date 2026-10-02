@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\Web\Customer\CustomerDashboardController;
+use App\Http\Controllers\Web\Customer\CustomerDigitalBookingController;
+use App\Http\Controllers\Web\Customer\CustomerOrderController;
+use App\Http\Controllers\Web\Customer\CustomerWishlistController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,26 +36,21 @@ Route::prefix('dashboard')
         Route::get('/addresses', [CustomerDashboardController::class, 'addresses'])
             ->name('addresses');
 
-        // Frontend order-history UI is currently a static prototype page.
-        // It will be replaced with a customer-scoped order controller later.
-        Route::view('/orders', 'frontend.dashboard.orders')
+        Route::get('/orders', [CustomerOrderController::class, 'index'])
             ->name('orders');
 
-        // Additional frontend dashboard pages already present in the UI layer.
-        Route::view('/digital-bookings', 'frontend.dashboard.digital-bookings')
+        Route::get('/digital-bookings', [CustomerDigitalBookingController::class, 'index'])
             ->name('digital-bookings');
 
-        Route::view('/wishlist', 'frontend.dashboard.wishlist')
+        Route::get('/wishlist', [CustomerWishlistController::class, 'index'])
             ->name('wishlist');
 
+        // These dashboard pages remain UI-only until their respective data modules are implemented.
         Route::view('/reviews', 'frontend.dashboard.reviews')
             ->name('reviews');
 
         Route::view('/coupons', 'frontend.dashboard.coupons')
             ->name('coupons');
-
-        Route::view('/notifications/details', 'frontend.dashboard.notification-details')
-            ->name('notification-details');
 
         Route::get('/addresses/add', [CustomerDashboardController::class, 'createAddress'])
             ->name('addresses.add');

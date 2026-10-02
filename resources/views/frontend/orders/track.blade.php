@@ -46,7 +46,7 @@
                             <p class="small text-secondary mb-0">Use your order number and registered email address.</p>
                         </div>
 
-                        <form action="{{ route('track-order') }}" method="get">
+                        <form action="{{ route('store.track-order') }}" method="get">
                             <div class="mb-4">
                                 <label for="order_number" class="form-label fw-semibold">
                                     Order Number <span class="text-danger">*</span>

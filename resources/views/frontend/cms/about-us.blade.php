@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'About Us | Pooja Nilayam')
+@section('title', $cmsPage?->title ? $cmsPage->title . ' | Pooja Nilayam' : 'About Us | Pooja Nilayam')
 
 @section(
     'meta_description',
-    'Learn about Pooja Nilayam, our vision and mission to make authentic Hindu rituals, temples and spiritual services accessible to every devotee.'
+    $cmsPage?->excerpt ?: 'Learn about Pooja Nilayam, our vision and mission to make authentic Hindu rituals, temples and spiritual services accessible to every devotee.'
 )
 
 @section('content')

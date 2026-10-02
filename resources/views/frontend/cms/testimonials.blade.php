@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Testimonials | Pooja Nilayam')
+@section('title', $cmsPage?->title ? $cmsPage->title . ' | Pooja Nilayam' : 'Testimonials | Pooja Nilayam')
 
 @section(
     'meta_description',
-    'Read experiences and feedback shared by customers of Pooja Nilayam across pooja services, digital pooja, temples, astrology, donations and the Pooja Store.'
+    $cmsPage?->excerpt ?: 'Read experiences and feedback shared by customers of Pooja Nilayam across pooja services, digital pooja, temples, astrology, donations and the Pooja Store.'
 )
 
 @section('content')

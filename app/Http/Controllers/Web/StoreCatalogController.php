@@ -196,8 +196,6 @@ class StoreCatalogController extends Controller
             : ($inventory > 0 ? 'in_stock' : 'out_of_stock');
 
         return [
-            'id' => $product->id,
-            'id' => $product->id,
             'name' => $product->name,
             'slug' => $product->slug,
             'category' => $product->category?->name ?? 'Uncategorized',
@@ -210,7 +208,7 @@ class StoreCatalogController extends Controller
             'price_available' => $price['available'],
             'rating' => $product->published_rating !== null ? (float) $product->published_rating : 0,
             'reviews' => (int) ($product->published_reviews_count ?? 0),
-            'image' => $product->images->first()?->image_url,
+            'image' => $product->images->first()?->file_path,
             'badge' => $product->featured ? 'Featured' : '',
             'stock' => $stockStatus === 'in_stock',
             'stock_status' => $stockStatus,
@@ -225,7 +223,7 @@ class StoreCatalogController extends Controller
     private function productDetail(Product $product): array
     {
         $card = $this->productCard($product);
-        $images = $product->images->pluck('image_url')->filter()->values()->all();
+        $images = $product->images->pluck('file_path')->filter()->values()->all();
 
         $card['sku'] = $product->sku;
         $card['mrp'] = $card['old_price'] ?? $card['price'];

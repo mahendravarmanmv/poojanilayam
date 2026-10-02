@@ -9,52 +9,7 @@
 
 @section('content')
 
-@php
 
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY CONTACT DATA
-    |--------------------------------------------------------------------------
-    | These values will later come from the Website / Company Settings
-    | configuration in the Admin Panel.
-    |--------------------------------------------------------------------------
-    */
-
-    $contactInfo = [
-
-        'phone' => '+91 90000 00000',
-
-        'email' => 'support@poojanilayam.com',
-
-        'hours' => 'Monday - Saturday, 9:00 AM - 7:00 PM',
-
-        'address' =>
-            'Pooja Nilayam, Hyderabad, Telangana, India'
-
-    ];
-
-
-    $contactReasons = [
-
-        'Pooja Booking',
-
-        'Digital Pooja',
-
-        'Temple Services',
-
-        'Priest Services',
-
-        'Astrology Services',
-
-        'Online Store',
-
-        'Donation',
-
-        'General Enquiry'
-
-    ];
-
-@endphp
 
 
 {{-- ============================================================
@@ -532,7 +487,7 @@
                             class="alert
                                    alert-success
                                    rounded-4
-                                   d-none"
+                                   {{ session('success') ? '' : 'd-none' }}"
                             role="alert"
                         >
 
@@ -606,7 +561,7 @@
                         <form
                             id="contactForm"
                             method="POST"
-                            action="#"
+                            action="{{ route('support.contact.submit') }}"
                             novalidate
                         >
 
@@ -1886,66 +1841,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
 
-            /*
-            |--------------------------------------------------------------------------
-            | Backend contact enquiry submission will be connected later.
-            |--------------------------------------------------------------------------
-            */
-
-            setTimeout(
-                function () {
-
-                    if (submitButton) {
-
-                        submitButton.disabled =
-                            false;
-
-
-                        submitButton.innerHTML =
-                            originalHTML;
-
-                    }
-
-
-                    form.reset();
-
-
-                    form.classList.remove(
-                        'was-validated'
-                    );
-
-
-                    if (messageCounter) {
-
-                        messageCounter.textContent =
-                            '0 / 1000';
-
-                    }
-
-
-                    successAlert?.classList.remove(
-                        'd-none'
-                    );
-
-
-                    window.scrollTo({
-
-                        top:
-                            successAlert
-                                ?.getBoundingClientRect()
-                                .top
-                            +
-                            window.scrollY
-                            -
-                            120,
-
-                        behavior: 'smooth'
-
-                    });
-
-                },
-                800
-            );
+            form.submit();
 
         }
     );

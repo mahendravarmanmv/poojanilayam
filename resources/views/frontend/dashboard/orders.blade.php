@@ -9,140 +9,6 @@
 
 @section('content')
 
-@php
-
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY UI DATA
-    |--------------------------------------------------------------------------
-    | This data will later come from the authenticated customer's
-    | order records.
-    |--------------------------------------------------------------------------
-    */
-
-    $orders = [
-
-        [
-            'id' => 'PN-ORD-2026-00482',
-            'date' => '08 August 2026',
-            'status' => 'Shipped',
-            'status_class' => 'primary',
-            'items' => 3,
-            'total' => 1450,
-            'payment' => 'Paid',
-            'payment_class' => 'success',
-            'delivery' => 'Expected 12 August 2026',
-            'address' => 'Hyderabad, Telangana',
-            'tracking' => 'TRKPN842019',
-            'products' => [
-                [
-                    'name' => 'Pooja Samagri Kit',
-                    'qty' => 1,
-                    'price' => 850
-                ],
-                [
-                    'name' => 'Brass Diya',
-                    'qty' => 2,
-                    'price' => 300
-                ]
-            ]
-        ],
-
-        [
-            'id' => 'PN-ORD-2026-00431',
-            'date' => '28 July 2026',
-            'status' => 'Delivered',
-            'status_class' => 'success',
-            'items' => 2,
-            'total' => 999,
-            'payment' => 'Paid',
-            'payment_class' => 'success',
-            'delivery' => 'Delivered on 02 August 2026',
-            'address' => 'Hyderabad, Telangana',
-            'tracking' => 'TRKPN731582',
-            'products' => [
-                [
-                    'name' => 'Lakshmi Pooja Kit',
-                    'qty' => 1,
-                    'price' => 699
-                ],
-                [
-                    'name' => 'Incense Pack',
-                    'qty' => 1,
-                    'price' => 300
-                ]
-            ]
-        ],
-
-        [
-            'id' => 'PN-ORD-2026-00398',
-            'date' => '16 July 2026',
-            'status' => 'Processing',
-            'status_class' => 'warning',
-            'items' => 1,
-            'total' => 1201,
-            'payment' => 'Paid',
-            'payment_class' => 'success',
-            'delivery' => 'Preparing for shipment',
-            'address' => 'Hyderabad, Telangana',
-            'tracking' => null,
-            'products' => [
-                [
-                    'name' => 'Ganapathi Pooja Kit',
-                    'qty' => 1,
-                    'price' => 1201
-                ]
-            ]
-        ],
-
-        [
-            'id' => 'PN-ORD-2026-00352',
-            'date' => '05 July 2026',
-            'status' => 'Cancelled',
-            'status_class' => 'danger',
-            'items' => 1,
-            'total' => 750,
-            'payment' => 'Refunded',
-            'payment_class' => 'secondary',
-            'delivery' => 'Order cancelled',
-            'address' => 'Hyderabad, Telangana',
-            'tracking' => null,
-            'products' => [
-                [
-                    'name' => 'Pooja Essentials Kit',
-                    'qty' => 1,
-                    'price' => 750
-                ]
-            ]
-        ]
-
-    ];
-
-
-    $activeOrders =
-        array_values(
-            array_filter(
-                $orders,
-                fn ($order) =>
-                    in_array(
-                        $order['status'],
-                        ['Processing', 'Shipped']
-                    )
-            )
-        );
-
-
-    $deliveredOrders =
-        array_values(
-            array_filter(
-                $orders,
-                fn ($order) =>
-                    $order['status'] === 'Delivered'
-            )
-        );
-
-@endphp
-
 
 {{-- ============================================================
      BREADCRUMB
@@ -315,7 +181,7 @@
                                    fs-5"
                             style="width:64px;height:64px;"
                         >
-                            MV
+                            {{ collect(preg_split('/\s+/', trim(auth()->user()->profile?->display_name ?: auth()->user()->name)))->filter()->map(fn ($part) => strtoupper(substr($part, 0, 1)))->take(2)->implode('') }}
                         </div>
 
 
@@ -325,7 +191,7 @@
                                    text-pn-brown
                                    mb-1"
                         >
-                            Mahendra Varma
+                            {{ auth()->user()->profile?->display_name ?: auth()->user()->name }}
                         </h2>
 
 
@@ -333,7 +199,7 @@
                             class="text-secondary
                                    text-break"
                         >
-                            customer@example.com
+                            {{ auth()->user()->email }}
                         </small>
 
                     </div>

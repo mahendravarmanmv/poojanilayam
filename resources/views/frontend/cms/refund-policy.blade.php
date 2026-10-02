@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Refund Policy | Pooja Nilayam')
+@section('title', $cmsPage?->title ? $cmsPage->title . ' | Pooja Nilayam' : 'Refund Policy | Pooja Nilayam')
 
 @section(
     'meta_description',
-    'Read the Pooja Nilayam Refund Policy and understand the refund request and processing workflow.'
+    $cmsPage?->excerpt ?: 'Read the Pooja Nilayam Refund Policy covering applicable refunds and cancellations.'
 )
 
 @section('content')
@@ -37,7 +37,7 @@
     |--------------------------------------------------------------------------
     */
 
-    $lastUpdated = 'To be updated by Pooja Nilayam';
+    $lastUpdated = data_get($cmsPage?->metadata, 'last_updated', 'To be updated by Pooja Nilayam');
 
 
     $sections = [

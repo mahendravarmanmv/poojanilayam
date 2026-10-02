@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Shipping Policy | Pooja Nilayam')
+@section('title', $cmsPage?->title ? $cmsPage->title . ' | Pooja Nilayam' : 'Shipping Policy | Pooja Nilayam')
 
 @section(
     'meta_description',
-    'Read the Pooja Nilayam Shipping Policy covering order processing, packing, shipment, delivery, tracking and delivery support.'
+    $cmsPage?->excerpt ?: 'Read the Pooja Nilayam Shipping Policy covering product delivery and related information.'
 )
 
 @section('content')
@@ -58,7 +58,7 @@
     |--------------------------------------------------------------------------
     */
 
-    $lastUpdated = 'To be updated by Pooja Nilayam';
+    $lastUpdated = data_get($cmsPage?->metadata, 'last_updated', 'To be updated by Pooja Nilayam');
 
 
     $sections = [

@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Careers | Pooja Nilayam')
+@section('title', $cmsPage?->title ? $cmsPage->title . ' | Pooja Nilayam' : 'Careers | Pooja Nilayam')
 
 @section(
     'meta_description',
-    'Explore career opportunities with Pooja Nilayam and learn about working with our spiritual and digital platform.'
+    $cmsPage?->excerpt ?: 'Explore career opportunities with Pooja Nilayam and learn about working with our spiritual and digital platform.'
 )
 
 @section('content')
@@ -32,7 +32,7 @@
     |--------------------------------------------------------------------------
     */
 
-    $lastUpdated = 'To be updated by Pooja Nilayam';
+    $lastUpdated = data_get($cmsPage?->metadata, 'last_updated', 'To be updated by Pooja Nilayam');
 
 
     $careerAreas = [
