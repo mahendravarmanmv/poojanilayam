@@ -196,6 +196,7 @@ class StoreCatalogController extends Controller
             : ($inventory > 0 ? 'in_stock' : 'out_of_stock');
 
         return [
+			'id' => $product->id,
             'name' => $product->name,
             'slug' => $product->slug,
             'category' => $product->category?->name ?? 'Uncategorized',

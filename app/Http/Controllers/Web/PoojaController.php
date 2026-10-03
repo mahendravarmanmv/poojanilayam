@@ -37,13 +37,14 @@ class PoojaController extends Controller
             });
         }
 
-        $poojas = $query
+        $paginator = $query
             ->orderByDesc('is_featured')
             ->orderBy('sort_order')
             ->orderBy('name')
-            ->get()
-            ->map(fn (Pooja $pooja) => $this->poojaCardData($pooja))
-            ->values();
+            ->paginate(12)
+            ->withQueryString();
+
+        $poojas = $paginator->through(fn (Pooja $pooja) => $this->poojaCardData($pooja));
 
         $categories = PoojaCategory::query()
             ->where('is_active', true)
