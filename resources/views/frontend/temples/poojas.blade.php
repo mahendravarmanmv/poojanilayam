@@ -5,61 +5,6 @@
 
 @section('content')
 
-@php
-    $templeName = 'Sri Venkateswara Temple';
-
-    $poojas = [
-        [
-            'slug' => 'suprabhata-seva',
-            'name' => 'Suprabhata Seva',
-            'description' => 'Begin the day with a traditional devotional service and seek the blessings of the presiding deity.',
-            'time' => '6:00 AM',
-            'duration' => '45 mins',
-            'price' => '₹501',
-        ],
-        [
-            'slug' => 'archana-seva',
-            'name' => 'Archana Seva',
-            'description' => 'Offer your prayers and participate in a traditional archana performed at the temple.',
-            'time' => '8:00 AM – 11:00 AM',
-            'duration' => '30 mins',
-            'price' => '₹301',
-        ],
-        [
-            'slug' => 'special-pooja',
-            'name' => 'Special Pooja',
-            'description' => 'A dedicated temple pooja for devotees seeking a meaningful and personal worship experience.',
-            'time' => '10:00 AM',
-            'duration' => '60 mins',
-            'price' => '₹751',
-        ],
-        [
-            'slug' => 'abhishekam',
-            'name' => 'Abhishekam',
-            'description' => 'A traditional ceremonial offering performed with devotion and sacred materials.',
-            'time' => '7:30 AM',
-            'duration' => '60 mins',
-            'price' => '₹1,001',
-        ],
-        [
-            'slug' => 'kalyanotsavam',
-            'name' => 'Kalyanotsavam',
-            'description' => 'Participate in the sacred ceremonial celebration conducted in the temple tradition.',
-            'time' => '11:00 AM',
-            'duration' => '90 mins',
-            'price' => '₹1,501',
-        ],
-        [
-            'slug' => 'ekanta-seva',
-            'name' => 'Ekanta Seva',
-            'description' => 'Experience a peaceful devotional service traditionally offered at the close of the day.',
-            'time' => '8:30 PM',
-            'duration' => '30 mins',
-            'price' => '₹501',
-        ],
-    ];
-@endphp
-
 <section class="bg-pn-cream py-4">
     <div class="container">
 

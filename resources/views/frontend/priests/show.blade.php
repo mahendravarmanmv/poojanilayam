@@ -1619,7 +1619,9 @@
                                gap-2"
                     >
 
-                        @foreach($slots[0]['slots'] as $index => $time)
+                        @if(!empty($slots) && !empty($slots[0]['slots']))
+
+                            @foreach($slots[0]['slots'] as $index => $time)
 
                             <button
                                 type="button"
@@ -1638,6 +1640,14 @@
                             </button>
 
                         @endforeach
+
+                        @else
+
+                            <span class="small text-secondary">
+                                No time slots are currently available.
+                            </span>
+
+                        @endif
 
                     </div>
 

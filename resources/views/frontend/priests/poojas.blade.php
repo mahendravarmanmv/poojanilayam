@@ -74,7 +74,7 @@
 
             <div class="col-12 col-lg-auto text-center">
                 <a
-                    href="{{ route('priest.show', ['slug' => 'anantha-sharma']) }}"
+                    href="{{ route('priest.show', ['slug' => $priest['slug']]) }}"
                     class="btn btn-pn"
                 >
                     View Priest Profile
