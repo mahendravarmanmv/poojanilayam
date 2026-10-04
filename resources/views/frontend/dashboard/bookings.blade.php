@@ -5,7 +5,7 @@
 @section('meta_description', 'View and manage your Pooja Nilayam bookings, upcoming poojas and booking history.')
 
 @php
-    $liveBookings = collect($bookings ?? [])->map(function ($booking) {
+    $liveBookings = $bookings->getCollection()->map(function ($booking) {
         $status = strtolower((string) $booking->status);
 
         $statusLabel = match ($status) {

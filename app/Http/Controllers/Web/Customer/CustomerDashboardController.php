@@ -131,12 +131,21 @@ class CustomerDashboardController extends Controller
             'display_name' => $user->name,
         ]);
 
-        $profile->update($validated);
+		$displayName = $validated['display_name']
+		?? trim(
+		$validated['first_name'] . ' ' .
+		($validated['last_name'] ?? '')
+		);
 
-        $displayName = $validated['display_name']
-            ?: trim($validated['first_name'] . ' ' . ($validated['last_name'] ?? ''));
+		$displayName = trim($displayName);
 
-        $user->update(['name' => $displayName]);
+		$validated['display_name'] = $displayName;
+
+		$profile->update($validated);
+
+		$user->update([
+		'name' => $displayName,
+		]);
 
         if ($user->customerProfile) {
             $user->customerProfile->update([

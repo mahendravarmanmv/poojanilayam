@@ -543,7 +543,7 @@
                                         array_map(
                                             fn ($order) =>
                                                 $order['items'],
-                                            $orders
+                                            $orders->getCollection()->all()
                                         )
                                     ) }}
 
