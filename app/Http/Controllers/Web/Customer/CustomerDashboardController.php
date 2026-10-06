@@ -12,6 +12,7 @@ use App\Models\Notification;
 use App\Models\Order;
 use App\Models\Language;
 use App\Models\State;
+use App\Models\City;
 use App\Models\Timezone;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -190,9 +191,9 @@ class CustomerDashboardController extends Controller
             'address_line_1' => ['required', 'string', 'max:255'],
             'address_line_2' => ['nullable', 'string', 'max:255'],
             'landmark' => ['nullable', 'string', 'max:255'],
-            'city_id' => ['nullable', 'integer', 'exists:cities,id'],
-            'state_id' => ['nullable', 'integer', 'exists:states,id'],
-            'country_id' => ['nullable', 'integer', 'exists:countries,id'],
+			'city_id' => ['required', 'integer', 'exists:cities,id'],
+			'state_id' => ['required', 'integer', 'exists:states,id'],
+			'country_id' => ['required', 'integer', 'exists:countries,id'],
             'postal_code' => ['required', 'string', 'max:20'],
             'latitude' => ['nullable', 'numeric', 'between:-90,90'],
             'longitude' => ['nullable', 'numeric', 'between:-180,180'],
@@ -200,6 +201,32 @@ class CustomerDashboardController extends Controller
         ]);
 
         $user = $request->user();
+		
+		$city = City::query()
+		->whereKey($validated['city_id'])
+		->where('state_id', $validated['state_id'])
+		->first();
+
+		if (!$city) {
+		return back()
+		->withErrors([
+			'city_id' => 'The selected city does not belong to the selected state.',
+		])
+		->withInput();
+		}
+
+		$state = State::query()
+		->whereKey($validated['state_id'])
+		->where('country_id', $validated['country_id'])
+		->first();
+
+		if (!$state) {
+		return back()
+		->withErrors([
+			'state_id' => 'The selected state does not belong to the selected country.',
+		])
+		->withInput();
+		}
 
         DB::transaction(function () use ($user, $validated): void {
             $makeDefault = (bool) ($validated['is_default'] ?? false)
@@ -247,4 +274,19 @@ class CustomerDashboardController extends Controller
             ->route('dashboard.addresses')
             ->with('success', 'Default address updated successfully.');
     }
+	
+	public function cities(Request $request)
+	{
+	$validated = $request->validate([
+		'state_id' => ['required', 'integer', 'exists:states,id'],
+	]);
+
+	return response()->json(
+		City::query()
+			->where('state_id', $validated['state_id'])
+			->where('is_active', true)
+			->orderBy('name')
+			->get(['id', 'name'])
+	);
+	}
 }

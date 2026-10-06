@@ -51,6 +51,9 @@ Route::prefix('dashboard')
 
         Route::view('/coupons', 'frontend.dashboard.coupons')
             ->name('coupons');
+			
+		Route::get('/addresses/cities', [CustomerDashboardController::class, 'cities'])
+			->name('addresses.cities');
 
         Route::get('/addresses/add', [CustomerDashboardController::class, 'createAddress'])
             ->name('addresses.add');

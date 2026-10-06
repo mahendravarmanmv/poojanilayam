@@ -11,15 +11,14 @@
 
 @php
 
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY UI DATA
-    |--------------------------------------------------------------------------
-    | This form is currently used for creating a new address.
-    | The same screen can later support editing by passing an address
-    | object from the controller.
-    |--------------------------------------------------------------------------
-    */
+	/*
+	|--------------------------------------------------------------------------
+	| ADDRESS FORM DATA
+	|--------------------------------------------------------------------------
+	| Address type options used by the customer address form.
+	| Country, state and city data are supplied by the controller.
+	|--------------------------------------------------------------------------
+	*/
 
     $addressTypes = [
         'home' => 'Home',
@@ -674,7 +673,7 @@
                                         name="name"
                                         class="form-control
                                                form-control-lg"
-                                        value="Mahendra Varma"
+                                        value="{{ old('name', $user->name) }}"
                                         placeholder="Enter full name"
                                         autocomplete="name"
                                         required
@@ -724,8 +723,9 @@
 
                                         <input
                                             type="tel"
-                                            id="mobile"
-                                            name="mobile"
+                                            id="phone"
+                                            name="phone"
+											value="{{ old('phone', $user->mobile) }}"
                                             class="form-control"
                                             placeholder="Enter 10-digit number"
                                             inputmode="numeric"
@@ -855,6 +855,7 @@
                                         type="text"
                                         id="addressLine1"
                                         name="address_line_1"
+										value="{{ old('address_line_1') }}"
                                         class="form-control
                                                form-control-lg"
                                         placeholder="Flat / House No. / Building"
@@ -897,6 +898,7 @@
                                         type="text"
                                         id="addressLine2"
                                         name="address_line_2"
+										value="{{ old('address_line_2') }}"
                                         class="form-control
                                                form-control-lg"
                                         placeholder="Street / Area / Landmark"
@@ -933,6 +935,7 @@
                                         type="text"
                                         id="landmark"
                                         name="landmark"
+										value="{{ old('landmark') }}"
                                         class="form-control
                                                form-control-lg"
                                         placeholder="Nearby landmark"
@@ -961,35 +964,27 @@
                                     </label>
 
 
-                                    <select
-                                        id="country"
-                                        name="country"
-                                        class="form-select
-                                               form-select-lg"
-                                        required
-                                    >
+									<select
+									id="country_id"
+									name="country_id"
+									class="form-select form-select-lg"
+									required
+									>
+									<option value="">Select country</option>
 
-                                        <option
-                                            value=""
-                                            disabled
-                                        >
-                                            Select country
-                                        </option>
+									@foreach($countries as $country)
+									<option
+									value="{{ $country->id }}"
+									{{ old('country_id') == $country->id ? 'selected' : '' }}
+									>
+									{{ $country->name }}
+									</option>
+									@endforeach
+									</select>
 
-
-                                        <option
-                                            value="IN"
-                                            selected
-                                        >
-                                            India
-                                        </option>
-
-                                    </select>
-
-
-                                    <div class="invalid-feedback">
-                                        Please select your country.
-                                    </div>
+									<div class="invalid-feedback">
+									Please select your country.
+									</div>
 
                                 </div>
 
@@ -1014,68 +1009,28 @@
                                     </label>
 
 
-                                    <select
-                                        id="state"
-                                        name="state"
-                                        class="form-select
-                                               form-select-lg"
-                                        required
-                                    >
+									<select
+									id="state_id"
+									name="state_id"
+									class="form-select form-select-lg"
+									required
+									>
+									<option value="">Select state</option>
 
-                                        <option
-                                            value=""
-                                            selected
-                                            disabled
-                                        >
-                                            Select state
-                                        </option>
+									@foreach($states as $state)
+									<option
+									value="{{ $state->id }}"
+									data-country-id="{{ $state->country_id }}"
+									{{ old('state_id') == $state->id ? 'selected' : '' }}
+									>
+									{{ $state->name }}
+									</option>
+									@endforeach
+									</select>
 
-
-                                        <option value="Andhra Pradesh">
-                                            Andhra Pradesh
-                                        </option>
-
-
-                                        <option value="Telangana">
-                                            Telangana
-                                        </option>
-
-
-                                        <option value="Karnataka">
-                                            Karnataka
-                                        </option>
-
-
-                                        <option value="Tamil Nadu">
-                                            Tamil Nadu
-                                        </option>
-
-
-                                        <option value="Kerala">
-                                            Kerala
-                                        </option>
-
-
-                                        <option value="Maharashtra">
-                                            Maharashtra
-                                        </option>
-
-
-                                        <option value="Delhi">
-                                            Delhi
-                                        </option>
-
-
-                                        <option value="Other">
-                                            Other
-                                        </option>
-
-                                    </select>
-
-
-                                    <div class="invalid-feedback">
-                                        Please select your state.
-                                    </div>
+									<div class="invalid-feedback">
+									Please select your state.
+									</div>
 
                                 </div>
 
@@ -1100,20 +1055,19 @@
                                     </label>
 
 
-                                    <input
-                                        type="text"
-                                        id="city"
-                                        name="city"
-                                        class="form-control
-                                               form-control-lg"
-                                        placeholder="Enter city"
-                                        autocomplete="address-level2"
-                                        required
-                                    >
+									<select
+									id="city_id"
+									name="city_id"
+									class="form-select form-select-lg"
+									required
+									disabled
+									>
+									<option value="">Select city</option>
+									</select>
 
 
                                     <div class="invalid-feedback">
-                                        Please enter your city.
+                                        Please select your city.
                                     </div>
 
                                 </div>
@@ -1141,8 +1095,9 @@
 
                                     <input
                                         type="text"
-                                        id="pincode"
-                                        name="pincode"
+                                        id="postal_code"
+                                        name="postal_code"
+										value="{{ old('postal_code') }}"
                                         class="form-control
                                                form-control-lg"
                                         placeholder="Enter 6-digit pincode"
@@ -1443,23 +1398,22 @@ document.addEventListener('DOMContentLoaded', function () {
     |--------------------------------------------------------------------------
     */
 
-    const mobile =
-        document.getElementById(
-            'mobile'
-        );
+	const phone =
+	document.getElementById(
+		'phone'
+	);
 
+	phone?.addEventListener(
+	'input',
+	function () {
 
-    mobile?.addEventListener(
-        'input',
-        function () {
+		this.value =
+			this.value
+				.replace(/\D/g, '')
+				.slice(0, 10);
 
-            this.value =
-                this.value
-                    .replace(/\D/g, '')
-                    .slice(0, 10);
-
-        }
-    );
+	}
+	);
 
 
     /*
@@ -1468,23 +1422,22 @@ document.addEventListener('DOMContentLoaded', function () {
     |--------------------------------------------------------------------------
     */
 
-    const pincode =
-        document.getElementById(
-            'pincode'
-        );
+	const postalCode =
+	document.getElementById(
+		'postal_code'
+	);
 
+	postalCode?.addEventListener(
+	'input',
+	function () {
 
-    pincode?.addEventListener(
-        'input',
-        function () {
+		this.value =
+			this.value
+				.replace(/\D/g, '')
+				.slice(0, 6);
 
-            this.value =
-                this.value
-                    .replace(/\D/g, '')
-                    .slice(0, 6);
-
-        }
-    );
+	}
+	);
 
 
     /*
@@ -1598,6 +1551,108 @@ document.addEventListener('DOMContentLoaded', function () {
 
     updateAddressTypeStyles();
 
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const countrySelect = document.getElementById('country_id');
+    const stateSelect = document.getElementById('state_id');
+    const citySelect = document.getElementById('city_id');
+
+    function filterStates() {
+        const countryId = countrySelect.value;
+
+        Array.from(stateSelect.options).forEach(function (option, index) {
+            if (index === 0) {
+                return;
+            }
+
+            const optionCountryId = option.dataset.countryId;
+
+            option.hidden = countryId !== '' && optionCountryId !== countryId;
+        });
+
+        const selectedState = stateSelect.options[stateSelect.selectedIndex];
+
+        if (
+            selectedState &&
+            selectedState.dataset.countryId &&
+            selectedState.dataset.countryId !== countryId
+        ) {
+            stateSelect.value = '';
+        }
+
+        citySelect.innerHTML = '<option value="">Select city</option>';
+        citySelect.disabled = true;
+    }
+
+    async function loadCities() {
+        const stateId = stateSelect.value;
+
+        citySelect.innerHTML = '<option value="">Loading cities...</option>';
+        citySelect.disabled = true;
+
+        if (!stateId) {
+            citySelect.innerHTML = '<option value="">Select city</option>';
+            return;
+        }
+
+        try {
+            const response = await fetch(
+                '{{ route('dashboard.addresses.cities') }}?state_id=' +
+                encodeURIComponent(stateId),
+                {
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error('Unable to load cities.');
+            }
+
+            const cities = await response.json();
+
+            citySelect.innerHTML = '<option value="">Select city</option>';
+
+			const oldCityId = @json(old('city_id'));
+
+			cities.forEach(function (city) {
+			const option = document.createElement('option');
+
+			option.value = city.id;
+			option.textContent = city.name;
+
+			if (String(city.id) === String(oldCityId)) {
+			option.selected = true;
+			}
+
+			citySelect.appendChild(option);
+			});
+
+			citySelect.disabled = cities.length === 0;
+
+            if (cities.length === 0) {
+                citySelect.innerHTML =
+                    '<option value="">No cities available for this state</option>';
+            }
+        } catch (error) {
+            citySelect.innerHTML =
+                '<option value="">Unable to load cities</option>';
+            citySelect.disabled = true;
+        }
+    }
+
+    countrySelect?.addEventListener('change', filterStates);
+    stateSelect?.addEventListener('change', loadCities);
+
+    filterStates();
+
+    if (stateSelect.value) {
+        loadCities();
+    }
 });
 </script>
 

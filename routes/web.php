@@ -6,6 +6,7 @@ use App\Http\Controllers\Web\PriestController;
 use App\Http\Controllers\Web\TempleController;
 use App\Http\Controllers\Web\StoreCatalogController;
 use App\Http\Controllers\Web\StoreCartController;
+use App\Http\Controllers\Web\StoreCheckoutController;
 use App\Http\Controllers\Web\StoreWishlistController;
 use App\Http\Controllers\Web\DonationController;
 use App\Http\Controllers\Web\BlogController;
@@ -252,16 +253,16 @@ Route::prefix('store')
             Route::patch('/cart/items', [StoreCartController::class, 'update'])->name('cart.update');
             Route::delete('/cart/items', [StoreCartController::class, 'remove'])->name('cart.remove');
             Route::delete('/cart', [StoreCartController::class, 'clear'])->name('cart.clear');
+			
+			Route::get('/checkout', [StoreCheckoutController::class, 'index'])->name('checkout');
+			Route::post('/checkout', [StoreCheckoutController::class, 'store'])->name('checkout.store');
         });
 
         Route::get('/products/{slug}', [StoreCatalogController::class, 'show'])
             ->name('product');
 
         Route::get('/category/{slug}', [StoreCatalogController::class, 'category'])
-            ->name('category');
-
-        Route::view('/checkout', 'frontend.store.checkout')
-            ->name('checkout');
+            ->name('category');        
 
         Route::view('/payment', 'frontend.store.payment')
             ->name('payment');
