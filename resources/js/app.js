@@ -211,3 +211,480 @@ import './bootstrap';
         pager.render();
     }
 })();
+
+/* ============================================================
+   Pooja Nilayam - Customer Address Book
+   Country → State → City
+============================================================ */
+
+(() => {
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+        const form = document.getElementById('addAddressForm') || document.getElementById('editAddressForm');
+
+        if (!form) {
+            return;
+        }
+
+
+        /* ========================================================
+           FORM VALIDATION
+        ======================================================== */
+
+        form.addEventListener('submit', function (event) {
+
+            if (!form.checkValidity()) {
+
+                event.preventDefault();
+                event.stopPropagation();
+
+            }
+
+            form.classList.add('was-validated');
+
+        });
+
+
+        /* ========================================================
+           MOBILE NUMBER
+        ======================================================== */
+
+        const phone = document.getElementById('phone');
+
+        phone?.addEventListener('input', function () {
+
+            this.value = this.value
+                .replace(/\D/g, '')
+                .slice(0, 10);
+
+        });
+
+
+        /* ========================================================
+           PINCODE
+        ======================================================== */
+
+        const postalCode =
+            document.getElementById('postal_code');
+
+        postalCode?.addEventListener('input', function () {
+
+            this.value = this.value
+                .replace(/\D/g, '')
+                .slice(0, 6);
+
+        });
+
+
+        /* ========================================================
+           SAVE BUTTON LOADING STATE
+        ======================================================== */
+
+        form.addEventListener('submit', function () {
+
+            if (!form.checkValidity()) {
+                return;
+            }
+
+            const saveButton = document.getElementById('saveAddressButton') || document.getElementById('updateAddressButton');
+
+            if (!saveButton) {
+                return;
+            }
+
+            saveButton.disabled = true;
+
+            saveButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>' +
+			(
+				document.getElementById('editAddressForm')
+					? 'Updating Address...'
+					: 'Saving Address...'
+			);
+
+				});
+
+
+        /* ========================================================
+           ADDRESS TYPE VISUAL SELECTION
+        ======================================================== */
+
+        const addressTypes =
+            document.querySelectorAll(
+                'input[name="address_type"]'
+            );
+
+
+        function updateAddressTypeStyles() {
+
+            addressTypes.forEach(function (radio) {
+
+                const label =
+                    document.querySelector(
+                        'label[for="' + radio.id + '"]'
+                    );
+
+                if (!label) {
+                    return;
+                }
+
+
+                if (radio.checked) {
+
+                    label.classList.add(
+                        'border-warning',
+                        'bg-pn-cream'
+                    );
+
+                    label.classList.remove(
+                        'border-warning-subtle'
+                    );
+
+                } else {
+
+                    label.classList.remove(
+                        'border-warning',
+                        'bg-pn-cream'
+                    );
+
+                    label.classList.add(
+                        'border-warning-subtle'
+                    );
+
+                }
+
+            });
+
+        }
+
+
+        addressTypes.forEach(function (radio) {
+
+            radio.addEventListener(
+                'change',
+                updateAddressTypeStyles
+            );
+
+        });
+
+
+        updateAddressTypeStyles();
+
+
+        /* ========================================================
+           COUNTRY / STATE / CITY
+        ======================================================== */
+
+        const countrySelect =
+            document.getElementById('country_id');
+
+        const stateSelect =
+            document.getElementById('state_id');
+
+        const citySelect =
+            document.getElementById('city_id');
+
+        const citiesUrl =
+            form.dataset.citiesUrl;
+
+
+        if (
+            !countrySelect ||
+            !stateSelect ||
+            !citySelect ||
+            !citiesUrl
+        ) {
+            return;
+        }
+
+
+        /* ========================================================
+           RESET CITY
+        ======================================================== */
+
+        function resetCities() {
+
+            citySelect.innerHTML =
+                '<option value="">Select city</option>';
+
+            citySelect.disabled = true;
+
+        }
+
+
+        /* ========================================================
+           FILTER STATES BY COUNTRY
+        ======================================================== */
+
+        function filterStates() {
+
+            const countryId =
+                countrySelect.value;
+
+
+            Array.from(
+                stateSelect.options
+            ).forEach(function (option, index) {
+
+                if (index === 0) {
+                    return;
+                }
+
+
+                const optionCountryId =
+                    option.dataset.countryId;
+
+
+                option.hidden =
+                    countryId !== '' &&
+                    optionCountryId !== countryId;
+
+            });
+
+
+            const selectedState =
+                stateSelect.options[
+                    stateSelect.selectedIndex
+                ];
+
+
+            if (
+                selectedState &&
+                selectedState.value &&
+                selectedState.dataset.countryId !== countryId
+            ) {
+
+                stateSelect.value = '';
+
+            }
+
+
+            resetCities();
+
+        }
+
+
+        /* ========================================================
+           LOAD CITIES
+        ======================================================== */
+
+        async function loadCities() {
+
+            const stateId =
+                stateSelect.value;
+
+
+            resetCities();
+
+
+            if (!stateId) {
+                return;
+            }
+
+
+            citySelect.innerHTML =
+                '<option value="">Loading cities...</option>';
+
+            citySelect.disabled = true;
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        citiesUrl +
+                        '?state_id=' +
+                        encodeURIComponent(stateId),
+                        {
+                            method: 'GET',
+
+                            headers: {
+                                'Accept': 'application/json',
+                                'X-Requested-With': 'XMLHttpRequest'
+                            },
+
+                            credentials: 'same-origin'
+                        }
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        'Cities request failed with status ' +
+                        response.status
+                    );
+
+                }
+
+
+                const cities =
+                    await response.json();
+
+
+                citySelect.innerHTML =
+                    '<option value="">Select city</option>';
+
+
+                if (
+                    !Array.isArray(cities) ||
+                    cities.length === 0
+                ) {
+
+                    citySelect.innerHTML =
+                        '<option value="">No cities available for this state</option>';
+
+                    citySelect.disabled = true;
+
+                    return;
+
+                }
+
+
+                const oldCityId =
+                    form.dataset.oldCityId || '';
+
+
+                cities.forEach(function (city) {
+
+                    const option =
+                        document.createElement('option');
+
+
+                    option.value =
+                        city.id;
+
+
+                    option.textContent =
+                        city.name;
+
+
+                    if (
+                        oldCityId !== '' &&
+                        String(city.id) ===
+                        String(oldCityId)
+                    ) {
+
+                        option.selected = true;
+
+                    }
+
+
+                    citySelect.appendChild(option);
+
+                });
+
+
+                citySelect.disabled = false;
+
+
+            } catch (error) {
+
+                console.error(
+                    'Unable to load cities:',
+                    error
+                );
+
+
+                citySelect.innerHTML =
+                    '<option value="">Unable to load cities</option>';
+
+                citySelect.disabled = true;
+
+            }
+
+        }
+
+
+        /* ========================================================
+           EVENTS
+        ======================================================== */
+
+        countrySelect.addEventListener(
+            'change',
+            filterStates
+        );
+
+
+        stateSelect.addEventListener(
+            'change',
+            loadCities
+        );
+
+
+        /* ========================================================
+           INITIAL STATE
+        ======================================================== */
+
+        filterStates();
+
+
+        if (stateSelect.value) {
+            loadCities();
+        }
+
+    });
+
+})();
+
+/* ============================================================
+   Pooja Nilayam - Customer Address Book Actions
+   Delete Address
+============================================================ */
+
+(() => {
+    document.addEventListener('DOMContentLoaded', function () {
+
+        const deleteButtons =
+            document.querySelectorAll('.delete-address');
+
+        const deleteMessage =
+            document.getElementById('deleteAddressMessage');
+
+        const confirmDelete =
+            document.getElementById('confirmDeleteAddress');
+
+        const deleteForm =
+            document.getElementById('deleteAddressForm');
+
+        let selectedAddressId = null;
+
+        deleteButtons.forEach(function (button) {
+
+            button.addEventListener('click', function () {
+
+                selectedAddressId =
+                    this.dataset.addressId || null;
+
+                const addressType =
+                    this.dataset.addressType || 'address';
+
+                if (deleteMessage) {
+                    deleteMessage.textContent =
+                        'Are you sure you want to delete your ' +
+                        addressType.toLowerCase() +
+                        ' address?';
+                }
+            });
+        });
+
+        confirmDelete?.addEventListener('click', function () {
+
+            if (!selectedAddressId || !deleteForm) {
+                return;
+            }
+
+            this.disabled = true;
+
+            this.innerHTML =
+                '<span class="spinner-border spinner-border-sm me-2"></span>' +
+                'Deleting...';
+
+            deleteForm.action =
+                '/dashboard/addresses/' +
+                encodeURIComponent(selectedAddressId);
+
+            deleteForm.submit();
+        });
+    });
+})();

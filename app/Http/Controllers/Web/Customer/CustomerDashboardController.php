@@ -173,77 +173,393 @@ class CustomerDashboardController extends Controller
         ]);
     }
 
-    public function createAddress(Request $request): View
-    {
-        return view('frontend.dashboard.add-address', [
-            'user' => $request->user(),
-            'countries' => Country::orderBy('name')->get(),
-            'states' => State::orderBy('name')->get(),
-        ]);
-    }
+	public function createAddress(Request $request): View
+	{
+	return view('frontend.dashboard.add-address', [
+		'user' => $request->user(),
 
-    public function storeAddress(Request $request): RedirectResponse
-    {
-        $validated = $request->validate([
-            'address_type' => ['required', 'string', 'max:30'],
-            'name' => ['nullable', 'string', 'max:150'],
-            'phone' => ['nullable', 'string', 'max:20'],
-            'address_line_1' => ['required', 'string', 'max:255'],
-            'address_line_2' => ['nullable', 'string', 'max:255'],
-            'landmark' => ['nullable', 'string', 'max:255'],
-			'city_id' => ['required', 'integer', 'exists:cities,id'],
-			'state_id' => ['required', 'integer', 'exists:states,id'],
-			'country_id' => ['required', 'integer', 'exists:countries,id'],
-            'postal_code' => ['required', 'string', 'max:20'],
-            'latitude' => ['nullable', 'numeric', 'between:-90,90'],
-            'longitude' => ['nullable', 'numeric', 'between:-180,180'],
-            'is_default' => ['nullable', 'boolean'],
-        ]);
+		'countries' => Country::query()
+			->where('is_active', true)
+			->orderBy('name')
+			->get(),
 
-        $user = $request->user();
-		
-		$city = City::query()
-		->whereKey($validated['city_id'])
-		->where('state_id', $validated['state_id'])
+		'states' => State::query()
+			->where('is_active', true)
+			->orderBy('name')
+			->get(),		
+
+		'addressTypes' => [
+			'home' => 'Home',
+			'office' => 'Office',
+			'other' => 'Other',
+		],
+	]);
+	}
+	
+	public function cities(Request $request)
+	{
+	$validated = $request->validate([
+		'state_id' => ['required', 'integer', 'exists:states,id'],
+	]);
+
+	return response()->json(
+		City::query()
+			->where('state_id', $validated['state_id'])
+			->where('is_active', true)
+			->orderBy('name')
+			->get(['id', 'name'])
+	);
+	}
+
+	public function storeAddress(Request $request): RedirectResponse
+	{
+	$validated = $request->validate([
+		'address_type' => ['required', 'string', 'max:30'],
+		'name' => ['required', 'string', 'max:150'],
+		'phone' => ['required', 'string', 'max:20'],
+
+		'address_line_1' => ['required', 'string', 'max:255'],
+		'address_line_2' => ['nullable', 'string', 'max:255'],
+		'landmark' => ['nullable', 'string', 'max:255'],
+
+		'country_id' => [
+			'required',
+			'integer',
+			'exists:countries,id',
+		],
+
+		'state_id' => [
+			'required',
+			'integer',
+			'exists:states,id',
+		],
+
+		'city_id' => [
+			'required',
+			'integer',
+			'exists:cities,id',
+		],
+
+		'postal_code' => [
+			'required',
+			'string',
+			'max:20',
+		],
+
+		'latitude' => ['nullable', 'numeric', 'between:-90,90'],
+		'longitude' => ['nullable', 'numeric', 'between:-180,180'],
+		'is_default' => ['nullable', 'boolean'],
+	]);
+
+	/*
+	|--------------------------------------------------------------------------
+	| Validate Country
+	|--------------------------------------------------------------------------
+	*/
+
+	$country = Country::query()
+		->whereKey($validated['country_id'])
+		->where('is_active', true)
 		->first();
 
-		if (!$city) {
+	if (!$country) {
 		return back()
-		->withErrors([
-			'city_id' => 'The selected city does not belong to the selected state.',
-		])
-		->withInput();
-		}
+			->withErrors([
+				'country_id' => 'The selected country is not available.',
+			])
+			->withInput();
+	}
 
-		$state = State::query()
+	/*
+	|--------------------------------------------------------------------------
+	| Validate State belongs to Country
+	|--------------------------------------------------------------------------
+	*/
+
+	$state = State::query()
 		->whereKey($validated['state_id'])
-		->where('country_id', $validated['country_id'])
+		->where('country_id', $country->id)
+		->where('is_active', true)
 		->first();
 
-		if (!$state) {
+	if (!$state) {
 		return back()
-		->withErrors([
-			'state_id' => 'The selected state does not belong to the selected country.',
-		])
-		->withInput();
+			->withErrors([
+				'state_id' => 'The selected state does not belong to the selected country.',
+			])
+			->withInput();
+	}
+
+	/*
+	|--------------------------------------------------------------------------
+	| Validate City belongs to State
+	|--------------------------------------------------------------------------
+	*/
+
+	$city = City::query()
+		->whereKey($validated['city_id'])
+		->where('state_id', $state->id)
+		->where('is_active', true)
+		->first();
+
+	if (!$city) {
+		return back()
+			->withErrors([
+				'city_id' => 'The selected city does not belong to the selected state.',
+			])
+			->withInput();
+	}
+
+	/*
+	|--------------------------------------------------------------------------
+	| Create Address
+	|--------------------------------------------------------------------------
+	*/
+
+	$user = $request->user();
+
+	DB::transaction(function () use ($user, $validated): void {
+
+		$makeDefault = (bool) ($validated['is_default'] ?? false)
+			|| !$user->addresses()->exists();
+
+		if ($makeDefault) {
+			$user->addresses()->update([
+				'is_default' => false,
+			]);
 		}
 
-        DB::transaction(function () use ($user, $validated): void {
-            $makeDefault = (bool) ($validated['is_default'] ?? false)
-                || !$user->addresses()->exists();
+		$validated['is_default'] = $makeDefault;
 
-            if ($makeDefault) {
-                $user->addresses()->update(['is_default' => false]);
-            }
+		$user->addresses()->create($validated);
+	});
 
-            $validated['is_default'] = $makeDefault;
-            $user->addresses()->create($validated);
-        });
+	return redirect()
+		->route('dashboard.addresses')
+		->with('success', 'Address added successfully.');
+	}
+	
+	public function editAddress(Request $request, Address $address): View {
+    abort_unless(
+        $address->user_id === $request->user()->id,
+        404
+    );
 
-        return redirect()
-            ->route('dashboard.addresses')
-            ->with('success', 'Address added successfully.');
+    return view('frontend.dashboard.edit-address', [
+        'user' => $request->user(),
+        'address' => $address,
+
+        'countries' => Country::query()
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->get(),
+
+        'states' => State::query()
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->get(),
+
+        'cities' => City::query()
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->get(),
+
+        'addressTypes' => [
+            'home' => 'Home',
+            'office' => 'Office',
+            'other' => 'Other',
+        ],
+    ]);
+}
+
+	public function updateAddress(
+    Request $request,
+    Address $address
+): RedirectResponse {
+    abort_unless(
+        $address->user_id === $request->user()->id,
+        404
+    );
+
+    $validated = $request->validate([
+        'address_type' => [
+            'required',
+            'string',
+            'max:30',
+        ],
+
+        'name' => [
+            'required',
+            'string',
+            'max:150',
+        ],
+
+        'phone' => [
+            'required',
+            'string',
+            'max:20',
+        ],
+
+        'address_line_1' => [
+            'required',
+            'string',
+            'max:255',
+        ],
+
+        'address_line_2' => [
+            'nullable',
+            'string',
+            'max:255',
+        ],
+
+        'landmark' => [
+            'nullable',
+            'string',
+            'max:255',
+        ],
+
+        'country_id' => [
+            'required',
+            'integer',
+            'exists:countries,id',
+        ],
+
+        'state_id' => [
+            'required',
+            'integer',
+            'exists:states,id',
+        ],
+
+        'city_id' => [
+            'required',
+            'integer',
+            'exists:cities,id',
+        ],
+
+        'postal_code' => [
+            'required',
+            'string',
+            'max:20',
+        ],
+
+        'latitude' => [
+            'nullable',
+            'numeric',
+            'between:-90,90',
+        ],
+
+        'longitude' => [
+            'nullable',
+            'numeric',
+            'between:-180,180',
+        ],
+
+        'is_default' => [
+            'nullable',
+            'boolean',
+        ],
+    ]);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Validate Country
+    |--------------------------------------------------------------------------
+    */
+
+    $country = Country::query()
+        ->whereKey($validated['country_id'])
+        ->where('is_active', true)
+        ->first();
+
+    if (!$country) {
+        return back()
+            ->withErrors([
+                'country_id' =>
+                    'The selected country is not available.',
+            ])
+            ->withInput();
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Validate State belongs to Country
+    |--------------------------------------------------------------------------
+    */
+
+    $state = State::query()
+        ->whereKey($validated['state_id'])
+        ->where('country_id', $country->id)
+        ->where('is_active', true)
+        ->first();
+
+    if (!$state) {
+        return back()
+            ->withErrors([
+                'state_id' =>
+                    'The selected state does not belong to the selected country.',
+            ])
+            ->withInput();
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Validate City belongs to State
+    |--------------------------------------------------------------------------
+    */
+
+    $city = City::query()
+        ->whereKey($validated['city_id'])
+        ->where('state_id', $state->id)
+        ->where('is_active', true)
+        ->first();
+
+    if (!$city) {
+        return back()
+            ->withErrors([
+                'city_id' =>
+                    'The selected city does not belong to the selected state.',
+            ])
+            ->withInput();
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Update Address
+    |--------------------------------------------------------------------------
+    */
+
+    DB::transaction(function () use (
+        $request,
+        $address,
+        $validated
+    ): void {
+
+        /*
+        | Keep an existing default address as default unless
+        | another address is explicitly being made default.
+        */
+        $makeDefault =
+            (bool) ($validated['is_default'] ?? false)
+            || $address->is_default;
+
+        if ($makeDefault) {
+            $request->user()
+                ->addresses()
+                ->whereKey('!=', $address->id)
+                ->update([
+                    'is_default' => false,
+                ]);
+        }
+
+        $validated['is_default'] = $makeDefault;
+
+        $address->update($validated);
+    });
+
+    return redirect()
+        ->route('dashboard.addresses')
+        ->with('success', 'Address updated successfully.');
+}
 
     public function destroyAddress(Request $request, Address $address): RedirectResponse
     {
@@ -275,18 +591,4 @@ class CustomerDashboardController extends Controller
             ->with('success', 'Default address updated successfully.');
     }
 	
-	public function cities(Request $request)
-	{
-	$validated = $request->validate([
-		'state_id' => ['required', 'integer', 'exists:states,id'],
-	]);
-
-	return response()->json(
-		City::query()
-			->where('state_id', $validated['state_id'])
-			->where('is_active', true)
-			->orderBy('name')
-			->get(['id', 'name'])
-	);
-	}
 }

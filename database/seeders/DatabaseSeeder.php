@@ -12,10 +12,14 @@ class DatabaseSeeder extends Seeder
     /**
      * Seed the application's database.
      */
-    public function run(): void
-    {
-        $this->call([
-            PoojaCatalogSeeder::class,
-        ]);
-    }
+	public function run(): void
+	{
+	$this->call([
+		CountrySeeder::class,
+		StateSeeder::class,
+		CitySeeder::class,
+
+		PoojaCatalogSeeder::class,
+	]);
+	}
 }

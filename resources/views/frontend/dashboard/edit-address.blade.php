@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Add Address | Pooja Nilayam')
+@section('title', 'Edit Address | Pooja Nilayam')
 
 @section(
     'meta_description',
-    'Add a new address to your Pooja Nilayam account for bookings and orders.'
+    'Edit your saved address in your Pooja Nilayam account.'
 )
 
 @section('content')
@@ -62,7 +62,7 @@
                     class="breadcrumb-item active"
                     aria-current="page"
                 >
-                    Add Address
+                    Edit Address
                 </li>
 
             </ol>
@@ -103,7 +103,7 @@
                            mt-2
                            mb-2"
                 >
-                    Add New Address
+                    Edit Address
                 </h1>
 
 
@@ -111,7 +111,7 @@
                     class="text-secondary
                            mb-0"
                 >
-                    Save an address for faster checkout, bookings and
+                    Update your saved address for bookings, orders and
                     applicable services.
                 </p>
 
@@ -383,15 +383,16 @@
             <div class="col-12 col-lg-9">
 
 			<form
-			id="addAddressForm"
+			id="editAddressForm"
 			method="POST"
-			action="{{ route('dashboard.addresses.store') }}"
-			data-cities-url="{{ route('dashboard.addresses.cities') }}" data-old-city-id="{{ old('city_id') }}"
+			action="{{ route('dashboard.addresses.update', $address) }}"
+			data-cities-url="{{ route('dashboard.addresses.cities') }}" data-old-city-id="{{ old('city_id', $address->city_id) }}"
 			class="needs-validation"
 			novalidate
 			>
 
                     @csrf
+                    @method('PUT')
 
 
                     {{-- ==================================================
@@ -489,7 +490,7 @@
                                             name="address_type"
                                             id="addressType{{ ucfirst($value) }}"
                                             value="{{ $value }}"
-                                            {{ $value === 'home'
+                                            {{ old('address_type', $address->address_type) === $value
                                                 ? 'checked'
                                                 : ''
                                             }}
@@ -655,7 +656,7 @@
                                         name="name"
                                         class="form-control
                                                form-control-lg"
-                                        value="{{ old('name', $user->name) }}"
+                                        value="{{ old('name', $address->name) }}"
                                         placeholder="Enter full name"
                                         autocomplete="name"
                                         required
@@ -707,7 +708,7 @@
                                             type="tel"
                                             id="phone"
                                             name="phone"
-											value="{{ old('phone', $user->mobile) }}"
+											value="{{ old('phone', $address->phone) }}"
                                             class="form-control"
                                             placeholder="Enter 10-digit number"
                                             inputmode="numeric"
@@ -837,7 +838,7 @@
                                         type="text"
                                         id="addressLine1"
                                         name="address_line_1"
-										value="{{ old('address_line_1') }}"
+										value="{{ old('address_line_1', $address->address_line_1) }}"
                                         class="form-control
                                                form-control-lg"
                                         placeholder="Flat / House No. / Building"
@@ -880,7 +881,7 @@
                                         type="text"
                                         id="addressLine2"
                                         name="address_line_2"
-										value="{{ old('address_line_2') }}"
+										value="{{ old('address_line_2', $address->address_line_2) }}"
                                         class="form-control
                                                form-control-lg"
                                         placeholder="Street / Area / Landmark"
@@ -917,7 +918,7 @@
                                         type="text"
                                         id="landmark"
                                         name="landmark"
-										value="{{ old('landmark') }}"
+										value="{{ old('landmark', $address->landmark) }}"
                                         class="form-control
                                                form-control-lg"
                                         placeholder="Nearby landmark"
@@ -957,7 +958,7 @@
 									@foreach($countries as $country)
 									<option
 									value="{{ $country->id }}"
-									{{ old('country_id') == $country->id ? 'selected' : '' }}
+									{{ old('country_id', $address->country_id) == $country->id ? 'selected' : '' }}
 									>
 									{{ $country->name }}
 									</option>
@@ -1003,7 +1004,7 @@
 									<option
 									value="{{ $state->id }}"
 									data-country-id="{{ $state->country_id }}"
-									{{ old('state_id') == $state->id ? 'selected' : '' }}
+									{{ old('state_id', $address->state_id) == $state->id ? 'selected' : '' }}
 									>
 									{{ $state->name }}
 									</option>
@@ -1079,7 +1080,7 @@
                                         type="text"
                                         id="postal_code"
                                         name="postal_code"
-										value="{{ old('postal_code') }}"
+										value="{{ old('postal_code', $address->postal_code) }}"
                                         class="form-control
                                                form-control-lg"
                                         placeholder="Enter 6-digit pincode"
@@ -1187,6 +1188,7 @@
                                             role="switch"
                                             id="isDefault"
                                             name="is_default"
+                                            {{ old('is_default', $address->is_default) ? 'checked' : '' }}
                                         >
 
 
@@ -1303,14 +1305,14 @@
                                         class="btn
                                                btn-pn
                                                px-4"
-                                        id="saveAddressButton"
+                                        id="updateAddressButton"
                                     >
 
                                         <i
                                             class="bi bi-check-lg me-2"
                                         ></i>
 
-                                        Save Address
+                                        Update Address
 
                                     </button>
 

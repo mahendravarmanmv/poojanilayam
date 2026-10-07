@@ -9,49 +9,6 @@
 
 @section('content')
 
-@php
-
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY UI DATA
-    |--------------------------------------------------------------------------
-    | These values will later come from the authenticated user's
-    | saved addresses.
-    |--------------------------------------------------------------------------
-    */
-
-    $addresses = [
-
-        [
-            'id' => 1,
-            'type' => 'Home',
-            'name' => 'Mahendra Varma',
-            'mobile' => '+91 XXXXX XXXXX',
-            'address_line_1' => 'Flat 201, Example Residency',
-            'address_line_2' => 'Pragathi Nagar',
-            'city' => 'Hyderabad',
-            'state' => 'Telangana',
-            'pincode' => '500090',
-            'is_default' => true
-        ],
-
-        [
-            'id' => 2,
-            'type' => 'Office',
-            'name' => 'Mahendra Varma',
-            'mobile' => '+91 XXXXX XXXXX',
-            'address_line_1' => 'Business Park, Main Road',
-            'address_line_2' => 'Kukatpally',
-            'city' => 'Hyderabad',
-            'state' => 'Telangana',
-            'pincode' => '500072',
-            'is_default' => false
-        ]
-
-    ];
-
-@endphp
-
 
 {{-- ============================================================
      BREADCRUMB
@@ -606,11 +563,7 @@
                                             style="width:52px;height:52px;"
                                         >
 
-                                            @if(
-                                                strtolower(
-                                                    $address['type']
-                                                ) === 'office'
-                                            )
+                                            @if(strtolower($address->address_type) === 'office')
 
                                                 <i
                                                     class="bi bi-building"
@@ -643,13 +596,13 @@
                                                            mb-0"
                                                 >
 
-                                                    {{ $address['type'] }}
+                                                    {{ $address->address_type }}
 
                                                 </h3>
 
 
                                                 @if(
-                                                    $address['is_default']
+                                                    $address->is_default
                                                 )
 
                                                     <span
@@ -718,46 +671,41 @@
 
                                             <li>
 
-                                                <a
-                                                    class="dropdown-item"
-                                                    href="#"
-                                                >
-
-                                                    <i
-                                                        class="bi bi-pencil me-2"
-                                                    ></i>
-
-                                                    Edit Address
-
-                                                </a>
+                     <a class="dropdown-item" href="{{ route('dashboard.addresses.edit', $address) }}"> <i class="bi bi-pencil me-2"></i> Edit Address</a>
 
                                             </li>
 
 
-                                            @if(
-                                                !$address['is_default']
-                                            )
+										@if(!$address->is_default)
 
-                                                <li>
+										<li>
 
-                                                    <button
-                                                        type="button"
-                                                        class="dropdown-item
-                                                               make-default-address"
-                                                        data-address-id="{{ $address['id'] }}"
-                                                    >
+										<form
+										method="POST"
+										action="{{ route('dashboard.addresses.default', $address) }}"
+										class="m-0"
+										>
 
-                                                        <i
-                                                            class="bi bi-check-circle me-2"
-                                                        ></i>
+										@csrf
 
-                                                        Make Default
+										@method('PATCH')
 
-                                                    </button>
+										<button
+										type="submit"
+										class="dropdown-item"
+										>
 
-                                                </li>
+										<i class="bi bi-check-circle me-2"></i>
 
-                                            @endif
+										Make Default
+
+										</button>
+
+										</form>
+
+										</li>
+
+										@endif
 
 
                                             <li>
@@ -771,22 +719,7 @@
 
                                             <li>
 
-                                                <button
-                                                    type="button"
-                                                    class="dropdown-item
-                                                           text-danger
-                                                           delete-address"
-                                                    data-address-id="{{ $address['id'] }}"
-                                                    data-address-type="{{ $address['type'] }}"
-                                                >
-
-                                                    <i
-                                                        class="bi bi-trash me-2"
-                                                    ></i>
-
-                                                    Delete Address
-
-                                                </button>
+                                            <button  type="button" class="dropdown-item text-danger delete-address" data-address-id="{{ $address->id }}" data-address-type="{{ $address->address_type }}" data-bs-toggle="modal" data-bs-target="#deleteAddressModal"> <i class="bi bi-trash me-2"></i>Delete Address</button>
 
                                             </li>
 
@@ -838,7 +771,7 @@
                                                                mb-2"
                                                     >
 
-                                                        {{ $address['name'] }}
+                                                        {{ $address->name }}
 
                                                     </strong>
 
@@ -849,18 +782,18 @@
                                                                lh-lg"
                                                     >
 
-                                                        {{ $address['address_line_1'] }}
+                                                        {{ $address->address_line_1 }}
 
                                                         <br>
 
-                                                        {{ $address['address_line_2'] }}
+                                                        {{ $address->address_line_2 }}
 
                                                         <br>
 
-                                                        {{ $address['city'] }},
-                                                        {{ $address['state'] }}
+                                                        {{ $address->city?->name }},
+                                                        {{ $address->state?->name }}
                                                         -
-                                                        {{ $address['pincode'] }}
+                                                        {{ $address->postal_code }}
 
                                                     </div>
 
@@ -913,7 +846,7 @@
                                                            text-pn-brown"
                                                 >
 
-                                                    {{ $address['mobile'] }}
+                                                    {{ $address->phone }}
 
                                                 </strong>
 
@@ -929,7 +862,7 @@
                                 {{-- Default Address Notice --}}
 
                                 @if(
-                                    $address['is_default']
+                                    $address->is_default
                                 )
 
                                     <div
@@ -1270,195 +1203,14 @@
      PAGE SCRIPT
 ============================================================ --}}
 
-@push('scripts')
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-
-    /*
-    |--------------------------------------------------------------------------
-    | Delete Address
-    |--------------------------------------------------------------------------
-    */
-
-    const deleteButtons =
-        document.querySelectorAll(
-            '.delete-address'
-        );
-
-
-    const deleteModalElement =
-        document.getElementById(
-            'deleteAddressModal'
-        );
-
-
-    const deleteModal =
-        deleteModalElement
-            ? new bootstrap.Modal(
-                deleteModalElement
-            )
-            : null;
-
-
-    const deleteMessage =
-        document.getElementById(
-            'deleteAddressMessage'
-        );
-
-
-    const confirmDelete =
-        document.getElementById(
-            'confirmDeleteAddress'
-        );
-
-
-    let selectedAddressId =
-        null;
-
-
-    deleteButtons.forEach(
-        function (button) {
-
-            button.addEventListener(
-                'click',
-                function () {
-
-                    selectedAddressId =
-                        this.dataset.addressId;
-
-
-                    const addressType =
-                        this.dataset.addressType
-                        || 'address';
-
-
-                    deleteMessage.textContent =
-                        'Are you sure you want to delete your ' +
-                        addressType.toLowerCase() +
-                        ' address?';
-
-
-                    deleteModal?.show();
-
-                }
-            );
-
-        }
-    );
-
-
-    confirmDelete?.addEventListener(
-        'click',
-        function () {
-
-            if (!selectedAddressId) {
-
-                return;
-
-            }
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Backend delete route will be connected later.
-            |--------------------------------------------------------------------------
-            */
-
-            this.disabled = true;
-
-
-            this.innerHTML =
-                '<span class="spinner-border spinner-border-sm me-2"></span>' +
-                'Deleting...';
-
-
-            setTimeout(
-                function () {
-
-                    deleteModal?.hide();
-
-
-                    confirmDelete.disabled =
-                        false;
-
-
-                    confirmDelete.innerHTML =
-                        'Delete';
-
-
-                    selectedAddressId =
-                        null;
-
-                },
-                800
-            );
-
-        }
-    );
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Make Default Address
-    |--------------------------------------------------------------------------
-    */
-
-    const defaultButtons =
-        document.querySelectorAll(
-            '.make-default-address'
-        );
-
-
-    defaultButtons.forEach(
-        function (button) {
-
-            button.addEventListener(
-                'click',
-                function () {
-
-                    /*
-                    |--------------------------------------------------------------------------
-                    | Backend default-address route will be connected later.
-                    |--------------------------------------------------------------------------
-                    */
-
-                    const originalHTML =
-                        this.innerHTML;
-
-
-                    this.disabled =
-                        true;
-
-
-                    this.innerHTML =
-                        '<span class="spinner-border spinner-border-sm me-2"></span>' +
-                        'Updating...';
-
-
-                    setTimeout(
-                        function () {
-
-                            button.disabled =
-                                false;
-
-
-                            button.innerHTML =
-                                originalHTML;
-
-                        },
-                        800
-                    );
-
-                }
-            );
-
-        }
-    );
-
-});
-</script>
-
-@endpush
+<form
+    id="deleteAddressForm"
+    method="POST"
+    action=""
+    class="d-none"
+>
+    @csrf
+    @method('DELETE')
+</form>
 
 @endsection

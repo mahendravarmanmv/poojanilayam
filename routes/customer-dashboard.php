@@ -55,16 +55,32 @@ Route::prefix('dashboard')
 		Route::get('/addresses/cities', [CustomerDashboardController::class, 'cities'])
 			->name('addresses.cities');
 
-        Route::get('/addresses/add', [CustomerDashboardController::class, 'createAddress'])
-            ->name('addresses.add');
+		Route::get('/addresses/add', [CustomerDashboardController::class, 'createAddress'])
+		->name('addresses.add');
 
-        Route::post('/addresses', [CustomerDashboardController::class, 'storeAddress'])
-            ->name('addresses.store');
+		Route::post('/addresses', [CustomerDashboardController::class, 'storeAddress'])
+		->name('addresses.store');
 
-        Route::patch('/addresses/{address}/default', [CustomerDashboardController::class, 'makeDefaultAddress'])
-            ->name('addresses.default');
+		Route::get('/addresses/{address}/edit', [CustomerDashboardController::class, 'editAddress'])
+		->name('addresses.edit');
 
-        Route::delete('/addresses/{address}', [CustomerDashboardController::class, 'destroyAddress'])
-            ->name('addresses.destroy');
+		Route::put('/addresses/{address}', [CustomerDashboardController::class, 'updateAddress'])
+		->name('addresses.update');
+
+		Route::patch('/addresses/{address}/default', [CustomerDashboardController::class, 'makeDefaultAddress'])
+		->name('addresses.default');
+
+		Route::delete('/addresses/{address}', [CustomerDashboardController::class, 'destroyAddress'])
+		->name('addresses.destroy');
+			
+		Route::get('/addresses/{address}/edit', [CustomerDashboardController::class, 'editAddress'])
+		->name('addresses.edit');
+
+		Route::put('/addresses/{address}', [CustomerDashboardController::class, 'updateAddress'])
+		->name('addresses.update');
+
+        
+
+        
 
     });
