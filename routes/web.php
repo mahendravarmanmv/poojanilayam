@@ -11,6 +11,7 @@ use App\Http\Controllers\Web\StoreWishlistController;
 use App\Http\Controllers\Web\DonationController;
 use App\Http\Controllers\Web\BlogController;
 use App\Http\Controllers\Web\CmsController;
+use App\Http\Controllers\Web\NewsletterController;
 use App\Http\Controllers\Web\SupportController;
 use App\Http\Controllers\Web\SearchController;
 use Illuminate\Support\Facades\Route;
@@ -397,6 +398,10 @@ Route::prefix('support')
 
 Route::get('/search', [SearchController::class, 'index'])
     ->name('search');
+
+Route::post('/newsletter/subscribe', [NewsletterController::class, 'store'])
+    ->middleware('throttle:5,1')
+    ->name('newsletter.subscribe');
 
 
 /*

@@ -342,10 +342,10 @@
 
                 <div class="pn-search">
 
-                    <form
-                        action="{{ route('pooja.index') }}"
-                        method="GET"
-                    >
+				<form
+				action="{{ route('search') }}"
+				method="GET"
+				>
 
                         <div
                             class="bg-white
@@ -380,8 +380,8 @@
 
                                         <input
                                             type="search"
-                                            name="search"
-                                            value="{{ request('search') }}"
+											name="q"
+											value="{{ request('q') }}"
                                             class="form-control
                                                    border-0
                                                    shadow-none"
@@ -1007,20 +1007,13 @@
                             </p>
 
 
-                            <a
-                                href="{{ route('temple.show', ['slug' => Str::slug($temple['name'])]) }}"
-                                class="small
-                                       fw-semibold
-                                       text-pn-primary"
-                            >
-
-                                View Temple
-
-                                <i
-                                    class="bi bi-arrow-right ms-1"
-                                ></i>
-
-                            </a>
+						<a
+						href="{{ route('temple.index', ['search' => $temple['name']]) }}"
+						class="small fw-semibold text-pn-primary"
+						>
+						Find Temple
+						<i class="bi bi-arrow-right ms-1"></i>
+						</a>
 
                         </div>
 
@@ -1808,22 +1801,14 @@
                                 {{ $blog['title'] }}
 
                             </h5>
-
-
-                            <a
-                                href="{{ route('blog.show', ['slug' => Str::slug($blog['title'])]) }}"
-                                class="small
-                                       fw-semibold
-                                       text-pn-primary"
-                            >
-
-                                Read Article
-
-                                <i
-                                    class="bi bi-arrow-right ms-1"
-                                ></i>
-
-                            </a>
+                            
+							<span
+							class="small
+								   fw-semibold
+								   text-pn-primary"
+							>
+							Article coming soon
+							</span>
 
                         </div>
 
@@ -1993,11 +1978,12 @@
                 </p>
 
 
-                <form
-                    action="#"
-                    method="POST"
-                    class="mt-4"
-                >
+				<form
+				action="{{ route('newsletter.subscribe') }}"
+				method="POST"
+				class="mt-4"
+				>
+				@csrf
 
                     <div
                         class="row
@@ -2047,6 +2033,18 @@
                         </div>
 
                     </div>
+					
+					@if (session('newsletter_success'))
+					<div class="alert alert-success mt-3" role="status">
+					{{ session('newsletter_success') }}
+					</div>
+					@endif
+
+					@if ($errors->has('email'))
+					<div class="alert alert-danger mt-3" role="alert">
+					{{ $errors->first('email') }}
+					</div>
+					@endif
 
                 </form>
 

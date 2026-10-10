@@ -30,14 +30,25 @@
 
                 <div class="col-lg-5">
 
-                    <form class="pn-newsletter-form">
+				<form
+				action="{{ route('newsletter.subscribe') }}"
+				method="POST"
+				class="pn-newsletter-form"
+				>
+				@csrf
 
                         <div class="input-group input-group-lg">
 
-                            <input type="email"
-                                   class="form-control"
-                                   placeholder="Enter your email"
-                                   aria-label="Email address">
+						<input
+						type="email"
+						name="email"
+						class="form-control"
+						placeholder="Enter your email"
+						aria-label="Email address"
+						maxlength="191"
+						value="{{ old('email') }}"
+						required
+						>
 
                             <button class="btn btn-dark px-4"
                                     type="submit">
@@ -47,6 +58,17 @@
                             </button>
 
                         </div>
+										@if (session('newsletter_success'))
+					<div class="alert alert-success mt-3" role="status">
+					{{ session('newsletter_success') }}
+					</div>
+					@endif
+
+					@if ($errors->has('email'))
+					<div class="alert alert-danger mt-3" role="alert">
+					{{ $errors->first('email') }}
+					</div>
+					@endif
 
                     </form>
 
@@ -101,26 +123,26 @@
 
                 <div class="d-flex gap-2">
 
-                    <a href="#"
-                       class="btn btn-outline-light rounded-circle">
+                   <span class="btn btn-outline-light rounded-circle"
+      aria-label="Facebook">
 
                         <i class="bi bi-facebook"></i>
 
-                    </a>
+                    </span>
 
-                    <a href="#"
-                       class="btn btn-outline-light rounded-circle">
+                    <span class="btn btn-outline-light rounded-circle"
+      aria-label="Instagram">
 
                         <i class="bi bi-instagram"></i>
 
-                    </a>
+                    </span>
 
-                    <a href="#"
-                       class="btn btn-outline-light rounded-circle">
+                    <span class="btn btn-outline-light rounded-circle"
+      aria-label="Youtube">
 
                         <i class="bi bi-youtube"></i>
 
-                    </a>
+                    </span>
 
                 </div>
 

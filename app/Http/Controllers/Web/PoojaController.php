@@ -36,6 +36,29 @@ class PoojaController extends Controller
                     ->where('is_active', true);
             });
         }
+		
+		
+		if ($request->filled('occasion')) {
+			$occasion = trim(
+				str_replace('-', ' ', (string) $request->input('occasion'))
+			);
+
+			if ($occasion !== '') {
+				$query->where(function ($query) use ($occasion) {
+					$query->where('name', 'like', "%{$occasion}%")
+						->orWhere('short_description', 'like', "%{$occasion}%")
+						->orWhere('description', 'like', "%{$occasion}%")
+						->orWhereHas('detail', function ($detailQuery) use ($occasion) {
+							$detailQuery->where(
+								'benefits',
+								'like',
+								"%{$occasion}%"
+							);
+						});
+				});
+			}
+		}
+
 
         $paginator = $query
             ->orderByDesc('is_featured')

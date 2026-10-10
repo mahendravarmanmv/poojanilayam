@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use Illuminate\Pagination\LengthAwarePaginator;
 use App\Http\Controllers\Controller;
 use App\Models\PujariProfile;
 use Illuminate\Http\Request;
@@ -35,61 +36,113 @@ class PriestController extends Controller
     }
 
     public function index(Request $request): View
-    {
-        $priests = $this->baseQuery()
-            ->when($request->filled('search'), function ($query) use ($request) {
-                $term = trim((string) $request->input('search'));
+{
+    // Fetch public profiles using the existing visibility rules.
+    $allPriests = $this->baseQuery()
+        ->orderByDesc('experience_years')
+        ->orderBy('display_name')
+        ->get()
+        ->map(fn (PujariProfile $priest) => $this->mapCard($priest))
+        ->values();
 
-                $query->where(function ($query) use ($term) {
-                    $query->where('display_name', 'like', "%{$term}%")
-                        ->orWhere('bio', 'like', "%{$term}%")
-                        ->orWhereHas('experiences', function ($query) use ($term) {
-                            $query->where('title', 'like', "%{$term}%")
-                                ->orWhere('description', 'like', "%{$term}%")
-                                ->orWhere('temple_or_organization', 'like', "%{$term}%");
-                        })
-                        ->orWhereHas('languages.language', function ($query) use ($term) {
-                            $query->where('name', 'like', "%{$term}%");
-                        })
-                        ->orWhereHas('templeAssignments.temple', function ($query) use ($term) {
-                            $query->where('name', 'like', "%{$term}%");
-                        });
-                });
-            })
-            ->orderByDesc('experience_years')
-            ->orderBy('display_name')
-            ->get();
+    // Build filter options from all available public profiles.
+    $locations = $allPriests
+        ->pluck('location')
+        ->filter(fn ($value) => filled($value))
+        ->unique()
+        ->sort()
+        ->values();
 
-        $mappedPriests = $priests->map(fn (PujariProfile $priest) => $this->mapCard($priest))->values();
+    $specializations = $allPriests
+        ->flatMap(fn ($priest) => $priest['specializations'])
+        ->filter()
+        ->unique()
+        ->sort()
+        ->values();
 
-        $locations = $mappedPriests
-            ->pluck('location')
-            ->filter()
-            ->unique()
-            ->sort()
-            ->values();
+    $languages = $allPriests
+        ->flatMap(fn ($priest) => $priest['languages'])
+        ->filter()
+        ->unique()
+        ->sort()
+        ->values();
 
-        $specializations = $mappedPriests
-            ->flatMap(fn ($priest) => $priest['specializations'])
-            ->filter()
-            ->unique()
-            ->sort()
-            ->values();
+    // Apply search and filters.
+    $filteredPriests = $allPriests
+        ->filter(function ($priest) use ($request) {
+            $search = mb_strtolower(trim((string) $request->input('search', '')));
+            $location = trim((string) $request->input('location', ''));
+            $specialization = trim((string) $request->input('specialization', ''));
+            $language = trim((string) $request->input('language', ''));
 
-        $languages = $mappedPriests
-            ->flatMap(fn ($priest) => $priest['languages'])
-            ->filter()
-            ->unique()
-            ->sort()
-            ->values();
+            if ($search !== '') {
+                $searchText = mb_strtolower($priest['search_text'] ?? $priest['name']);
 
-        return view('frontend.priests.index', [
-            'priests' => $mappedPriests,
-            'locations' => $locations,
-            'specializations' => $specializations,
-            'languages' => $languages,
-        ]);
-    }
+                if (! str_contains($searchText, $search)) {
+                    return false;
+                }
+            }
+
+            if (
+                $location !== '' &&
+                mb_strtolower($priest['location']) !== mb_strtolower($location)
+            ) {
+                return false;
+            }
+
+            if (
+                $specialization !== '' &&
+                ! in_array(
+                    mb_strtolower($specialization),
+                    array_map('mb_strtolower', $priest['specializations']),
+                    true
+                )
+            ) {
+                return false;
+            }
+
+            if (
+                $language !== '' &&
+                ! in_array(
+                    mb_strtolower($language),
+                    array_map('mb_strtolower', $priest['languages']),
+                    true
+                )
+            ) {
+                return false;
+            }
+
+            return true;
+        })
+        ->values();
+
+    $totalPriests = $filteredPriests->count();
+
+    // Paginate the filtered results while preserving query parameters.
+    $perPage = 6;
+    $currentPage = LengthAwarePaginator::resolveCurrentPage();
+
+    $priests = new LengthAwarePaginator(
+        $filteredPriests
+            ->slice(($currentPage - 1) * $perPage, $perPage)
+            ->values(),
+        $totalPriests,
+        $perPage,
+        $currentPage,
+        [
+            'path' => LengthAwarePaginator::resolveCurrentPath(),
+            'query' => $request->query(),
+        ]
+    );
+
+    return view('frontend.priests.index', [
+        'priests' => $priests,
+        'totalPriests' => $totalPriests,
+        'locations' => $locations,
+        'specializations' => $specializations,
+        'languages' => $languages,
+    ]);
+}
 
     public function show(string $slug): View
     {
@@ -164,27 +217,82 @@ class PriestController extends Controller
             ->firstOrFail();
     }
 
-    private function mapCard(PujariProfile $priest): array
-    {
-        $profile = $priest->user?->profile;
-        $assignment = $priest->templeAssignments->first();
-        $address = $assignment?->temple?->profile?->address;
+    
+private function mapCard(PujariProfile $priest): array
+{
+    $profile = $priest->user?->profile;
 
-        return [
-            'name' => $priest->display_name,
-            'title' => $priest->experiences->pluck('title')->filter()->first() ?? 'Pujari',
-            'location' => $this->formatLocation($address),
-            'experience' => $this->formatExperience($priest->experience_years),
-            'languages' => $priest->languages->map(fn ($item) => $item->language?->name)->filter()->values()->all(),
-            'specializations' => $priest->experiences->pluck('title')->filter()->unique()->values()->all(),
-            'rating' => '—',
-            'reviews' => '—',
-            'image' => $profile?->profile_photo,
-            'verified' => $priest->verification_status === 'approved',
-            'available' => $priest->availabilities->isNotEmpty(),
-            'slug' => $priest->display_name,
-        ];
-    }
+    $assignment = $priest->templeAssignments->first();
+
+    $address = $assignment?->temple?->profile?->address;
+
+    $languages = $priest->languages
+        ->map(fn ($item) => $item->language?->name)
+        ->filter()
+        ->values()
+        ->all();
+
+    $specializations = $priest->experiences
+        ->pluck('title')
+        ->filter()
+        ->unique()
+        ->values()
+        ->all();
+
+    $templeNames = $priest->templeAssignments
+        ->map(fn ($item) => $item->temple?->name)
+        ->filter()
+        ->implode(' ');
+
+    $location = $this->formatLocation($address);
+
+    $searchText = implode(' ', array_filter([
+        $priest->display_name,
+        $priest->bio,
+        $priest->experience_details,
+        $priest->experiences->pluck('title')->implode(' '),
+        $priest->experiences->pluck('description')->implode(' '),
+        $priest->experiences->pluck('temple_or_organization')->implode(' '),
+        implode(' ', $languages),
+        implode(' ', $specializations),
+        $templeNames,
+        $location,
+    ]));
+
+    return [
+        'name' => $priest->display_name,
+
+        'title' => $priest->experiences
+            ->pluck('title')
+            ->filter()
+            ->first() ?? 'Pujari',
+
+        'location' => $location,
+
+        'experience' => $this->formatExperience(
+            $priest->experience_years
+        ),
+
+        'languages' => $languages,
+
+        'specializations' => $specializations,
+
+        'rating' => '—',
+
+        'reviews' => '—',
+
+        'image' => $profile?->profile_photo,
+
+        'verified' => $priest->verification_status === 'approved',
+
+        'available' => $priest->availabilities->isNotEmpty(),
+
+        'slug' => $priest->display_name,
+
+        'search_text' => mb_strtolower($searchText),
+    ];
+}
+
 
     private function mapProfile(PujariProfile $priest): array
     {

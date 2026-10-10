@@ -111,6 +111,11 @@
                 {{-- Search --}}
 
                 <form action="{{ route('priest.index') }}" method="GET">
+    <input type="hidden" name="location" value="{{ request('location') }}">
+    <input type="hidden" name="specialization" value="{{ request('specialization') }}">
+    <input type="hidden" name="language" value="{{ request('language') }}">
+
+    {{-- Keep the existing search input and button here. --}}
 
                     <div
                         class="input-group
@@ -137,7 +142,7 @@
 
 
                         <input
-                            type="search"
+                            type="search" value="{{ request('search') }}"
                             name="search"
                             class="form-control
                                    border-0
@@ -518,7 +523,11 @@
             >
 
                 Showing
-                <strong>{{ count($priests) }}</strong>
+                <strong>
+    {{ $priests instanceof \Illuminate\Pagination\LengthAwarePaginator
+        ? $priests->total()
+        : count($priests) }}
+</strong>
                 priests
 
             </span>
@@ -536,7 +545,8 @@
 
             <div class="card-body p-3 p-md-4">
 
-                <form>
+                <form action="{{ route('priest.index') }}" method="GET">
+    <input type="hidden" name="search" value="{{ request('search') }}">
 
                     <div
                         class="row
@@ -561,21 +571,18 @@
                             </label>
 
 
-                            <select
-                                id="location"
-                                name="location"
-                                class="form-select"
-                            >
+							<select id="location" name="location" class="form-select">
+							<option value="">All locations</option>
 
-                                @foreach($locations as $location)
-
-                                    <option>
-                                        {{ $location }}
-                                    </option>
-
-                                @endforeach
-
-                            </select>
+							@foreach ($locations as $location)
+							<option
+							value="{{ $location }}"
+							@selected(request('location') === $location)
+							>
+							{{ $location }}
+							</option>
+							@endforeach
+							</select>
 
                         </div>
 
@@ -597,21 +604,18 @@
                             </label>
 
 
-                            <select
-                                id="specialization"
-                                name="specialization"
-                                class="form-select"
-                            >
+							<select id="specialization" name="specialization" class="form-select">
+							<option value="">All specializations</option>
 
-                                @foreach($specializations as $specialization)
-
-                                    <option>
-                                        {{ $specialization }}
-                                    </option>
-
-                                @endforeach
-
-                            </select>
+							@foreach ($specializations as $specialization)
+							<option
+							value="{{ $specialization }}"
+							@selected(request('specialization') === $specialization)
+							>
+							{{ $specialization }}
+							</option>
+							@endforeach
+							</select>
 
                         </div>
 
@@ -633,21 +637,18 @@
                             </label>
 
 
-                            <select
-                                id="language"
-                                name="language"
-                                class="form-select"
-                            >
+						<select id="language" name="language" class="form-select">
+						<option value="">All languages</option>
 
-                                @foreach($languages as $language)
-
-                                    <option>
-                                        {{ $language }}
-                                    </option>
-
-                                @endforeach
-
-                            </select>
+						@foreach ($languages as $language)
+						<option
+						value="{{ $language }}"
+						@selected(request('language') === $language)
+						>
+						{{ $language }}
+						</option>
+						@endforeach
+						</select>
 
                         </div>
 
@@ -686,16 +687,14 @@
              PRIEST CARDS
         ===================================================== --}}
 
-        <div
-            class="row
-                   row-cols-1
-                   row-cols-md-2
-                   row-cols-xl-3
-                   g-4
-            data-pn-listing="priests"
-        >
+        
+<div
+    class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4"
+    data-pn-listing="priests"
+>
 
-            @foreach($priests as $priest)
+
+            @foreach($priests as $index => $priest)
 
                 <div class="col pn-listing-item"
                      data-pn-item
@@ -706,7 +705,7 @@
                      data-rating="{{ $priest['rating'] }}"
                      data-reviews="{{ $priest['reviews'] }}"
                      data-available="{{ $priest['available'] ? '1' : '0' }}"
-                     data-search="{{ $priest['name'] . ' ' . $priest['title'] . ' ' . $priest['location'] . ' ' . implode(' ', $priest['specializations']) . ' ' . implode(' ', $priest['languages']) }}">
+                     data-search="{{ $priest['search_text'] ?? ($priest['name'] . ' ' . $priest['title'] . ' ' . $priest['location'] . ' ' . implode(' ', $priest['specializations']) . ' ' . implode(' ', $priest['languages'])) }}">
 
                     <article
                         class="card
@@ -723,14 +722,29 @@
                             class="position-relative"
                         >
 
-                            <img
-                                src="{{ $priest['image'] ? (filter_var($priest['image'], FILTER_VALIDATE_URL) ? $priest['image'] : asset($priest['image'])) : asset('images/priests/default.jpg') }}"
-                                class="card-img-top
-                                       object-fit-cover"
-                                style="height:300px;"
-                                alt="{{ $priest['name'] }}"
-                                loading="lazy"
-                            >
+                            
+@php
+    $defaultPriestImages = [
+        'images/home/priests/priest-1.webp',
+        'images/home/priests/priest-2.webp',
+        'images/home/priests/priest-3.webp',
+        'images/home/priests/priest-4.webp',
+    ];
+
+    $priestImage = $priest['image']
+        ?: $defaultPriestImages[$index % count($defaultPriestImages)];
+@endphp
+
+<img
+    src="{{ filter_var($priestImage, FILTER_VALIDATE_URL)
+        ? $priestImage
+        : asset($priestImage) }}"
+    class="card-img-top object-fit-cover"
+    style="height:300px;"
+    alt="{{ $priest['name'] }}"
+    loading="lazy"
+>
+
 
 
                             {{-- Verification --}}
@@ -1064,84 +1078,17 @@
         </div>
 
 
-        {{-- ====================================================
-             PAGINATION
-        ===================================================== --}}
+        
+{{-- ====================================================
+     PAGINATION
+===================================================== --}}
 
-        <div
-            class="d-flex
-                   justify-content-center
-                   mt-5"
-        >
+@if ($priests instanceof \Illuminate\Pagination\LengthAwarePaginator)
+    <div class="d-flex justify-content-center mt-5">
+        {{ $priests->withQueryString()->links() }}
+    </div>
+@endif
 
-            <div class="alert alert-light border rounded-4 text-center d-none mt-4" data-pn-empty>No matching results found. Please adjust your filters.</div>
-
-                <nav aria-label="Priest pagination">
-
-                <ul class="pagination mb-0">
-
-                    <li class="page-item disabled">
-
-                        <span class="page-link">
-
-                            <i class="bi bi-chevron-left"></i>
-
-                        </span>
-
-                    </li>
-
-
-                    <li class="page-item active">
-
-                        <span class="page-link">
-                            1
-                        </span>
-
-                    </li>
-
-
-                    <li class="page-item">
-
-                        <a
-                            href="#"
-                            class="page-link"
-                        >
-                            2
-                        </a>
-
-                    </li>
-
-
-                    <li class="page-item">
-
-                        <a
-                            href="#"
-                            class="page-link"
-                        >
-                            3
-                        </a>
-
-                    </li>
-
-
-                    <li class="page-item">
-
-                        <a
-                            href="#"
-                            class="page-link"
-                        >
-
-                            <i class="bi bi-chevron-right"></i>
-
-                        </a>
-
-                    </li>
-
-                </ul>
-
-            </nav>
-
-        </div>
 
     </div>
 

@@ -953,40 +953,52 @@
                             </p>
 
 
-                            <form
-                                id="articleNewsletterForm"
-                            >
+                            
+<form
+    id="articleNewsletterForm"
+    action="{{ route('newsletter.subscribe') }}"
+    method="POST"
+>
+    @csrf
 
-                                <label
-                                    for="articleNewsletterEmail"
-                                    class="visually-hidden"
-                                >
-                                    Email address
-                                </label>
+    <label
+        for="articleNewsletterEmail"
+        class="visually-hidden"
+    >
+        Email address
+    </label>
 
+    <input
+        type="email"
+        id="articleNewsletterEmail"
+        name="email"
+        class="form-control mb-2"
+        placeholder="Email address"
+        value="{{ old('email') }}"
+        maxlength="191"
+        required
+    >
 
-                                <input
-                                    type="email"
-                                    id="articleNewsletterEmail"
-                                    class="form-control
-                                           mb-2"
-                                    placeholder="Email address"
-                                    required
-                                >
+    <button
+        type="submit"
+        class="btn btn-warning text-dark fw-semibold w-100"
+    >
+        Subscribe
+    </button>
+</form>
 
+@if (session('newsletter_success'))
+    <div class="alert alert-success mt-3 mb-0" role="status">
+        {{ session('newsletter_success') }}
+    </div>
+@endif
 
-                                <button
-                                    type="submit"
-                                    class="btn
-                                           btn-warning
-                                           text-dark
-                                           fw-semibold
-                                           w-100"
-                                >
-                                    Subscribe
-                                </button>
+@if ($errors->has('email'))
+    <div class="alert alert-danger mt-3 mb-0" role="alert">
+        {{ $errors->first('email') }}
+    </div>
+@endif
 
-                            </form>
 
                         </div>
 

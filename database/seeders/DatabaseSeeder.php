@@ -18,8 +18,8 @@ class DatabaseSeeder extends Seeder
 		CountrySeeder::class,
 		StateSeeder::class,
 		CitySeeder::class,
-
 		PoojaCatalogSeeder::class,
+        PujariProfileSeeder::class,		
 	]);
 	}
 }

@@ -1,5 +1,20 @@
 <header class="sticky-top">
 
+@php
+    $headerCartCount = 0;
+
+    if (auth()->check()) {
+        $headerCartCount = (int) (
+            \App\Models\Cart::query()
+                ->where('user_id', auth()->id())
+                ->where('status', 'active')
+                ->withSum('items as total_quantity', 'quantity')
+                ->value('total_quantity') ?? 0
+        );
+    }
+@endphp
+
+
     {{-- Top Bar --}}
     <div class="bg-pn-brown text-white">
 
@@ -97,16 +112,18 @@
 
                     <i class="bi bi-bag fs-5"></i>
 
-                    <span
-                        class="position-absolute
-                               top-0
-                               start-100
-                               translate-middle
-                               badge
-                               rounded-pill
-                               bg-pn-primary">
-                        2
-                    </span>
+                    
+					<span
+					class="position-absolute
+						   top-0
+						   start-100
+						   translate-middle
+						   badge
+						   rounded-pill
+						   bg-pn-primary">
+					{{ $headerCartCount }}
+					</span>
+
 
                 </a>
 
@@ -276,9 +293,7 @@
                            align-items-center
                            gap-1">
 
-                    <a
-                        href="#"
-                        class="btn btn-sm text-pn-brown">
+                    <span class="btn btn-sm text-pn-brown">
 
                         <i
                             class="bi bi-geo-alt
@@ -287,7 +302,7 @@
 
                         Hyderabad
 
-                    </a>
+                    </span>
 
 
                     <a href="{{ route('store.wishlist') }}" class="text-pn-brown fs-5" aria-label="Wishlist">
@@ -301,16 +316,20 @@
 
                         <i class="bi bi-bag fs-5"></i>
 
-                        <span
-                            class="position-absolute
-                                   top-0
-                                   start-100
-                                   translate-middle
-                                   badge
-                                   rounded-pill
-                                   bg-pn-primary">
-                            2
-                        </span>
+                        
+
+					<span
+						class="position-absolute
+							   top-0
+							   start-100
+							   translate-middle
+							   badge
+							   rounded-pill
+							   bg-pn-primary">
+						{{ $headerCartCount }}
+					</span>
+
+
 
                     </a>
 

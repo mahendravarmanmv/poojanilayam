@@ -779,87 +779,11 @@
         </div>
 
 
-        {{-- Pagination --}}
+                {{-- Pagination --}}
 
-        <nav
-            class="mt-5"
-            aria-label="Blog pagination"
-        >
-
-            <ul
-                class="pagination
-                       justify-content-center
-                       mb-0"
-            >
-
-                <li
-                    class="page-item disabled"
-                >
-
-                    <span class="page-link">
-
-                        <i
-                            class="bi bi-chevron-left"
-                        ></i>
-
-                    </span>
-
-                </li>
-
-
-                <li
-                    class="page-item active"
-                    aria-current="page"
-                >
-
-                    <span class="page-link">
-                        1
-                    </span>
-
-                </li>
-
-
-                <li class="page-item">
-
-                    <a
-                        href="#"
-                        class="page-link"
-                    >
-                        2
-                    </a>
-
-                </li>
-
-
-                <li class="page-item">
-
-                    <a
-                        href="#"
-                        class="page-link"
-                    >
-                        3
-                    </a>
-
-                </li>
-
-
-                <li class="page-item">
-
-                    <a
-                        href="#"
-                        class="page-link"
-                    >
-
-                        <i
-                            class="bi bi-chevron-right"
-                        ></i>
-
-                    </a>
-
-                </li>
-
+        <nav class="mt-5" aria-label="Blog pagination">
+            <ul class="pagination justify-content-center mb-0">
             </ul>
-
         </nav>
 
     </div>
@@ -930,54 +854,56 @@
 
                     <div class="col-12 col-lg-6">
 
-                        <form
-                            class="row
-                                   g-2"
-                        >
+                        
+<form
+    action="{{ route('newsletter.subscribe') }}"
+    method="POST"
+    class="row g-2"
+>
+    @csrf
 
-                            <div class="col-12 col-sm">
+    <div class="col-12 col-sm">
+        <label
+            for="blogNewsletterEmail"
+            class="visually-hidden"
+        >
+            Email address
+        </label>
 
-                                <label
-                                    for="blogNewsletterEmail"
-                                    class="visually-hidden"
-                                >
-                                    Email address
-                                </label>
+        <input
+            type="email"
+            id="blogNewsletterEmail"
+            name="email"
+            class="form-control form-control-lg"
+            placeholder="Enter your email address"
+            value="{{ old('email') }}"
+            maxlength="191"
+            required
+        >
+    </div>
 
+    <div class="col-12 col-sm-auto">
+        <button
+            type="submit"
+            class="btn btn-warning text-dark fw-semibold btn-lg w-100"
+        >
+            Subscribe
+        </button>
+    </div>
+</form>
 
-                                <input
-                                    type="email"
-                                    id="blogNewsletterEmail"
-                                    class="form-control
-                                           form-control-lg"
-                                    placeholder="Enter your email address"
-                                    required
-                                >
+@if (session('newsletter_success'))
+    <div class="alert alert-success mt-3 mb-0" role="status">
+        {{ session('newsletter_success') }}
+    </div>
+@endif
 
-                            </div>
+@if ($errors->has('email'))
+    <div class="alert alert-danger mt-3 mb-0" role="alert">
+        {{ $errors->first('email') }}
+    </div>
+@endif
 
-
-                            <div
-                                class="col-12 col-sm-auto"
-                            >
-
-                                <button
-                                    type="submit"
-                                    class="btn
-                                           btn-warning
-                                           text-dark
-                                           fw-semibold
-                                           btn-lg
-                                           w-100"
-                                >
-
-                                    Subscribe
-
-                                </button>
-
-                            </div>
-
-                        </form>
 
                     </div>
 
