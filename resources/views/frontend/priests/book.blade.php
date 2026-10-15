@@ -318,6 +318,16 @@
 
     <div class="container">
 
+        <form id="priestBookingForm" method="POST" action="#" novalidate>
+            @csrf
+            <input type="hidden" name="booking_date" id="selectedBookingDate" value="{{ $selectedDateValue ?? '' }}">
+            <input type="hidden" name="availability_id" id="selectedAvailabilityId" value="">
+            <input type="hidden" name="start_time" id="selectedBookingStartTime" value="">
+            <input type="hidden" name="end_time" id="selectedBookingEndTime" value="">
+            <input type="hidden" id="selectedPriestService" value="vedic-pooja">
+            <input type="hidden" name="terms_accepted" id="termsAcceptedValue" value="0">
+            <div id="priestBookingReviewMessage" class="alert alert-warning d-none mt-3" role="alert" aria-live="polite"></div>
+
         <div
             class="row
                    g-4
@@ -581,7 +591,7 @@
                                             <input
                                                 class="form-check-input"
                                                 type="radio"
-                                                name="service"
+                                                name="service_choice"
                                                 id="serviceVedic"
                                                 value="vedic-pooja"
                                                 checked
@@ -656,7 +666,7 @@
                                             <input
                                                 class="form-check-input"
                                                 type="radio"
-                                                name="service"
+                                                name="service_choice"
                                                 id="serviceHomam"
                                                 value="homam"
                                             >
@@ -794,41 +804,24 @@
                                 <div class="col">
 
                                     <button
-                                        type="button"
-                                        class="btn
-                                               {{ $date['active']
-                                                    ? 'btn-pn'
-                                                    : 'btn-pn-outline' }}
-                                               w-100
-                                               py-3"
-                                    >
+    type="button"
+    data-booking-date="{{ $date['date_value'] }}"
+    data-booking-day="{{ $date['day_name'] }}"
+    class="btn {{ $date['active'] ? 'btn-pn' : 'btn-pn-outline' }} w-100 py-3 booking-date-option"
+    aria-pressed="{{ $date['active'] ? 'true' : 'false' }}"
+>
+    <strong class="d-block fs-5">
+        {{ $date['date'] }}
+    </strong>
 
-                                        <strong
-                                            class="d-block
-                                                   fs-5"
-                                        >
+    <small class="d-block">
+        {{ $date['month'] }}
+    </small>
 
-                                            {{ $date['date'] }}
-
-                                        </strong>
-
-
-                                        <small
-                                            class="d-block"
-                                        >
-
-                                            {{ $date['month'] }}
-
-                                        </small>
-
-
-                                        <small>
-
-                                            {{ $date['day'] }}
-
-                                        </small>
-
-                                    </button>
+    <small>
+        {{ $date['day'] }}
+    </small>
+</button>
 
                                 </div>
 
@@ -918,13 +911,21 @@
 
                                 @if($slot['available'])
 
-                                    <button
-                                        type="button"
-                                        class="btn
-                                               {{ $slot['active']
-                                                    ? 'btn-pn'
-                                                    : 'btn-pn-outline' }}"
-                                    >
+                                    
+						<button
+							type="button"
+							data-availability-id="{{ $slot['availability_id'] }}"
+							data-available="true"
+                            data-booking-date="{{ $slot['date_value'] }}"
+							data-start-time="{{ $slot['start_time'] }}"
+							data-end-time="{{ $slot['end_time'] }}"
+							class="btn
+								   {{ $slot['active']
+										? 'btn-pn'
+										: 'btn-pn-outline' }}
+								   booking-time-option"
+						>
+
 
                                         <i
                                             class="bi bi-clock me-1"
@@ -1601,6 +1602,8 @@
                         class="form-check-input"
                         type="checkbox"
                         id="terms"
+                        name="terms"
+                        value="1"
                         required
                     >
 
@@ -1632,6 +1635,7 @@
 
                     <button
                         type="button"
+                        data-priest-booking-review
                         class="btn
                                btn-pn
                                btn-lg"
@@ -1728,7 +1732,7 @@
                                     class="small
                                            text-pn-brown
                                            text-end"
-                                >
+                                 id="priestBookingSummaryService">
 
                                     {{ $priest['service'] }}
 
@@ -1757,14 +1761,11 @@
 
 
                                 <strong
-                                    class="small
-                                           text-pn-brown
-                                           text-end"
-                                >
-
-                                    {{ $selectedDate }}
-
-                                </strong>
+    class="small text-pn-brown text-end"
+    id="priestBookingSummaryDate"
+>
+    {{ $selectedDate }}
+</strong>
 
                             </div>
 
@@ -1792,7 +1793,7 @@
                                     class="small
                                            text-pn-brown
                                            text-end"
-                                >
+                                 id="priestBookingSummaryDay">
 
                                     {{ $selectedDay }}
 
@@ -1824,7 +1825,7 @@
                                     class="small
                                            text-pn-brown
                                            text-end"
-                                >
+                                 id="priestBookingSummaryTime">
 
                                     {{ $selectedTime }}
 
@@ -2001,6 +2002,7 @@
 
                             <button
                                 type="button"
+                        data-priest-booking-review
                                 class="btn
                                        btn-pn
                                        btn-lg
@@ -2122,6 +2124,7 @@
             </div>
 
         </div>
+        </form>
 
     </div>
 
@@ -2367,6 +2370,7 @@
 
                 <button
                     type="button"
+                        data-priest-booking-review
                     class="btn
                            btn-warning
                            text-dark

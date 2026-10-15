@@ -688,3 +688,349 @@ import './bootstrap';
         });
     });
 })();
+
+
+/* ============================================================
+   Pooja Nilayam - Priest Booking Date, Time and Review
+   Isolated from the existing Pooja booking functionality.
+============================================================ */
+
+(() => {
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('priestBookingForm');
+
+        // Run only on the priest booking page.
+        if (!form) return;
+
+        const dateButtons = [
+            ...form.querySelectorAll('.booking-date-option')
+        ];
+
+        const timeButtons = [
+            ...form.querySelectorAll('.booking-time-option')
+        ];
+
+        const message = document.getElementById(
+            'priestBookingReviewMessage'
+        );
+
+        const dateInput = document.getElementById(
+            'selectedBookingDate'
+        );
+
+        const availabilityInput = document.getElementById(
+            'selectedAvailabilityId'
+        );
+
+        const startInput = document.getElementById(
+            'selectedBookingStartTime'
+        );
+
+        const endInput = document.getElementById(
+            'selectedBookingEndTime'
+        );
+
+        const serviceInput = document.getElementById(
+            'selectedPriestService'
+        );
+
+        const termsInput = document.getElementById(
+            'termsAcceptedValue'
+        );
+		
+		
+		if (
+			!dateInput ||
+			!availabilityInput ||
+			!startInput ||
+			!endInput ||
+			!serviceInput ||
+			!termsInput
+		) {
+			console.error(
+				'Priest booking is missing one or more required hidden inputs.'
+			);
+			return;
+		}
+
+        const summaryService = document.getElementById(
+            'priestBookingSummaryService'
+        );
+
+        const summaryDate = document.getElementById(
+            'priestBookingSummaryDate'
+        );
+
+        const summaryDay = document.getElementById(
+            'priestBookingSummaryDay'
+        );
+
+        const summaryTime = document.getElementById(
+            'priestBookingSummaryTime'
+        );
+
+        const serviceLabels = {
+            'vedic-pooja': 'Vedic Pooja',
+            'homam': 'Homam'
+        };
+
+        function showMessage(text) {
+            if (!message) return;
+
+            message.textContent = text;
+            message.classList.remove('d-none');
+            message.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
+        }
+
+        function clearMessage() {
+            if (!message) return;
+
+            message.textContent = '';
+            message.classList.add('d-none');
+        }
+
+        function selectTime(button) {
+            timeButtons.forEach(item => {
+                item.classList.remove('btn-pn');
+                item.classList.add('btn-pn-outline');
+                item.dataset.selected = 'false';
+                item.setAttribute('aria-pressed', 'false');
+            });
+
+            if (
+                !button ||
+                button.hidden ||
+                button.disabled ||
+                button.dataset.available === 'false'
+            ) {
+                availabilityInput.value = '';
+                startInput.value = '';
+                endInput.value = '';
+
+                if (summaryTime) {
+                    summaryTime.textContent = 'Please select a time';
+                }
+
+                return;
+            }
+
+            button.classList.remove('btn-pn-outline');
+            button.classList.add('btn-pn');
+            button.dataset.selected = 'true';
+            button.setAttribute('aria-pressed', 'true');
+
+            availabilityInput.value =
+                button.dataset.availabilityId || '';
+
+            startInput.value = button.dataset.startTime || '';
+            endInput.value = button.dataset.endTime || '';
+
+            if (summaryTime) {
+                summaryTime.textContent = button.textContent.trim();
+            }
+        }
+
+        function selectDate(button) {
+            if (!button) return;
+
+            const selectedDate = button.dataset.bookingDate || '';
+
+            dateButtons.forEach(item => {
+                item.classList.remove('btn-pn');
+                item.classList.add('btn-pn-outline');
+                item.dataset.selected = 'false';
+                item.setAttribute('aria-pressed', 'false');
+            });
+
+            button.classList.remove('btn-pn-outline');
+            button.classList.add('btn-pn');
+            button.dataset.selected = 'true';
+            button.setAttribute('aria-pressed', 'true');
+
+            dateInput.value = selectedDate;
+
+            timeButtons.forEach(item => {
+                item.hidden =
+                    item.dataset.bookingDate !== selectedDate;
+            });
+
+            if (summaryDate) {
+                summaryDate.textContent =
+                    button.dataset.bookingDay || selectedDate;
+            }
+
+            if (summaryDay) {
+                summaryDay.textContent =
+                    button.dataset.bookingDay || '';
+            }
+
+            const firstAvailableTime = timeButtons.find(item =>
+                item.dataset.bookingDate === selectedDate &&
+                item.dataset.available !== 'false' &&
+                !item.disabled
+            );
+
+            selectTime(firstAvailableTime);
+            clearMessage();
+        }
+
+        // Date selection.
+        dateButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                selectDate(button);
+            });
+        });
+
+        // Time selection.
+        timeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                if (
+                    button.hidden ||
+                    button.disabled ||
+                    button.dataset.available === 'false'
+                ) {
+                    return;
+                }
+
+                selectTime(button);
+                clearMessage();
+            });
+        });
+
+        // Service selection.
+        form.querySelectorAll(
+            'input[name="service_choice"]'
+        ).forEach(radio => {
+            radio.addEventListener('change', () => {
+                if (!radio.checked) return;
+
+                serviceInput.value = radio.value;
+
+                if (summaryService) {
+                    summaryService.textContent =
+                        serviceLabels[radio.value] || radio.value;
+                }
+
+                clearMessage();
+            });
+        });
+
+        // Terms acceptance.
+        const terms = document.getElementById('terms');
+
+        if (terms) {
+            terms.addEventListener('change', () => {
+                termsInput.value = terms.checked ? '1' : '0';
+                clearMessage();
+            });
+        }
+
+        // Continue to Review buttons.
+        document.querySelectorAll(
+            '[data-priest-booking-review]'
+        ).forEach(button => {
+            button.addEventListener('click', () => {
+                clearMessage();
+
+                const selectedService = form.querySelector(
+                    'input[name="service_choice"]:checked'
+                );
+
+                if (!selectedService) {
+                    showMessage('Please select a service.');
+                    return;
+                }
+
+                serviceInput.value = selectedService.value;
+
+                if (!dateInput.value) {
+                    showMessage('Please select a booking date.');
+                    return;
+                }
+
+                if (
+                    !availabilityInput.value ||
+                    !startInput.value ||
+                    !endInput.value
+                ) {
+                    showMessage(
+                        'Please select an available time slot for the selected date.'
+                    );
+                    return;
+                }
+
+                const requiredFields = [
+                    ['first_name', 'Please enter your first name.'],
+                    ['last_name', 'Please enter your last name.'],
+                    ['mobile', 'Please enter your mobile number.'],
+                    ['address', 'Please enter your address.'],
+                    ['city', 'Please enter your city.'],
+                    ['state', 'Please enter your state.'],
+                    ['pincode', 'Please enter your PIN code.']
+                ];
+
+                for (const [name, error] of requiredFields) {
+                    const field = form.querySelector(
+                        `[name="${name}"]`
+                    );
+
+                    if (field && !field.value.trim()) {
+                        field.focus();
+                        showMessage(error);
+                        return;
+                    }
+                }
+
+                if (terms && !terms.checked) {
+                    terms.focus();
+
+                    showMessage(
+                        'Please accept the booking terms to continue.'
+                    );
+
+                    return;
+                }
+
+                termsInput.value =
+                    terms && terms.checked ? '1' : '0';
+
+                showMessage(
+                    'Your selections are ready for review. ' +
+                    'Booking confirmation and payment are not submitted yet.'
+                );
+            });
+        });
+
+        // Initialize selected date and service.
+        const initialDate =
+            dateButtons.find(button =>
+                button.classList.contains('btn-pn')
+            ) || dateButtons[0];
+
+        if (initialDate) {
+            selectDate(initialDate);
+        }
+
+        const checkedService = form.querySelector(
+            'input[name="service_choice"]:checked'
+        );
+
+        if (checkedService) {
+            serviceInput.value = checkedService.value;
+
+            if (summaryService) {
+                summaryService.textContent =
+                    serviceLabels[checkedService.value] ||
+                    checkedService.value;
+            }
+        }
+
+        if (terms) {
+            termsInput.value = terms.checked ? '1' : '0';
+        }
+    });
+})();
+
