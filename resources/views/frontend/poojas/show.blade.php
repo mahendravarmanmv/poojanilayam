@@ -9,7 +9,12 @@
 
 @section('content')
 @php
-
+    // The controller normalizes admin-uploaded media paths to public-relative paths.
+    $poojaImage = $pooja['image'] ?? 'images/poojas/pooja_6_primary_1792339607.jpg';
+    $galleryImages = array_values(array_unique($pooja['gallery'] ?? [$poojaImage]));
+    if (empty($galleryImages)) {
+        $galleryImages = [$poojaImage];
+    }
     $benefits = [
 
         [
@@ -183,7 +188,7 @@
                 >
 
                     <img
-                        src="{{ asset($pooja['image']) }}"
+                        src="{{ asset($poojaImage) }}"
                         class="img-fluid
                                w-100
                                object-fit-cover"
@@ -240,33 +245,22 @@
 
                 <div class="row g-2 mt-2">
 
-                    @foreach([
-                        'ganapathi.jpg',
-                        'ganapathi.jpg',
-                        'ganapathi.jpg'
-                    ] as $galleryImage)
+                    @foreach(array_slice($galleryImages, 0, 3) as $galleryImage)
 
                         <div class="col-4">
 
                             <button
                                 type="button"
-                                class="btn
-                                       p-0
-                                       border
-                                       rounded-3
-                                       overflow-hidden
-                                       w-100"
+                                class="btn p-0 border rounded-3 overflow-hidden w-100"
+                                aria-label="View {{ $pooja['name'] }} image {{ $loop->iteration }}"
                             >
-
                                 <img
-                                    src="{{ Vite::asset('resources/images/home/' . $galleryImage) }}"
-                                    class="img-fluid
-                                           w-100
-                                           object-fit-cover"
+                                    src="{{ asset($galleryImage) }}"
+                                    class="img-fluid w-100 object-fit-cover"
                                     style="height:90px;"
-                                    alt="{{ $pooja['name'] }}"
+                                    alt="{{ $pooja['name'] }} image {{ $loop->iteration }}"
+                                    loading="lazy"
                                 >
-
                             </button>
 
                         </div>
@@ -1631,7 +1625,7 @@
                     >
 
                         <img
-                            src="{{ asset($related['image']) }}"
+                            src="{{ asset(str_starts_with(ltrim((string) ($related['image'] ?? ''), '/'), 'images/poojas/') ? ltrim($related['image'], '/') : $poojaImage) }}"
                             class="pn-pooja-image
                                    card-img-top"
                             alt="{{ $related['name'] }}"

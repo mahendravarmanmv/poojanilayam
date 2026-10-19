@@ -145,6 +145,7 @@
 
                 <form
                     method="POST"
+                    enctype="multipart/form-data"
                     action="{{ route('dashboard.profile.update') }}"
                     id="editProfileForm"
                     class="needs-validation"
@@ -155,6 +156,20 @@
 
                     @method('PUT')
 
+                    @if ($errors->any())
+                        <div class="alert alert-danger" role="alert">
+                            <strong>Please correct the following:</strong>
+                            <ul class="mb-0 mt-2">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    @if (session('success'))
+                        <div class="alert alert-success" role="alert">{{ session('success') }}</div>
+                    @endif
 
                     {{-- ==================================================
                          PERSONAL INFORMATION
@@ -742,7 +757,7 @@
                                     id="profilePreview"
                                 >
 
-                                    MV
+                                    {{ collect(preg_split('/\s+/', trim($profile?->display_name ?: $user->name)))->filter()->map(fn ($part) => strtoupper(substr($part, 0, 1)))->take(2)->implode('') }}
 
                                 </div>
 
@@ -767,6 +782,8 @@
                                                form-control-lg"
                                         accept="image/jpeg,image/png,image/webp"
                                     >
+
+                                    <input type="hidden" name="remove_profile_photo" id="removeProfilePhoto" value="0">
 
 
                                     <small
@@ -936,7 +953,8 @@
                                                 role="switch"
                                                 id="bookingNotifications"
                                                 name="booking_notifications"
-                                                checked
+                                                value="1"
+                                                {{ old('booking_notifications', $notificationPreferences['booking'] ?? true) ? 'checked' : '' }}
                                             >
 
                                         </div>
@@ -996,7 +1014,8 @@
                                                 role="switch"
                                                 id="orderNotifications"
                                                 name="order_notifications"
-                                                checked
+                                                value="1"
+                                                {{ old('order_notifications', $notificationPreferences['order'] ?? true) ? 'checked' : '' }}
                                             >
 
                                         </div>
@@ -1056,6 +1075,8 @@
                                                 role="switch"
                                                 id="offerNotifications"
                                                 name="offer_notifications"
+                                                value="1"
+                                                {{ old('offer_notifications', $notificationPreferences['offers'] ?? false) ? 'checked' : '' }}
                                             >
 
                                         </div>
@@ -1332,6 +1353,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById(
             'profilePreview'
         );
+    const removeProfilePhoto = document.getElementById('removeProfilePhoto');
 
 
     profilePhoto?.addEventListener(
@@ -1343,10 +1365,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
             if (!file) {
-
                 return;
-
             }
+            if (removeProfilePhoto) removeProfilePhoto.value = '0';
 
 
             if (
@@ -1404,10 +1425,10 @@ document.addEventListener('DOMContentLoaded', function () {
         function () {
 
             profilePhoto.value = '';
-
+            if (removeProfilePhoto) removeProfilePhoto.value = '1';
 
             profilePreview.innerHTML =
-                'MV';
+                'Photo will be removed';
 
         }
     );

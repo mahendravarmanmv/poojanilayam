@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 @section('title', 'Book Pooja | Pooja Nilayam')
@@ -12,14 +13,81 @@
 @php
     $customer = auth()->user();
     $poojaCategory = $pooja->category?->name ?? 'Pooja';
-    $poojaImage = $pooja->media()->where('is_active', true)->orderByDesc('is_featured')->orderBy('sort_order')->value('file_path');
+
+    /*
+     * Resolve the image using the same path conventions as
+     * PoojaController, without changing the booking workflow.
+     */
+    $poojaImageUrl = null;
+
+    $poojaMedia = $pooja->media
+        ->where('is_active', true)
+        ->sortBy('sort_order')
+        ->sortByDesc('is_featured');
+
+    foreach ($poojaMedia as $media) {
+        $storedPath = trim(
+            str_replace('\\', '/', (string) $media->file_path)
+        );
+
+        if ($storedPath === '') {
+            continue;
+        }
+
+        // Remove the domain from absolute URLs.
+        $storedPath = preg_replace(
+            '#^https?://[^/]+/#i',
+            '',
+            $storedPath
+        ) ?? $storedPath;
+
+        $storedPath = ltrim($storedPath, '/');
+
+        // Remove a public directory prefix.
+        $storedPath = preg_replace(
+            '#^(?:public/)+#',
+            '',
+            $storedPath
+        ) ?? $storedPath;
+
+        // Normalize the path to the public pooja images directory.
+        if (str_starts_with($storedPath, 'images/poojas/')) {
+            $relativePath = $storedPath;
+        } elseif (str_starts_with($storedPath, 'poojas/')) {
+            $relativePath = 'images/' . $storedPath;
+        } else {
+            $relativePath = 'images/poojas/' . basename($storedPath);
+        }
+
+        // Select the first active image that exists on the server.
+        if (is_file(public_path($relativePath))) {
+            $poojaImageUrl = asset($relativePath);
+            break;
+        }
+    }
+
+    // Use the same fallback configured in PoojaController.
+    if ($poojaImageUrl === null) {
+        $fallbackImage = 'images/poojas/pooja_6_primary_1792339607.jpg';
+
+        if (is_file(public_path($fallbackImage))) {
+            $poojaImageUrl = asset($fallbackImage);
+        }
+    }
+
     $poojaData = [
         'name' => $pooja->name,
-        'image' => $poojaImage,
+        'image' => $poojaImageUrl,
         'category' => $poojaCategory,
-        'duration' => $pooja->duration_minutes ? $pooja->duration_minutes . ' Mins' : 'Duration not specified',
-        'base_price' => $selectedTemplePooja?->pricing->where('is_active', true)->sortByDesc('is_default')->first()?->amount ?? 0,
-        'location' => $selectedTemplePooja?->temple?->name ?? 'Select a temple',
+        'duration' => $pooja->duration_minutes
+            ? $pooja->duration_minutes . ' Mins'
+            : 'Duration not specified',
+        'base_price' => $selectedTemplePooja?->pricing
+            ->where('is_active', true)
+            ->sortByDesc('is_default')
+            ->first()?->amount ?? 0,
+        'location' => $selectedTemplePooja?->temple?->name
+            ?? 'Select a temple',
     ];
 
     $steps = [
@@ -32,20 +100,54 @@
 
     $dates = collect(range(0, 13))->map(function ($offset) {
         $d = today()->addDays($offset);
-        return ['value' => $d->toDateString(), 'day' => $d->format('d'), 'weekday' => strtoupper($d->format('D')), 'month' => strtoupper($d->format('M'))];
+
+        return [
+            'value' => $d->toDateString(),
+            'day' => $d->format('d'),
+            'weekday' => strtoupper($d->format('D')),
+            'month' => strtoupper($d->format('M')),
+        ];
     });
+
     $selectedDate = ($date ?? today())->toDateString();
+
     $slotsByPeriod = collect($slots ?? [])->groupBy(function ($slot) {
         $hour = (int) substr($slot->start_time, 0, 2);
-        return $hour < 12 ? 'Morning' : ($hour < 17 ? 'Afternoon' : 'Evening');
+
+        return $hour < 12
+            ? 'Morning'
+            : ($hour < 17 ? 'Afternoon' : 'Evening');
     });
-    $purposes = ['Health', 'Business', 'Marriage', 'Education', 'Birthday', 'Anniversary'];
-    $addonOptions = collect($extras ?? [])->flatMap(function ($extra) {
-        return $extra->options->map(function ($option) use ($extra) {
-            return ['id' => $option->id, 'extra_id' => $extra->id, 'icon' => 'bi-plus-circle', 'name' => $option->name, 'description' => $option->description, 'price' => (float) $option->price];
-        });
-    })->values();
-    $defaultCurrency = $selectedTemplePooja?->pricing->where('is_active', true)->sortByDesc('is_default')->first()?->currency;
+
+    $purposes = [
+        'Health',
+        'Business',
+        'Marriage',
+        'Education',
+        'Birthday',
+        'Anniversary',
+    ];
+
+    $addonOptions = collect($extras ?? [])
+        ->flatMap(function ($extra) {
+            return $extra->options->map(function ($option) use ($extra) {
+                return [
+                    'id' => $option->id,
+                    'extra_id' => $extra->id,
+                    'icon' => 'bi-plus-circle',
+                    'name' => $option->name,
+                    'description' => $option->description,
+                    'price' => (float) $option->price,
+                ];
+            });
+        })
+        ->values();
+
+    $defaultCurrency = $selectedTemplePooja?->pricing
+        ->where('is_active', true)
+        ->sortByDesc('is_default')
+        ->first()?->currency;
+
     $paymentMethods = [
         ['id' => 'upi', 'name' => 'UPI', 'icon' => 'bi-phone'],
         ['id' => 'cards', 'name' => 'Cards', 'icon' => 'bi-credit-card'],
@@ -54,6 +156,7 @@
         ['id' => 'international', 'name' => 'International Cards', 'icon' => 'bi-globe'],
     ];
 @endphp
+
 
 
 {{-- ============================================================
@@ -136,7 +239,7 @@
                 >
 
                     <img
-                        src="{{ $poojaData['image'] ? asset($poojaData['image']) : Vite::asset('resources/images/home/ganapathi.jpg') }}"
+                        src="{{ $poojaData['image'] ?? Vite::asset('resources/images/home/ganapathi.jpg') }}"
                         class="rounded-3
                                object-fit-cover"
                         style="width:72px;height:72px;"
@@ -305,7 +408,7 @@
             ================================================= --}}
 
             <div class="col-12 col-lg-8">
-                <form id="bookingForm" method="POST" action="{{ route('pooja.book.store', ['slug' => $pooja->slug]) }}" data-slug="{{ $pooja->slug }}" data-booking-base="{{ url('/') }}" data-base-amount="{{ (float) $poojaData['base_price'] }}" data-currency-symbol="{{ $defaultCurrency?->symbol ?? '₹' }}">
+                <form id="bookingForm" method="POST" action="{{ route('pooja.book.store', ['slug' => $pooja->slug]) }}" data-slug="{{ $pooja->slug }}" data-booking-base="{{ url('/') }}" data-slots-url="{{ route('pooja.book.slots', ['slug' => $pooja->slug]) }}" data-pujaris-url="{{ route('pooja.book.pujaris', ['slug' => $pooja->slug]) }}" data-base-amount="{{ (float) $poojaData['base_price'] }}" data-currency-symbol="{{ $defaultCurrency?->symbol ?? '₹' }}">
                     @csrf
                     @if(session('error'))<div class="alert alert-danger">{{ session('error') }}</div>@endif
                     @if($errors->any())<div class="alert alert-danger"><strong>Please correct the following:</strong><ul class="mb-0 mt-2">@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>@endif
@@ -390,7 +493,8 @@
                         <select class="form-select form-select-lg mb-4" name="temple_pooja_id" id="templePoojaId" required>
                             <option value="">Select Temple</option>
                             @foreach($templePoojas as $templePooja)
-                                <option value="{{ $templePooja->id }}" data-currency="{{ $templePooja->pricing->where('is_active', true)->sortByDesc('is_default')->first()?->currency?->code }}" {{ $selectedTemplePooja?->id === $templePooja->id ? 'selected' : '' }}>
+                                @php($templeDefaultPricing = $templePooja->pricing->where('is_active', true)->sortByDesc('is_default')->first())
+                                <option value="{{ $templePooja->id }}" data-currency="{{ $templeDefaultPricing?->currency?->code }}" data-symbol="{{ $templeDefaultPricing?->currency?->symbol ?? '₹' }}" data-amount="{{ $templeDefaultPricing ? max(0, (float) $templeDefaultPricing->amount - (float) $templeDefaultPricing->discount_amount) : 0 }}" {{ $selectedTemplePooja?->id === $templePooja->id ? 'selected' : '' }}>
                                     {{ $templePooja->temple?->name }}
                                 </option>
                             @endforeach
@@ -414,17 +518,13 @@
 
                         <button
                             type="button"
-                            class="btn
-                                   btn-pn-outline
-                                   btn-sm
-                                   mb-4"
+                            id="openBookingCalendar"
+                            class="btn btn-pn-outline btn-sm mb-4"
                         >
-
                             <i class="bi bi-calendar3 me-2"></i>
-
                             Open Calendar
-
                         </button>
+                        <input type="date" id="bookingCalendarInput" class="form-control mb-4 d-none" min="{{ today()->toDateString() }}" value="{{ $selectedDate }}" aria-label="Choose booking date">
 
 
                         {{-- Time --}}
@@ -602,6 +702,7 @@
 
                         <div class="vstack gap-3">
 
+                            <div id="pujariOptions">
                             @forelse($pujaris as $priest)
                                 <div>
                                     <input type="radio" class="btn-check pujari-option" name="pujari_profile_id" id="priest{{ $priest->id }}" value="{{ $priest->id }}">
@@ -619,6 +720,7 @@
                             @empty
                                 <div class="alert alert-light border mb-0">No approved priests are currently assigned to the selected temple. You can continue with <strong>No Preference</strong>.</div>
                             @endforelse
+                            </div>
 
                         </div>
 
@@ -1541,7 +1643,7 @@
                             >
 
                                 <img
-                                    src="{{ $poojaData['image'] ? asset($poojaData['image']) : Vite::asset('resources/images/home/ganapathi.jpg') }}"
+                                    src="{{ $poojaData['image'] ?? Vite::asset('resources/images/home/ganapathi.jpg') }}"
                                     class="rounded-3
                                            object-fit-cover"
                                     style="width:64px;height:64px;"
@@ -2127,5 +2229,215 @@
     </div>
 
 </section>
+
+
+
+@push('scripts')
+<script>
+(function () {
+    'use strict';
+
+    const form = document.getElementById('bookingForm');
+    if (!form || form.dataset.bookingIntegrationReady === '1') return;
+    form.dataset.bookingIntegrationReady = '1';
+
+    const templeSelect = document.getElementById('templePoojaId');
+    const calendarButton = document.getElementById('openBookingCalendar');
+    const calendarInput = document.getElementById('bookingCalendarInput');
+    const currencyInput = document.getElementById('currencyCode');
+    const slotContainers = Array.from(document.querySelectorAll('.booking-slots'));
+    const summaryDate = document.getElementById('summaryDate');
+    const summaryTime = document.getElementById('summaryTime');
+    const summaryPriest = document.getElementById('summaryPriest');
+    const currencySymbol = () => templeSelect?.selectedOptions[0]?.dataset.symbol || form.dataset.currencySymbol || '₹';
+    const money = (value) => currencySymbol() + Number(value || 0).toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    const selectedDate = () => document.querySelector('input[name="booking_date"]:checked')?.value || calendarInput?.value || '';
+
+    function periodFor(time) {
+        const hour = Number(String(time || '00:00').split(':')[0]);
+        return hour < 12 ? 'Morning' : (hour < 17 ? 'Afternoon' : 'Evening');
+    }
+
+    function updateDateSummary(date) {
+        if (summaryDate && date) {
+            const parsed = new Date(date + 'T00:00:00');
+            summaryDate.textContent = parsed.toLocaleDateString('en-GB', {day:'2-digit', month:'short', year:'numeric'});
+        }
+        if (calendarInput && date) calendarInput.value = date;
+    }
+
+    function clearSlots(message) {
+        slotContainers.forEach(container => {
+            container.innerHTML = '<div class="small text-secondary slot-empty">' + message + '</div>';
+        });
+        if (summaryTime) summaryTime.textContent = '--';
+    }
+
+    function renderSlots(slots) {
+        slotContainers.forEach(container => {
+            const period = container.dataset.period;
+            const matching = slots.filter(slot => periodFor(slot.start_time) === period);
+            if (!matching.length) {
+                container.innerHTML = '<div class="small text-secondary slot-empty">No available slots for this period.</div>';
+                return;
+            }
+            container.innerHTML = matching.map(slot => {
+                const id = 'slot' + slot.id;
+                const time = new Date('2000-01-01T' + slot.start_time).toLocaleTimeString('en-IN', {hour:'2-digit', minute:'2-digit', hour12:true});
+                return '<div><input type="radio" class="btn-check booking-slot" name="booking_slot_id" id="' + id + '" value="' + Number(slot.id) + '" data-start="' + slot.start_time + '" data-end="' + slot.end_time + '" required><label for="' + id + '" class="btn btn-outline-secondary">' + time + '</label></div>';
+            }).join('');
+        });
+    }
+
+    async function refreshSlots() {
+        const templeId = templeSelect?.value;
+        const date = selectedDate();
+        if (!templeId || !date) {
+            clearSlots('Select a temple and date to view available slots.');
+            return;
+        }
+        clearSlots('Checking available slots…');
+        try {
+            const url = new URL(form.dataset.slotsUrl, window.location.origin);
+            url.searchParams.set('temple_pooja_id', templeId);
+            url.searchParams.set('date', date);
+            const response = await fetch(url.toString(), {headers:{'Accept':'application/json','X-Requested-With':'XMLHttpRequest'}});
+            if (!response.ok) throw new Error('Unable to load slots. Please try again.');
+            const payload = await response.json();
+            renderSlots(Array.isArray(payload.slots) ? payload.slots : []);
+        } catch (error) {
+            clearSlots('Could not load slots. Please refresh or try another date.');
+        }
+    }
+
+    async function refreshPujaris() {
+        const templeId = templeSelect?.value;
+        const container = document.getElementById('pujariOptions');
+        if (!container || !templeId) {
+            if (container) container.innerHTML = '<p class="small text-secondary">Select a temple to view available priests.</p>';
+            if (summaryPriest) summaryPriest.textContent = 'No Preference';
+            return;
+        }
+        container.innerHTML = '<p class="small text-secondary">Loading available priests…</p>';
+        try {
+            const url = new URL(form.dataset.pujarisUrl, window.location.origin);
+            url.searchParams.set('temple_pooja_id', templeId);
+            const response = await fetch(url.toString(), {headers:{'Accept':'application/json','X-Requested-With':'XMLHttpRequest'}});
+            if (!response.ok) throw new Error('Unable to load priests.');
+            const payload = await response.json();
+            const priests = Array.isArray(payload.pujaris) ? payload.pujaris : [];
+            if (!priests.length) {
+                container.innerHTML = '<p class="small text-secondary">No approved priests are currently listed for this temple. You can continue without selecting a priest.</p>';
+                if (summaryPriest) summaryPriest.textContent = 'No Preference';
+                return;
+            }
+            container.innerHTML = '<div class="row g-3">' + priests.map(priest => {
+                const id = 'priest' + Number(priest.id);
+                const experience = priest.experience_years ? Number(priest.experience_years) + '+ years experience' : 'Experience not specified';
+                return '<div class="col-12 col-md-6"><input type="radio" class="btn-check pujari-option" name="pujari_profile_id" id="' + id + '" value="' + Number(priest.id) + '"><label class="card p-3 h-100" for="' + id + '"><strong>' + escapeHtml(priest.display_name || 'Priest') + '</strong><span class="small text-secondary">' + escapeHtml(experience) + '</span>' + (priest.bio ? '<span class="small mt-2">' + escapeHtml(priest.bio) + '</span>' : '') + '</label></div>';
+            }).join('') + '</div>';
+        } catch (error) {
+            container.innerHTML = '<p class="small text-danger">Unable to load priests. You may continue without selecting a priest.</p>';
+        }
+    }
+
+    function escapeHtml(value) {
+        return String(value).replace(/[&<>"']/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[character]));
+    }
+
+    function updatePriceSummary() {
+        const option = templeSelect?.selectedOptions[0];
+        if (option && currencyInput) currencyInput.value = option.dataset.currency || '';
+        const amount = Number(option?.dataset.amount ?? form.dataset.baseAmount ?? 0);
+        const addonTotal = Array.from(document.querySelectorAll('.addon-checkbox:checked')).reduce((total, checkbox) => total + Number(checkbox.dataset.price || 0), 0);
+        const fee = document.getElementById('summaryPoojaFee');
+        const addons = document.getElementById('summaryAddons');
+        const total = document.getElementById('summaryTotal');
+        if (fee) fee.textContent = money(amount);
+        if (addons) addons.textContent = money(addonTotal);
+        if (total) total.textContent = money(amount + addonTotal);
+    }
+
+    document.addEventListener('change', function (event) {
+        if (event.target.matches('.booking-date')) {
+            updateDateSummary(event.target.value);
+            refreshSlots();
+        }
+        if (event.target.matches('.booking-slot')) {
+            const label = event.target.dataset.start ? new Date('2000-01-01T' + event.target.dataset.start).toLocaleTimeString('en-IN', {hour:'2-digit', minute:'2-digit', hour12:true}) : '--';
+            if (summaryTime) summaryTime.textContent = label;
+        }
+        if (event.target.matches('.pujari-option')) {
+            const label = document.querySelector('label[for="' + event.target.id + '"] strong');
+            if (summaryPriest) summaryPriest.textContent = label?.textContent || 'No Preference';
+        }
+        if (event.target.matches('.addon-checkbox')) updatePriceSummary();
+    });
+
+    templeSelect?.addEventListener('change', function () {
+        updatePriceSummary();
+        refreshSlots();
+        refreshPujaris();
+    });
+
+    calendarButton?.addEventListener('click', function () {
+        if (!calendarInput) return;
+        calendarInput.classList.remove('d-none');
+        calendarInput.focus();
+        if (typeof calendarInput.showPicker === 'function') calendarInput.showPicker();
+    });
+
+    calendarInput?.addEventListener('change', function () {
+        if (!this.value) return;
+        let radio = Array.from(document.querySelectorAll('.booking-date')).find(item => item.value === this.value);
+        if (radio) radio.checked = true;
+        else {
+            document.querySelectorAll('.booking-date').forEach(item => item.checked = false);
+            const dateWrap = document.querySelector('.booking-date')?.closest('.row');
+            if (dateWrap) {
+                const existing = document.getElementById('customBookingDateWrap');
+                if (existing) existing.remove();
+                const wrap = document.createElement('div');
+                wrap.id = 'customBookingDateWrap';
+                wrap.className = 'col';
+                const date = new Date(this.value + 'T00:00:00');
+                const id = 'customBookingDate';
+                wrap.innerHTML = '<input type="radio" class="btn-check booking-date" name="booking_date" id="' + id + '" value="' + this.value + '" checked><label for="' + id + '" class="btn btn-outline-secondary w-100 py-3"><small class="d-block text-uppercase">' + date.toLocaleDateString('en-US',{weekday:'short'}).toUpperCase() + '</small><strong class="d-block fs-4">' + date.getDate() + '</strong><small>' + date.toLocaleDateString('en-US',{month:'short'}).toUpperCase() + '</small></label>';
+                dateWrap.appendChild(wrap);
+            }
+        }
+        updateDateSummary(this.value);
+        refreshSlots();
+    });
+
+    form.addEventListener('submit', function (event) {
+        if (!templeSelect?.value) {
+            event.preventDefault();
+            alert('Please select a temple before continuing.');
+            templeSelect?.focus();
+            return;
+        }
+        if (!selectedDate()) {
+            event.preventDefault();
+            alert('Please select a booking date.');
+            return;
+        }
+        if (!form.querySelector('input[name="booking_slot_id"]:checked')) {
+            event.preventDefault();
+            alert('Please select an available time slot.');
+        }
+    });
+
+    updateDateSummary(selectedDate());
+    updatePriceSummary();
+    if (templeSelect?.value) {
+        refreshSlots();
+        refreshPujaris();
+    } else {
+        clearSlots('Select a temple and date to view available slots.');
+    }
+})();
+</script>
+@endpush
 
 @endsection

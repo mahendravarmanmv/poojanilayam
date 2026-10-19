@@ -154,7 +154,7 @@ class BookingController extends Controller
     {
         $validated = $request->validate([
             'temple_pooja_id' => ['required', 'integer'],
-            'date' => ['required', 'date_format:Y-m-d'],
+            'date' => ['required', 'date_format:Y-m-d', 'after_or_equal:today'],
         ]);
 
         $pooja = Pooja::query()
@@ -165,6 +165,10 @@ class BookingController extends Controller
         $templePooja = TemplePooja::query()
             ->whereKey($validated['temple_pooja_id'])
             ->where('pooja_id', $pooja->id)
+            ->where('status', 'active')
+            ->whereHas('temple', function ($query) {
+                $query->where('status', 'active')->where('verification_status', 'approved');
+            })
             ->firstOrFail();
 
         $slots = $this->availability
@@ -190,6 +194,10 @@ class BookingController extends Controller
             'currency_code' => ['nullable', 'string', 'size:3'],
             'pujari_profile_id' => ['nullable', 'integer'],
             'customer_notes' => ['nullable', 'string', 'max:5000'],
+            'devotee_name' => ['required', 'string', 'max:200'],
+            'devotee_phone' => ['required', 'string', 'max:30'],
+            'devotee_email' => ['required', 'email', 'max:255'],
+            'devotee_dob' => ['nullable', 'date', 'before_or_equal:today'],
             'address_id' => ['nullable', 'integer'],
             'sankalpam' => ['nullable', 'array'],
             'sankalpam.language_id' => ['nullable', 'integer'],
@@ -219,6 +227,21 @@ class BookingController extends Controller
             'address.latitude' => ['nullable', 'numeric'],
             'address.longitude' => ['nullable', 'numeric'],
         ]);
+
+        // The supplied schema has no dedicated booking columns for devotee phone, email, or DOB.
+        // Preserve the primary devotee name in the existing sankalpam members structure.
+        $validated['sankalpam'] = $validated['sankalpam'] ?? [];
+        $primaryName = trim($validated['devotee_name']);
+        $members = $validated['sankalpam']['members'] ?? [];
+        array_unshift($members, [
+            'family_member_id' => null,
+            'name' => $primaryName,
+            'relationship' => 'Self',
+        ]);
+        $validated['sankalpam']['members'] = $members;
+
+        // Do not store phone/email/DOB in unrelated columns; these require an explicit schema decision.
+        unset($validated['devotee_name'], $validated['devotee_phone'], $validated['devotee_email'], $validated['devotee_dob'], $validated['booking_date']);
 
         try {
             $booking = $this->bookingService->createPendingBooking(

@@ -14,6 +14,35 @@
                 </div>
 
                 @include('frontend.auth._messages')
+				
+				
+				@if (session('dev_reset_token'))
+				<div class="alert alert-warning mb-4" role="alert">
+					<strong>Temporary Password Reset Token</strong>
+
+					<p class="mb-2">
+						Copy this token into the Reset Token field below.
+					</p>
+
+					<div class="input-group">
+						<input
+							type="text"
+							id="devResetToken"
+							class="form-control"
+							value="{{ session('dev_reset_token') }}"
+							readonly
+						>
+
+						<button
+							type="button"
+							class="btn btn-outline-secondary"
+							onclick="document.getElementById('token').value = document.getElementById('devResetToken').value"
+						>
+							Use Token
+						</button>
+					</div>
+				</div>
+				@endif
 
                 <div class="card border-0 shadow-sm rounded-4">
                     <div class="card-body p-4 p-md-5">

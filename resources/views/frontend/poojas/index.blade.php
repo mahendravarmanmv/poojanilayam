@@ -780,7 +780,7 @@
                                 >
 
                                     <img
-                                        src="{{ asset($pooja['image']) }}"
+                                        src="{{ asset($pooja['image'] ?: 'images/poojas/pooja_6_primary_1792339607.jpg') }}"
                                         class="pn-pooja-image
                                                card-img-top"
                                         alt="{{ $pooja['name'] }}"

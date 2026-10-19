@@ -265,7 +265,7 @@ class PoojaController extends Controller
         $priestProfile = $assignment?->pujariProfile;
         $priest = $priestProfile ? [
             'name' => $priestProfile->display_name,
-            'image' => 'images/home/ganapathi.jpg',
+            'image' => null,
             'experience' => $priestProfile->experience_years ? $priestProfile->experience_years . '+ Years' : 'Experience not specified',
             'speciality' => 'Vedic Rituals',
             'rating' => '—',
@@ -277,6 +277,7 @@ class PoojaController extends Controller
             'name' => $pooja->name,
             'category' => $pooja->category?->name ?? 'Pooja',
             'image' => $this->imagePath($pooja),
+            'gallery' => $this->galleryImagePaths($pooja),
             'short_description' => $pooja->short_description ?: '',
             'description' => $pooja->description ?: $pooja->short_description ?: '',
             'rating' => '—',
@@ -302,15 +303,60 @@ class PoojaController extends Controller
             : 'Contact for pricing';
     }
 
+    /**
+     * Return a public-relative path for an admin-uploaded pooja image.
+     * Admin uploads are stored in public/images/poojas.
+     */
+    private function normalizePoojaImagePath(?string $storedPath): ?string
+    {
+        $path = trim(str_replace('\\', '/', (string) $storedPath));
+        if ($path === '') {
+            return null;
+        }
+
+        // Handle URLs or absolute paths by using their filename; pooja media
+        // managed by the admin panel is stored in public/images/poojas.
+        $path = preg_replace('#^https?://[^/]+/#i', '', $path) ?? $path;
+        $path = ltrim($path, '/');
+        $path = preg_replace('#^(?:public/)+#', '', $path) ?? $path;
+
+        if (str_starts_with($path, 'images/poojas/')) {
+            $relativePath = $path;
+        } elseif (str_starts_with($path, 'poojas/')) {
+            $relativePath = 'images/' . $path;
+        } else {
+            // Legacy records may store only the uploaded filename or a path
+            // rooted in another directory. Use the basename in the known
+            // admin upload folder rather than generating a broken URL.
+            $relativePath = 'images/poojas/' . basename($path);
+        }
+
+        return is_file(public_path($relativePath)) ? $relativePath : null;
+    }
+
+    private function galleryImagePaths(Pooja $pooja): array
+    {
+        return $pooja->media
+            ->where('is_active', true)
+            ->sortBy('sort_order')
+            ->sortByDesc('is_featured')
+            ->map(fn ($media) => $this->normalizePoojaImagePath($media->file_path))
+            ->filter()
+            ->unique()
+            ->values()
+            ->all();
+    }
+
     private function imagePath(Pooja $pooja): string
     {
-        $media = $pooja->media
-            ->where('is_active', true)
-            ->sortByDesc('is_featured')
-            ->sortBy('sort_order')
-            ->first();
+        $gallery = $this->galleryImagePaths($pooja);
+        if (!empty($gallery)) {
+            return $gallery[0];
+        }
 
-        return $media?->file_path ?: 'images/home/ganapathi.jpg';
+        // Known fallback from the deployed admin upload folder.
+        $fallback = 'images/poojas/pooja_6_primary_1792339607.jpg';
+        return is_file(public_path($fallback)) ? $fallback : '';
     }
 
     private function categoryIcon(string $slug): string

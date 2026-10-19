@@ -106,10 +106,32 @@ class CustomerDashboardController extends Controller
     {
         $user = $request->user()->loadMissing(['profile', 'customerProfile']);
 
+        $notificationPreferences = DB::table('notification_preferences')
+            ->where('user_id', $user->id)
+            ->get()
+            ->mapWithKeys(function ($preference) {
+                $enabled = (bool) ($preference->email_enabled || $preference->sms_enabled || $preference->whatsapp_enabled || $preference->push_enabled);
+                $type = strtolower((string) $preference->notification_type);
+
+                if (str_contains($type, 'booking')) {
+                    return ['booking' => $enabled];
+                }
+                if (str_contains($type, 'order')) {
+                    return ['order' => $enabled];
+                }
+                if (str_contains($type, 'offer') || str_contains($type, 'promo')) {
+                    return ['offers' => $enabled];
+                }
+
+                return [];
+            })
+            ->all();
+
         return view('frontend.dashboard.edit-profile', [
             'user' => $user,
             'profile' => $user->profile,
             'customerProfile' => $user->customerProfile,
+            'notificationPreferences' => $notificationPreferences,
             'languages' => Language::where('is_active', true)->orderBy('name')->get(),
             'timezones' => Timezone::where('is_active', true)->orderBy('name')->get(),
         ]);
@@ -117,41 +139,110 @@ class CustomerDashboardController extends Controller
 
     public function updateProfile(Request $request): RedirectResponse
     {
+        $user = $request->user();
+
         $validated = $request->validate([
             'first_name' => ['required', 'string', 'max:100'],
             'last_name' => ['nullable', 'string', 'max:100'],
             'display_name' => ['nullable', 'string', 'max:150'],
             'date_of_birth' => ['nullable', 'date', 'before:today'],
-            'gender' => ['nullable', 'string', 'max:30'],
-            'preferred_language_id' => ['nullable', 'integer', 'exists:languages,id'],
+            'gender' => ['nullable', 'in:male,female,other'],
+            'preferred_language_id' => ['required', 'integer', 'exists:languages,id'],
             'timezone_id' => ['nullable', 'integer', 'exists:timezones,id'],
+            'email' => ['required', 'email:rfc', 'max:255', \Illuminate\Validation\Rule::unique('users', 'email')->ignore($user->id)],
+            'mobile' => ['required', 'regex:/^[0-9]{10}$/', \Illuminate\Validation\Rule::unique('users', 'mobile')->ignore($user->id)],
+            'profile_photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'remove_profile_photo' => ['nullable', 'boolean'],
+            'booking_notifications' => ['nullable', 'boolean'],
+            'order_notifications' => ['nullable', 'boolean'],
+            'offer_notifications' => ['nullable', 'boolean'],
+        ], [
+            'mobile.regex' => 'Please enter a valid 10-digit mobile number.',
+            'profile_photo.max' => 'The profile photo must not exceed 2 MB.',
         ]);
 
-        $user = $request->user();
-        $profile = $user->profile()->firstOrCreate([], [
-            'display_name' => $user->name,
-        ]);
+        $firstName = trim($validated['first_name']);
+        $lastName = trim($validated['last_name'] ?? '');
+        $displayName = trim($validated['display_name'] ?? '') ?: trim($firstName . ' ' . $lastName);
+        $profile = $user->profile()->firstOrNew([]);
+        $oldPhoto = $profile->profile_photo;
+        $newPhotoPath = null;
 
-		$displayName = $validated['display_name']
-		?? trim(
-		$validated['first_name'] . ' ' .
-		($validated['last_name'] ?? '')
-		);
+        if ($request->hasFile('profile_photo')) {
+            $newPhotoPath = $request->file('profile_photo')->store('profile-photos', 'public');
+        }
 
-		$displayName = trim($displayName);
+        $removePhoto = $request->boolean('remove_profile_photo') && ! $request->hasFile('profile_photo');
 
-		$validated['display_name'] = $displayName;
+        try {
+            DB::transaction(function () use ($user, $profile, $validated, $firstName, $lastName, $displayName, $newPhotoPath, $removePhoto): void {
+                $profile->first_name = $firstName;
+                $profile->last_name = $lastName !== '' ? $lastName : null;
+                $profile->display_name = $displayName;
+                $profile->date_of_birth = $validated['date_of_birth'] ?? null;
+                $profile->gender = $validated['gender'] ?? null;
+                $profile->preferred_language_id = $validated['preferred_language_id'];
+                $profile->timezone_id = $validated['timezone_id'] ?? null;
 
-		$profile->update($validated);
+                if ($newPhotoPath !== null) {
+                    $profile->profile_photo = $newPhotoPath;
+                } elseif ($removePhoto) {
+                    $profile->profile_photo = null;
+                }
 
-		$user->update([
-		'name' => $displayName,
-		]);
+                $profile->user_id = $user->id;
+                $profile->save();
 
-        if ($user->customerProfile) {
-            $user->customerProfile->update([
-                'preferred_language_id' => $validated['preferred_language_id'] ?? null,
-            ]);
+                $user->name = $displayName;
+                $user->email = trim($validated['email']);
+                $user->mobile = trim($validated['mobile']);
+                $user->save();
+
+                if ($user->customerProfile) {
+                    $user->customerProfile->preferred_language_id = $validated['preferred_language_id'];
+                    $user->customerProfile->save();
+                }
+
+                // The existing schema stores preferences as one row per notification type.
+                $preferenceTypes = [
+                    'booking' => (bool) ($validated['booking_notifications'] ?? false),
+                    'order' => (bool) ($validated['order_notifications'] ?? false),
+                    'offers' => (bool) ($validated['offer_notifications'] ?? false),
+                ];
+
+                foreach ($preferenceTypes as $type => $enabled) {
+                    $existingPreference = DB::table('notification_preferences')
+                        ->where('user_id', $user->id)
+                        ->where('notification_type', $type)
+                        ->exists();
+
+                    $preferenceValues = [
+                        'email_enabled' => $enabled,
+                        'sms_enabled' => $enabled,
+                        'whatsapp_enabled' => $enabled,
+                        'push_enabled' => $enabled,
+                        'updated_at' => now(),
+                    ];
+
+                    if (! $existingPreference) {
+                        $preferenceValues['created_at'] = now();
+                    }
+
+                    DB::table('notification_preferences')->updateOrInsert(
+                        ['user_id' => $user->id, 'notification_type' => $type],
+                        $preferenceValues
+                    );
+                }
+            });
+        } catch (\Throwable $exception) {
+            if ($newPhotoPath !== null) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($newPhotoPath);
+            }
+            throw $exception;
+        }
+
+        if (($newPhotoPath !== null || $removePhoto) && $oldPhoto && $oldPhoto !== $newPhotoPath) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPhoto);
         }
 
         return redirect()

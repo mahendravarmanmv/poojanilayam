@@ -11,20 +11,39 @@ class CustomerProfileCompletionController extends Controller
 {
     public function status(Request $request): View
     {
-        $user = $request->user()->loadMissing(['profile', 'customerProfile']);
+        $user = $request->user()->loadMissing([
+            'profile',
+            'customerProfile',
+        ]);
+
+        $customerProfile = $user->customerProfile;
 
         $checks = [
             'name' => filled(trim((string) $user->name)),
             'mobile' => filled($user->mobile),
             'email' => filled($user->email),
-            'preferred_language' => filled(optional($user->customerProfile)->preferred_language_id),
+            'preferred_language' => filled(
+                optional($customerProfile)->preferred_language_id
+            ),
         ];
+
+        $isComplete = $customerProfile !== null
+            && ! in_array(false, $checks, true);
+
+        // Keep the stored eligibility flags synchronized with the
+        // same checks displayed on the Profile Completion page.
+        if ($customerProfile !== null) {
+            $customerProfile->update([
+                'profile_status' => $isComplete ? 'complete' : 'incomplete',
+                'is_booking_eligible' => $isComplete,
+            ]);
+        }
 
         return view('frontend.dashboard.profile-completion', [
             'user' => $user,
-            'customerProfile' => $user->customerProfile,
+            'customerProfile' => $customerProfile,
             'checks' => $checks,
-            'isComplete' => ! in_array(false, $checks, true),
+            'isComplete' => $isComplete,
         ]);
     }
 
@@ -51,8 +70,11 @@ class CustomerProfileCompletionController extends Controller
 
         return redirect()
             ->route('dashboard.profile-completion')
-            ->with('success', $isComplete
-                ? 'Your profile is complete and eligible for booking.'
-                : 'Your profile is still incomplete. Please complete the required details.');
+            ->with(
+                'success',
+                $isComplete
+                    ? 'Your profile is complete and eligible for booking.'
+                    : 'Your profile is still incomplete. Please complete the required details.'
+            );
     }
 }

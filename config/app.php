@@ -118,9 +118,24 @@ return [
     |
     */
 
+    
     'maintenance' => [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Development Password Reset Token
+    |--------------------------------------------------------------------------
+    |
+    | Enable temporary password reset token visibility for testing only.
+    |
+    */
+    'dev_password_reset_token' => (bool) env(
+        'DEV_PASSWORD_RESET_TOKEN',
+        false
+    ),
+
 ];
+

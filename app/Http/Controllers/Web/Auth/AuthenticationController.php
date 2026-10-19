@@ -23,52 +23,97 @@ class AuthenticationController extends Controller
         return view('frontend.auth.login');
     }
 
-    public function login(Request $request): RedirectResponse
-    {
-        $data = $request->validate([
-            'identifier' => ['required', 'string', 'max:191'],
-            'password' => ['required', 'string'],
-            'remember' => ['nullable', 'boolean'],
-        ]);
+    
+public function login(Request $request): RedirectResponse
+{
+    $data = $request->validate([
+        'identifier' => ['required', 'string', 'max:191'],
+        'password' => ['required', 'string'],
+        'remember' => ['nullable', 'boolean'],
+    ]);
 
-        $user = User::query()
-            ->where(function ($query) use ($data) {
-                $query->where('email', $data['identifier'])
-                    ->orWhere('mobile', $data['identifier']);
-            })
-            ->first();
+    $identifier = trim($data['identifier']);
 
-        if (!$user || !Hash::check($data['password'], $user->password)) {
-            return back()->withInput($request->except('password'))->withErrors([
+    $user = User::query()
+        ->where(function ($query) use ($identifier) {
+            $query->where('email', $identifier)
+                ->orWhere('mobile', $identifier);
+        })
+        ->first();
+
+    if (!$user || !Hash::check($data['password'], $user->password)) {
+        return back()
+            ->withInput($request->except('password'))
+            ->withErrors([
                 'identifier' => 'Invalid email/mobile or password.',
             ]);
-        }
+    }
 
-        if ($user->status !== 'active') {
-            return back()->withInput($request->except('password'))->withErrors([
+    if ($user->status !== 'active') {
+        return back()
+            ->withInput($request->except('password'))
+            ->withErrors([
                 'identifier' => 'Your account is not active.',
             ]);
-        }
+    }
 
-        if ($user->email && $data['identifier'] === $user->email && !$user->email_verified_at) {
-            return redirect()->route('auth.otp-verification', [
+    // Generate an email OTP if the user logs in with an unverified email.
+    if (
+        $user->email &&
+        strcasecmp($identifier, $user->email) === 0 &&
+        !$user->email_verified_at
+    ) {
+        $otp = (string) random_int(100000, 999999);
+
+        OtpVerification::create([
+            'user_id' => $user->id,
+            'channel' => 'email',
+            'destination' => $user->email,
+            'purpose' => 'registration',
+            'otp_hash' => Hash::make($otp),
+            'expires_at' => now()->addMinutes(10),
+            'attempts' => 0,
+        ]);
+
+        $redirect = redirect()
+            ->route('auth.otp-verification', [
                 'destination' => $user->email,
                 'purpose' => 'registration',
-            ])->with('warning', 'Please verify your email with the OTP before logging in.');
+            ])
+            ->with(
+                'warning',
+                'Please verify your email with the OTP before logging in.'
+            );
+
+        // Show the OTP only in local development.
+        if (app()->environment('local')) {
+            $redirect->with('dev_otp', $otp);
         }
 
-        if ($user->mobile && $data['identifier'] === $user->mobile && !$user->mobile_verified_at) {
-            return redirect()->route('auth.otp-verification', [
-                'destination' => $user->mobile,
-                'purpose' => 'registration',
-            ])->with('warning', 'Please verify your mobile number with the OTP before logging in.');
-        }
-
-        Auth::login($user, (bool) ($data['remember'] ?? false));
-        $request->session()->regenerate();
-
-        return redirect()->intended(route('dashboard.index'));
+        return $redirect;
     }
+
+    // Preserve the existing mobile verification flow.
+    if (
+        $user->mobile &&
+        $identifier === $user->mobile &&
+        !$user->mobile_verified_at
+    ) {
+        return redirect()->route('auth.otp-verification', [
+            'destination' => $user->mobile,
+            'purpose' => 'registration',
+        ])->with(
+            'warning',
+            'Please verify your mobile number with the OTP before logging in.'
+        );
+    }
+
+    Auth::login($user, (bool) ($data['remember'] ?? false));
+    $request->session()->regenerate();
+
+    return redirect()->intended(route('dashboard.index'));
+}
+
 
     public function showRegister(): View
     {
@@ -111,11 +156,20 @@ class AuthenticationController extends Controller
                 'is_booking_eligible' => false,
             ]);
 
-            $customerRole = Role::where('slug', 'customer')->where('is_active', true)->first();
+            $customerRole = Role::firstOrCreate(
+    ['slug' => 'customer'],
+    [
+        'name' => 'Customer (Devotee)',
+        'is_active' => true,
+    ]
+);
 
-            if (!$customerRole) {
-                throw new \RuntimeException('Customer role is not seeded. Run: php artisan db:seed --class=RoleSeeder');
-            }
+if (!$customerRole->is_active) {
+    throw new \RuntimeException(
+        'The customer role exists but is inactive. '
+        . 'Please check the role configuration.'
+    );
+}
 
             $user->roles()->syncWithoutDetaching([$customerRole->id]);
 
@@ -216,25 +270,47 @@ class AuthenticationController extends Controller
         return view('frontend.auth.forgot-password');
     }
 
-    public function forgotPassword(Request $request): RedirectResponse
-    {
-        $data = $request->validate([
-            'email' => ['required', 'email', 'max:191'],
-        ]);
+    
+public function forgotPassword(Request $request): RedirectResponse
+{
+    $data = $request->validate([
+        'email' => ['required', 'email', 'max:191'],
+    ]);
 
-        $user = User::where('email', $data['email'])->first();
+    $devResetToken = null;
 
-        if ($user) {
-            $token = Str::random(64);
-            DB::table('password_reset_tokens')->updateOrInsert(
-                ['email' => $user->email],
-                ['token' => Hash::make($token), 'created_at' => now()]
-            );
+    $user = User::where('email', $data['email'])->first();
+
+    if ($user) {
+        $token = Str::random(64);
+
+        DB::table('password_reset_tokens')->updateOrInsert(
+            ['email' => $user->email],
+            [
+                'token' => Hash::make($token),
+                'created_at' => now(),
+            ]
+        );
+
+        if (config('app.dev_password_reset_token', false) && app()->environment(['local', 'testing'])) {
+            $devResetToken = $token;
         }
-
-        return redirect()->route('auth.reset-password', ['email' => $data['email']])
-            ->with('success', 'If the email exists, password reset instructions will be sent.');
     }
+
+    $redirect = redirect()
+        ->route('auth.reset-password', ['email' => $data['email']])
+        ->with(
+            'success',
+            'If the email exists, password reset instructions will be sent.'
+        );
+
+    if ($devResetToken !== null) {
+        $redirect->with('dev_reset_token', $devResetToken);
+    }
+
+    return $redirect;
+}
+
 
     public function showResetPassword(Request $request): View
     {
