@@ -156,7 +156,7 @@
                                    fs-5"
                             style="width:64px;height:64px;"
                         >
-                            MV
+                            {{ collect(preg_split('/\s+/', trim($user->profile?->display_name ?: $user->name ?: 'User')))->filter()->map(fn ($part) => strtoupper(substr($part, 0, 1)))->take(2)->implode('') ?: 'U' }}
                         </div>
 
                         <h2
@@ -165,14 +165,14 @@
                                    text-pn-brown
                                    mb-1"
                         >
-                            Mahendra Varma
+                            {{ $user->profile?->display_name ?: $user->name }}
                         </h2>
 
                         <small
                             class="text-secondary
                                    text-break"
                         >
-                            customer@example.com
+                            {{ $user->email }}
                         </small>
 
                     </div>
@@ -412,6 +412,22 @@
 
                                 {{-- Success Alert --}}
 
+                                @if (session('success'))
+                                    <div class="alert alert-success rounded-4" role="alert">
+                                        <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
+                                    </div>
+                                @endif
+
+                                @if ($errors->any())
+                                    <div class="alert alert-danger rounded-4" role="alert">
+                                        <ul class="mb-0 ps-3">
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
+
                                 <div
                                     id="passwordSuccess"
                                     class="alert
@@ -484,6 +500,7 @@
                                 >
 
                                     @csrf
+                                    @method('PUT')
 
 
                                     {{-- Current Password --}}
@@ -1728,9 +1745,6 @@ document.addEventListener('DOMContentLoaded', function () {
         'submit',
         function (event) {
 
-            event.preventDefault();
-
-
             successAlert?.classList.add(
                 'd-none'
             );
@@ -1836,7 +1850,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     'd-none'
                 );
 
-
+                event.preventDefault();
                 return;
 
             }
@@ -1865,90 +1879,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
 
-            /*
-            |--------------------------------------------------------------------------
-            | Backend password update will be connected later.
-            |--------------------------------------------------------------------------
-            */
-
-            setTimeout(
-                function () {
-
-                    if (submitButton) {
-
-                        submitButton.disabled =
-                            false;
-
-                        submitButton.innerHTML =
-                            originalHTML;
-
-                    }
-
-
-                    successAlert?.classList.remove(
-                        'd-none'
-                    );
-
-
-                    form.reset();
-
-
-                    currentPassword?.classList.remove(
-                        'is-invalid'
-                    );
-
-
-                    confirmPassword?.classList.remove(
-                        'is-valid',
-                        'is-invalid'
-                    );
-
-
-                    if (strengthBar) {
-
-                        strengthBar.style.width =
-                            '0%';
-
-                        strengthBar.className =
-                            'progress-bar';
-
-                    }
-
-
-                    if (strengthText) {
-
-                        strengthText.textContent =
-                            'Not entered';
-
-                        strengthText.className =
-                            'fw-semibold text-secondary';
-
-                    }
-
-
-                    Object.values(requirements)
-                        .forEach(
-                            function (element) {
-
-                                updateRequirement(
-                                    element,
-                                    false
-                                );
-
-                            }
-                        );
-
-
-                    if (confirmFeedback) {
-
-                        confirmFeedback.textContent =
-                            '';
-
-                    }
-
-                },
-                700
-            );
+            // Allow the real Laravel form submission to proceed.
+            // The server verifies the current password and saves the new hash.
 
         }
     );

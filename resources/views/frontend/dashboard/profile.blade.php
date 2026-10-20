@@ -9,27 +9,6 @@
 
 @section('content')
 
-@php
-
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY UI DATA
-    |--------------------------------------------------------------------------
-    | These values will later come from the authenticated user.
-    |--------------------------------------------------------------------------
-    */
-
-    $user = [
-        'name' => 'Mahendra Varma',
-        'email' => 'customer@example.com',
-        'mobile' => '+91 XXXXX XXXXX',
-        'gender' => 'Prefer not to say',
-        'date_of_birth' => 'Not provided',
-        'member_since' => 'August 2026',
-        'initials' => 'MV'
-    ];
-
-@endphp
 
 
 {{-- ============================================================
@@ -203,7 +182,7 @@
                             style="width:64px;height:64px;"
                         >
 
-                            {{ $user['initials'] }}
+                            {{ collect(preg_split('/\s+/', trim($profile?->display_name ?: $user->name ?: 'User')))->filter()->map(fn ($part) => strtoupper(substr($part, 0, 1)))->take(2)->implode('') ?: 'U' }}
 
                         </div>
 
@@ -214,7 +193,7 @@
                                    text-pn-brown
                                    mb-1"
                         >
-                            {{ $user['name'] }}
+                            {{ $profile?->display_name ?: $user->name ?: 'User' }}
                         </h2>
 
 
@@ -222,7 +201,7 @@
                             class="text-secondary
                                    text-break"
                         >
-                            {{ $user['email'] }}
+                            {{ $user->email ?: 'Not provided' }}
                         </small>
 
                     </div>
@@ -460,7 +439,7 @@
                                     style="width:82px;height:82px;"
                                 >
 
-                                    {{ $user['initials'] }}
+                                    {{ collect(preg_split('/\s+/', trim($profile?->display_name ?: $user->name ?: 'User')))->filter()->map(fn ($part) => strtoupper(substr($part, 0, 1)))->take(2)->implode('') ?: 'U' }}
 
                                 </div>
 
@@ -484,7 +463,7 @@
                                                mt-1
                                                mb-1"
                                     >
-                                        {{ $user['name'] }}
+                                        {{ $profile?->display_name ?: $user->name ?: 'User' }}
                                     </h2>
 
 
@@ -492,7 +471,7 @@
                                         class="text-secondary"
                                     >
                                         Member since
-                                        {{ $user['member_since'] }}
+                                        {{ $user->created_at?->format('F Y') ?? 'Not available' }}
                                     </small>
 
                                 </div>
@@ -583,7 +562,7 @@
                                             <strong
                                                 class="text-pn-brown"
                                             >
-                                                {{ $user['name'] }}
+                                                {{ $profile?->display_name ?: $user->name ?: 'User' }}
                                             </strong>
 
                                         </div>
@@ -646,7 +625,7 @@
                                                 class="text-pn-brown
                                                        text-break"
                                             >
-                                                {{ $user['email'] }}
+                                                {{ $user->email ?: 'Not provided' }}
                                             </strong>
 
                                         </div>
@@ -708,7 +687,7 @@
                                             <strong
                                                 class="text-pn-brown"
                                             >
-                                                {{ $user['mobile'] }}
+                                                {{ $user->mobile ?: 'Not provided' }}
                                             </strong>
 
                                         </div>
@@ -770,7 +749,7 @@
                                             <strong
                                                 class="text-pn-brown"
                                             >
-                                                {{ $user['gender'] }}
+                                                {{ $profile?->gender ? ucfirst($profile->gender) : 'Not provided' }}
                                             </strong>
 
                                         </div>
@@ -832,7 +811,7 @@
                                             <strong
                                                 class="text-pn-brown"
                                             >
-                                                {{ $user['date_of_birth'] }}
+                                                {{ $profile?->date_of_birth ? \Illuminate\Support\Carbon::parse($profile->date_of_birth)->format('d F Y') : 'Not provided' }}
                                             </strong>
 
                                         </div>
@@ -894,7 +873,7 @@
                                             <strong
                                                 class="text-pn-brown"
                                             >
-                                                {{ $user['member_since'] }}
+                                                {{ $user->created_at?->format('F Y') ?? 'Not available' }}
                                             </strong>
 
                                         </div>
@@ -1030,7 +1009,7 @@
                                            py-3"
                                 >
 
-                                    {{ $user['email'] }}
+                                    {{ $user->email ?: 'Not provided' }}
 
                                 </div>
 
@@ -1054,7 +1033,7 @@
                                            py-3"
                                 >
 
-                                    {{ $user['mobile'] }}
+                                    {{ $user->mobile ?: 'Not provided' }}
 
                                 </div>
 

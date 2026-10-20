@@ -22,7 +22,16 @@ class CustomerSecurityController extends Controller
     {
         $validated = $request->validate([
             'current_password' => ['required', 'string'],
-            'password' => ['required', 'confirmed', Password::defaults()],
+            'new_password' => [
+                'required',
+                'string',
+                'confirmed',
+                'different:current_password',
+                Password::min(8)->mixedCase()->numbers()->symbols(),
+            ],
+        ], [
+            'new_password.confirmed' => 'The new password confirmation does not match.',
+            'new_password.different' => 'The new password must be different from your current password.',
         ]);
 
         $user = $request->user();
@@ -33,12 +42,10 @@ class CustomerSecurityController extends Controller
                 ->withInput();
         }
 
-        $user->update([
-            'password' => $validated['password'],
-        ]);
-
-        // Revoke application-level sessions while keeping the current web session active.
-        $user->sessions()->delete();
+        // Hash explicitly so the stored password is never saved as plain text.
+        $user->forceFill([
+            'password' => Hash::make($validated['new_password']),
+        ])->save();
 
         return redirect()
             ->route('dashboard.change-password')

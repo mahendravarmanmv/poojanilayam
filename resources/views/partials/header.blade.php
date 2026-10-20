@@ -15,59 +15,6 @@
 @endphp
 
 
-    {{-- Top Bar --}}
-    <div class="bg-pn-brown text-white">
-
-        <div class="container">
-
-            <div
-                class="d-flex
-                       flex-column
-                       flex-md-row
-                       align-items-center
-                       justify-content-between
-                       gap-2
-                       py-2">
-
-                <span class="small">
-
-                    <i class="bi bi-stars text-warning me-1"></i>
-
-                    Sacred services, thoughtfully delivered.
-
-                </span>
-
-                <div
-                    class="d-flex
-                           align-items-center
-                           gap-3
-                           small">
-
-                    <a href="{{ route('dashboard.bookings') }}" class="text-white">
-                        Track Booking
-                    </a>
-
-                    <span class="text-white-50">|</span>
-
-                    <a href="{{ route('support.help-center') }}" class="text-white">
-                        Help
-                    </a>
-
-                    <span class="text-white-50">|</span>
-
-                    <a href="{{ route('support.contact') }}" class="text-white">
-                        Contact
-                    </a>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
     {{-- Main Navigation --}}
     <nav
     class="navbar
