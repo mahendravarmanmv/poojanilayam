@@ -1027,7 +1027,9 @@
                                                 type="button"
                                                 class="btn
                                                        btn-pn"
-                                                aria-label="Add product to cart"
+                                                data-add-cart
+                                                data-product-id="{{ $product['id'] }}"
+                                                aria-label="Add {{ $product['name'] }} to cart"
                                             >
 
                                                 <i
@@ -1698,6 +1700,34 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const csrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+    document.querySelectorAll('[data-add-cart]').forEach(button => {
+        button.addEventListener('click', async function () {
+            if (this.disabled) return;
+            const original = this.innerHTML;
+            this.disabled = true;
+            try {
+                const response = await fetch('{{ route('store.cart.add') }}', {
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': csrf || '', 'Accept': 'application/json', 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ product_id: this.dataset.productId, quantity: 1 })
+                });
+                const data = await response.json().catch(() => ({}));
+                if (response.status === 401) {
+                    window.location.href = '{{ route('auth.login') }}';
+                    return;
+                }
+                if (!response.ok) throw new Error(data.message || 'Unable to add this product to your cart.');
+                this.innerHTML = '<i class="bi bi-check2"></i>';
+                window.setTimeout(() => { this.innerHTML = original; }, 1400);
+            } catch (error) {
+                alert(error.message || 'Unable to add this product to your cart.');
+            } finally {
+                this.disabled = false;
+            }
+        });
+    });
+
     document.querySelectorAll('[data-wishlist-add]').forEach(button => {
         button.addEventListener('click', async function () {
             try {

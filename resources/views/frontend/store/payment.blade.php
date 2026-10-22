@@ -4,85 +4,12 @@
 
 @section(
     'meta_description',
-    'Complete your payment securely for your Pooja Nilayam order.'
+    'Review and place your order securely for your Pooja Nilayam order.'
 )
 
 @section('content')
 
-@php
 
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY PAYMENT DATA
-    |--------------------------------------------------------------------------
-    | UI prototype only.
-    |
-    | Actual payment gateway, order ID, payment status,
-    | transaction reference and backend verification will be
-    | connected later.
-    |--------------------------------------------------------------------------
-    */
-
-    $order = [
-
-        'order_number' => 'PN-2026-000124',
-
-        'subtotal' => 1547,
-
-        'discount' => 100,
-
-        'delivery' => 0,
-
-        'tax' => 0,
-
-        'total' => 1447
-
-    ];
-
-
-    $cartItems = [
-
-        [
-            'name' => 'Premium Pooja Samagri Kit',
-            'price' => 999,
-            'quantity' => 1,
-            'image' => 'images/home/hero.webp'
-        ],
-
-        [
-            'name' => 'Premium Brass Diya',
-            'price' => 299,
-            'quantity' => 2,
-            'image' => 'images/home/hero.webp'
-        ],
-
-        [
-            'name' => 'Sandalwood Dhoop',
-            'price' => 249,
-            'quantity' => 1,
-            'image' => 'images/home/hero.webp'
-        ]
-
-    ];
-
-
-    $deliveryAddress = [
-
-        'name' => 'Mahendra Varma',
-
-        'phone' => '+91 XXXXX XXXXX',
-
-        'address' => 'Your selected delivery address',
-
-        'city' => 'Hyderabad',
-
-        'state' => 'Telangana',
-
-        'pincode' => '500000'
-
-    ];
-
-@endphp
 
 
 {{-- ============================================================
@@ -189,7 +116,7 @@
                            mb-3"
                 >
 
-                    Complete your payment
+                    Review and place your order
 
                 </h1>
 
@@ -456,8 +383,7 @@
                             class="btn-check"
                             name="payment_method"
                             id="paymentUpi"
-                            value="upi"
-                            checked
+                            value="upi" disabled
                         >
 
 
@@ -540,7 +466,7 @@
 
                         <div
                             id="upiPaymentDetails"
-                            class="border
+                            class="d-none border
                                    border-warning-subtle
                                    rounded-4
                                    bg-pn-cream
@@ -604,7 +530,7 @@
                             class="btn-check"
                             name="payment_method"
                             id="paymentCard"
-                            value="card"
+                            value="card" disabled
                         >
 
 
@@ -823,7 +749,7 @@
                             class="btn-check"
                             name="payment_method"
                             id="paymentNetBanking"
-                            value="netbanking"
+                            value="netbanking" disabled
                         >
 
 
@@ -970,7 +896,7 @@
                             class="btn-check"
                             name="payment_method"
                             id="paymentCod"
-                            value="cod"
+                            value="cod" checked
                         >
 
 
@@ -1056,8 +982,7 @@
                                    alert-warning
                                    rounded-4
                                    mt-3
-                                   mb-0
-                                   d-none"
+                                   mb-0"
                         >
 
                             <div
@@ -1278,7 +1203,7 @@
                                            text-secondary"
                                 >
 
-                                    Order Reference
+                                    Checkout Reference
 
                                 </span>
 
@@ -1302,7 +1227,7 @@
                                        rounded-pill"
                             >
 
-                                Ready for Payment
+                                Checkout Verified
 
                             </span>
 
@@ -1349,7 +1274,7 @@
                                         >
 
                                             <img
-                                                src="{{ asset($item['image']) }}"
+                                                src="{{ !empty($item['image']) && \Illuminate\Support\Str::startsWith($item['image'], ['http://', 'https://']) ? $item['image'] : asset($item['image'] ?: 'images/home/hero.webp') }}"
                                                 class="w-100
                                                        h-100
                                                        object-fit-cover"
@@ -1405,10 +1330,7 @@
                                                text-pn-brown"
                                     >
 
-                                        ₹{{ number_format(
-                                            $item['price'] *
-                                            $item['quantity']
-                                        ) }}
+                                        {{ $currencySymbol }}{{ number_format($item['price'] * $item['quantity'], 2) }}
 
                                     </strong>
 
@@ -1442,7 +1364,7 @@
 
                             <strong class="text-pn-brown">
 
-                                ₹{{ number_format($order['subtotal']) }}
+                                {{ $currencySymbol }}{{ number_format($order['subtotal'], 2) }}
 
                             </strong>
 
@@ -1467,7 +1389,7 @@
 
                             <strong class="text-success">
 
-                                - ₹{{ number_format($order['discount']) }}
+                                - {{ $currencySymbol }}{{ number_format($order['discount'], 2) }}
 
                             </strong>
 
@@ -1517,7 +1439,7 @@
 
                             <span class="text-secondary">
 
-                                ₹{{ number_format($order['tax']) }}
+                                {{ $currencySymbol }}{{ number_format($order['tax'], 2) }}
 
                             </span>
 
@@ -1557,7 +1479,7 @@
                                        text-pn-primary"
                             >
 
-                                ₹{{ number_format($order['total']) }}
+                                {{ $currencySymbol }}{{ number_format($order['total'], 2) }}
 
                             </strong>
 
@@ -1694,7 +1616,7 @@
                                     class="bi bi-lock-fill me-2"
                                 ></i>
 
-                                Pay ₹{{ number_format($order['total']) }}
+                                Place COD Order {{ $currencySymbol }}{{ number_format($order['total'], 2) }}
 
                             </button>
 
@@ -2145,33 +2067,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 );
 
 
-                /*
-                |--------------------------------------------------------------------------
-                | Payment gateway integration will be connected later.
-                |--------------------------------------------------------------------------
-                */
+                const placeOrderForm = document.getElementById('placeOrderForm');
 
-                const originalHTML =
-                    this.innerHTML;
+                if (!placeOrderForm) {
+                    return;
+                }
 
+                payButton.disabled = true;
+                payButton.innerHTML =
+                    '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>' +
+                    'Placing order...';
 
-                this.innerHTML =
-                    '<span class="spinner-border spinner-border-sm me-2"></span>' +
-                    'Processing...';
-
-
-                this.disabled = true;
-
-
-                setTimeout(function () {
-
-                    payButton.innerHTML =
-                        originalHTML;
-
-                    payButton.disabled =
-                        false;
-
-                }, 1500);
+                placeOrderForm.requestSubmit();
 
             }
         );

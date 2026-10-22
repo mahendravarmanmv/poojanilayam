@@ -783,7 +783,7 @@
      OCCASIONS
 ============================================================ --}}
 
-<section class="bg-pn-cream py-5">
+{{-- <section class="bg-pn-cream py-5">
 
     <div class="container py-lg-4">
 
@@ -889,14 +889,14 @@
 
     </div>
 
-</section>
+</section> --}}
 
 
 {{-- ============================================================
      POPULAR TEMPLES
 ============================================================ --}}
 
-<section class="bg-pn-cream py-5">
+{{-- <section class="bg-pn-cream py-5">
 
     <div class="container py-lg-4">
 
@@ -1027,7 +1027,7 @@
 
     </div>
 
-</section>
+</section>  --}}
 
 
 {{-- ============================================================

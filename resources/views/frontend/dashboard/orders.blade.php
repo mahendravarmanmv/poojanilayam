@@ -406,7 +406,7 @@
                                            display-6
                                            text-pn-brown"
                                 >
-                                    {{ count($orders) }}
+                                    {{ $totalOrdersCount }}
                                 </strong>
 
 
@@ -450,7 +450,7 @@
                                            display-6
                                            text-pn-brown"
                                 >
-                                    {{ count($activeOrders) }}
+                                    {{ $activeOrdersCount }}
                                 </strong>
 
 
@@ -494,7 +494,7 @@
                                            display-6
                                            text-pn-brown"
                                 >
-                                    {{ count($deliveredOrders) }}
+                                    {{ $deliveredOrdersCount }}
                                 </strong>
 
 
@@ -539,13 +539,7 @@
                                            text-pn-brown"
                                 >
 
-                                    {{ array_sum(
-                                        array_map(
-                                            fn ($order) =>
-                                                $order['items'],
-                                            $orders->getCollection()->all()
-                                        )
-                                    ) }}
+                                    {{ $productsPurchasedCount }}
 
                                 </strong>
 
@@ -641,21 +635,13 @@
                                         All Orders
                                     </option>
 
-                                    <option value="processing">
-                                        Processing
-                                    </option>
-
-                                    <option value="shipped">
-                                        Shipped
-                                    </option>
-
-                                    <option value="delivered">
-                                        Delivered
-                                    </option>
-
-                                    <option value="cancelled">
-                                        Cancelled
-                                    </option>
+                                    <option value="pending">Pending</option>
+                                    <option value="processing">Processing</option>
+                                    <option value="dispatched">Dispatched</option>
+                                    <option value="shipped">Shipped</option>
+                                    <option value="delivered">Delivered</option>
+                                    <option value="completed">Completed</option>
+                                    <option value="cancelled">Cancelled</option>
 
                                 </select>
 
@@ -736,12 +722,9 @@
                                py-2"
                     >
 
-                        {{ count($orders) }}
+                        {{ $orders->total() }}
 
-                        {{ count($orders) === 1
-                            ? 'Order'
-                            : 'Orders'
-                        }}
+                        {{ $orders->total() === 1 ? 'Order' : 'Orders' }}
 
                     </span>
 
@@ -764,7 +747,7 @@
                                    border
                                    border-warning-subtle
                                    rounded-5"
-                            data-order-status="{{ strtolower($order['status']) }}"
+                            data-order-status="{{ $order['status_key'] ?? strtolower($order['status']) }}"
                             data-order-search="{{ strtolower(
                                 $order['id']
                                 . ' '
@@ -1120,11 +1103,7 @@
 
                                 {{-- Tracking --}}
 
-                                @if(
-                                    $order['tracking']
-                                )
-
-                                    <div
+                                <div
                                         class="alert
                                                bg-primary-subtle
                                                border-0
@@ -1333,11 +1312,7 @@
                                     </a>
 
 
-                                    @if(
-                                        $order['tracking']
-                                    )
-
-                                        <a
+                                    <a
                                             href="{{ route('orders.track', ['order' => $order['id'] ?? $order->id ?? 0]) }}"
                                             class="btn
                                                    btn-outline-primary"
@@ -1350,8 +1325,6 @@
                                             Track Order
 
                                         </a>
-
-                                    @endif
 
 
                                     <a
@@ -1368,27 +1341,6 @@
 
                                     </a>
 
-
-                                    @if(
-                                        $order['status'] === 'Delivered'
-                                    )
-
-                                        <a
-                                            href="#"
-                                            class="btn
-                                                   btn-outline-success"
-                                        >
-
-                                            <i
-                                                class="bi bi-arrow-repeat me-1"
-                                            ></i>
-
-                                            Reorder
-
-                                        </a>
-
-                                    @endif
-
                                 </div>
 
                             </div>
@@ -1398,6 +1350,12 @@
                     @endforeach
 
                 </div>
+
+                @if ($orders->hasPages())
+                    <div class="mt-4">
+                        {{ $orders->onEachSide(1)->links() }}
+                    </div>
+                @endif
 
 
                 {{-- ==================================================

@@ -7,6 +7,7 @@ use App\Http\Controllers\Web\TempleController;
 use App\Http\Controllers\Web\StoreCatalogController;
 use App\Http\Controllers\Web\StoreCartController;
 use App\Http\Controllers\Web\StoreCheckoutController;
+use App\Http\Controllers\Web\Customer\CustomerOrderController;
 use App\Http\Controllers\Web\StoreWishlistController;
 use App\Http\Controllers\Web\DonationController;
 use App\Http\Controllers\Web\BlogController;
@@ -257,23 +258,20 @@ Route::prefix('store')
 			
 			Route::get('/checkout', [StoreCheckoutController::class, 'index'])->name('checkout');
 			Route::post('/checkout', [StoreCheckoutController::class, 'store'])->name('checkout.store');
+            Route::get('/payment', [StoreCheckoutController::class, 'payment'])->name('payment');
+            Route::post('/payment/place-order', [StoreCheckoutController::class, 'placeOrder'])->name('payment.place-order');
+            Route::get('/order-success', [StoreCheckoutController::class, 'success'])->name('order.success');
         });
 
         Route::get('/products/{slug}', [StoreCatalogController::class, 'show'])
             ->name('product');
 
         Route::get('/category/{slug}', [StoreCatalogController::class, 'category'])
-            ->name('category');        
-
-        Route::view('/payment', 'frontend.store.payment')
-            ->name('payment');
+            ->name('category');
 
         // Public order tracking entry point.
-        Route::view('/track-order', 'frontend.orders.track')
+        Route::get('/track-order', [CustomerOrderController::class, 'trackLookup'])
             ->name('track-order');
-
-        Route::view('/order-success', 'frontend.store.order-success')
-            ->name('order.success');
 
         Route::view('/order-failed', 'frontend.store.order-failed')
             ->name('order.failed');
@@ -288,16 +286,12 @@ Route::prefix('store')
 
 Route::prefix('orders')
     ->name('orders.')
+    ->middleware('auth')
+    ->controller(CustomerOrderController::class)
     ->group(function () {
-
-        Route::view('/{order}/track', 'frontend.orders.track')
-            ->name('track');
-
-        Route::view('/{order}/invoice', 'frontend.orders.invoice')
-            ->name('invoice');
-
-        Route::view('/{order}', 'frontend.orders.show')
-            ->name('show');
+        Route::get('/{order}/track', 'track')->name('track');
+        Route::get('/{order}/invoice', 'invoice')->name('invoice');
+        Route::get('/{order}', 'show')->name('show');
     });
 
 

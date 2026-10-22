@@ -9,88 +9,7 @@
 
 @section('content')
 
-@php
 
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY CHECKOUT DATA
-    |--------------------------------------------------------------------------
-    | UI prototype only.
-    |
-    | Actual customer details, addresses, cart values, delivery
-    | charges, discounts and payment options will be connected
-    | through controllers/models later.
-    |--------------------------------------------------------------------------
-    */
-
-    $customer = [
-
-        'name' => '',
-        'email' => '',
-        'phone' => ''
-
-    ];
-
-
-    $addresses = [
-
-        [
-            'id' => 1,
-            'type' => 'Home',
-            'name' => 'Mahendra Varma',
-            'phone' => '+91 XXXXX XXXXX',
-            'address' => 'Your saved address will appear here',
-            'city' => 'Hyderabad',
-            'state' => 'Telangana',
-            'pincode' => '500000',
-            'selected' => true
-        ]
-
-    ];
-
-
-    $cartItems = [
-
-        [
-            'name' => 'Premium Pooja Samagri Kit',
-            'category' => 'Pooja Samagri',
-            'price' => 999,
-            'quantity' => 1,
-            'image' => 'images/home/hero.webp'
-        ],
-
-        [
-            'name' => 'Premium Brass Diya',
-            'category' => 'Pooja Essentials',
-            'price' => 299,
-            'quantity' => 2,
-            'image' => 'images/home/hero.webp'
-        ],
-
-        [
-            'name' => 'Sandalwood Dhoop',
-            'category' => 'Incense & Dhoop',
-            'price' => 249,
-            'quantity' => 1,
-            'image' => 'images/home/hero.webp'
-        ]
-
-    ];
-
-
-    $subtotal = collect($cartItems)->sum(
-        fn ($item) => $item['price'] * $item['quantity']
-    );
-
-    $discount = 100;
-
-    $delivery = 0;
-
-    $tax = 0;
-
-    $total = $subtotal - $discount + $delivery + $tax;
-
-@endphp
 
 
 {{-- ============================================================
@@ -371,6 +290,18 @@
 
     <div class="container">
 
+        <form action="{{ route('store.checkout.store') }}" method="POST" id="checkoutForm">
+            @csrf
+
+        @if ($errors->any())
+            <div class="alert alert-danger" role="alert">
+                <ul class="mb-0">@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>
+            </div>
+        @endif
+        @if (session('error'))
+            <div class="alert alert-danger" role="alert">{{ session('error') }}</div>
+        @endif
+
         <div class="row g-4 g-xl-5">
 
             {{-- ====================================================
@@ -647,6 +578,7 @@
                                     type="radio"
                                     class="btn-check"
                                     name="delivery_address"
+                                    required
                                     id="address{{ $address['id'] }}"
                                     value="{{ $address['id'] }}"
                                     @checked($address['selected'])
@@ -1190,8 +1122,9 @@
                             class="form-control"
                             rows="4"
                             name="order_notes"
+                            maxlength="2000"
                             placeholder="Add any special instructions..."
-                        ></textarea>
+                        >{{ old('order_notes') }}</textarea>
 
                     </div>
 
@@ -1257,7 +1190,7 @@
                                         >
 
                                             <img
-                                                src="{{ asset($item['image']) }}"
+                                                src="{{ !empty($item['image']) && \Illuminate\Support\Str::startsWith($item['image'], ['http://', 'https://']) ? $item['image'] : asset($item['image'] ?: 'images/home/hero.webp') }}"
                                                 class="w-100
                                                        h-100
                                                        object-fit-cover"
@@ -1312,9 +1245,7 @@
                                                text-pn-brown"
                                     >
 
-                                        ₹{{ number_format(
-                                            $item['price'] * $item['quantity']
-                                        ) }}
+                                        {{ $currencySymbol }}{{ number_format($item['price'] * $item['quantity'], 2) }}
 
                                     </strong>
 
@@ -1348,7 +1279,7 @@
 
                             <strong class="text-pn-brown">
 
-                                ₹{{ number_format($subtotal) }}
+                                {{ $currencySymbol }}{{ number_format($subtotal, 2) }}
 
                             </strong>
 
@@ -1373,7 +1304,7 @@
 
                             <strong class="text-success">
 
-                                - ₹{{ number_format($discount) }}
+                                - {{ $currencySymbol }}{{ number_format($discount, 2) }}
 
                             </strong>
 
@@ -1423,7 +1354,7 @@
 
                             <span class="text-secondary">
 
-                                ₹{{ number_format($tax) }}
+                                {{ $currencySymbol }}{{ number_format($tax, 2) }}
 
                             </span>
 
@@ -1463,7 +1394,7 @@
                                        text-pn-primary"
                             >
 
-                                ₹{{ number_format($total) }}
+                                {{ $currencySymbol }}{{ number_format($total, 2) }}
 
                             </strong>
 
@@ -1516,20 +1447,10 @@
 
                         <div class="d-grid">
 
-                            <a
-                                href="{{ route('store.payment') }}"
-                                class="btn
-                                       btn-pn
-                                       btn-lg"
-                            >
-
+                            <button type="submit" form="checkoutForm" class="btn btn-pn btn-lg">
                                 Continue to Payment
-
-                                <i
-                                    class="bi bi-arrow-right ms-2"
-                                ></i>
-
-                            </a>
+                                <i class="bi bi-arrow-right ms-2"></i>
+                            </button>
 
                         </div>
 
@@ -1593,6 +1514,8 @@
             </div>
 
         </div>
+
+        </form>
 
     </div>
 

@@ -1,174 +1,23 @@
 @extends('layouts.app')
-
 @section('title', 'Track Order | Pooja Nilayam')
-@section('meta_description', 'Track your Pooja Nilayam order and view its current delivery status.')
-
+@section('meta_description', 'Track your Pooja Nilayam order using your order number and registered email address.')
 @section('content')
-
-<section class="bg-pn-cream border-bottom">
-    <div class="container py-3">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0 small">
-                <li class="breadcrumb-item"><a href="{{ route('home') }}" class="text-pn-primary">Home</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('store.index') }}" class="text-pn-primary">Store</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Track Order</li>
-            </ol>
-        </nav>
-    </div>
-</section>
-
-<section class="py-5">
-    <div class="container">
-        <div class="row justify-content-center text-center">
-            <div class="col-12 col-lg-8">
-                <span class="pn-section-label text-uppercase text-pn-gold small fw-semibold">Order Tracking</span>
-                <h1 class="font-serif display-5 text-pn-brown mt-2 mb-3">Track Your Order</h1>
-                <div class="pn-divider mx-auto mb-3"></div>
-                <p class="text-secondary mb-0">
-                    Enter your order details below to view the current status of your Pooja Nilayam order.
-                </p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="pb-5">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-12 col-lg-7">
-                <div class="card border-0 shadow-sm rounded-4">
-                    <div class="card-body p-4 p-md-5">
-                        <div class="text-center mb-4">
-                            <div class="icon-circle-58 rounded-circle bg-pn-cream d-inline-flex align-items-center justify-content-center mb-3">
-                                <i class="bi bi-box-seam fs-4 text-pn-primary"></i>
-                            </div>
-                            <h2 class="font-serif h3 text-pn-brown mb-2">Find Your Order</h2>
-                            <p class="small text-secondary mb-0">Use your order number and registered email address.</p>
-                        </div>
-
-                        <form action="{{ route('store.track-order') }}" method="get">
-                            <div class="mb-4">
-                                <label for="order_number" class="form-label fw-semibold">
-                                    Order Number <span class="text-danger">*</span>
-                                </label>
-                                <input type="text" class="form-control form-control-lg rounded-3"
-                                       id="order_number" name="order_number" placeholder="Example: PN-2026-00125">
-                            </div>
-
-                            <div class="mb-4">
-                                <label for="email" class="form-label fw-semibold">
-                                    Email Address <span class="text-danger">*</span>
-                                </label>
-                                <input type="email" class="form-control form-control-lg rounded-3"
-                                       id="email" name="email" placeholder="you@example.com">
-                            </div>
-
-                            <button type="submit" class="btn btn-pn btn-lg w-100 py-3">
-                                Track Order <i class="bi bi-arrow-right ms-2"></i>
-                            </button>
-                        </form>
-
-                        <p class="small text-secondary text-center mt-4 mb-0">
-                            You can find your order number in your order confirmation email.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="pb-5">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-12 col-xl-9">
-                <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-                    <div class="card-header bg-white border-0 p-4 p-md-5 pb-3">
-                        <div class="d-flex flex-column flex-md-row justify-content-between gap-3">
-                            <div>
-                                <span class="small text-secondary">Sample Order</span>
-                                <h2 class="font-serif h4 text-pn-brown mb-0 mt-1">PN-2026-00125</h2>
-                            </div>
-                            <div class="text-md-end">
-                                <span class="badge rounded-pill bg-success-subtle text-success px-3 py-2">In Transit</span>
-                                <div class="small text-secondary mt-2">Expected delivery: 12 September 2026</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card-body p-4 p-md-5 pt-3">
-                        <div class="row g-0">
-                            <div class="col-12 col-md-3 text-center">
-                                <div class="icon-circle-58 rounded-circle bg-pn-cream d-inline-flex align-items-center justify-content-center">
-                                    <i class="bi bi-check-lg fs-4 text-pn-primary"></i>
-                                </div>
-                                <h3 class="h6 fw-semibold text-pn-brown mt-3 mb-1">Order Confirmed</h3>
-                                <p class="small text-secondary mb-4 mb-md-0">08 Sep 2026</p>
-                            </div>
-
-                            <div class="col-12 col-md-3 text-center">
-                                <div class="icon-circle-58 rounded-circle bg-pn-cream d-inline-flex align-items-center justify-content-center">
-                                    <i class="bi bi-box2 fs-4 text-pn-primary"></i>
-                                </div>
-                                <h3 class="h6 fw-semibold text-pn-brown mt-3 mb-1">Packed</h3>
-                                <p class="small text-secondary mb-4 mb-md-0">09 Sep 2026</p>
-                            </div>
-
-                            <div class="col-12 col-md-3 text-center">
-                                <div class="icon-circle-58 rounded-circle bg-pn-primary d-inline-flex align-items-center justify-content-center">
-                                    <i class="bi bi-truck fs-4 text-white"></i>
-                                </div>
-                                <h3 class="h6 fw-semibold text-pn-brown mt-3 mb-1">In Transit</h3>
-                                <p class="small text-secondary mb-4 mb-md-0">10 Sep 2026</p>
-                            </div>
-
-                            <div class="col-12 col-md-3 text-center">
-                                <div class="icon-circle-58 rounded-circle bg-light d-inline-flex align-items-center justify-content-center">
-                                    <i class="bi bi-house-check fs-4 text-secondary"></i>
-                                </div>
-                                <h3 class="h6 fw-semibold text-secondary mt-3 mb-1">Delivered</h3>
-                                <p class="small text-secondary mb-0">Pending</p>
-                            </div>
-                        </div>
-
-                        <hr class="my-4">
-
-                        <div class="row g-4">
-                            <div class="col-12 col-md-6">
-                                <span class="small text-secondary d-block mb-1">Shipping To</span>
-                                <span class="fw-semibold text-pn-brown">Hyderabad, Telangana</span>
-                            </div>
-                            <div class="col-12 col-md-6">
-                                <span class="small text-secondary d-block mb-1">Courier Status</span>
-                                <span class="fw-semibold text-pn-brown">Shipment is on the way</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="pb-5">
-    <div class="container">
-        <div class="bg-pn-cream rounded-4 p-4 p-md-5">
-            <div class="row align-items-center g-4">
-                <div class="col-12 col-md">
-                    <span class="small text-pn-gold fw-semibold text-uppercase">Need Assistance?</span>
-                    <h2 class="font-serif h4 text-pn-brown mt-2 mb-2">Having trouble tracking your order?</h2>
-                    <p class="small text-secondary mb-0">
-                        Our support team can help you with order and delivery related questions.
-                    </p>
-                </div>
-                <div class="col-12 col-md-auto">
-                    <a href="{{ route('support.help-center') }}" class="btn btn-pn-outline px-4">
-                        Visit Help Center <i class="bi bi-arrow-right ms-2"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
+<section class="bg-pn-cream border-bottom"><div class="container py-3"><nav aria-label="breadcrumb"><ol class="breadcrumb mb-0 small"><li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li><li class="breadcrumb-item"><a href="{{ route('store.index') }}">Store</a></li><li class="breadcrumb-item active">Track Order</li></ol></nav></div></section>
+<section class="py-5"><div class="container"><div class="row justify-content-center text-center"><div class="col-lg-8"><span class="pn-section-label text-uppercase text-pn-gold small fw-semibold">Order Tracking</span><h1 class="font-serif display-5 text-pn-brown mt-2 mb-3">Track Your Order</h1><p class="text-secondary">Enter your order number and the email address registered to your account.</p></div></div>
+<div class="row justify-content-center"><div class="col-12 col-lg-7"><div class="card border-0 shadow-sm rounded-4"><div class="card-body p-4 p-md-5"><form action="{{ route('store.track-order') }}" method="get"><div class="mb-3"><label for="order_number" class="form-label fw-semibold">Order Number <span class="text-danger">*</span></label><input required type="text" class="form-control form-control-lg rounded-3 @error('order_number') is-invalid @enderror" id="order_number" name="order_number" value="{{ old('order_number', request('order_number')) }}" placeholder="Example: PN-20261022-ABC123">@error('order_number')<div class="invalid-feedback">{{ $message }}</div>@enderror</div><div class="mb-4"><label for="email" class="form-label fw-semibold">Registered Email Address <span class="text-danger">*</span></label><input required type="email" class="form-control form-control-lg rounded-3 @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email', request('email')) }}" placeholder="you@example.com">@error('email')<div class="invalid-feedback">{{ $message }}</div>@enderror</div><button type="submit" class="btn btn-pn btn-lg w-100 py-3">Find Order <i class="bi bi-arrow-right ms-2"></i></button></form><p class="small text-secondary text-center mt-3 mb-0">Your order information is shown only when both details match.</p></div></div></div></div></div></section>
+@if(isset($order) && $order)
+@php
+    $latestShipment = $order->shipments->sortByDesc('id')->first();
+    $statusLabel = str($order->fulfillment_status ?: $order->status ?: 'pending')->replace('_',' ')->title()->toString();
+    $events = collect();
+    foreach ($order->statusHistories as $history) { $events->push((object)['label' => str($history->to_status)->replace('_',' ')->title()->toString(), 'date' => $history->changed_at, 'remarks' => $history->remarks]); }
+    if ($latestShipment) { foreach ($latestShipment->trackingEvents as $trackingEvent) { $events->push((object)['label' => str($trackingEvent->event_status ?: $trackingEvent->event_code ?: 'Shipment update')->replace('_',' ')->title()->toString(), 'date' => $trackingEvent->event_at, 'remarks' => collect([$trackingEvent->description, $trackingEvent->location, $trackingEvent->city, $trackingEvent->state])->filter()->implode(' · ')]); } }
+    $events = $events->sortBy(fn($event) => $event->date?->timestamp ?? 0);
+@endphp
+<section class="pb-5"><div class="container"><div class="row justify-content-center"><div class="col-12 col-xl-9"><div class="card border-0 shadow-sm rounded-4 overflow-hidden"><div class="card-header bg-white border-0 p-4 p-md-5 pb-3"><div class="d-flex flex-column flex-md-row justify-content-between gap-3"><div><span class="small text-secondary">Order Number</span><h2 class="font-serif h4 text-pn-brown mb-0 mt-1">{{ $order->order_id }}</h2><div class="small text-secondary mt-2">Placed {{ optional($order->placed_at ?? $order->created_at)->format('d M Y') }}</div></div><div class="text-md-end"><span class="badge rounded-pill bg-pn-cream text-pn-brown px-3 py-2">{{ $statusLabel }}</span>@if($latestShipment?->estimated_delivery_at)<div class="small text-secondary mt-2">Estimated delivery: {{ $latestShipment->estimated_delivery_at->format('d M Y') }}</div>@endif</div></div></div><div class="card-body p-4 p-md-5 pt-3">
+@if($latestShipment && ($latestShipment->tracking_number || $latestShipment->carrier_name))<div class="bg-pn-cream rounded-4 p-3 mb-4"><strong>Shipment details</strong><div class="small text-secondary mt-1">{{ $latestShipment->carrier_name ?: 'Delivery partner pending' }}@if($latestShipment->tracking_number) · Tracking number: {{ $latestShipment->tracking_number }}@endif</div>@if($latestShipment->tracking_url)<a class="btn btn-sm btn-pn mt-2" href="{{ $latestShipment->tracking_url }}" target="_blank" rel="noopener noreferrer">Open carrier tracking</a>@endif</div>@endif
+@if($events->isNotEmpty())<div class="vstack gap-3">@foreach($events as $event)<div class="d-flex gap-3"><span class="icon-circle-58 rounded-circle bg-pn-cream d-inline-flex align-items-center justify-content-center flex-shrink-0"><i class="bi bi-check2-circle text-pn-primary"></i></span><div><strong>{{ $event->label }}</strong><div class="small text-secondary">{{ $event->date?->format('d M Y, h:i A') ?? 'Date not recorded' }}</div>@if($event->remarks)<p class="small text-secondary mb-0 mt-1">{{ $event->remarks }}</p>@endif</div></div>@endforeach</div>@else<p class="text-secondary">Your order has been placed. Detailed tracking updates will appear here when the store team records them.</p>@endif
+@if($latestShipment?->delivery_notes)<hr><p class="small mb-0"><strong>Delivery note:</strong> {{ $latestShipment->delivery_notes }}</p>@endif
+<div class="d-flex flex-wrap gap-2 mt-4">@auth<a class="btn btn-pn-outline" href="{{ route('orders.show', ['order' => $order->order_id]) }}">View order details</a>@endauth</div></div></div></div></div></div></section>
+@endif
 @endsection

@@ -824,6 +824,9 @@
                                        btn-pn
                                        btn-lg
                                        w-100"
+                                data-add-cart
+                                data-product-id="{{ $product['id'] }}"
+                                data-quantity-input="#productQuantity"
                                 @disabled($product['stock_status'] !== 'in_stock')
                             >
 
@@ -872,6 +875,9 @@
                                btn-lg
                                w-100
                                mb-4"
+                        data-buy-now
+                        data-product-id="{{ $product['id'] }}"
+                        data-quantity-input="#productQuantity"
                         @disabled($product['stock_status'] !== 'in_stock')
                     >
 
@@ -1745,6 +1751,45 @@ document.addEventListener('DOMContentLoaded', function () {
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const csrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+    async function addProduct(button, buyNow) {
+        if (button.disabled) return;
+        const quantityInput = document.querySelector(button.dataset.quantityInput || '#productQuantity');
+        const quantity = Math.max(1, Math.min(999, parseInt(quantityInput?.value || '1', 10) || 1));
+        const original = button.innerHTML;
+        button.disabled = true;
+        try {
+            const response = await fetch('{{ route('store.cart.add') }}', {
+                method: 'POST',
+                headers: { 'X-CSRF-TOKEN': csrf || '', 'Accept': 'application/json', 'Content-Type': 'application/json' },
+                body: JSON.stringify({ product_id: button.dataset.productId, quantity })
+            });
+            const data = await response.json().catch(() => ({}));
+            if (response.status === 401) {
+                window.location.href = '{{ route('auth.login') }}';
+                return;
+            }
+            if (!response.ok) throw new Error(data.message || 'Unable to add this product to your cart.');
+            if (buyNow) {
+                window.location.href = '{{ route('store.checkout') }}';
+                return;
+            }
+            button.innerHTML = '<i class="bi bi-check2 me-2"></i> Added to Cart';
+            window.setTimeout(() => { button.innerHTML = original; }, 1500);
+        } catch (error) {
+            alert(error.message || 'Unable to add this product to your cart.');
+        } finally {
+            button.disabled = false;
+        }
+    }
+
+    document.querySelectorAll('[data-add-cart]').forEach(button => {
+        button.addEventListener('click', () => addProduct(button, false));
+    });
+    document.querySelectorAll('[data-buy-now]').forEach(button => {
+        button.addEventListener('click', () => addProduct(button, true));
+    });
+
     document.querySelectorAll('[data-wishlist-add]').forEach(button => {
         button.addEventListener('click', async function () {
             try {

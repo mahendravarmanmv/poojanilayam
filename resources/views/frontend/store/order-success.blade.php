@@ -9,99 +9,7 @@
 
 @section('content')
 
-@php
 
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY ORDER DATA
-    |--------------------------------------------------------------------------
-    | UI prototype only.
-    |
-    | Actual order information will later come from the
-    | authenticated user's order / order confirmation response.
-    |--------------------------------------------------------------------------
-    */
-
-    $order = [
-
-        'number' => 'PN-2026-000124',
-
-        'date' => '09 August 2026',
-
-        'payment_status' => 'Payment Successful',
-
-        'payment_method' => 'UPI',
-
-        'subtotal' => 1547,
-
-        'discount' => 100,
-
-        'delivery' => 0,
-
-        'tax' => 0,
-
-        'total' => 1447
-
-    ];
-
-
-    $customer = [
-
-        'name' => 'Mahendra Varma',
-
-        'phone' => '+91 XXXXX XXXXX',
-
-        'email' => 'customer@example.com'
-
-    ];
-
-
-    $deliveryAddress = [
-
-        'name' => 'Mahendra Varma',
-
-        'phone' => '+91 XXXXX XXXXX',
-
-        'address' => 'Your selected delivery address',
-
-        'city' => 'Hyderabad',
-
-        'state' => 'Telangana',
-
-        'pincode' => '500000'
-
-    ];
-
-
-    $orderItems = [
-
-        [
-            'name' => 'Premium Pooja Samagri Kit',
-            'category' => 'Pooja Samagri',
-            'price' => 999,
-            'quantity' => 1,
-            'image' => 'images/home/hero.webp'
-        ],
-
-        [
-            'name' => 'Premium Brass Diya',
-            'category' => 'Pooja Essentials',
-            'price' => 299,
-            'quantity' => 2,
-            'image' => 'images/home/hero.webp'
-        ],
-
-        [
-            'name' => 'Sandalwood Dhoop',
-            'category' => 'Incense & Dhoop',
-            'price' => 249,
-            'quantity' => 1,
-            'image' => 'images/home/hero.webp'
-        ]
-
-    ];
-
-@endphp
 
 
 {{-- ============================================================
@@ -771,7 +679,7 @@
                                     >
 
                                         <img
-                                            src="{{ asset($item['image']) }}"
+                                            src="{{ !empty($item['image']) && \Illuminate\Support\Str::startsWith($item['image'], ['http://', 'https://']) ? $item['image'] : asset($item['image'] ?: 'images/home/hero.webp') }}"
                                             class="w-100
                                                    h-100
                                                    object-fit-cover"
@@ -819,10 +727,7 @@
                                         class="text-pn-brown"
                                     >
 
-                                        ₹{{ number_format(
-                                            $item['price'] *
-                                            $item['quantity']
-                                        ) }}
+                                        {{ $currencySymbol }}{{ number_format($item['price'] * $item['quantity'], 2) }}
 
                                     </strong>
 
@@ -1247,9 +1152,7 @@
 
                                 <strong class="text-pn-brown">
 
-                                    ₹{{ number_format(
-                                        $order['subtotal']
-                                    ) }}
+                                    {{ $currencySymbol }}{{ number_format($order['subtotal'], 2) }}
 
                                 </strong>
 
@@ -1271,9 +1174,7 @@
 
                                 <strong class="text-success">
 
-                                    - ₹{{ number_format(
-                                        $order['discount']
-                                    ) }}
+                                    - {{ $currencySymbol }}{{ number_format($order['discount'], 2) }}
 
                                 </strong>
 
@@ -1317,9 +1218,7 @@
 
                                 <span class="text-secondary">
 
-                                    ₹{{ number_format(
-                                        $order['tax']
-                                    ) }}
+                                    {{ $currencySymbol }}{{ number_format($order['tax'], 2) }}
 
                                 </span>
 
@@ -1358,9 +1257,7 @@
                                        text-pn-primary"
                             >
 
-                                ₹{{ number_format(
-                                    $order['total']
-                                ) }}
+                                {{ $currencySymbol }}{{ number_format($order['total'], 2) }}
 
                             </strong>
 

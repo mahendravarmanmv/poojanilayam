@@ -950,7 +950,7 @@
                     <small class="text-secondary">
 
                         Showing
-                        <strong class="text-pn-brown">
+                        <strong class="text-pn-brown" data-pn-product-count>
                             {{ count($products) }}
                         </strong>
                         products
@@ -1025,6 +1025,8 @@
                              data-price="{{ $product['price'] }}"
                              data-rating="{{ $product['rating'] }}"
                              data-reviews="{{ $product['reviews'] }}"
+                             data-id="{{ $product['id'] }}"
+                             data-featured="{{ $product['badge'] ? '1' : '0' }}"
                              data-stock="{{ $product['stock_status'] === 'in_stock' ? '1' : '0' }}"
                              data-search="{{ $product['name'] . ' ' . $product['category'] . ' ' . $product['description'] }}">
 
@@ -1234,6 +1236,8 @@
                                                     class="btn
                                                            btn-pn
                                                            px-3"
+                                                    data-add-cart
+                                                    data-product-id="{{ $product['id'] }}"
                                                     aria-label="Add {{ $product['name'] }} to cart"
                                                 >
 
@@ -1286,9 +1290,8 @@
                 >
 
                     <ul
-                        class="pagination
-                               justify-content-center
-                               mb-0"
+                        class="pagination justify-content-center mb-0"
+                        data-pn-pagination
                     >
 
                         <li class="page-item disabled">
@@ -1428,6 +1431,7 @@
                         <input
                             class="form-check-input"
                             type="checkbox"
+                            value="{{ $category['name'] }}"
                             id="mobileCategory{{ $index }}"
                         >
 
@@ -1661,22 +1665,239 @@
 @endsection
 @push('scripts')
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
+    const listing = document.querySelector('[data-pn-listing="products"]');
+    if (!listing) return;
+
+    const items = Array.from(listing.querySelectorAll('[data-pn-item]'));
+    const emptyState = document.querySelector('[data-pn-empty]');
+    const countNode = document.querySelector('[data-pn-product-count]');
+    const pagination = document.querySelector('[data-pn-pagination]');
+    const searchInputs = Array.from(document.querySelectorAll('input[type="search"]'))
+        .filter(input => input.closest('#products'));
+    const sortSelect = document.querySelector('#sortProducts');
+    const desktopAside = document.querySelector('aside');
+    const mobileFilters = document.querySelector('#productFilters');
+    const pageSize = 9;
+    let currentPage = 1;
+
+    const desktopCategories = Array.from(desktopAside?.querySelectorAll('input[type="checkbox"]') || []);
+    const mobileCategories = Array.from(mobileFilters?.querySelectorAll('input[type="checkbox"]') || []);
+    const desktopRating = Array.from(desktopAside?.querySelectorAll('input[type="radio"]') || []);
+    const mobileRating = Array.from(mobileFilters?.querySelectorAll('input[type="radio"]') || []);
+
+    function getPriceInputs(container) {
+        return Array.from(container?.querySelectorAll('input[type="number"]') || []);
+    }
+    const desktopPrices = getPriceInputs(desktopAside);
+    const mobilePrices = getPriceInputs(mobileFilters);
+
+    function checkedCategories() {
+        const checked = [...desktopCategories, ...mobileCategories]
+            .filter(input => input.checked)
+            .map(input => (input.value || '').trim().toLowerCase())
+            .filter(Boolean);
+        return [...new Set(checked)];
+    }
+
+    function selectedRating() {
+        const selected = [...desktopRating, ...mobileRating].find(input => input.checked);
+        if (!selected) return 0;
+        const match = (selected.id || '').match(/(\d+)$/);
+        return match ? Number(match[1]) : 0;
+    }
+
+    function activePriceRange() {
+        const values = [desktopPrices, mobilePrices]
+            .map(inputs => ({
+                min: inputs[0]?.value !== '' && inputs[0]?.value != null ? Number(inputs[0].value) : null,
+                max: inputs[1]?.value !== '' && inputs[1]?.value != null ? Number(inputs[1].value) : null
+            }))
+            .find(range => range.min !== null || range.max !== null) || { min: null, max: null };
+        return values;
+    }
+
+    function sortMode() {
+        const value = (sortSelect?.value || '').toLowerCase();
+        if (value.includes('low to high')) return 'price-asc';
+        if (value.includes('high to low')) return 'price-desc';
+        if (value.includes('rated')) return 'rating';
+        if (value.includes('newest')) return 'newest';
+        return 'recommended';
+    }
+
+    function renderPagination(totalPages) {
+        if (!pagination) return;
+        pagination.innerHTML = '';
+        if (totalPages <= 1) return;
+
+        const addPage = (label, page, disabled = false, active = false) => {
+            const li = document.createElement('li');
+            li.className = `page-item${disabled ? ' disabled' : ''}${active ? ' active' : ''}`;
+            const button = document.createElement(disabled ? 'span' : 'button');
+            button.className = 'page-link';
+            button.type = 'button';
+            button.textContent = label;
+            if (!disabled) button.addEventListener('click', () => {
+                currentPage = page;
+                render();
+                document.querySelector('#products')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+            li.appendChild(button);
+            pagination.appendChild(li);
+        };
+
+        addPage('‹', Math.max(1, currentPage - 1), currentPage === 1);
+        for (let page = 1; page <= totalPages; page++) {
+            addPage(String(page), page, false, page === currentPage);
+        }
+        addPage('›', Math.min(totalPages, currentPage + 1), currentPage === totalPages);
+    }
+
+    function render() {
+        const query = (searchInputs.find(input => input.value.trim())?.value || '').trim().toLowerCase();
+        const categories = checkedCategories();
+        const rating = selectedRating();
+        const { min, max } = activePriceRange();
+
+        const filtered = items.filter(item => {
+            const name = (item.dataset.name || '').toLowerCase();
+            const category = (item.dataset.category || '').toLowerCase();
+            const searchText = (item.dataset.search || `${name} ${category}`).toLowerCase();
+            const price = Number(item.dataset.price || 0);
+            const productRating = Number(item.dataset.rating || 0);
+
+            return (!query || searchText.includes(query))
+                && (!categories.length || categories.includes(category))
+                && (min === null || price >= min)
+                && (max === null || price <= max)
+                && (!rating || productRating >= rating);
+        });
+
+        const mode = sortMode();
+        filtered.sort((a, b) => {
+            const priceA = Number(a.dataset.price || 0), priceB = Number(b.dataset.price || 0);
+            const ratingA = Number(a.dataset.rating || 0), ratingB = Number(b.dataset.rating || 0);
+            if (mode === 'price-asc') return priceA - priceB;
+            if (mode === 'price-desc') return priceB - priceA;
+            if (mode === 'rating') return ratingB - ratingA;
+            if (mode === 'newest') return Number(b.dataset.id || 0) - Number(a.dataset.id || 0);
+            return Number(b.dataset.featured || 0) - Number(a.dataset.featured || 0)
+                || a.dataset.name.localeCompare(b.dataset.name);
+        });
+
+        const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+        currentPage = Math.min(currentPage, totalPages);
+        const visible = new Set(filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize));
+
+        items.forEach(item => {
+            item.classList.toggle('d-none', !visible.has(item));
+        });
+
+        if (emptyState) emptyState.classList.toggle('d-none', filtered.length !== 0);
+        if (countNode) countNode.textContent = String(filtered.length);
+        renderPagination(totalPages);
+    }
+
+    function clearFilters() {
+        [...desktopCategories, ...mobileCategories, ...desktopRating, ...mobileRating].forEach(input => input.checked = false);
+        [...desktopPrices, ...mobilePrices].forEach(input => input.value = '');
+        searchInputs.forEach(input => input.value = '');
+        if (sortSelect) sortSelect.selectedIndex = 0;
+        currentPage = 1;
+        render();
+    }
+
+    searchInputs.forEach(input => input.addEventListener('input', () => {
+        searchInputs.forEach(other => { if (other !== input) other.value = input.value; });
+        currentPage = 1;
+        render();
+    }));
+
+    [...desktopCategories, ...mobileCategories, ...desktopRating, ...mobileRating,
+        ...desktopPrices, ...mobilePrices].forEach(input => {
+        input.addEventListener('change', () => { currentPage = 1; render(); });
+        input.addEventListener('input', () => { currentPage = 1; render(); });
+    });
+
+    if (sortSelect) sortSelect.addEventListener('change', () => { currentPage = 1; render(); });
+
+    document.querySelectorAll('button').forEach(button => {
+        if (button.textContent.trim().toLowerCase() === 'clear' &&
+            (button.closest('aside') || button.closest('#productFilters'))) {
+            button.addEventListener('click', clearFilters);
+        }
+    });
+
+    // Keep mobile and desktop filter controls in sync.
+    [...desktopCategories, ...mobileCategories].forEach(input => input.addEventListener('change', () => {
+        const value = (input.value || '').toLowerCase();
+        [...desktopCategories, ...mobileCategories].filter(other => (other.value || '').toLowerCase() === value)
+            .forEach(other => { if (other !== input) other.checked = input.checked; });
+        currentPage = 1;
+        render();
+    }));
+
     const csrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+    // Add products using the existing authenticated StoreCartController endpoint.
+    document.querySelectorAll('[data-add-cart]').forEach(button => {
+        button.addEventListener('click', async function () {
+            if (this.disabled) return;
+            const original = this.innerHTML;
+            this.disabled = true;
+            try {
+                const response = await fetch('{{ route('store.cart.add') }}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrf || '',
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ product_id: this.dataset.productId, quantity: 1 })
+                });
+                const data = await response.json().catch(() => ({}));
+                if (response.status === 401) {
+                    window.location.href = '{{ route('auth.login') }}';
+                    return;
+                }
+                if (!response.ok) throw new Error(data.message || 'Unable to add this product to your cart.');
+                this.innerHTML = '<i class="bi bi-check2 me-1"></i> Added';
+                window.setTimeout(() => { this.innerHTML = original; }, 1400);
+            } catch (error) {
+                alert(error.message || 'Unable to add this product to your cart.');
+            } finally {
+                this.disabled = false;
+            }
+        });
+    });
+
     document.querySelectorAll('[data-wishlist-add]').forEach(button => {
         button.addEventListener('click', async function () {
             try {
                 const response = await fetch('{{ route('store.wishlist.add') }}', {
                     method: 'POST',
-                    headers: { 'X-CSRF-TOKEN': csrf, 'Accept': 'application/json', 'Content-Type': 'application/json' },
+                    headers: {
+                        'X-CSRF-TOKEN': csrf || '',
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
                     body: JSON.stringify({ product_id: this.dataset.productId })
                 });
                 const data = await response.json().catch(() => ({}));
+                if (response.status === 401) {
+                    window.location.href = '{{ route('auth.login') }}';
+                    return;
+                }
                 if (!response.ok) throw new Error(data.message || 'Unable to update wishlist.');
                 this.innerHTML = '<i class="bi bi-heart-fill text-danger"></i>';
-            } catch (error) { alert(error.message); }
+            } catch (error) {
+                alert(error.message || 'Unable to update wishlist.');
+            }
         });
     });
+
+    render();
 });
 </script>
 @endpush

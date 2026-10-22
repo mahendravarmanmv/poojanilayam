@@ -318,6 +318,7 @@
 
                 <button
                     type="button"
+                    id="wishlistAddAllToCart"
                     class="btn
                            btn-pn-outline"
                 >
@@ -333,6 +334,7 @@
 
                 <button
                     type="button"
+                    id="wishlistClearAll"
                     class="btn
                            btn-outline-secondary"
                 >
@@ -1089,6 +1091,52 @@ document.addEventListener('DOMContentLoaded', function () {
                 setTimeout(() => { this.innerHTML = original; this.disabled = false; }, 1000);
             }
         });
+    });
+
+    document.getElementById('wishlistAddAllToCart')?.addEventListener('click', async function () {
+        const button = this;
+        const productButtons = Array.from(document.querySelectorAll('[data-wishlist-remove]'));
+        if (!productButtons.length) return;
+        const original = button.innerHTML;
+        button.disabled = true;
+        try {
+            for (const removeButton of productButtons) {
+                await request('{{ route('store.cart.add') }}', 'POST', {
+                    product_id: removeButton.dataset.productId,
+                    quantity: 1
+                });
+            }
+            button.innerHTML = '<i class="bi bi-check-lg me-1"></i> Added to Cart';
+            window.setTimeout(() => { button.innerHTML = original; }, 1500);
+        } catch (error) {
+            alert(error.message || 'Some products could not be added to the cart.');
+        } finally {
+            button.disabled = false;
+        }
+    });
+
+    document.getElementById('wishlistClearAll')?.addEventListener('click', async function () {
+        const button = this;
+        const removeButtons = Array.from(document.querySelectorAll('[data-wishlist-remove]'));
+        if (!removeButtons.length) return;
+        if (!window.confirm('Remove all products from your wishlist?')) return;
+        button.disabled = true;
+        try {
+            for (const removeButton of removeButtons) {
+                await request('{{ route('store.wishlist.remove') }}', 'DELETE', {
+                    product_id: removeButton.dataset.productId
+                });
+                removeButton.closest('.col')?.remove();
+            }
+            const counter = document.querySelector('[data-wishlist-count]');
+            if (counter) counter.textContent = '0';
+            document.getElementById('wishlist-empty-state')?.classList.remove('d-none');
+        } catch (error) {
+            alert(error.message || 'Unable to clear the wishlist completely.');
+            window.location.reload();
+        } finally {
+            button.disabled = false;
+        }
     });
 });
 </script>

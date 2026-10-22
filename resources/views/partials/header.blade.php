@@ -153,13 +153,13 @@
                                 </a>
                             </li>
 
-                            <li>
+                            {{-- <li>
                                 <a
                                     href="{{ route('pooja.index') }}"
                                     class="dropdown-item py-2">
                                     Temple Poojas
                                 </a>
-                            </li>
+                            </li> --}}
 
                         </ul>
 
