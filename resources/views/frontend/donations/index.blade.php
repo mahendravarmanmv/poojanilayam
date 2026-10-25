@@ -4,7 +4,7 @@
 
 @section(
     'meta_description',
-    'Support temples, spiritual initiatives and devotional activities through Pooja Nilayam.'
+    'Support spiritual initiatives and devotional activities through Pooja Nilayam.'
 )
 
 @section('content')
@@ -106,7 +106,7 @@
                            mb-4"
                 >
 
-                    Support temples, devotional activities and
+                    Support devotional activities and
                     spiritual initiatives through a simple and
                     secure donation experience.
 
@@ -121,7 +121,7 @@
                 >
 
                     <a
-                        href="#donationTemples"
+                        href="#donationTypes"
                         class="btn
                                btn-pn
                                btn-lg
@@ -398,7 +398,7 @@
                                mb-0"
                     >
 
-                        Choose a temple and donation purpose that
+                        Choose a donation purpose that
                         matters to you. Pooja Nilayam provides a
                         convenient way to make your contribution and
                         receive a donation receipt after successful
@@ -541,6 +541,8 @@
 
                             </p>
 
+                            <a href="{{ route('donation.donate', ['donation_type_id' => $type['id']]) }}" class="btn btn-pn-outline w-100 mt-3">Donate for this purpose <i class="bi bi-arrow-right ms-1"></i></a>
+
                         </div>
 
                     </div>
@@ -557,222 +559,48 @@
 
 
 {{-- ============================================================
-     TEMPLE SELECTION
+     ACTIVE DONATION CAMPAIGNS
 ============================================================ --}}
 
-<section
-    id="donationTemples"
-    class="py-5"
->
-
+@if($campaigns->isNotEmpty())
+<section id="donationCampaigns" class="py-5">
     <div class="container">
-
-        <div
-            class="row
-                   align-items-end
-                   g-4
-                   mb-5"
-        >
-
+        <div class="row align-items-end g-4 mb-4">
             <div class="col-12 col-lg-8">
-
-                <span
-                    class="small
-                           text-pn-gold
-                           fw-semibold
-                           text-uppercase"
-                >
-
-                    Select Temple
-
-                </span>
-
-
-                <h2
-                    class="font-serif
-                           display-6
-                           text-pn-brown
-                           mt-2
-                           mb-2"
-                >
-
-                    Choose where you would like to contribute
-
-                </h2>
-
-
-                <p
-                    class="text-secondary
-                           mb-0"
-                >
-
-                    Select a temple to continue with your donation.
-
-                </p>
-
+                <span class="small text-pn-gold fw-semibold text-uppercase">Current Initiatives</span>
+                <h2 class="font-serif display-6 text-pn-brown mt-2 mb-2">Support an active campaign</h2>
+                <p class="text-secondary mb-0">Choose a published campaign to see its details and submit a donation request.</p>
             </div>
-
-
-            <div
-                class="col-12 col-lg-4
-                       text-lg-end"
-            >
-
-                <a
-                    href="{{ route('temple.index') }}"
-                    class="text-pn-primary
-                           fw-semibold
-                           text-decoration-none"
-                >
-
-                    View All Temples
-
-                    <i
-                        class="bi bi-arrow-right ms-1"
-                    ></i>
-
-                </a>
-
-            </div>
-
         </div>
-
-
-        <div
-            class="row
-                   row-cols-1
-                   row-cols-md-2
-                   row-cols-xl-3
-                   g-4"
-        >
-
-            @foreach($temples as $temple)
-
+        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+            @foreach($campaigns as $campaign)
                 <div class="col">
-
-                    <article
-                        class="card
-                               border
-                               border-warning-subtle
-                               rounded-5
-                               overflow-hidden
-                               h-100"
-                    >
-
-                        {{-- Temple Image --}}
-
-                        <div
-                            class="ratio ratio-16x9"
-                        >
-
-                            <img
-                                src="{{ asset($temple['image']) }}"
-                                class="w-100
-                                       h-100
-                                       object-fit-cover"
-                                alt="{{ $temple['name'] }}"
-                                loading="lazy"
-                            >
-
-                        </div>
-
-
-                        <div class="card-body p-4">
-
-                            <span
-                                class="badge
-                                       bg-pn-cream
-                                       text-pn-primary
-                                       rounded-pill
-                                       mb-3"
-                            >
-
-                                {{ $temple['tag'] }}
-
+                    <article class="card border border-warning-subtle rounded-5 h-100">
+                        <div class="card-body p-4 d-flex flex-column">
+                            <span class="badge rounded-pill bg-pn-cream text-pn-primary align-self-start mb-3">
+                                {{ $campaign->donationType?->name ?? 'Donation' }}
                             </span>
-
-
-                            <h3
-                                class="font-serif
-                                       h4
-                                       text-pn-brown
-                                       mb-2"
-                            >
-
-                                {{ $temple['name'] }}
-
-                            </h3>
-
-
-                            <div
-                                class="d-flex
-                                       align-items-center
-                                       gap-2
-                                       mb-3"
-                            >
-
-                                <i
-                                    class="bi bi-geo-alt
-                                           text-pn-primary"
-                                ></i>
-
-
-                                <small
-                                    class="text-secondary"
-                                >
-
-                                    {{ $temple['location'] }}
-
-                                </small>
-
-                            </div>
-
-
-                            <p
-                                class="small
-                                       text-secondary
-                                       mb-4"
-                            >
-
-                                {{ $temple['description'] }}
-
+                            <h3 class="font-serif h4 text-pn-brown">{{ $campaign->name }}</h3>
+                            <p class="small text-secondary flex-grow-1">
+                                {{ $campaign->short_description ?: \Illuminate\Support\Str::limit(strip_tags($campaign->description ?? 'Support this devotional initiative.'), 160) }}
                             </p>
-
-
-                            <div
-                                class="d-grid"
-                            >
-
-                                <a
-                                    href="{{ route('donation.donate', ['temple' => $temple['slug']]) }}"
-                                    class="btn
-                                           btn-pn-outline"
-                                >
-
-                                    Donate to this Temple
-
-                                    <i
-                                        class="bi bi-arrow-right ms-2"
-                                    ></i>
-
-                                </a>
-
+                            @if($campaign->target_amount)
+                                <div class="small text-secondary mb-3">
+                                    Target: <strong class="text-pn-brown">₹{{ number_format((float) $campaign->target_amount, 2) }}</strong>
+                                </div>
+                            @endif
+                            <div class="d-grid gap-2">
+                                <a href="{{ route('donation.show', $campaign->slug) }}" class="btn btn-pn-outline">View Campaign</a>
+                                <a href="{{ route('donation.donate', ['campaign' => $campaign->slug]) }}" class="btn btn-pn">Donate to Campaign</a>
                             </div>
-
                         </div>
-
                     </article>
-
                 </div>
-
             @endforeach
-
         </div>
-
     </div>
-
 </section>
-
+@endif
 
 {{-- ============================================================
      SUGGESTED DONATION AMOUNTS
@@ -834,17 +662,7 @@
 
                     @foreach($suggestedAmounts as $amount)
 
-                        <button
-                            type="button"
-                            class="btn
-                                   btn-outline-secondary
-                                   rounded-pill
-                                   px-4"
-                        >
-
-                            ₹{{ number_format($amount) }}
-
-                        </button>
+                        <a href="{{ route('donation.donate', ['amount' => $amount]) }}" class="btn btn-outline-secondary rounded-pill px-4">₹{{ number_format($amount) }}</a>
 
                     @endforeach
 
@@ -958,7 +776,7 @@
                     <div class="d-grid mt-3">
 
                         <a
-                            href="{{ route('donation.donate') }}"
+                            href="{{ route('donation.donate', ['amount' => 1001]) }}"
                             class="btn
                                    btn-pn
                                    btn-lg"
@@ -1030,7 +848,7 @@
             >
 
                 The donation process follows a simple journey from
-                temple selection through payment and receipt.
+                purpose selection, amount entry, donor details and request submission.
 
             </p>
 
@@ -1041,65 +859,11 @@
             class="row
                    row-cols-1
                    row-cols-sm-2
-                   row-cols-lg-5
+                   row-cols-lg-4
                    g-4"
         >
 
             {{-- Step 1 --}}
-
-            <div class="col">
-
-                <div
-                    class="text-center
-                           h-100"
-                >
-
-                    <div
-                        class="rounded-circle
-                               bg-pn-cream
-                               text-pn-primary
-                               d-flex
-                               align-items-center
-                               justify-content-center
-                               mx-auto
-                               mb-3"
-                        style="width:58px;height:58px;"
-                    >
-
-                        <span class="fw-semibold">
-                            1
-                        </span>
-
-                    </div>
-
-
-                    <h3
-                        class="font-serif
-                               h5
-                               text-pn-brown"
-                    >
-
-                        Select Temple
-
-                    </h3>
-
-
-                    <p
-                        class="small
-                               text-secondary
-                               mb-0"
-                    >
-
-                        Choose the temple you would like to support.
-
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            {{-- Step 2 --}}
 
             <div class="col">
 
@@ -1153,7 +917,7 @@
             </div>
 
 
-            {{-- Step 3 --}}
+            {{-- Step 2 --}}
 
             <div class="col">
 
@@ -1207,7 +971,7 @@
             </div>
 
 
-            {{-- Step 4 --}}
+            {{-- Step 3 --}}
 
             <div class="col">
 
@@ -1261,7 +1025,7 @@
             </div>
 
 
-            {{-- Step 5 --}}
+            {{-- Step 4 --}}
 
             <div class="col">
 
@@ -1395,7 +1159,7 @@
 
                     Donations can support the devotional purposes
                     made available through the platform. Choose
-                    your temple and donation purpose during the
+                    your donation purpose during the
                     donation journey.
 
                 </p>
@@ -1423,14 +1187,14 @@
                                        text-pn-brown"
                             >
 
-                                Choose your temple
+                                Choose your purpose
 
                             </strong>
 
 
                             <small class="text-secondary">
 
-                                Select the temple you wish to support.
+                                Select the donation purpose you wish to support.
 
                             </small>
 
@@ -1517,7 +1281,7 @@
                 <div class="mt-4">
 
                     <a
-                        href="#donationTemples"
+                        href="#donationTypes"
                         class="btn btn-pn"
                     >
 
@@ -1765,14 +1529,14 @@
                            mb-4"
                 >
 
-                    Choose a temple and continue to the donation
+                    Choose a donation purpose and continue to the donation
                     form when you are ready.
 
                 </p>
 
 
                 <a
-                    href="#donationTemples"
+                    href="#donationTypes"
                     class="btn
                            btn-warning
                            text-dark

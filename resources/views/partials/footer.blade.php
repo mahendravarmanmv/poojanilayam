@@ -163,11 +163,7 @@
                         </a>
                     </li>
 
-                    <li class="mb-2">
-                        <a href="{{ route('temple.index') }}" class="text-white-50">
-                            Temples
-                        </a>
-                    </li>
+                    
 
                     <li class="mb-2">
                         <a href="{{ route('priest.index') }}" class="text-white-50">
@@ -175,11 +171,7 @@
                         </a>
                     </li>
 
-                    <li class="mb-2">
-                        <a href="{{ route('digital-pooja.index') }}" class="text-white-50">
-                            Digital Pooja
-                        </a>
-                    </li>
+                  
 
                     <li class="mb-2">
                         <a href="{{ route('astrology.index') }}" class="text-white-50">
@@ -212,29 +204,8 @@
                         </a>
                     </li>
 
-                    <li class="mb-2">
-                        <a href="{{ route('festival.index') }}" class="text-white-50">
-                            Festival
-                        </a>
-                    </li>
-
-                    <li class="mb-2">
-                        <a href="#" class="text-white-50">
-                            Live Darshan
-                        </a>
-                    </li>
-
-                    <li class="mb-2">
-                        <a href="{{ route('blog.index') }}" class="text-white-50">
-                            Spiritual Blogs
-                        </a>
-                    </li>
-
-                    <li class="mb-2">
-                        <a href="{{ route('sitemap') }}" class="text-white-50">
-                            Sitemap
-                        </a>
-                    </li>
+                   
+                  
 
                 </ul>
 

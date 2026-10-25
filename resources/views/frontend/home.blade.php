@@ -26,11 +26,7 @@
             'title' => 'Poojas',
             'subtitle' => 'Book Poojas'
         ],
-        [
-            'icon' => 'bi-bank',
-            'title' => 'Temples',
-            'subtitle' => 'Explore Temples'
-        ],
+       
         [
             'icon' => 'bi-person-check',
             'title' => 'Priests',
@@ -50,46 +46,6 @@
             'icon' => 'bi-bag-heart',
             'title' => 'Store',
             'subtitle' => 'Pooja Samagri'
-        ]
-    ];
-
-
-    $poojas = [
-        [
-            'image' => 'ganapathi.jpg',
-            'name' => 'Ganapathi Homam',
-            'category' => 'Popular',
-            'description' => 'For success and removal of obstacles.',
-            'duration' => '60 Mins',
-            'rating' => '4.9',
-            'price' => '₹501'
-        ],
-        [
-            'image' => 'rudrabhishekam.jpg',
-            'name' => 'Rudrabhishekam',
-            'category' => 'Popular',
-            'description' => 'For peace, health and wellbeing.',
-            'duration' => '90 Mins',
-            'rating' => '4.8',
-            'price' => '₹1,101'
-        ],
-        [
-            'image' => 'lakshmi.jpg',
-            'name' => 'Lakshmi Pooja',
-            'category' => 'Popular',
-            'description' => 'For prosperity and family happiness.',
-            'duration' => '60 Mins',
-            'rating' => '4.9',
-            'price' => '₹501'
-        ],
-        [
-            'image' => 'satyanarayana.jpg',
-            'name' => 'Satyanarayana Pooja',
-            'category' => 'Popular',
-            'description' => 'For peace, blessings and harmony.',
-            'duration' => '90 Mins',
-            'rating' => '4.8',
-            'price' => '₹601'
         ]
     ];
 
@@ -146,38 +102,6 @@
     ];
 
 
-    $priests = [
-        [
-            'image' => 'priests/priest-1.webp',
-            'name' => 'Sri Venkatesh Sharma',
-            'speciality' => 'Vedic Rituals',
-            'experience' => '18+ Years',
-            'rating' => '4.9'
-        ],
-        [
-            'image' => 'priests/priest-2.webp',
-            'name' => 'Sri Ramesh Shastri',
-            'speciality' => 'Homams & Poojas',
-            'experience' => '15+ Years',
-            'rating' => '4.9'
-        ],
-        [
-            'image' => 'priests/priest-3.webp',
-            'name' => 'Sri Suresh Bhatt',
-            'speciality' => 'Temple Rituals',
-            'experience' => '20+ Years',
-            'rating' => '4.8'
-        ],
-        [
-            'image' => 'priests/priest-4.webp',
-            'name' => 'Sri Anand Sharma',
-            'speciality' => 'Vedic Astrology',
-            'experience' => '16+ Years',
-            'rating' => '4.9'
-        ]
-    ];
-
-
     $astrologyServices = [
         'Horoscope',
         'Kundli',
@@ -185,30 +109,6 @@
         'Numerology',
         'Palm Reading',
         'Vastu'
-    ];
-
-
-    $products = [
-        [
-            'image' => 'pooja-samagri/pooja-samagri.webp',
-            'name' => 'Pooja Kit',
-            'price' => '₹499'
-        ],
-        [
-            'image' => 'pooja-samagri/brassdiya-set.webp',
-            'name' => 'Brass Diya Set',
-            'price' => '₹699'
-        ],
-        [
-            'image' => 'pooja-samagri/pancha-patra-set.webp',
-            'name' => 'Panchapatra Set',
-            'price' => '₹899'
-        ],
-        [
-            'image' => 'pooja-samagri/premium-pooja-box.webp',
-            'name' => 'Premium Pooja Box',
-            'price' => '₹1,299'
-        ]
     ];
 
 
@@ -628,7 +528,7 @@
 
         <div class="row g-4">
 
-            @foreach($poojas as $pooja)
+            @forelse($featuredPoojas as $pooja)
 
                 <div class="col-12 col-sm-6 col-lg-3">
 
@@ -643,7 +543,7 @@
                     >
 
                         <img
-                            src="{{ asset('images/home/' . $pooja['image']) }}"
+                            src="{{ asset($pooja['image'] ?: 'images/home/ganapathi.jpg') }}"
                             class="pn-pooja-image
                                    card-img-top"
                             alt="{{ $pooja['name'] }}"
@@ -754,10 +654,10 @@
 
 
                                     <a
-                                        href="{{ route('pooja.book', ['slug' => Str::slug($pooja['name'])]) }}"
+                                        href="{{ route('pooja.show', ['slug' => $pooja['slug']]) }}"
                                         class="btn btn-pn btn-sm"
                                     >
-                                        Book
+                                        View Details
                                     </a>
 
                                 </div>
@@ -770,7 +670,13 @@
 
                 </div>
 
-            @endforeach
+            @empty
+                <div class="col-12">
+                    <div class="text-center text-secondary py-4">
+                        Popular poojas will be displayed here soon.
+                    </div>
+                </div>
+            @endforelse
 
         </div>
 
@@ -1069,18 +975,21 @@
                        col-lg-6
                        mx-auto"
             >
-
                 Experienced priests committed to performing
                 every ritual with devotion and authenticity.
-
             </p>
+
+            <a href="{{ route('priest.index') }}" class="btn btn-pn-outline mt-3">
+                View All Priests
+                <i class="bi bi-arrow-right ms-2"></i>
+            </a>
 
         </div>
 
 
         <div class="row g-4">
 
-            @foreach($priests as $priest)
+            @forelse($priests as $priest)
 
                 <div class="col-12 col-sm-6 col-lg-3">
 
@@ -1094,15 +1003,25 @@
                                p-3"
                     >
 
-                        <img
-                            src="{{ asset('images/home/' . $priest['image']) }}"
-                            class="rounded-circle
-                                   mx-auto
-                                   object-fit-cover"
-                            style="width:120px;height:120px;"
-                            alt="{{ $priest['name'] }}"
-                            loading="lazy"
-                        >
+                        @if (!empty($priest['image']))
+                            <img
+                                src="{{ filter_var($priest['image'], FILTER_VALIDATE_URL) ? $priest['image'] : asset($priest['image']) }}"
+                                class="rounded-circle
+                                       mx-auto
+                                       object-fit-cover"
+                                style="width:120px;height:120px;"
+                                alt="{{ $priest['name'] }}"
+                                loading="lazy"
+                            >
+                        @else
+                            <div
+                                class="rounded-circle mx-auto d-flex align-items-center justify-content-center bg-pn-cream text-pn-primary"
+                                style="width:120px;height:120px;"
+                                aria-label="Priest photo unavailable"
+                            >
+                                <i class="bi bi-person fs-1"></i>
+                            </div>
+                        @endif
 
 
                         <div class="card-body">
@@ -1149,7 +1068,7 @@
                                                text-pn-gold"
                                     ></i>
 
-                                    {{ $priest['rating'] }}
+                                    {{ $priest['rating'] ?? '—' }}
 
                                 </span>
 
@@ -1161,7 +1080,13 @@
 
                 </div>
 
-            @endforeach
+            @empty
+                <div class="col-12">
+                    <div class="text-center text-secondary py-4">
+                        Trusted priest profiles will be displayed here soon.
+                    </div>
+                </div>
+            @endforelse
 
         </div>
 
@@ -1174,7 +1099,7 @@
      DIGITAL POOJA
 ============================================================ --}}
 
-<section class="py-5">
+{{-- <section class="py-5">
 
     <div class="container py-lg-4">
 
@@ -1269,7 +1194,7 @@
 
     </div>
 
-</section>
+</section> --}}
 
 
 {{-- ============================================================
@@ -1441,7 +1366,7 @@
 
         <div class="row g-4">
 
-            @foreach($products as $product)
+            @forelse($products as $product)
 
                 <div class="col-6 col-lg-3">
 
@@ -1454,13 +1379,18 @@
                                h-100"
                     >
 
-                        <img
-                            src="{{ asset('images/home/' . $product['image']) }}"
-                            class="pn-pooja-image
-                                   card-img-top"
-                            alt="{{ $product['name'] }}"
-                            loading="lazy"
-                        >
+                        @if (!empty($product['image']))
+                            <img
+                                src="{{ filter_var($product['image'], FILTER_VALIDATE_URL) ? $product['image'] : asset($product['image']) }}"
+                                class="pn-pooja-image card-img-top"
+                                alt="{{ $product['name'] }}"
+                                loading="lazy"
+                            >
+                        @else
+                            <div class="pn-pooja-image card-img-top d-flex align-items-center justify-content-center bg-pn-cream text-pn-primary">
+                                <i class="bi bi-box-seam display-4"></i>
+                            </div>
+                        @endif
 
 
                         <div class="card-body">
@@ -1486,7 +1416,13 @@
 
                 </div>
 
-            @endforeach
+            @empty
+                <div class="col-12">
+                    <div class="text-center text-secondary py-4">
+                        Pooja samagri products will be displayed here soon.
+                    </div>
+                </div>
+            @endforelse
 
         </div>
 
@@ -1499,7 +1435,7 @@
      FESTIVAL OFFERS
 ============================================================ --}}
 
-<section class="bg-pn-cream py-5">
+{{-- <section class="bg-pn-cream py-5">
 
     <div class="container">
 
@@ -1581,7 +1517,7 @@
 
     </div>
 
-</section>
+</section> --}}
 
 
 {{-- ============================================================
@@ -1698,7 +1634,7 @@
      BLOGS
 ============================================================ --}}
 
-<section class="bg-pn-cream py-5">
+{{-- <section class="bg-pn-cream py-5">
 
     <div class="container py-lg-4">
 
@@ -1822,7 +1758,7 @@
 
     </div>
 
-</section>
+</section> --}}
 
 
 {{-- ============================================================

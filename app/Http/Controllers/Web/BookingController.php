@@ -174,43 +174,6 @@ class BookingController extends Controller
         ]);
     }
 
-    public function slots(Request $request, string $slug): JsonResponse
-    {
-        $validated = $request->validate([
-            'date' => ['required', 'date_format:Y-m-d', 'after_or_equal:today'],
-        ]);
-
-        $pooja = Pooja::query()
-            ->where('slug', $slug)
-            ->where('is_active', true)
-            ->firstOrFail();
-
-        $templePooja = TemplePooja::query()
-            ->where('pooja_id', $pooja->id)
-            ->first();
-
-        $slots = collect();
-        if ($templePooja) {
-            $slots = $this->availability->slotsForDate(
-                $templePooja, 
-                Carbon::createFromFormat('Y-m-d', $validated['date'])
-            );
-        }
-
-        return response()->json([
-            'date' => $validated['date'],
-            'slots' => $slots->map(fn ($slot) => [
-                'id' => $slot->id,
-                'start_time' => $slot->start_time,
-                'end_time' => $slot->end_time,
-                'capacity' => $slot->capacity ?? 1,
-                'remaining_capacity' => method_exists($this->availability, 'remainingCapacity') 
-                    ? $this->availability->remainingCapacity($slot) 
-                    : ($slot->remaining_capacity ?? 1),
-            ])->values(),
-        ]);
-    }
-
     public function store(Request $request, string $slug): RedirectResponse
     {
         $pooja = Pooja::query()->where('slug', $slug)->where('is_active', true)->firstOrFail();

@@ -224,6 +224,15 @@
                         </a>
 
                     </li>
+					
+					
+					<li class="nav-item">
+						<a href="{{ route('donation.index') }}"
+						   class="nav-link px-xl-3 text-pn-brown">
+							Donations
+						</a>
+					</li>
+
 
                 </ul>
 
@@ -369,12 +378,12 @@
 
                 @foreach([
                 ['icon'=>'bi-house', 'name'=>'Home', 'route'=>'home'],
-                ['icon'=>'bi-flower1', 'name'=>'Poojas', 'route'=>'pooja.index'],
-                ['icon'=>'bi-bank', 'name'=>'Temples', 'route'=>'temple.index'],
+                ['icon'=>'bi-flower1', 'name'=>'Poojas', 'route'=>'pooja.index'],               
                 ['icon'=>'bi-person', 'name'=>'Priests', 'route'=>'priest.index'],
-                ['icon'=>'bi-camera-video', 'name'=>'Digital Pooja', 'route'=>'digital-pooja.index'],
-                ['icon'=>'bi-stars', 'name'=>'Astrology', 'route'=>'astrology.index'],
-                ['icon'=>'bi-shop', 'name'=>'Online Store', 'route'=>'store.index']
+                ['icon'=>'bi-stars', 'name'=>'Astrology', 'route'=>'astrology.index'],                
+				['icon'=>'bi-shop', 'name'=>'Online Store', 'route'=>'store.index'],
+				['icon'=>'bi-heart', 'name'=>'Donations', 'route'=>'donation.index']
+
                 ] as $item)
 
                 <a

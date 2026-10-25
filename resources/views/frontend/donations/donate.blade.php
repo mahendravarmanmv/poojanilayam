@@ -4,7 +4,7 @@
 
 @section(
     'meta_description',
-    'Make a devotional contribution to your selected temple or spiritual initiative through Pooja Nilayam.'
+    'Make a devotional contribution to a spiritual initiative through Pooja Nilayam.'
 )
 
 @section('content')
@@ -15,6 +15,16 @@
 {{-- ============================================================
      BREADCRUMB
 ============================================================ --}}
+
+@if ($errors->any())
+    <div class="alert alert-danger rounded-4 mb-4">
+        <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
 <section class="bg-pn-cream border-bottom">
 
@@ -104,9 +114,8 @@
                            mx-auto
                            mb-0"
                 >
-                    Choose a temple, select your purpose, enter your
-                    contribution and provide your donor details to
-                    continue securely.
+                    Choose your donation purpose, enter your contribution,
+                    and provide your donor details to continue.
                 </p>
 
             </div>
@@ -159,7 +168,7 @@
                            d-none
                            d-sm-inline"
                 >
-                    Temple
+                    Purpose
                 </small>
 
             </div>
@@ -173,7 +182,7 @@
             ></div>
 
 
-            {{-- Step 2 --}}
+            {{-- Step 1 --}}
 
             <div
                 class="d-flex
@@ -214,7 +223,7 @@
             ></div>
 
 
-            {{-- Step 3 --}}
+            {{-- Step 2 --}}
 
             <div
                 class="d-flex
@@ -255,7 +264,7 @@
             ></div>
 
 
-            {{-- Step 4 --}}
+            {{-- Step 3 --}}
 
             <div
                 class="d-flex
@@ -346,7 +355,7 @@
         <form
             id="donationForm"
             method="POST"
-            action="#"
+            action="{{ route('donation.submit') }}"
         >
 
             @if($selectedCampaign)
@@ -364,131 +373,7 @@
                 <div class="col-12 col-lg-7">
 
                     {{-- ==================================================
-                         1. SELECT TEMPLE
-                    =================================================== --}}
-
-                    <div
-                        class="card
-                               border
-                               border-warning-subtle
-                               rounded-5
-                               mb-4"
-                    >
-
-                        <div class="card-body p-4 p-md-5">
-
-                            <div
-                                class="d-flex
-                                       align-items-start
-                                       gap-3
-                                       mb-4"
-                            >
-
-                                <div
-                                    class="rounded-circle
-                                           bg-pn-cream
-                                           text-pn-primary
-                                           d-flex
-                                           align-items-center
-                                           justify-content-center
-                                           flex-shrink-0"
-                                    style="width:52px;height:52px;"
-                                >
-
-                                    <i
-                                        class="bi bi-bank2 fs-5"
-                                    ></i>
-
-                                </div>
-
-
-                                <div>
-
-                                    <span
-                                        class="small
-                                               text-pn-gold
-                                               fw-semibold
-                                               text-uppercase"
-                                    >
-                                        Step 1
-                                    </span>
-
-
-                                    <h2
-                                        class="font-serif
-                                               h3
-                                               text-pn-brown
-                                               mt-1
-                                               mb-1"
-                                    >
-                                        Select Temple
-                                    </h2>
-
-
-                                    <p
-                                        class="small
-                                               text-secondary
-                                               mb-0"
-                                    >
-                                        Choose the temple you would
-                                        like to support.
-                                    </p>
-
-                                </div>
-
-                            </div>
-
-
-                            <label
-                                for="temple"
-                                class="form-label
-                                       fw-semibold
-                                       text-pn-brown"
-                            >
-                                Temple
-                                <span class="text-danger">*</span>
-                            </label>
-
-
-                            <select
-                                id="temple"
-                                name="temple_id"
-                                class="form-select
-                                       form-select-lg"
-                                required
-                            >
-
-                                <option
-                                    value=""
-                                    @selected(! $selectedTemple)
-                                    disabled
-                                >
-                                    Select a temple
-                                </option>
-
-
-                                @foreach($temples as $temple)
-
-                                    <option
-                                        value="{{ $temple['id'] }}"
-                                        @selected($selectedTemple?->id === $temple['id'])
-                                    >
-                                        {{ $temple['name'] }}
-                                        —
-                                        {{ $temple['location'] }}
-                                    </option>
-
-                                @endforeach
-
-                            </select>
-
-                        </div>
-
-                    </div>
-
-
-                    {{-- ==================================================
-                         2. DONATION TYPE
+                         1. DONATION PURPOSE
                     =================================================== --}}
 
                     <div
@@ -535,7 +420,7 @@
                                                fw-semibold
                                                text-uppercase"
                                     >
-                                        Step 2
+                                        Step 1
                                     </span>
 
 
@@ -580,10 +465,10 @@
                                         <input
                                             type="radio"
                                             class="btn-check"
-                                            name="donation_type"
+                                            name="donation_type_id"
                                             id="donationType{{ $type['id'] }}"
                                             value="{{ $type['id'] }}"
-                                            @checked($selectedDonationTypeId === $type['id'])
+                                            @checked((int) old('donation_type_id', $selectedDonationTypeId) === (int) $type['id'])
                                             required
                                         >
 
@@ -676,7 +561,7 @@
                                                fw-semibold
                                                text-uppercase"
                                     >
-                                        Step 3
+                                        Step 2
                                     </span>
 
 
@@ -766,17 +651,17 @@
 
 
                                 <input
-                                    type="number"
-                                    id="donationAmount"
-                                    name="amount"
-                                    class="form-control
-                                           border-warning-subtle"
-                                    min="1"
-                                    step="1"
-                                    placeholder="Enter amount"
-                                    inputmode="numeric"
-                                    required
-                                >
+    type="number"
+    id="donationAmount"
+    name="amount"
+    class="form-control border-warning-subtle"
+    value="{{ old('amount', $selectedAmount ?? 1001) }}"
+    min="1"
+    step="1"
+    placeholder="Enter amount"
+    inputmode="numeric"
+    required
+>
 
                             </div>
 
@@ -842,7 +727,7 @@
                                                fw-semibold
                                                text-uppercase"
                                     >
-                                        Step 4
+                                        Step 3
                                     </span>
 
 
@@ -1067,14 +952,14 @@
                                 </label>
 
 
-                                <textarea
-                                    id="donationMessage"
-                                    name="message"
-                                    class="form-control"
-                                    rows="3"
-                                    placeholder="Add a dedication or message"
-                                    maxlength="500"
-                                ></textarea>
+                               <textarea
+    id="donationMessage"
+    name="donor_message"
+    class="form-control"
+    rows="3"
+    placeholder="Add a dedication or message"
+    maxlength="500"
+>{{ old('donor_message') }}</textarea>
 
 
                                 <small
@@ -1176,56 +1061,7 @@
                             </h2>
 
 
-                            {{-- Selected Temple --}}
-
-                            <div
-                                class="border
-                                       border-warning-subtle
-                                       rounded-4
-                                       p-4
-                                       mb-3"
-                            >
-
-                                <div
-                                    class="d-flex
-                                           align-items-start
-                                           gap-3"
-                                >
-
-                                    <i
-                                        class="bi bi-bank2
-                                               text-pn-primary
-                                               fs-5"
-                                    ></i>
-
-
-                                    <div>
-
-                                        <small
-                                            class="text-secondary
-                                                   d-block
-                                                   mb-1"
-                                        >
-                                            Temple
-                                        </small>
-
-
-                                        <strong
-                                            id="summaryTemple"
-                                            class="d-block
-                                                   text-pn-brown"
-                                        >
-                                            Not selected
-                                        </strong>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-
-                            {{-- Donation Type --}}
+                            {{-- Donation Purpose --}}
 
                             <div
                                 class="border
@@ -1341,7 +1177,7 @@
                             >
 
 
-                            {{-- Secure Payment --}}
+                            {{-- Donation Request Status --}}
 
                             <div
                                 class="d-flex
@@ -1376,17 +1212,14 @@
                                                text-pn-brown
                                                mb-1"
                                     >
-                                        Secure Payment
+                                        Donation Request Status
                                     </strong>
 
 
                                     <small
                                         class="text-secondary"
                                     >
-                                        You will continue to the
-                                        payment process after
-                                        submitting your donation
-                                        details.
+                                        Your request will be saved as pending. No payment will be processed at this stage.
                                     </small>
 
                                 </div>
@@ -1398,21 +1231,14 @@
 
                             <div class="d-grid">
 
-                                <button
-                                    type="submit"
-                                    id="continueDonationButton"
-                                    class="btn
-                                           btn-pn
-                                           btn-lg"
-                                >
-
-                                    Continue to Payment
-
-                                    <i
-                                        class="bi bi-arrow-right ms-2"
-                                    ></i>
-
-                                </button>
+                               <button
+    type="submit"
+    id="continueDonationButton"
+    class="btn btn-pn btn-lg"
+>
+    Submit Donation Request
+    <i class="bi bi-arrow-right ms-2"></i>
+</button>
 
                             </div>
 
@@ -1615,20 +1441,12 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-
-    const templeSelect =
-        document.getElementById('temple');
-
-    const donationAmount =
+const donationAmount =
         document.getElementById('donationAmount');
 
     const donorName =
         document.getElementById('donorName');
-
-    const summaryTemple =
-        document.getElementById('summaryTemple');
-
-    const summaryType =
+const summaryType =
         document.getElementById('summaryType');
 
     const summaryAmount =
@@ -1696,36 +1514,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     /*
     |--------------------------------------------------------------------------
-    | Temple Summary
-    |--------------------------------------------------------------------------
-    */
-
-    templeSelect?.addEventListener(
-        'change',
-        function () {
-
-            const option =
-                this.options[
-                    this.selectedIndex
-                ];
-
-
-            summaryTemple.textContent =
-                option?.text || 'Not selected';
-
-        }
-    );
-
-
-    /*
-    |--------------------------------------------------------------------------
     | Donation Type Summary
     |--------------------------------------------------------------------------
     */
 
     document
         .querySelectorAll(
-            'input[name="donation_type"]'
+            'input[name="donation_type_id"]'
         )
         .forEach(function (radio) {
 
@@ -1747,9 +1542,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         );
 
 
-                    summaryType.textContent =
-                        title?.textContent.trim()
-                        || 'Not selected';
+                    if (summaryType) summaryType.textContent = title?.textContent.trim() || 'Not selected';
 
                 }
             );
@@ -1783,14 +1576,14 @@ document.addEventListener('DOMContentLoaded', function () {
             );
 
 
-        summaryAmount.textContent =
+        if (summaryAmount) summaryAmount.textContent =
             '₹' +
             amount.toLocaleString(
                 'en-IN'
             );
 
 
-        summaryDonor.textContent =
+        if (summaryDonor) summaryDonor.textContent =
             donorName?.value.trim()
             || 'Not entered';
 
@@ -1845,8 +1638,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
             continueButton.innerHTML =
-                '<span class="spinner-border spinner-border-sm me-2"></span>' +
-                'Preparing Payment...';
+    '<span class="spinner-border spinner-border-sm me-2"></span>' +
+    'Submitting Request...';
 
         }
     );
