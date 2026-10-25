@@ -257,6 +257,7 @@ Route::prefix('store')
             Route::delete('/cart', [StoreCartController::class, 'clear'])->name('cart.clear');
 			
 			Route::get('/checkout', [StoreCheckoutController::class, 'index'])->name('checkout');
+            Route::post('/checkout/address', [StoreCheckoutController::class, 'storeCheckoutAddress'])->name('checkout.address.store');
 			Route::post('/checkout', [StoreCheckoutController::class, 'store'])->name('checkout.store');
             Route::get('/payment', [StoreCheckoutController::class, 'payment'])->name('payment');
             Route::post('/payment/place-order', [StoreCheckoutController::class, 'placeOrder'])->name('payment.place-order');

@@ -1862,6 +1862,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
                 if (!response.ok) throw new Error(data.message || 'Unable to add this product to your cart.');
+                // Refresh the visible cart badge immediately after the server confirms success.
+                // Use the server count when supplied, with a local increment as a fallback.
+                const cartBadges = new Set([
+                    ...document.querySelectorAll('[data-cart-count]'),
+                    ...document.querySelectorAll('a[href*="/store/cart"] .badge')
+                ]);
+                cartBadges.forEach(badge => {
+                    const currentCount = Number.parseInt((badge.textContent || '').trim(), 10) || 0;
+                    const serverCount = Number.parseInt(data.cart_count, 10);
+                    badge.textContent = String(Number.isFinite(serverCount) && serverCount >= 0
+                        ? serverCount
+                        : currentCount + 1);
+                });
+
                 this.innerHTML = '<i class="bi bi-check2 me-1"></i> Added';
                 window.setTimeout(() => { this.innerHTML = original; }, 1400);
             } catch (error) {

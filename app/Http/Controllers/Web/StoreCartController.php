@@ -159,16 +159,31 @@ class StoreCartController extends Controller
         );
     }
 
-    private function assertStock(Product $product, int $quantity): void
-    {
-        $inventories = $product->inventories()->where('active', true)->get();
-        $tracked = $inventories->filter(fn ($inventory) => $inventory->track_inventory);
+	private function assertStock(Product $product, int $quantity): void
+	{
+	$inventories = $product->inventories()
+		->where('active', true)
+		->get();
 
-        if ($tracked->isNotEmpty() && ! $product->is_digital) {
-            $available = $tracked->sum('quantity_available');
-            abort_if($available < $quantity, 422, 'Requested quantity is not available.');
-        }
-    }
+	$tracked = $inventories->filter(
+		fn ($inventory) => $inventory->track_inventory
+	);
+
+	if ($tracked->isNotEmpty() && ! $product->is_digital) {
+		$available = (int) $tracked->sum('quantity_available');
+
+		if ($available < $quantity) {
+			throw new \Illuminate\Http\Exceptions\HttpResponseException(
+				response()->json([
+					'success' => false,
+					'message' => $available > 0
+						? "Only {$available} item(s) are currently available. Please reduce the quantity and try again."
+						: "Sorry, this product is currently out of stock.",
+				], 422)
+			);
+		}
+	}
+	}
 
     private function activePrice(Product $product)
     {

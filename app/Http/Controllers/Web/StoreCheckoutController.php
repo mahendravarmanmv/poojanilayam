@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Address;
+use App\Models\City;
+use App\Models\Country;
+use App\Models\State;
 use App\Models\Cart;
 use App\Models\CartCheckoutSnapshot;
 use App\Models\Product;
@@ -147,6 +150,93 @@ class StoreCheckoutController extends Controller
             'currencySymbol' => Currency::query()
                 ->where('code', $calculation['currency_code'])
                 ->value('symbol') ?: '₹',
+        ]);
+    }
+
+    /**
+     * Save a new address from checkout and select it for the current checkout.
+     */
+    public function storeCheckoutAddress(Request $request)
+    {
+        $validated = $request->validate([
+            'address_type' => ['required', 'string', 'max:30'],
+            'address_line_1' => ['required', 'string', 'max:255'],
+            'city' => ['required', 'string', 'max:150'],
+            'state' => ['required', 'string', 'max:150'],
+            'postal_code' => ['required', 'string', 'max:20'],
+            'phone' => ['required', 'string', 'max:20'],
+            'name' => ['required', 'string', 'max:150'],
+            'save_for_future' => ['nullable', 'boolean'],
+        ]);
+
+        $country = Country::query()
+            ->where('name', 'India')
+            ->where('is_active', true)
+            ->first();
+
+        if (! $country) {
+            return response()->json([
+                'success' => false,
+                'message' => 'India is not configured as an active country. Please contact support.',
+            ], 422);
+        }
+
+        $state = State::query()
+            ->where('country_id', $country->id)
+            ->where('is_active', true)
+            ->whereRaw('LOWER(name) = ?', [mb_strtolower(trim($validated['state']))])
+            ->first();
+
+        if (! $state) {
+            return response()->json([
+                'success' => false,
+                'message' => 'The selected state was not found. Please select a valid state.',
+            ], 422);
+        }
+
+        $city = City::query()
+            ->where('state_id', $state->id)
+            ->where('is_active', true)
+            ->whereRaw('LOWER(name) = ?', [mb_strtolower(trim($validated['city']))])
+            ->first();
+
+        if (! $city) {
+            return response()->json([
+                'success' => false,
+                'message' => 'The entered city was not found for the selected state. Please check the city name.',
+            ], 422);
+        }
+
+        $user = $request->user();
+
+        $address = DB::transaction(function () use ($user, $validated, $country, $state, $city) {
+            $makeDefault = ! $user->addresses()->exists();
+
+            $typeText = mb_strtolower(trim($validated['address_type']));
+            $type = str_contains($typeText, 'office') ? 'office'
+                : (str_contains($typeText, 'other') ? 'other' : 'home');
+
+            return $user->addresses()->create([
+                'address_type' => $type,
+                'name' => $validated['name'],
+                'phone' => $validated['phone'],
+                'address_line_1' => $validated['address_line_1'],
+                'address_line_2' => null,
+                'landmark' => null,
+                'country_id' => $country->id,
+                'state_id' => $state->id,
+                'city_id' => $city->id,
+                'postal_code' => $validated['postal_code'],
+                'is_default' => $makeDefault,
+            ]);
+        });
+
+        $request->session()->put('store_checkout.address_id', $address->id);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Address saved and selected for this checkout.',
+            'redirect' => route('store.checkout'),
         ]);
     }
 

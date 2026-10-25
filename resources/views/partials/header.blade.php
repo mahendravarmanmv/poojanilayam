@@ -61,15 +61,10 @@
 
                     
 					<span
-					class="position-absolute
-						   top-0
-						   start-100
-						   translate-middle
-						   badge
-						   rounded-pill
-						   bg-pn-primary">
-					{{ $headerCartCount }}
-					</span>
+    data-cart-count
+    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-pn-primary">
+    {{ $headerCartCount }}
+</span>
 
 
                 </a>
@@ -192,7 +187,7 @@
                     </li>
 
 
-                    <li class="nav-item">
+					{{-- <li class="nav-item">
 
                         <a
                             href="{{ route('digital-pooja.index') }}"
@@ -202,7 +197,7 @@
                             Digital Pooja
                         </a>
 
-                    </li>
+                    </li> --}}
 
 
                     <li class="nav-item">
@@ -266,6 +261,7 @@
                         
 
 					<span
+						data-cart-count
 						class="position-absolute
 							   top-0
 							   start-100

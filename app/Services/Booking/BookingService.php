@@ -41,6 +41,10 @@ class BookingService
                 ->with(['pooja', 'pricing.currency', 'temple'])
                 ->whereKey((int) $data['temple_pooja_id'])
                 ->where('status', 'active')
+                ->whereHas('temple', function ($query) {
+                    $query->where('status', 'active')
+                        ->where('verification_status', 'approved');
+                })
                 ->firstOrFail();
 
             $slot = BookingSlot::query()
@@ -50,10 +54,22 @@ class BookingService
 
             $slotBelongsToTemplePooja = $slot->schedule()
                 ->where('temple_pooja_id', $templePooja->id)
+                ->where('status', 'active')
                 ->exists();
 
             if (!$slotBelongsToTemplePooja) {
                 throw new \DomainException('The selected time slot does not belong to the selected temple pooja.');
+            }
+
+            if ($slot->slot_date->toDateString() < today()->toDateString()) {
+                throw new \DomainException('The selected booking date has already passed. Please choose another date.');
+            }
+
+            if ($slot->slot_date->isToday()) {
+                $slotStart = now()->copy()->setTimeFromTimeString((string) $slot->start_time);
+                if ($slotStart->lessThanOrEqualTo(now())) {
+                    throw new \DomainException('The selected time has already passed. Please choose a future slot.');
+                }
             }
 
             $this->availability->assertAvailable($slot);
@@ -99,6 +115,10 @@ class BookingService
                 'service_mode' => $templePooja->service_mode,
                 'status' => 'pending_payment',
                 'booking_date' => $slot->slot_date,
+                'devotee_name' => trim((string) ($data['devotee_name'] ?? '')),
+                'devotee_phone' => trim((string) ($data['devotee_phone'] ?? '')),
+                'devotee_email' => strtolower(trim((string) ($data['devotee_email'] ?? ''))),
+                'devotee_dob' => $data['devotee_dob'] ?? null,
                 'start_time' => $slot->start_time,
                 'end_time' => $slot->end_time,
                 'timezone' => $templePooja->temple?->timezone,
