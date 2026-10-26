@@ -32,8 +32,8 @@
     class="navbar-brand d-flex align-items-center">
 
     <img
-        src="{{ asset('images/pooja-nilayam-logo.png') }}"
-        alt="Pooja Nilayam"
+        src="{{ asset('images/logo.png') }}"
+        alt="Pooja Go"
         class="img-fluid pn-brand-logo">
 
 </a>
