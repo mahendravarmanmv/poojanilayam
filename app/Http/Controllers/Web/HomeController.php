@@ -150,6 +150,6 @@ class HomeController extends Controller
             $relativePath = 'images/poojas/' . basename($path);
         }
 
-        return is_file(public_path($relativePath)) ? $relativePath : null;
+        return 'https://admin.poojago.com/' . $relativePath;
     }
 }

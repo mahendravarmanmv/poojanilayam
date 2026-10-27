@@ -543,7 +543,7 @@
                     >
 
                         <img
-                            src="{{ asset($pooja['image'] ?: 'images/home/ganapathi.jpg') }}"
+                            src="{{ $pooja['image'] ?: asset('images/home/ganapathi.jpg') }}"
                             class="pn-pooja-image
                                    card-img-top"
                             alt="{{ $pooja['name'] }}"
