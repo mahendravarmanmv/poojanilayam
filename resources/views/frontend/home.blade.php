@@ -569,18 +569,25 @@
                                     {{ $pooja['category'] }}
 
                                 </span>
+                                
+								
+								<span class="small">
+									@if(isset($pooja['reviews']) && $pooja['reviews'] > 0)
+										<i class="bi bi-star-fill text-pn-gold"></i>
+										<strong>{{ $pooja['rating'] }}</strong>
 
+										<span class="text-secondary">
+											({{ $pooja['reviews'] }}
+											{{ $pooja['reviews'] == 1 ? 'review' : 'reviews' }})
+										</span>
+									@else
+										<span class="text-secondary">
+											<i class="bi bi-chat-left-text me-1"></i>
+											No reviews yet
+										</span>
+									@endif
+								</span>
 
-                                <span class="small">
-
-                                    <i
-                                        class="bi bi-star-fill
-                                               text-pn-gold"
-                                    ></i>
-
-                                    {{ $pooja['rating'] }}
-
-                                </span>
 
                             </div>
 

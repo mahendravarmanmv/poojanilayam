@@ -13,10 +13,25 @@ class PoojaController extends Controller
 {
     public function index(Request $request): View
     {
-        $query = Pooja::query()
-            ->with(['category', 'media', 'pricing.currency', 'templePoojas.temple'])
-            ->where('is_active', true)
-            ->where('status', 'active');
+        
+	$query = Pooja::query()
+		->with(['category', 'media', 'pricing.currency', 'templePoojas.temple'])
+		->withAvg([
+			'reviews as reviews_avg_rating' => function ($query) {
+				$query->where('status', 'published')
+					->where('customer_visible', true)
+					->whereNotNull('published_at');
+			},
+		], 'rating')
+		->withCount([
+			'reviews as reviews_count' => function ($query) {
+				$query->where('status', 'published')
+					->where('customer_visible', true)
+					->whereNotNull('published_at');
+			},
+		])
+		->where('is_active', true)
+		->where('status', 'active');
 
         if ($request->filled('search')) {
             $search = trim((string) $request->string('search'));
@@ -178,6 +193,11 @@ class PoojaController extends Controller
                 'pricing.currency',
                 'templePoojas.temple.profile',
                 'templePoojas.pricing.currency',
+				'reviews' => function ($query) {
+				$query->where('status', 'published')
+				->where('customer_visible', true)
+				->whereNotNull('published_at');
+				},
             ])
             ->where('slug', $slug)
             ->where('is_active', true)
@@ -224,8 +244,10 @@ class PoojaController extends Controller
             'category' => $pooja->category?->name ?? 'Pooja',
             'description' => $pooja->short_description ?: $pooja->description ?: 'Traditional devotional service.',
             'duration' => $pooja->duration_minutes ? $pooja->duration_minutes . ' Mins' : 'As per ritual',
-            'rating' => '—',
-            'reviews' => '0',
+			'rating' => $pooja->reviews_count > 0
+			? number_format((float) $pooja->reviews_avg_rating, 1)
+			: '—',
+			'reviews' => (string) ($pooja->reviews_count ?? 0),
             'price' => $this->displayPrice($pooja),
             'location' => $temple?->name ?? 'Multiple locations',
             'featured' => (bool) $pooja->is_featured,
@@ -280,8 +302,10 @@ class PoojaController extends Controller
             'gallery' => $this->galleryImagePaths($pooja),
             'short_description' => $pooja->short_description ?: '',
             'description' => $pooja->description ?: $pooja->short_description ?: '',
-            'rating' => '—',
-            'reviews' => '0',
+			'rating' => $pooja->reviews->isNotEmpty()
+			? number_format((float) $pooja->reviews->avg('rating'), 1)
+			: '—',
+			'reviews' => (string) $pooja->reviews->count(),
             'duration' => $pooja->duration_minutes ? $pooja->duration_minutes . ' Mins' : 'As per ritual',
             'starting_price' => $this->displayPrice($pooja),
             'location' => $temple?->name ?? 'Multiple locations',

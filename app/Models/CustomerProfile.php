@@ -40,4 +40,9 @@ class CustomerProfile extends Model
     {
         return $this->hasMany(FamilyMember::class);
     }
+	
+	public function reviews(): HasMany
+	{
+	return $this->hasMany(Review::class);
+	}
 }

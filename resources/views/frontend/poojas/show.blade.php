@@ -316,56 +316,37 @@
                 </p>
 
 
-                {{-- Rating --}}
+                
+				{{-- Rating --}}
+				<div
+					class="d-flex
+						   flex-wrap
+						   align-items-center
+						   gap-3
+						   mb-4"
+				>
+					@if(isset($pooja['reviews']) && (int) $pooja['reviews'] > 0)
+						<span>
+							<i class="bi bi-star-fill text-pn-gold"></i>
+							<strong>{{ $pooja['rating'] }}</strong>
+						</span>
 
-                <div
-                    class="d-flex
-                           flex-wrap
-                           align-items-center
-                           gap-3
-                           mb-4"
-                >
+						<span class="small text-secondary">
+							({{ $pooja['reviews'] }}
+							{{ (int) $pooja['reviews'] === 1 ? 'Review' : 'Reviews' }})
+						</span>
+					@else
+						<span class="small text-secondary">
+							<i class="bi bi-chat-left-text me-1"></i>
+							No reviews yet
+						</span>
+					@endif
 
-                    <span>
-
-                        <i
-                            class="bi bi-star-fill
-                                   text-pn-gold"
-                        ></i>
-
-                        <strong>
-                            {{ $pooja['rating'] }}
-                        </strong>
-
-                    </span>
-
-
-                    <span
-                        class="small
-                               text-secondary"
-                    >
-
-                        {{ $pooja['reviews'] }} Reviews
-
-                    </span>
-
-
-                    <span
-                        class="small
-                               text-secondary"
-                    >
-
-                        <i
-                            class="bi bi-patch-check-fill
-                                   text-pn-primary
-                                   me-1"
-                        ></i>
-
-                        Verified Service
-
-                    </span>
-
-                </div>
+					<span class="small text-secondary">
+						<i class="bi bi-patch-check-fill text-pn-primary me-1"></i>
+						Verified Service
+					</span>
+				</div>
 
 
                 {{-- Quick Info --}}
@@ -922,6 +903,164 @@
     </div>
 
 </section>
+
+
+{{-- ============================================================
+     CUSTOMER REVIEWS & RATINGS
+============================================================ --}}
+
+<section class="py-5">
+    <div class="container py-lg-3">
+
+        <div class="row justify-content-center">
+            <div class="col-lg-9">
+
+                <div class="mb-4">
+                    <span class="pn-section-label text-uppercase text-pn-gold small fw-semibold">
+                        Customer Feedback
+                    </span>
+
+                    <h2 class="font-serif display-6 text-pn-brown mt-2">
+                        Reviews & Ratings
+                    </h2>
+
+                    <div class="pn-divider mb-3"></div>
+
+                    <p class="text-secondary">
+                        Share your experience with {{ $pooja['name'] }}.
+                        Your feedback helps other devotees make informed decisions.
+                    </p>
+                </div>
+
+                {{-- Success message --}}
+                @if(session('success'))
+                    <div class="alert alert-success" role="alert">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                {{-- General error message --}}
+                @if(session('error'))
+                    <div class="alert alert-danger" role="alert">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
+                {{-- Validation errors --}}
+                @if($errors->any())
+                    <div class="alert alert-danger" role="alert">
+                        <ul class="mb-0">
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <div class="card border border-warning-subtle rounded-4 shadow-sm">
+                    <div class="card-body p-4 p-md-5">
+
+                        @auth
+                            <form
+                                action="{{ route('pooja.reviews.store', ['slug' => $pooja['slug']]) }}"
+                                method="POST"
+                            >
+                                @csrf
+
+                                <div class="mb-4">
+                                    <label class="form-label fw-semibold">
+                                        Your Rating <span class="text-danger">*</span>
+                                    </label>
+
+                                    <div class="d-flex flex-wrap gap-3">
+                                        @for($star = 1; $star <= 5; $star++)
+                                            <div class="form-check">
+                                                <input
+                                                    class="form-check-input"
+                                                    type="radio"
+                                                    name="rating"
+                                                    id="rating{{ $star }}"
+                                                    value="{{ $star }}"
+                                                    {{ (string) old('rating') === (string) $star ? 'checked' : '' }}
+                                                    required
+                                                >
+
+                                                <label
+                                                    class="form-check-label"
+                                                    for="rating{{ $star }}"
+                                                >
+                                                    <span class="text-warning">
+                                                        {{ $star }} <i class="bi bi-star-fill"></i>
+                                                    </span>
+                                                </label>
+                                            </div>
+                                        @endfor
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="review_title" class="form-label fw-semibold">
+                                        Review Title (Optional)
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        id="review_title"
+                                        name="title"
+                                        maxlength="255"
+                                        value="{{ old('title') }}"
+                                        placeholder="Summarize your experience"
+                                    >
+                                </div>
+
+                                <div class="mb-4">
+                                    <label for="review_text" class="form-label fw-semibold">
+                                        Your Review (Optional)
+                                    </label>
+
+                                    <textarea
+                                        class="form-control"
+                                        id="review_text"
+                                        name="review_text"
+                                        rows="5"
+                                        maxlength="5000"
+                                        placeholder="Tell us about your experience..."
+                                    >{{ old('review_text') }}</textarea>
+                                </div>
+
+                                <button type="submit" class="btn btn-pn px-4">
+                                    <i class="bi bi-send me-2"></i>
+                                    Submit Review
+                                </button>
+                            </form>
+                        @else
+                            <h5 class="font-serif text-pn-brown">
+                                Sign in to write a review
+                            </h5>
+
+                            <p class="text-secondary">
+                                Please log in to share your rating and feedback
+                                about this pooja.
+                            </p>
+
+                            <a
+                                href="{{ route('login') }}"
+                                class="btn btn-pn px-4"
+                            >
+                                Login to Review
+                            </a>
+                        @endauth
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
 
 
 {{-- ============================================================

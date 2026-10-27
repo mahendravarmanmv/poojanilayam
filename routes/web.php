@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Web\ReviewController;
 use App\Http\Controllers\Web\PoojaController;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\DigitalPoojaController;
@@ -73,6 +74,10 @@ Route::prefix('poojas')
 
         Route::view('/{slug}/booking-failed', 'frontend.poojas.booking-failed')
             ->name('booking.failed');
+			
+		Route::post('/{slug}/reviews', [ReviewController::class, 'store'])
+		->middleware('auth')
+		->name('reviews.store');
     });
 
 

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Pooja extends Model
 {
@@ -91,4 +92,9 @@ class Pooja extends Model
     {
         return $this->hasMany(TemplePooja::class);
     }
+	
+	public function reviews(): MorphMany
+	{
+	return $this->morphMany(Review::class, 'reviewable');
+	}
 }

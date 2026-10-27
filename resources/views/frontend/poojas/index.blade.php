@@ -896,40 +896,35 @@
                                     </p>
 
 
-                                    {{-- Rating --}}
+                                    
+								{{-- Rating --}}
+								<div class="d-flex align-items-center gap-2 mb-3">
 
-                                    <div
-                                        class="d-flex
-                                               align-items-center
-                                               gap-2
-                                               mb-3"
-                                    >
+									@if(isset($pooja['reviews']) && (int) $pooja['reviews'] > 0)
 
-                                        <span>
+										<span>
+											<i class="bi bi-star-fill text-pn-gold"></i>
+											<strong class="small">
+												{{ $pooja['rating'] }}
+											</strong>
+										</span>
 
-                                            <i
-                                                class="bi bi-star-fill
-                                                       text-pn-gold"
-                                            ></i>
+										<span class="small text-secondary">
+											({{ $pooja['reviews'] }}
+											{{ (int) $pooja['reviews'] === 1 ? 'review' : 'reviews' }})
+										</span>
 
-                                            <strong
-                                                class="small"
-                                            >
-                                                {{ $pooja['rating'] }}
-                                            </strong>
+									@else
 
-                                        </span>
+										<span class="small text-secondary">
+											<i class="bi bi-chat-left-text me-1"></i>
+											No reviews yet
+										</span>
 
+									@endif
 
-                                        <span
-                                            class="small
-                                                   text-secondary"
-                                        >
-                                            ({{ $pooja['reviews'] }}
-                                            reviews)
-                                        </span>
+								</div>
 
-                                    </div>
 
 
                                     {{-- Duration --}}

@@ -16,7 +16,19 @@ class HomeController extends Controller
     public function index(): View
     {
         $featuredPoojas = Pooja::query()
-            ->with(['category', 'media', 'pricing.currency'])
+			->with(['category', 'media', 'pricing.currency'])
+			->withCount([
+			'reviews as approved_reviews_count' => function ($query) {
+			$query->where('status', 'published')
+			->where('customer_visible', true);
+			},
+			])
+			->withAvg([
+			'reviews as approved_reviews_avg_rating' => function ($query) {
+			$query->where('status', 'published')
+			->where('customer_visible', true);
+			},
+			], 'rating')
             ->where('is_active', true)
             ->where('status', 'active')
             // Featured poojas appear first, but regular active poojas are also shown.
@@ -51,8 +63,11 @@ class HomeController extends Controller
                     'duration' => $pooja->duration_minutes
                         ? $pooja->duration_minutes . ' Mins'
                         : 'As per ritual',
-                    'rating' => '—',
-                    'price' => $price
+						'rating' => $pooja->approved_reviews_avg_rating !== null
+						? number_format((float) $pooja->approved_reviews_avg_rating, 1)
+						: '—',
+						'reviews' => (int) $pooja->approved_reviews_count,
+						'price' => $price
                         ? $currencySymbol . number_format((float) $price->amount, 2)
                         : 'Contact for pricing',
                     'image' => $image,
