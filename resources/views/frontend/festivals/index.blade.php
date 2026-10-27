@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Festivals | Pooja Nilayam')
-@section('meta_description', 'Explore upcoming Hindu festivals, their significance, and sacred pooja services with Pooja Nilayam.')
+@section('title', 'Festivals | Pooja Go')
+@section('meta_description', 'Explore upcoming Hindu festivals, their significance, and sacred pooja services with Pooja Go.')
 
 @section('content')
 <section class="bg-pn-cream border-bottom">

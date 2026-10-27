@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Event Registration | Pooja Nilayam')
+@section('title', 'Event Registration | Pooja Go')
 
 @section(
     'meta_description',
-    'Register for a sacred temple event with Pooja Nilayam.'
+    'Register for a sacred temple event with Pooja Go.'
 )
 
 @section('content')

@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Match Making | Pooja Nilayam')
+@section('title', 'Match Making | Pooja Go')
 
 @section(
     'meta_description',
-    'Explore traditional match making services through Pooja Nilayam.'
+    'Explore traditional match making services through Pooja Go.'
 )
 
 @section('content')

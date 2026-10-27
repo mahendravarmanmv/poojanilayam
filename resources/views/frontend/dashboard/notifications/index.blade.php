@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Notifications | Pooja Nilayam')
+@section('title', 'Notifications | Pooja Go')
 
 @section('content')
 <div class="container py-4 py-lg-5">
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
         <div>
             <h1 class="h3 mb-1">Notifications</h1>
-            <p class="text-muted mb-0">Your latest Pooja Nilayam notifications.</p>
+            <p class="text-muted mb-0">Your latest Pooja Go notifications.</p>
         </div>
 
         @if($unreadCount > 0)

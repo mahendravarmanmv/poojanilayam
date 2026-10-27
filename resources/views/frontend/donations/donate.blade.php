@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Donate Now | Pooja Nilayam')
+@section('title', 'Donate Now | Pooja Go')
 
 @section(
     'meta_description',
-    'Make a devotional contribution to a spiritual initiative through Pooja Nilayam.'
+    'Make a devotional contribution to a spiritual initiative through Pooja Go.'
 )
 
 @section('content')

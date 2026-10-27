@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Donation Request | Pooja Nilayam')
+@section('title', 'Donation Request | Pooja Go')
 @section('meta_description', 'View your donation request reference and pending status.')
 
 @section('content')

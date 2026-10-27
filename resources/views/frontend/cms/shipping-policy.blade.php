@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', $cmsPage?->title ? $cmsPage->title . ' | Pooja Nilayam' : 'Shipping Policy | Pooja Nilayam')
+@section('title', $cmsPage?->title ? $cmsPage->title . ' | Pooja Go' : 'Shipping Policy | Pooja Go')
 
 @section(
     'meta_description',
-    $cmsPage?->excerpt ?: 'Read the Pooja Nilayam Shipping Policy covering product delivery and related information.'
+    $cmsPage?->excerpt ?: 'Read the Pooja Go Shipping Policy covering product delivery and related information.'
 )
 
 @section('content')
@@ -58,7 +58,7 @@
     |--------------------------------------------------------------------------
     */
 
-    $lastUpdated = data_get($cmsPage?->metadata, 'last_updated', 'To be updated by Pooja Nilayam');
+    $lastUpdated = data_get($cmsPage?->metadata, 'last_updated', 'To be updated by Pooja Go');
 
 
     $sections = [
@@ -2181,7 +2181,7 @@
 
                                         Any future changes to shipping
                                         rules should be maintained
-                                        through the Pooja Nilayam CMS
+                                        through the Pooja Go CMS
                                         and reflected on this page.
 
                                     </p>
@@ -2236,7 +2236,7 @@
                                         For questions concerning
                                         shipping, delivery or an
                                         existing order, contact the
-                                        Pooja Nilayam support team.
+                                        Pooja Go support team.
 
                                     </p>
 
@@ -2246,7 +2246,7 @@
                                         class="btn btn-pn"
                                     >
 
-                                        Contact Pooja Nilayam
+                                        Contact Pooja Go
 
                                         <i
                                             class="bi bi-arrow-right ms-1"

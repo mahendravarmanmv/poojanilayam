@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', $cmsPage?->title ? $cmsPage->title . ' | Pooja Nilayam' : 'Careers | Pooja Nilayam')
+@section('title', $cmsPage?->title ? $cmsPage->title . ' | Pooja Go' : 'Careers | Pooja Go')
 
 @section(
     'meta_description',
-    $cmsPage?->excerpt ?: 'Explore career opportunities with Pooja Nilayam and learn about working with our spiritual and digital platform.'
+    $cmsPage?->excerpt ?: 'Explore career opportunities with Pooja Go and learn about working with our spiritual and digital platform.'
 )
 
 @section('content')
@@ -32,7 +32,7 @@
     |--------------------------------------------------------------------------
     */
 
-    $lastUpdated = data_get($cmsPage?->metadata, 'last_updated', 'To be updated by Pooja Nilayam');
+    $lastUpdated = data_get($cmsPage?->metadata, 'last_updated', 'To be updated by Pooja Go');
 
 
     $careerAreas = [
@@ -179,7 +179,7 @@
                            fw-semibold
                            text-uppercase"
                 >
-                    Careers at Pooja Nilayam
+                    Careers at Pooja Go
                 </span>
 
 
@@ -433,7 +433,7 @@
                            fw-semibold
                            text-uppercase"
                 >
-                    Why Pooja Nilayam
+                    Why Pooja Go
                 </span>
 
 
@@ -772,7 +772,7 @@
                            lh-lg"
                 >
 
-                    Pooja Nilayam is designed as a comprehensive
+                    Pooja Go is designed as a comprehensive
                     platform bringing together spiritual services,
                     digital experiences, temple services, astrology,
                     devotional content, donations, a Pooja Store and
@@ -924,7 +924,7 @@
                 >
 
                     If you would like to explore opportunities with
-                    Pooja Nilayam, contact our team or submit your
+                    Pooja Go, contact our team or submit your
                     details through the approved careers process.
 
                 </p>

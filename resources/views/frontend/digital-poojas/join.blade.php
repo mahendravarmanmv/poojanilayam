@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Join Live Pooja | Pooja Nilayam')
+@section('title', 'Join Live Pooja | Pooja Go')
 
 @section(
     'meta_description',
-    'Join your scheduled Live Pooja with Pooja Nilayam.'
+    'Join your scheduled Live Pooja with Pooja Go.'
 )
 
 @section('content')
@@ -30,7 +30,7 @@
 
         'god' => 'Lord Ganesha',
 
-        'temple' => 'Pooja Nilayam',
+        'temple' => 'Pooja Go',
 
         'priest' => 'Sri Venkateshwara Sharma',
 

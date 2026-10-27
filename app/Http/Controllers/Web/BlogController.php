@@ -139,7 +139,7 @@ class BlogController extends Controller
         }
 
         $image = $this->assetUrl($imagePath);
-        $author = $blog->author?->name ?: 'Pooja Nilayam';
+        $author = $blog->author?->name ?: 'Pooja Go';
         $date = $blog->published_at
             ? Carbon::parse($blog->published_at)->format('d F Y')
             : ($blog->created_at ? Carbon::parse($blog->created_at)->format('d F Y') : '');

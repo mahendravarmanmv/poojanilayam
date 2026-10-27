@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'My Coupons | Pooja Nilayam')
-@section('meta_description', 'View your available coupons and offers on Pooja Nilayam.')
+@section('title', 'My Coupons | Pooja Go')
+@section('meta_description', 'View your available coupons and offers on Pooja Go.')
 
 @section('content')
 

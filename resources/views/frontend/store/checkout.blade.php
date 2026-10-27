@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Checkout | Pooja Nilayam')
-@section('meta_description', 'Complete your Pooja Nilayam order with secure checkout and delivery details.')
+@section('title', 'Checkout | Pooja Go')
+@section('meta_description', 'Complete your Pooja Go order with secure checkout and delivery details.')
 
 @section('content')
 {{-- Breadcrumb --}}

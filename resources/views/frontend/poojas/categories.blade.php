@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Pooja Categories | Pooja Nilayam')
-@section('meta_description', 'Explore Pooja Nilayam categories and discover sacred poojas for devotion, festivals, prosperity, health and special occasions.')
+@section('title', 'Pooja Categories | Pooja Go')
+@section('meta_description', 'Explore Pooja Go categories and discover sacred poojas for devotion, festivals, prosperity, health and special occasions.')
 
 @section('content')
 

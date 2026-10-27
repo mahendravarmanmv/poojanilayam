@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Ganapathi Poojas | Pooja Nilayam')
-@section('meta_description', 'Explore Ganapathi Poojas available through Pooja Nilayam.')
+@section('title', 'Ganapathi Poojas | Pooja Go')
+@section('meta_description', 'Explore Ganapathi Poojas available through Pooja Go.')
 
 @section('content')
 

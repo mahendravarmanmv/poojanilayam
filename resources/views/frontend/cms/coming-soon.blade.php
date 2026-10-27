@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Coming Soon | Pooja Nilayam')
+@section('title', 'Coming Soon | Pooja Go')
 
 @section(
     'meta_description',
-    'Pooja Nilayam is preparing something special. Stay connected for updates.'
+    'Pooja Go is preparing something special. Stay connected for updates.'
 )
 
 @section('content')
@@ -67,7 +67,7 @@
                            justify-content-center
                            text-decoration-none
                            mb-4"
-                    aria-label="Pooja Nilayam Home"
+                    aria-label="Pooja Go Home"
                 >
 
                     @if(
@@ -78,7 +78,7 @@
 
                         <img
                             src="{{ asset('images/logo.png') }}"
-                            alt="Pooja Nilayam"
+                            alt="Pooja Go"
                             class="coming-soon-logo"
                         >
 
@@ -90,7 +90,7 @@
                                    text-pn-brown"
                         >
 
-                            Pooja Nilayam
+                            Pooja Go
 
                         </span>
 
@@ -170,7 +170,7 @@
                 >
 
                     We are preparing a meaningful experience for
-                    devotees. Pooja Nilayam will be bringing spiritual,
+                    devotees. Pooja Go will be bringing spiritual,
                     devotional and digital experiences together in
                     one connected platform.
 
@@ -280,7 +280,7 @@
                                mb-3"
                     >
 
-                        Explore Pooja Nilayam
+                        Explore Pooja Go
 
                     </p>
 
@@ -362,7 +362,7 @@
                     >
 
                         © {{ date('Y') }}
-                        Pooja Nilayam.
+                        Pooja Go.
                         All rights reserved.
 
                     </p>

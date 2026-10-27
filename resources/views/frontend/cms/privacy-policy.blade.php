@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', $cmsPage?->title ? $cmsPage->title . ' | Pooja Nilayam' : 'Privacy Policy | Pooja Nilayam')
+@section('title', $cmsPage?->title ? $cmsPage->title . ' | Pooja Go' : 'Privacy Policy | Pooja Go')
 
 @section(
     'meta_description',
-    $cmsPage?->excerpt ?: 'Read the Pooja Nilayam Privacy Policy and learn how privacy information is presented and managed.'
+    $cmsPage?->excerpt ?: 'Read the Pooja Go Privacy Policy and learn how privacy information is presented and managed.'
 )
 
 @section('content')
@@ -24,7 +24,7 @@
     |--------------------------------------------------------------------------
     */
 
-    $lastUpdated = data_get($cmsPage?->metadata, 'last_updated', 'To be updated by Pooja Nilayam');
+    $lastUpdated = data_get($cmsPage?->metadata, 'last_updated', 'To be updated by Pooja Go');
 
 
     $sections = [
@@ -202,7 +202,7 @@
                 >
 
                     Your privacy is important to us. This page
-                    provides the Privacy Policy for Pooja Nilayam.
+                    provides the Privacy Policy for Pooja Go.
 
                 </p>
 
@@ -305,7 +305,7 @@
                     >
 
                         The Privacy Policy legal text is intended to
-                        be maintained through the Pooja Nilayam CMS.
+                        be maintained through the Pooja Go CMS.
                         The project documentation defines this page
                         as a required CMS page but does not contain
                         the final approved legal wording.
@@ -481,7 +481,7 @@
                                    text-secondary"
                         >
 
-                            Contact the Pooja Nilayam support team
+                            Contact the Pooja Go support team
                             for privacy-related assistance.
 
                         </p>
@@ -569,7 +569,7 @@
 
                                         This section will contain
                                         the approved introduction to
-                                        the Pooja Nilayam Privacy
+                                        the Pooja Go Privacy
                                         Policy, including the scope
                                         of the policy and the services
                                         to which it applies.
@@ -641,7 +641,7 @@
                                         The final Privacy Policy
                                         should specify the categories
                                         of information collected by
-                                        Pooja Nilayam and the
+                                        Pooja Go and the
                                         circumstances in which such
                                         information may be provided.
 
@@ -766,7 +766,7 @@
                                         describe the permitted purposes
                                         for which information may be
                                         used in connection with the
-                                        Pooja Nilayam platform and its
+                                        Pooja Go platform and its
                                         services.
 
                                     </p>
@@ -821,7 +821,7 @@
                                                lh-lg"
                                     >
 
-                                        Pooja Nilayam includes multiple
+                                        Pooja Go includes multiple
                                         services such as pooja booking,
                                         digital pooja, temple services,
                                         astrology, marketplace,
@@ -1423,7 +1423,7 @@
                                         class="btn btn-pn"
                                     >
 
-                                        Contact Pooja Nilayam
+                                        Contact Pooja Go
 
                                         <i
                                             class="bi bi-arrow-right ms-1"

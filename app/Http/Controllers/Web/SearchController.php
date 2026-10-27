@@ -298,7 +298,7 @@ class SearchController extends Controller
             'type' => $type,
             'icon' => $icon,
             'title' => $title,
-            'description' => Str::limit($description ?: 'Explore this section of Pooja Nilayam.', 220),
+            'description' => Str::limit($description ?: 'Explore this section of Pooja Go.', 220),
             'url' => $url,
             'image' => $this->assetUrl($image),
             'date' => $date ? $date->timestamp : 0,

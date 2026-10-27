@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Resources | Pooja Nilayam')
-@section('meta_description', 'Explore useful devotional resources, guides and downloadable materials from Pooja Nilayam.')
+@section('title', 'Resources | Pooja Go')
+@section('meta_description', 'Explore useful devotional resources, guides and downloadable materials from Pooja Go.')
 
 @section('content')
 <div class="bg-pn-cream py-3">
@@ -93,7 +93,7 @@
                         <h2 class="h5 fw-bold mb-2">Astrology Basics</h2>
                         <p class="text-muted small mb-4">
                             An introductory reference for devotees exploring the
-                            astrology services available on Pooja Nilayam.
+                            astrology services available on Pooja Go.
                         </p>
                         <div class="mt-auto">
                             <div class="small text-muted mb-3">
@@ -113,7 +113,7 @@
             <h2 class="h4 fw-bold mt-3 mb-2">More Resources Coming Soon</h2>
             <p class="text-muted mb-4 mx-auto" style="max-width: 650px;">
                 We will continue adding useful devotional resources and guides to the
-                Pooja Nilayam library.
+                Pooja Go library.
             </p>
             <a href="{{ route('pooja.index') }}" class="btn btn-pn">
                 <i class="bi bi-flower1 me-2"></i>Explore Poojas

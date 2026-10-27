@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Product Details | Pooja Nilayam')
-@section('meta_description', 'View product details, pricing and purchase options at the Pooja Nilayam Store.')
+@section('title', 'Product Details | Pooja Go')
+@section('meta_description', 'View product details, pricing and purchase options at the Pooja Go Store.')
 
 @push('styles')
 <style>

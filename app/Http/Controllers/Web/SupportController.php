@@ -42,7 +42,7 @@ class SupportController extends Controller
             'Orders & Store' => ['icon' => 'bi-bag', 'description' => 'Questions about products, cart, checkout, shipping and orders.'],
             'Payments & Donations' => ['icon' => 'bi-credit-card', 'description' => 'Payment, donation, receipts, refunds and transaction-related questions.'],
             'Account' => ['icon' => 'bi-person-circle', 'description' => 'Manage your profile, password, addresses and account information.'],
-            'General' => ['icon' => 'bi-question-circle', 'description' => 'General information about Pooja Nilayam and using the website.'],
+            'General' => ['icon' => 'bi-question-circle', 'description' => 'General information about Pooja Go and using the website.'],
         ];
 
         $categories = $faqs
@@ -50,7 +50,7 @@ class SupportController extends Controller
             ->map(function ($items, $name) use ($categoryMeta) {
                 $meta = $categoryMeta[$name] ?? [
                     'icon' => 'bi-question-circle',
-                    'description' => 'Frequently asked questions about Pooja Nilayam.',
+                    'description' => 'Frequently asked questions about Pooja Go.',
                 ];
 
                 return [
@@ -475,7 +475,7 @@ class SupportController extends Controller
             'created_at' => optional($ticket->created_at)->format('d F Y, h:i A'),
             'updated_at' => optional($ticket->updated_at)->format('d F Y, h:i A'),
             'description' => $ticket->description,
-            'assigned_to' => 'Pooja Nilayam Support Team',
+            'assigned_to' => 'Pooja Go Support Team',
             'message_count' => $ticket->messages_count ?? 0,
         ];
     }

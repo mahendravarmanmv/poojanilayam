@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'My Support Tickets | Pooja Nilayam')
-@section('meta_description', 'View your Pooja Nilayam support tickets and their current status.')
+@section('title', 'My Support Tickets | Pooja Go')
+@section('meta_description', 'View your Pooja Go support tickets and their current status.')
 
 @section('content')
 <section class="bg-pn-cream border-bottom">

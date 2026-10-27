@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', ($festival->name ?? 'Festival Details') . ' | Pooja Nilayam')
+@section('title', ($festival->name ?? 'Festival Details') . ' | Pooja Go')
 @section('meta_description', $festival->short_description ?: 'Learn about the significance, traditions and upcoming observances associated with this sacred festival.')
 @section('content')
 <section class="bg-pn-cream border-bottom"><div class="container py-3"><nav aria-label="breadcrumb"><ol class="breadcrumb mb-0 small">

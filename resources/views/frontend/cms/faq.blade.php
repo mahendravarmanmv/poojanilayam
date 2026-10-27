@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', $cmsPage?->title ? $cmsPage->title . ' | Pooja Nilayam' : 'Frequently Asked Questions | Pooja Nilayam')
+@section('title', $cmsPage?->title ? $cmsPage->title . ' | Pooja Go' : 'Frequently Asked Questions | Pooja Go')
 
 @section(
     'meta_description',
-    $cmsPage?->excerpt ?: 'Find answers to frequently asked questions about Pooja Nilayam, pooja bookings, digital pooja, temples, astrology, donations, orders and customer support.'
+    $cmsPage?->excerpt ?: 'Find answers to frequently asked questions about Pooja Go, pooja bookings, digital pooja, temples, astrology, donations, orders and customer support.'
 )
 
 @section('content')
@@ -17,7 +17,7 @@
     |--------------------------------------------------------------------------
     | FAQ content will later come from the Admin CMS FAQ module.
     |
-    | The categories below are based on the documented Pooja Nilayam
+    | The categories below are based on the documented Pooja Go
     | modules and customer workflows.
     |--------------------------------------------------------------------------
     */
@@ -87,10 +87,10 @@
             'category' => 'general',
 
             'question' =>
-                'What is Pooja Nilayam?',
+                'What is Pooja Go?',
 
             'answer' =>
-                'Pooja Nilayam is envisioned as a digital spiritual
+                'Pooja Go is envisioned as a digital spiritual
                 ecosystem that connects devotees with poojas, temples,
                 priests, digital spiritual experiences, astrology,
                 devotional products, donations and spiritual learning.'
@@ -100,7 +100,7 @@
             'category' => 'general',
 
             'question' =>
-                'Who can use Pooja Nilayam?',
+                'Who can use Pooja Go?',
 
             'answer' =>
                 'The platform is designed for devotees in India and
@@ -166,7 +166,7 @@
                 'What is AI Personalized Digital Pooja?',
 
             'answer' =>
-                'AI Personalized Digital Pooja is a key Pooja Nilayam
+                'AI Personalized Digital Pooja is a key Pooja Go
                 experience designed to provide a personalized digital
                 spiritual journey.'
         ],
@@ -355,7 +355,7 @@
                 'How can I contact customer support?',
 
             'answer' =>
-                'Pooja Nilayam includes customer support through
+                'Pooja Go includes customer support through
                 support chat and a ticket system, with reference-ID
                 based support also documented.'
         ],

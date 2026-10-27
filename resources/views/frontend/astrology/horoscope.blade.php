@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Horoscope | Pooja Nilayam')
+@section('title', 'Horoscope | Pooja Go')
 
 @section(
     'meta_description',
-    'Explore horoscope services through Pooja Nilayam and discover astrology guidance for your journey.'
+    'Explore horoscope services through Pooja Go and discover astrology guidance for your journey.'
 )
 
 @section('content')
@@ -281,7 +281,7 @@
 
                     Choose your zodiac sign and explore the
                     available horoscope experience through
-                    Pooja Nilayam.
+                    Pooja Go.
 
                 </p>
 

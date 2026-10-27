@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Pooja Nilayam | Modern Divine')
+@section('title', 'Pooja Go | Modern Divine')
 
 @section(
     'meta_description',
-    'Discover authentic poojas, sacred temples, trusted priests, digital spiritual services, astrology and pooja samagri with Pooja Nilayam.'
+    'Discover authentic poojas, sacred temples, trusted priests, digital spiritual services, astrology and pooja samagri with Pooja Go.'
 )
 
 @section('content')
@@ -20,34 +20,30 @@
     |--------------------------------------------------------------------------
     */
 
-    $services = [
-        [
-            'icon' => 'bi-flower1',
-            'title' => 'Poojas',
-            'subtitle' => 'Book Poojas'
-        ],
-       
-        [
-            'icon' => 'bi-person-check',
-            'title' => 'Priests',
-            'subtitle' => 'Find Priests'
-        ],
-        [
-            'icon' => 'bi-camera-video',
-            'title' => 'Digital Pooja',
-            'subtitle' => 'Join Online Pooja'
-        ],
-        [
-            'icon' => 'bi-stars',
-            'title' => 'Astrology',
-            'subtitle' => 'Guidance & More'
-        ],
-        [
-            'icon' => 'bi-bag-heart',
-            'title' => 'Store',
-            'subtitle' => 'Pooja Samagri'
-        ]
-    ];
+    
+$services = [
+    [
+        'image' => 'images/services/poojas.png',
+        'title' => 'Poojas',
+        'subtitle' => 'Book Poojas'
+    ],
+    [
+        'image' => 'images/services/priests.png',
+        'title' => 'Priests',
+        'subtitle' => 'Find Priests'
+    ],
+    [
+        'image' => 'images/services/astrology.png',
+        'title' => 'Astrology',
+        'subtitle' => 'Guidance & More'
+    ],
+    [
+        'image' => 'images/services/store.png',
+        'title' => 'Store',
+        'subtitle' => 'Pooja Samagri'
+    ]
+];
+
 
 
     $occasions = [
@@ -417,24 +413,14 @@
 
                         <div class="card-body p-2">
 
-                            <div
-                                class="icon-circle-58
-                                       mx-auto
-                                       d-flex
-                                       align-items-center
-                                       justify-content-center
-                                       rounded-circle
-                                       bg-pn-beige
-                                       text-pn-primary
-                                       fs-3
-                                       mb-3"
-                            >
+                            
+<img
+    src="{{ asset($service['image']) }}"
+    alt="{{ $service['title'] }}"
+    class="service-image d-block mx-auto mb-3"
+    loading="lazy"
+>
 
-                                <i
-                                    class="bi {{ $service['icon'] }}"
-                                ></i>
-
-                            </div>
 
 
                             <h6 class="fw-semibold mb-1">

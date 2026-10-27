@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'My Wishlist | Pooja Nilayam')
+@section('title', 'My Wishlist | Pooja Go')
 
 @section(
     'meta_description',
-    'View your saved pooja products and devotional items in your Pooja Nilayam wishlist.'
+    'View your saved pooja products and devotional items in your Pooja Go wishlist.'
 )
 
 @section('content')

@@ -8,9 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <meta name="description"
-          content="Pooja Nilayam - Book Poojas, Temples, Priests, Digital Poojas and Astrology Services online.">
+          content="Pooja Go - Book Poojas, Temples, Priests, Digital Poojas and Astrology Services online.">
 
-    <title>Pooja Nilayam | Divine Services Online</title>
+    <title>Pooja Go | Divine Services Online</title>
 
     {{-- Bootstrap 5.3 --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
@@ -109,7 +109,7 @@
                 <span>
 
                     <span class="d-block fw-bold text-danger fs-4 lh-1">
-                        Pooja Nilayam
+                        Pooja Go
                     </span>
 
                     <small class="text-secondary">
@@ -1753,7 +1753,7 @@
                       text-danger fs-1"></i>
 
             <h2 class="fw-bold mt-3">
-                Stay Connected With Pooja Nilayam
+                Stay Connected With Pooja Go
             </h2>
 
             <p class="text-secondary">
@@ -1824,7 +1824,7 @@
                     </span>
 
                     <span class="fw-bold fs-4">
-                        Pooja Nilayam
+                        Pooja Go
                     </span>
 
                 </a>
@@ -2072,7 +2072,7 @@
 
                 <small class="text-white-50">
 
-                    © {{ date('Y') }} Pooja Nilayam.
+                    © {{ date('Y') }} Pooja Go.
                     All rights reserved.
 
                 </small>

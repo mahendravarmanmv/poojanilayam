@@ -1,6 +1,6 @@
 @extends('layouts.app')
-@section('title', 'Track Order | Pooja Nilayam')
-@section('meta_description', 'Track your Pooja Nilayam order using your order number and registered email address.')
+@section('title', 'Track Order | Pooja Go')
+@section('meta_description', 'Track your Pooja Go order using your order number and registered email address.')
 @section('content')
 <section class="bg-pn-cream border-bottom"><div class="container py-3"><nav aria-label="breadcrumb"><ol class="breadcrumb mb-0 small"><li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li><li class="breadcrumb-item"><a href="{{ route('store.index') }}">Store</a></li><li class="breadcrumb-item active">Track Order</li></ol></nav></div></section>
 <section class="py-5"><div class="container"><div class="row justify-content-center text-center"><div class="col-lg-8"><span class="pn-section-label text-uppercase text-pn-gold small fw-semibold">Order Tracking</span><h1 class="font-serif display-5 text-pn-brown mt-2 mb-3">Track Your Order</h1><p class="text-secondary">Enter your order number and the email address registered to your account.</p></div></div>

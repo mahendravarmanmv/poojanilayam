@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Raise a Support Ticket | Pooja Nilayam')
+@section('title', 'Raise a Support Ticket | Pooja Go')
 
 @section(
     'meta_description',
-    'Raise a support ticket for your Pooja Nilayam booking, order, digital pooja or other service.'
+    'Raise a support ticket for your Pooja Go booking, order, digital pooja or other service.'
 )
 
 @section('content')

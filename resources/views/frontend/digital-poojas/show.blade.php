@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Digital Pooja | Pooja Nilayam')
+@section('title', 'Digital Pooja | Pooja Go')
 
 @section(
     'meta_description',

@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', '403 - Access Forbidden | Pooja Nilayam')
+@section('title', '403 - Access Forbidden | Pooja Go')
 
 @section(
     'meta_description',
-    'You do not have permission to access this page on Pooja Nilayam.'
+    'You do not have permission to access this page on Pooja Go.'
 )
 
 @section('content')
@@ -68,7 +68,7 @@
                            justify-content-center
                            text-decoration-none
                            mb-4"
-                    aria-label="Pooja Nilayam Home"
+                    aria-label="Pooja Go Home"
                 >
 
                     @if(
@@ -79,7 +79,7 @@
 
                         <img
                             src="{{ asset('images/logo.png') }}"
-                            alt="Pooja Nilayam"
+                            alt="Pooja Go"
                             class="error-logo"
                         >
 
@@ -91,7 +91,7 @@
                                    text-pn-brown"
                         >
 
-                            Pooja Nilayam
+                            Pooja Go
 
                         </span>
 
@@ -290,7 +290,7 @@
                                text-decoration-none"
                     >
 
-                        Contact Pooja Nilayam Support
+                        Contact Pooja Go Support
 
                         <i
                             class="bi bi-arrow-right ms-1"
@@ -316,7 +316,7 @@
                     >
 
                         © {{ date('Y') }}
-                        Pooja Nilayam.
+                        Pooja Go.
                         All rights reserved.
 
                     </p>

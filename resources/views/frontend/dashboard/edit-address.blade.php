@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Address | Pooja Nilayam')
+@section('title', 'Edit Address | Pooja Go')
 
 @section(
     'meta_description',
-    'Edit your saved address in your Pooja Nilayam account.'
+    'Edit your saved address in your Pooja Go account.'
 )
 
 @section('content')
@@ -1264,7 +1264,7 @@
 
                                             Your saved address will
                                             only be used for relevant
-                                            Pooja Nilayam services,
+                                            Pooja Go services,
                                             bookings and orders.
 
                                         </small>

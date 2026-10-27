@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Payment Failed | Pooja Nilayam')
+@section('title', 'Payment Failed | Pooja Go')
 
 @section(
     'meta_description',

@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Numerology | Pooja Nilayam')
+@section('title', 'Numerology | Pooja Go')
 
 @section(
     'meta_description',
-    'Explore numerology services through Pooja Nilayam and discover personalized number-based guidance.'
+    'Explore numerology services through Pooja Go and discover personalized number-based guidance.'
 )
 
 @section('content')
@@ -263,7 +263,7 @@
                 >
 
                     Explore the numerology experience available
-                    through Pooja Nilayam and discover
+                    through Pooja Go and discover
                     personalized number-based guidance.
 
                 </p>

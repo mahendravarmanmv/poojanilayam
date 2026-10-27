@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Family Members | Pooja Nilayam')
+@section('title', 'Family Members | Pooja Go')
 
 @section('content')
 <div class="container py-4">

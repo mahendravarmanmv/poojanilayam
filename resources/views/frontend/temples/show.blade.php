@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Temple Details | Pooja Nilayam')
+@section('title', 'Temple Details | Pooja Go')
 
 @section(
     'meta_description',
-    'Explore temple details, poojas, timings, services and devotional experiences at Pooja Nilayam.'
+    'Explore temple details, poojas, timings, services and devotional experiences at Pooja Go.'
 )
 
 @section('content')
@@ -509,7 +509,7 @@
                     class="text-secondary"
                 >
 
-                    Through Pooja Nilayam, devotees can discover
+                    Through Pooja Go, devotees can discover
                     available temple services, explore devotional
                     offerings and access relevant temple information
                     from one place.

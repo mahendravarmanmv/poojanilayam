@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Palm Reading | Pooja Nilayam')
+@section('title', 'Palm Reading | Pooja Go')
 
 @section(
     'meta_description',
-    'Explore palm reading services through Pooja Nilayam and discover personalized guidance.'
+    'Explore palm reading services through Pooja Go and discover personalized guidance.'
 )
 
 @section('content')
@@ -27,7 +27,7 @@
             'title' => 'Palm Reading',
             'description' =>
                 'Explore the palm-reading experience available
-                 through Pooja Nilayam.',
+                 through Pooja Go.',
             'icon' => 'bi-hand-index-thumb'
         ],
 
@@ -211,7 +211,7 @@
                 >
 
                     Explore the palm-reading experience available
-                    through Pooja Nilayam and discover personalized
+                    through Pooja Go and discover personalized
                     astrology guidance.
 
                 </p>

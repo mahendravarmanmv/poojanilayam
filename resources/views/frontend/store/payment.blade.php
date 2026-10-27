@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Payment | Pooja Nilayam')
-@section('meta_description', 'Review your order and choose an available payment method at Pooja Nilayam.')
+@section('title', 'Payment | Pooja Go')
+@section('meta_description', 'Review your order and choose an available payment method at Pooja Go.')
 
 @section('content')
 <section class="bg-pn-cream border-bottom">

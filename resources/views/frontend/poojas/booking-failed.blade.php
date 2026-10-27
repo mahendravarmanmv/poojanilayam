@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Booking Payment Failed | Pooja Nilayam')
+@section('title', 'Booking Payment Failed | Pooja Go')
 
 @section(
     'meta_description',
-    'Your Pooja Nilayam payment could not be completed. Review the booking details and retry your payment.'
+    'Your Pooja Go payment could not be completed. Review the booking details and retry your payment.'
 )
 
 @section('content')
@@ -1236,7 +1236,7 @@
                                 >
 
                                     If your payment continues to fail,
-                                    contact Pooja Nilayam support with
+                                    contact Pooja Go support with
                                     your Booking ID or Reference ID.
 
                                 </p>

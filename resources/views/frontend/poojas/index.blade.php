@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Poojas | Pooja Nilayam')
+@section('title', 'Poojas | Pooja Go')
 
 @section(
     'meta_description',
-    'Explore and book authentic poojas for health, prosperity, success, peace and special occasions with Pooja Nilayam.'
+    'Explore and book authentic poojas for health, prosperity, success, peace and special occasions with Pooja Go.'
 )
 
 @section('content')
@@ -30,238 +30,6 @@
         'Birthday'
     ];
 @endphp
-
-
-
-
-{{-- ============================================================
-     PAGE HERO
-============================================================ --}}
-
-<section class="bg-pn-cream border-bottom">
-
-    <div class="container py-5">
-
-        {{-- Breadcrumb --}}
-
-        <nav
-            aria-label="breadcrumb"
-            class="mb-4"
-        >
-
-            <ol class="breadcrumb mb-0">
-
-                <li class="breadcrumb-item">
-
-                    <a
-                        href="{{ route('home') }}"
-                        class="text-pn-primary"
-                    >
-                        Home
-                    </a>
-
-                </li>
-
-                <li
-                    class="breadcrumb-item active"
-                    aria-current="page"
-                >
-                    Poojas
-                </li>
-
-            </ol>
-
-        </nav>
-
-
-        <div class="row align-items-center g-4">
-
-            <div class="col-lg-7">
-
-                <span
-                    class="pn-section-label
-                           text-uppercase
-                           text-pn-gold
-                           small
-                           fw-semibold"
-                >
-                    Sacred Services
-                </span>
-
-
-                <h1
-                    class="font-serif
-                           display-4
-                           text-pn-brown
-                           mt-2
-                           mb-3"
-                >
-                    Discover Poojas
-                </h1>
-
-
-                <div class="pn-divider mb-3"></div>
-
-
-                <p
-                    class="lead
-                           text-secondary
-                           col-lg-10
-                           mb-0"
-                >
-                    Explore authentic poojas and traditional
-                    rituals for health, prosperity, peace,
-                    success and life's special occasions.
-                </p>
-
-            </div>
-
-
-            <div class="col-lg-5">
-
-                <div
-                    class="bg-white
-                           rounded-4
-                           border
-                           shadow-sm
-                           p-2"
-                >
-
-                    <form
-                        action="{{ route('pooja.index') }}"
-                        method="GET"
-                    >
-
-                        <div class="input-group input-group-lg">
-
-                            <span
-                                class="input-group-text
-                                       bg-transparent
-                                       border-0"
-                            >
-
-                                <i
-                                    class="bi bi-search
-                                           text-pn-primary"
-                                ></i>
-
-                            </span>
-
-
-                            <input
-                                type="search"
-                                name="search"
-                                value="{{ request('search') }}"
-                                class="form-control
-                                       border-0
-                                       shadow-none"
-                                placeholder="Search for a pooja..."
-                                aria-label="Search for a pooja"
-                            >
-
-
-                            <button
-                                type="submit"
-                                class="btn btn-pn"
-                            >
-                                Search
-                            </button>
-
-                        </div>
-
-                    </form>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-{{-- ============================================================
-     CATEGORY STRIP
-============================================================ --}}
-
-<section class="py-4 bg-white border-bottom">
-
-    <div class="container">
-
-        <div
-            class="row
-                   row-cols-2
-                   row-cols-md-3
-                   row-cols-lg-6
-                   g-3"
-        >
-
-            @foreach($categories as $category)
-
-                <div class="col">
-
-                    <a
-                        href="{{ $category['name'] === 'All Poojas' ? route('pooja.index') : route('pooja.category', ['slug' => Str::slug($category['name'])]) }}"
-                        class="card
-                               border
-                               border-warning-subtle
-                               rounded-4
-                               h-100
-                               text-center
-                               text-pn-brown
-                               p-3"
-                    >
-
-                        <div class="card-body p-2">
-
-                            <div
-                                class="icon-circle-58
-                                       mx-auto
-                                       d-flex
-                                       align-items-center
-                                       justify-content-center
-                                       rounded-circle
-                                       bg-pn-beige
-                                       text-pn-primary
-                                       fs-3
-                                       mb-3"
-                            >
-
-                                <i
-                                    class="bi {{ $category['icon'] }}"
-                                ></i>
-
-                            </div>
-
-
-                            <h6 class="fw-semibold mb-1">
-
-                                {{ $category['name'] }}
-
-                            </h6>
-
-
-                            <small class="text-secondary">
-
-                                {{ $category['count'] }} Poojas
-
-                            </small>
-
-                        </div>
-
-                    </a>
-
-                </div>
-
-            @endforeach
-
-        </div>
-
-    </div>
-
-</section>
 
 
 {{-- ============================================================
@@ -1052,7 +820,7 @@
 
 
 {{-- ============================================================
-     WHY BOOK WITH POOJA NILAYAM
+     WHY BOOK WITH Pooja Go
 ============================================================ --}}
 
 <section class="bg-pn-cream py-5">
@@ -1078,7 +846,7 @@
                        text-pn-brown
                        mt-2"
             >
-                Why Book With Pooja Nilayam?
+                Why Book With Pooja Go?
             </h2>
 
 

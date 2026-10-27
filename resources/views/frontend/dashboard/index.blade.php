@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'My Dashboard | Pooja Nilayam')
+@section('title', 'My Dashboard | Pooja Go')
 
 @section(
     'meta_description',
-    'Manage your Pooja Nilayam bookings, orders, digital poojas, wishlist, profile and notifications.'
+    'Manage your Pooja Go bookings, orders, digital poojas, wishlist, profile and notifications.'
 )
 
 @section('content')

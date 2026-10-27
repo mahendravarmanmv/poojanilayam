@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', $cmsPage?->title ? $cmsPage->title . ' | Pooja Nilayam' : 'About Us | Pooja Nilayam')
+@section('title', $cmsPage?->title ? $cmsPage->title . ' | Pooja Go' : 'About Us | Pooja Go')
 
 @section(
     'meta_description',
-    $cmsPage?->excerpt ?: 'Learn about Pooja Nilayam, our vision and mission to make authentic Hindu rituals, temples and spiritual services accessible to every devotee.'
+    $cmsPage?->excerpt ?: 'Learn about Pooja Go, our vision and mission to make authentic Hindu rituals, temples and spiritual services accessible to every devotee.'
 )
 
 @section('content')
@@ -15,7 +15,7 @@
     |--------------------------------------------------------------------------
     | ABOUT US CONTENT
     |--------------------------------------------------------------------------
-    | Content below is based on the finalized Pooja Nilayam
+    | Content below is based on the finalized Pooja Go
     | project planning documents.
     |
     | No unsupported company history, founder names, statistics
@@ -230,7 +230,7 @@
                            fw-semibold
                            text-uppercase"
                 >
-                    About Pooja Nilayam
+                    About Pooja Go
                 </span>
 
 
@@ -260,7 +260,7 @@
                            mb-4"
                 >
 
-                    Pooja Nilayam is envisioned as a digital spiritual
+                    Pooja Go is envisioned as a digital spiritual
                     ecosystem connecting devotees with authentic
                     Hindu rituals, temples, priests, digital pooja
                     experiences, spiritual learning and devotional
@@ -434,7 +434,7 @@
                            mb-3"
                 >
 
-                    Pooja Nilayam is designed to bring together
+                    Pooja Go is designed to bring together
                     devotees, temples, priests and spiritual
                     services through a single digital platform.
 
@@ -710,7 +710,7 @@
                            mb-4"
                 >
 
-                    Pooja Nilayam brings multiple spiritual services
+                    Pooja Go brings multiple spiritual services
                     together so devotees can discover, participate,
                     learn and stay connected with their spiritual
                     journey.
@@ -876,7 +876,7 @@
                                    mb-4"
                         >
 
-                            Pooja Nilayam's AI Personalized Digital
+                            Pooja Go's AI Personalized Digital
                             Pooja is designed to create a more
                             personalized spiritual experience by
                             combining technology with devotional
@@ -1176,7 +1176,7 @@
                                mb-0"
                     >
 
-                        Pooja Nilayam is built around authentic Hindu
+                        Pooja Go is built around authentic Hindu
                         rituals and spiritual services while using
                         technology to make those experiences easier
                         to access.
@@ -1323,7 +1323,7 @@
                            mb-0"
                 >
 
-                    Pooja Nilayam brings together temple pooja
+                    Pooja Go brings together temple pooja
                     booking, online live pooja, AI Personalized
                     Digital Pooja, marketplace services, donations
                     and spiritual learning as part of one connected
@@ -1447,7 +1447,7 @@
                                    mb-2"
                         >
 
-                            Experience Pooja Nilayam
+                            Experience Pooja Go
 
                         </h2>
 
@@ -1480,7 +1480,7 @@
                                    px-4"
                         >
 
-                            Explore Pooja Nilayam
+                            Explore Pooja Go
 
                             <i
                                 class="bi bi-arrow-right ms-2"

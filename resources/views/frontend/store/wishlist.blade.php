@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'My Wishlist | Pooja Nilayam')
+@section('title', 'My Wishlist | Pooja Go')
 
 @section(
     'meta_description',
-    'View and manage your saved devotional products at Pooja Nilayam.'
+    'View and manage your saved devotional products at Pooja Go.'
 )
 
 @section('content')
@@ -1013,7 +1013,7 @@
                            mb-4"
                 >
 
-                    Explore the Pooja Nilayam Store and find
+                    Explore the Pooja Go Store and find
                     products for your daily worship and special
                     occasions.
 

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Pooja Recording | Pooja Nilayam')
+@section('title', 'Pooja Recording | Pooja Go')
 
 @section(
     'meta_description',
@@ -29,7 +29,7 @@
 
         'god' => 'Lord Ganesha',
 
-        'temple' => 'Pooja Nilayam',
+        'temple' => 'Pooja Go',
 
         'priest' => 'Sri Venkateshwara Sharma',
 
@@ -1640,7 +1640,7 @@
                            mx-auto"
                 >
 
-                    Thank you for choosing Pooja Nilayam for your
+                    Thank you for choosing Pooja Go for your
                     devotional journey.
 
                 </p>

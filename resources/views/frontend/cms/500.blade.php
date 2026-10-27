@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', '500 - Server Error | Pooja Nilayam')
+@section('title', '500 - Server Error | Pooja Go')
 
 @section(
     'meta_description',
@@ -64,7 +64,7 @@
                            justify-content-center
                            text-decoration-none
                            mb-4"
-                    aria-label="Pooja Nilayam Home"
+                    aria-label="Pooja Go Home"
                 >
 
                     @if(
@@ -75,7 +75,7 @@
 
                         <img
                             src="{{ asset('images/logo.png') }}"
-                            alt="Pooja Nilayam"
+                            alt="Pooja Go"
                             class="error-logo"
                         >
 
@@ -87,7 +87,7 @@
                                    text-pn-brown"
                         >
 
-                            Pooja Nilayam
+                            Pooja Go
 
                         </span>
 
@@ -320,7 +320,7 @@
                     >
 
                         If the problem continues, please contact
-                        Pooja Nilayam Support.
+                        Pooja Go Support.
 
                     </p>
 
@@ -359,7 +359,7 @@
                     >
 
                         © {{ date('Y') }}
-                        Pooja Nilayam.
+                        Pooja Go.
                         All rights reserved.
 
                     </p>

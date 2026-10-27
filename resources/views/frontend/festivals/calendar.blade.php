@@ -1,6 +1,6 @@
 @extends('layouts.app')
-@section('title', 'Festival Calendar | Pooja Nilayam')
-@section('meta_description', 'Browse the Pooja Nilayam festival calendar and explore important upcoming sacred occasions throughout the year.')
+@section('title', 'Festival Calendar | Pooja Go')
+@section('meta_description', 'Browse the Pooja Go festival calendar and explore important upcoming sacred occasions throughout the year.')
 @section('content')
 <section class="bg-pn-cream border-bottom"><div class="container py-3"><nav aria-label="breadcrumb"><ol class="breadcrumb mb-0 small">
     <li class="breadcrumb-item"><a href="{{ route('home') }}" class="text-pn-primary">Home</a></li>

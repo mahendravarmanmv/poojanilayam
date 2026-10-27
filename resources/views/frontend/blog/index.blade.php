@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Blog | Pooja Nilayam')
+@section('title', 'Blog | Pooja Go')
 
 @section(
     'meta_description',
-    'Explore devotional stories, pooja guides, temple traditions, festivals and spiritual insights from Pooja Nilayam.'
+    'Explore devotional stories, pooja guides, temple traditions, festivals and spiritual insights from Pooja Go.'
 )
 
 @section('content')

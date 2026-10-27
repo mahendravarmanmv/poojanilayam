@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Under Maintenance | Pooja Nilayam')
+@section('title', 'Under Maintenance | Pooja Go')
 
 @section(
     'meta_description',
-    'Pooja Nilayam is temporarily unavailable while we perform scheduled maintenance.'
+    'Pooja Go is temporarily unavailable while we perform scheduled maintenance.'
 )
 
 @section('content')
@@ -72,7 +72,7 @@
 
                         <img
                             src="{{ asset('images/logo.png') }}"
-                            alt="Pooja Nilayam"
+                            alt="Pooja Go"
                             class="maintenance-logo"
                         >
 
@@ -84,7 +84,7 @@
                                    text-pn-brown"
                         >
 
-                            Pooja Nilayam
+                            Pooja Go
 
                         </span>
 
@@ -166,7 +166,7 @@
                     style="max-width:680px;"
                 >
 
-                    Pooja Nilayam is temporarily unavailable while
+                    Pooja Go is temporarily unavailable while
                     we work on the platform. We are making improvements
                     to provide a better experience for our devotees.
 
@@ -369,7 +369,7 @@
                                    text-decoration-none"
                         >
 
-                            Contact Pooja Nilayam Support
+                            Contact Pooja Go Support
 
                             <i
                                 class="bi bi-arrow-right ms-1"
@@ -397,7 +397,7 @@
                     >
 
                         © {{ date('Y') }}
-                        Pooja Nilayam.
+                        Pooja Go.
                         All rights reserved.
 
                     </p>

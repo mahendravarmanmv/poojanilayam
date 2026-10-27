@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Notifications | Pooja Nilayam')
+@section('title', 'Notifications | Pooja Go')
 
 @section(
     'meta_description',
-    'View your latest Pooja Nilayam booking, pooja, order and account notifications.'
+    'View your latest Pooja Go booking, pooja, order and account notifications.'
 )
 
 @section('content')

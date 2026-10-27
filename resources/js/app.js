@@ -1,6 +1,6 @@
 import './bootstrap';
 
-/* Pooja Nilayam - Phase 25.5 booking UI */
+/* Pooja Go - Phase 25.5 booking UI */
 (() => {
     const form = document.getElementById('bookingForm');
     if (!form) return;
@@ -77,7 +77,7 @@ import './bootstrap';
     updateSummary();
 })();
 
-/* Pooja Nilayam - Phase 4 frontend listing interactions */
+/* Pooja Go - Phase 4 frontend listing interactions */
 (() => {
     const listing = document.querySelector('[data-pn-listing]');
     if (!listing) return;
@@ -159,7 +159,7 @@ import './bootstrap';
 })();
 
 
-/* Pooja Nilayam - Phase 4 blog/search pagination */
+/* Pooja Go - Phase 4 blog/search pagination */
 (() => {
     const style = document.createElement('style');
     style.textContent = '.d-none-filter{display:none!important}.d-none-paged{display:none!important}';
@@ -213,7 +213,7 @@ import './bootstrap';
 })();
 
 /* ============================================================
-   Pooja Nilayam - Customer Address Book
+   Pooja Go - Customer Address Book
    Country → State → City
 ============================================================ */
 
@@ -628,7 +628,7 @@ import './bootstrap';
 })();
 
 /* ============================================================
-   Pooja Nilayam - Customer Address Book Actions
+   Pooja Go - Customer Address Book Actions
    Delete Address
 ============================================================ */
 
@@ -691,7 +691,7 @@ import './bootstrap';
 
 
 /* ============================================================
-   Pooja Nilayam - Priest Booking Date, Time and Review
+   Pooja Go - Priest Booking Date, Time and Review
    Isolated from the existing Pooja booking functionality.
 ============================================================ */
 

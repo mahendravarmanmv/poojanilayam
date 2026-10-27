@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Share Your Feedback | Pooja Nilayam')
+@section('title', 'Share Your Feedback | Pooja Go')
 
 @section(
     'meta_description',
-    'Share your experience with Pooja Nilayam and provide feedback about your completed service.'
+    'Share your experience with Pooja Go and provide feedback about your completed service.'
 )
 
 @section('content')
@@ -107,7 +107,7 @@
                            mb-0"
                 >
 
-                    Thank you for choosing Pooja Nilayam.
+                    Thank you for choosing Pooja Go.
                     Your feedback helps us improve the experience
                     for every devotee.
 
@@ -207,7 +207,7 @@
                             >
 
                                 Thank you for sharing your experience
-                                with Pooja Nilayam.
+                                with Pooja Go.
 
                             </p>
 
@@ -686,7 +686,7 @@
                                     >
 
                                         Would You Recommend
-                                        Pooja Nilayam?
+                                        Pooja Go?
 
                                     </label>
 
@@ -1160,7 +1160,7 @@
                                        mb-3"
                             >
 
-                                Your feedback helps Pooja Nilayam
+                                Your feedback helps Pooja Go
                                 understand what devotees value and
                                 where we can improve.
 
@@ -1347,7 +1347,7 @@
                                    fw-semibold
                                    text-uppercase"
                         >
-                            Pooja Nilayam
+                            Pooja Go
                         </span>
 
 
@@ -1388,7 +1388,7 @@
                                    px-4"
                         >
 
-                            Explore Pooja Nilayam
+                            Explore Pooja Go
 
                             <i
                                 class="bi bi-arrow-right ms-2"

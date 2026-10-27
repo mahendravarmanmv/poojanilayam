@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Booking Confirmed | Pooja Nilayam')
+@section('title', 'Booking Confirmed | Pooja Go')
 
 @section(
     'meta_description',
-    'Your Pooja Nilayam booking has been successfully confirmed.'
+    'Your Pooja Go booking has been successfully confirmed.'
 )
 
 @section('content')
@@ -205,7 +205,7 @@
                            mb-0"
                 >
 
-                    Thank you for choosing Pooja Nilayam.
+                    Thank you for choosing Pooja Go.
                     Your booking details are provided below.
 
                 </p>
@@ -1744,7 +1744,7 @@
             >
 
                 You can explore more poojas, temples, digital poojas
-                and other services available through Pooja Nilayam.
+                and other services available through Pooja Go.
 
             </p>
 

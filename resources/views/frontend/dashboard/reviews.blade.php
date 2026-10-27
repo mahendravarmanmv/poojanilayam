@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'My Reviews | Pooja Nilayam')
-@section('meta_description', 'View and manage your reviews on Pooja Nilayam.')
+@section('title', 'My Reviews | Pooja Go')
+@section('meta_description', 'View and manage your reviews on Pooja Go.')
 
 @section('content')
 <section class="bg-pn-cream border-bottom">

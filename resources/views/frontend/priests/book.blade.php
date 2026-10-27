@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Book Priest | Pooja Nilayam')
+@section('title', 'Book Priest | Pooja Go')
 
 @section(
     'meta_description',
-    'Book a trusted priest for your sacred pooja or traditional ceremony through Pooja Nilayam.'
+    'Book a trusted priest for your sacred pooja or traditional ceremony through Pooja Go.'
 )
 
 @section('content')

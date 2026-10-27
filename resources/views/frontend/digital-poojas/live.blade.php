@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Live Pooja | Pooja Nilayam')
+@section('title', 'Live Pooja | Pooja Go')
 
 @section(
     'meta_description',
-    'Join your live devotional Pooja experience with Pooja Nilayam.'
+    'Join your live devotional Pooja experience with Pooja Go.'
 )
 
 @section('content')
@@ -32,7 +32,7 @@
 
         'priest' => 'Sri Venkateshwara Sharma',
 
-        'temple' => 'Pooja Nilayam',
+        'temple' => 'Pooja Go',
 
         'date' => '11 August 2026',
 
@@ -195,7 +195,7 @@
                            d-md-inline-block"
                 >
 
-                    Pooja Nilayam
+                    Pooja Go
 
                 </a>
 

@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', $cmsPage?->title ? $cmsPage->title . ' | Pooja Nilayam' : 'Testimonials | Pooja Nilayam')
+@section('title', $cmsPage?->title ? $cmsPage->title . ' | Pooja Go' : 'Testimonials | Pooja Go')
 
 @section(
     'meta_description',
-    $cmsPage?->excerpt ?: 'Read experiences and feedback shared by customers of Pooja Nilayam across pooja services, digital pooja, temples, astrology, donations and the Pooja Store.'
+    $cmsPage?->excerpt ?: 'Read experiences and feedback shared by customers of Pooja Go across pooja services, digital pooja, temples, astrology, donations and the Pooja Store.'
 )
 
 @section('content')
@@ -140,7 +140,7 @@
         [
             'icon' => 'bi-flower1',
             'title' => 'Many Experiences',
-            'text' => 'Feedback can span multiple Pooja Nilayam services.'
+            'text' => 'Feedback can span multiple Pooja Go services.'
         ]
 
     ];
@@ -235,7 +235,7 @@
                 >
 
                     Discover experiences and feedback shared by
-                    customers across Pooja Nilayam's spiritual,
+                    customers across Pooja Go's spiritual,
                     devotional and digital services.
 
                 </p>
@@ -330,7 +330,7 @@
                 >
 
                     Customer feedback and ratings are an important
-                    part of the Pooja Nilayam experience. The project
+                    part of the Pooja Go experience. The project
                     flow includes feedback and rating after successful
                     service completion.
 
@@ -701,7 +701,7 @@
                                     {{ data_get(
                                         $featuredTestimonial,
                                         'service',
-                                        'Pooja Nilayam'
+                                        'Pooja Go'
                                     ) }}
 
                                 </h3>
@@ -854,7 +854,7 @@
                             data_get(
                                 $testimonial,
                                 'service',
-                                'Pooja Nilayam'
+                                'Pooja Go'
                             );
 
                         $rating =
@@ -1236,7 +1236,7 @@
 
                             Customer testimonials and ratings will
                             appear here once they are published
-                            through the Pooja Nilayam testimonial
+                            through the Pooja Go testimonial
                             management process.
 
                         </p>
@@ -1247,7 +1247,7 @@
                             class="btn btn-pn"
                         >
 
-                            Explore Pooja Nilayam
+                            Explore Pooja Go
 
                             <i
                                 class="bi bi-arrow-right ms-1"
@@ -1333,7 +1333,7 @@
 
                         After completing a service, customers can
                         share feedback and ratings through the
-                        applicable Pooja Nilayam experience.
+                        applicable Pooja Go experience.
 
                     </p>
 
@@ -1400,7 +1400,7 @@
                        fw-semibold
                        text-uppercase"
             >
-                Explore Pooja Nilayam
+                Explore Pooja Go
             </span>
 
 
@@ -1556,7 +1556,7 @@
                            mb-3"
                 >
 
-                    Begin Your Pooja Nilayam Journey
+                    Begin Your Pooja Go Journey
 
                 </h2>
 

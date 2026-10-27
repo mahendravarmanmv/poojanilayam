@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', $cmsPage?->title ? $cmsPage->title . ' | Pooja Nilayam' : 'Refund Policy | Pooja Nilayam')
+@section('title', $cmsPage?->title ? $cmsPage->title . ' | Pooja Go' : 'Refund Policy | Pooja Go')
 
 @section(
     'meta_description',
-    $cmsPage?->excerpt ?: 'Read the Pooja Nilayam Refund Policy covering applicable refunds and cancellations.'
+    $cmsPage?->excerpt ?: 'Read the Pooja Go Refund Policy covering applicable refunds and cancellations.'
 )
 
 @section('content')
@@ -37,7 +37,7 @@
     |--------------------------------------------------------------------------
     */
 
-    $lastUpdated = data_get($cmsPage?->metadata, 'last_updated', 'To be updated by Pooja Nilayam');
+    $lastUpdated = data_get($cmsPage?->metadata, 'last_updated', 'To be updated by Pooja Go');
 
 
     $sections = [
@@ -225,7 +225,7 @@
                 >
 
                     Learn how refund requests are submitted,
-                    reviewed and processed through Pooja Nilayam.
+                    reviewed and processed through Pooja Go.
 
                 </p>
 
@@ -389,7 +389,7 @@
                 style="max-width:760px;"
             >
 
-                The documented Pooja Nilayam refund workflow begins
+                The documented Pooja Go refund workflow begins
                 with a customer request and continues through
                 verification, eligibility review and the final
                 refund decision.
@@ -789,7 +789,7 @@
                                                lh-lg"
                                     >
 
-                                        Pooja Nilayam provides a
+                                        Pooja Go provides a
                                         defined refund-request workflow
                                         in which a customer can submit
                                         a refund request for review.
@@ -1039,7 +1039,7 @@
 
                                         A customer must initiate a
                                         refund request through the
-                                        applicable Pooja Nilayam
+                                        applicable Pooja Go
                                         customer/support process.
 
                                     </p>
@@ -1551,7 +1551,7 @@
                                                lh-lg"
                                     >
 
-                                        Pooja Nilayam includes multiple
+                                        Pooja Go includes multiple
                                         transaction-based services,
                                         including Online Pooja, Temple
                                         Pooja, Digital Pooja and
@@ -1903,7 +1903,7 @@
 
                                         For questions about a refund
                                         request or the refund process,
-                                        contact the Pooja Nilayam
+                                        contact the Pooja Go
                                         support team.
 
                                     </p>
@@ -1914,7 +1914,7 @@
                                         class="btn btn-pn"
                                     >
 
-                                        Contact Pooja Nilayam
+                                        Contact Pooja Go
 
                                         <i
                                             class="bi bi-arrow-right ms-1"

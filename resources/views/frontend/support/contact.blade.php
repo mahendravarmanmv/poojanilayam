@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Contact Us | Pooja Nilayam')
+@section('title', 'Contact Us | Pooja Go')
 
 @section(
     'meta_description',
-    'Contact Pooja Nilayam for general enquiries, pooja services, temple services, digital pooja, astrology and other assistance.'
+    'Contact Pooja Go for general enquiries, pooja services, temple services, digital pooja, astrology and other assistance.'
 )
 
 @section('content')
@@ -1388,7 +1388,7 @@
                                        h4
                                        text-pn-brown"
                             >
-                                Pooja Nilayam
+                                Pooja Go
                             </h2>
 
 
@@ -1404,7 +1404,7 @@
 
 
                             <a
-                                href="https://www.google.com/maps/search/?api=1&query={{ urlencode('Pooja Nilayam Support Office') }}" target="_blank" rel="noopener noreferrer"
+                                href="https://www.google.com/maps/search/?api=1&query={{ urlencode('Pooja Go Support Office') }}" target="_blank" rel="noopener noreferrer"
                                 class="btn
                                        btn-sm
                                        btn-pn-outline"

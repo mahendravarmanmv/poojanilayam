@@ -244,16 +244,7 @@
                            align-items-center
                            gap-1">
 
-                    <span class="btn btn-sm text-pn-brown">
-
-                        <i
-                            class="bi bi-geo-alt
-                                   text-pn-primary
-                                   me-1"></i>
-
-                        Hyderabad
-
-                    </span>
+                   
 
 
                     <a href="{{ route('store.wishlist') }}" class="text-pn-brown fs-5" aria-label="Wishlist">
@@ -335,7 +326,7 @@
                        font-serif
                        fw-bold
                        text-pn-primary">
-                Pooja Nilayam
+                Pooja Go
             </h5>
 
             <button

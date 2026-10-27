@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Schedule Digital Pooja | Pooja Nilayam')
+@section('title', 'Schedule Digital Pooja | Pooja Go')
 
 @section(
     'meta_description',
-    'Schedule your personalized Digital Pooja with Pooja Nilayam.'
+    'Schedule your personalized Digital Pooja with Pooja Go.'
 )
 
 @section('content')
@@ -1409,7 +1409,7 @@
 
                                 I confirm that the information provided
                                 above is correct and I agree to the
-                                Pooja Nilayam booking terms and applicable
+                                Pooja Go booking terms and applicable
                                 policies.
 
                             </label>

@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', ($pooja['name'] ?? 'Pooja') . ' | Pooja Nilayam')
+@section('title', ($pooja['name'] ?? 'Pooja') . ' | Pooja Go')
 
 @section(
     'meta_description',
-    ($pooja['short_description'] ?? 'Learn about this Pooja, its benefits, procedure, materials and booking options with Pooja Nilayam.')
+    ($pooja['short_description'] ?? 'Learn about this Pooja, its benefits, procedure, materials and booking options with Pooja Go.')
 )
 
 @section('content')

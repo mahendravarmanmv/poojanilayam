@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Digital Pooja | Pooja Nilayam')
+@section('title', 'Digital Pooja | Pooja Go')
 
 @section(
     'meta_description',
@@ -1096,7 +1096,7 @@
                     class="text-secondary"
                 >
 
-                    Pooja Nilayam's Digital Pooja experience is
+                    Pooja Go's Digital Pooja experience is
                     designed around personalization. Instead of
                     providing only a generic digital prayer,
                     the planned experience allows devotees to

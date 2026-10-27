@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'HTML Sitemap | Pooja Nilayam')
-@section('meta_description', 'Explore the main pages and services available on Pooja Nilayam.')
+@section('title', 'HTML Sitemap | Pooja Go')
+@section('meta_description', 'Explore the main pages and services available on Pooja Go.')
 
 @section('content')
 <div class="bg-pn-cream py-3">
@@ -20,11 +20,11 @@
 <section class="py-5">
     <div class="container">
         <div class="text-center mb-5">
-            <span class="pn-section-label">Explore Pooja Nilayam</span>
+            <span class="pn-section-label">Explore Pooja Go</span>
             <h1 class="display-6 fw-bold mt-2 mb-3">HTML Sitemap</h1>
             <p class="text-muted mx-auto mb-0" style="max-width: 760px;">
                 Quickly find the main pages, spiritual services, shopping and support
-                sections available across Pooja Nilayam.
+                sections available across Pooja Go.
             </p>
         </div>
 

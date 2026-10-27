@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Temples | Pooja Nilayam')
+@section('title', 'Temples | Pooja Go')
 
 @section(
     'meta_description',
-    'Explore temples, discover sacred places and find temple services with Pooja Nilayam.'
+    'Explore temples, discover sacred places and find temple services with Pooja Go.'
 )
 
 @section('content')
@@ -100,7 +100,7 @@
 
                     Explore temples, discover their spiritual
                     offerings and connect with sacred experiences
-                    through Pooja Nilayam.
+                    through Pooja Go.
 
                 </p>
 
@@ -970,7 +970,7 @@
                     class="text-secondary"
                 >
 
-                    Pooja Nilayam brings temple discovery together
+                    Pooja Go brings temple discovery together
                     with devotional services and spiritual experiences.
 
                 </p>

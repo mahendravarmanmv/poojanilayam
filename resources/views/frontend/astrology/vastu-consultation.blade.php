@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Vastu Consultation | Pooja Nilayam')
+@section('title', 'Vastu Consultation | Pooja Go')
 
 @section(
     'meta_description',
-    'Explore Vastu consultation services through Pooja Nilayam.'
+    'Explore Vastu consultation services through Pooja Go.'
 )
 
 @section('content')
@@ -199,7 +199,7 @@
                 >
 
                     Explore Vastu consultation services through
-                    Pooja Nilayam and discover guidance for your
+                    Pooja Go and discover guidance for your
                     home, office or property.
 
                 </p>

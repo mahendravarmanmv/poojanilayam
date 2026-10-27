@@ -1,6 +1,6 @@
 @extends('layouts.app')
-@section('title', 'Order Details | Pooja Nilayam')
-@section('meta_description', 'View your Pooja Nilayam order details and current status.')
+@section('title', 'Order Details | Pooja Go')
+@section('meta_description', 'View your Pooja Go order details and current status.')
 @section('content')
 @php
     $address = $order->addresses->firstWhere('address_type', 'shipping');

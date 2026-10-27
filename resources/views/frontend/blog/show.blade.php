@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', ($post['meta_title'] ?? $post['title']) . ' | Pooja Nilayam')
+@section('title', ($post['meta_title'] ?? $post['title']) . ' | Pooja Go')
 
 @section(
     'meta_description',
@@ -623,7 +623,7 @@
                                     Sharing devotional knowledge,
                                     pooja guidance and meaningful
                                     spiritual insights for the
-                                    Pooja Nilayam community.
+                                    Pooja Go community.
 
                                 </p>
 
@@ -1057,7 +1057,7 @@
             >
 
                 Explore more devotional stories and spiritual
-                insights from Pooja Nilayam.
+                insights from Pooja Go.
 
             </p>
 

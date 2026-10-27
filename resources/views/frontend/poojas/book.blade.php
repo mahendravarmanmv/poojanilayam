@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Book ' . $pooja->name . ' | Pooja Nilayam')
-@section('meta_description', 'Book your preferred pooja, select date and time, choose a priest, enter Sankalpam details, add services and securely complete your booking with Pooja Nilayam.')
+@section('title', 'Book ' . $pooja->name . ' | Pooja Go')
+@section('meta_description', 'Book your preferred pooja, select date and time, choose a priest, enter Sankalpam details, add services and securely complete your booking with Pooja Go.')
 
 @section('content')
 
@@ -282,7 +282,7 @@
                                         </div>
                                         <div>
                                             <strong class="text-pn-brown d-block">No Preference (Auto Assigned)</strong>
-                                            <small class="text-muted">Let Pooja Nilayam assign an experienced verified Vedic pandit for your pooja.</small>
+                                            <small class="text-muted">Let Pooja Go assign an experienced verified Vedic pandit for your pooja.</small>
                                         </div>
                                     </div>
                                 </label>
@@ -518,7 +518,7 @@
                     <div class="form-check mb-4">
                         <input class="form-check-input" type="checkbox" id="bookingTerms" name="booking_terms" value="1" required checked>
                         <label class="form-check-label small text-secondary" for="bookingTerms">
-                            I confirm that the booking information provided is correct and agree to the applicable Pooja Nilayam terms and policies.
+                            I confirm that the booking information provided is correct and agree to the applicable Pooja Go terms and policies.
                         </label>
                     </div>
 

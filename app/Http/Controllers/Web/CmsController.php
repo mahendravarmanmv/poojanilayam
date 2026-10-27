@@ -133,7 +133,7 @@ class CmsController extends Controller
                     'city' => $testimonial->location,
                     'rating' => $testimonial->rating,
                     'review' => $testimonial->testimonial,
-                    'service' => 'Pooja Nilayam',
+                    'service' => 'Pooja Go',
                     'avatar' => $testimonial->photo_path,
                     'verified' => false,
                     'featured' => $testimonial->featured,

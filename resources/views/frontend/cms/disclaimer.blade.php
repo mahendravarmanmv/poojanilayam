@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', $cmsPage?->title ? $cmsPage->title . ' | Pooja Nilayam' : 'Disclaimer | Pooja Nilayam')
+@section('title', $cmsPage?->title ? $cmsPage->title . ' | Pooja Go' : 'Disclaimer | Pooja Go')
 
 @section(
     'meta_description',
-    $cmsPage?->excerpt ?: 'Read the Pooja Nilayam Disclaimer covering spiritual services, astrology, digital experiences, products, information and third-party services.'
+    $cmsPage?->excerpt ?: 'Read the Pooja Go Disclaimer covering spiritual services, astrology, digital experiences, products, information and third-party services.'
 )
 
 @section('content')
@@ -25,7 +25,7 @@
     |--------------------------------------------------------------------------
     */
 
-    $lastUpdated = data_get($cmsPage?->metadata, 'last_updated', 'To be updated by Pooja Nilayam');
+    $lastUpdated = data_get($cmsPage?->metadata, 'last_updated', 'To be updated by Pooja Go');
 
 
     $sections = [
@@ -216,7 +216,7 @@
 
                     Important information regarding the content,
                     services and experiences provided through
-                    Pooja Nilayam.
+                    Pooja Go.
 
                 </p>
 
@@ -379,7 +379,7 @@
                 style="max-width:760px;"
             >
 
-                Pooja Nilayam brings together spiritual services,
+                Pooja Go brings together spiritual services,
                 digital experiences, astrology, products, donations
                 and related content. The final disclaimer will define
                 the applicable limitations and conditions.
@@ -657,7 +657,7 @@
                                    text-secondary"
                         >
 
-                            Contact the Pooja Nilayam support team
+                            Contact the Pooja Go support team
                             if you need clarification about our
                             services.
 
@@ -749,7 +749,7 @@
                                         provide important information
                                         about the nature of content,
                                         services and experiences made
-                                        available through Pooja Nilayam.
+                                        available through Pooja Go.
 
                                     </p>
 
@@ -816,7 +816,7 @@
                                                lh-lg"
                                     >
 
-                                        Pooja Nilayam is designed as
+                                        Pooja Go is designed as
                                         a spiritual and devotional
                                         platform. The project scope
                                         includes poojas, temples,
@@ -1329,7 +1329,7 @@
                                                lh-lg"
                                     >
 
-                                        Pooja Nilayam includes website
+                                        Pooja Go includes website
                                         content such as service
                                         descriptions, temple information,
                                         blogs, devotional content,
@@ -1704,7 +1704,7 @@
 
                                         Changes to the approved
                                         disclaimer should be managed
-                                        through the Pooja Nilayam CMS
+                                        through the Pooja Go CMS
                                         and reflected on this page.
 
                                     </p>
@@ -1758,7 +1758,7 @@
 
                                         If you have questions about
                                         information presented on this
-                                        page or about Pooja Nilayam
+                                        page or about Pooja Go
                                         services, contact the support
                                         team.
 
@@ -1770,7 +1770,7 @@
                                         class="btn btn-pn"
                                     >
 
-                                        Contact Pooja Nilayam
+                                        Contact Pooja Go
 
                                         <i
                                             class="bi bi-arrow-right ms-1"

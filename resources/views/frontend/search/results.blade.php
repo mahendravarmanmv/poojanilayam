@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Search Results | Pooja Nilayam')
+@section('title', 'Search Results | Pooja Go')
 
 @section(
     'meta_description',
-    'Search Pooja Nilayam for poojas, temples, priests, digital pooja, astrology services, products, donations and spiritual content.'
+    'Search Pooja Go for poojas, temples, priests, digital pooja, astrology services, products, donations and spiritual content.'
 )
 
 @section('content')
@@ -74,7 +74,7 @@
                            fw-semibold
                            text-uppercase"
                 >
-                    Search Pooja Nilayam
+                    Search Pooja Go
                 </span>
 
 
@@ -127,7 +127,7 @@
                                    border-start-0"
                             placeholder="Search poojas, temples, priests, products..."
                             autocomplete="off"
-                            aria-label="Search Pooja Nilayam"
+                            aria-label="Search Pooja Go"
                         >
 
 
@@ -686,7 +686,7 @@
                         class="btn btn-pn"
                     >
 
-                        Explore Pooja Nilayam
+                        Explore Pooja Go
 
                         <i
                             class="bi bi-arrow-right ms-1"
@@ -768,7 +768,7 @@
                         >
 
                             Explore the Spiritual World of
-                            Pooja Nilayam
+                            Pooja Go
 
                         </h2>
 

@@ -233,7 +233,7 @@ class StoreCatalogController extends Controller
         $card['main_image'] = $images[0] ?? null;
         $card['images'] = $images;
         $card['features'] = [
-            ['icon' => 'bi-shield-check', 'title' => 'Quality Assured', 'description' => 'Product information managed by Pooja Nilayam.'],
+            ['icon' => 'bi-shield-check', 'title' => 'Quality Assured', 'description' => 'Product information managed by Pooja Go.'],
             ['icon' => 'bi-box-seam', 'title' => 'Secure Packaging', 'description' => 'Packaging details are managed with the product.'],
             ['icon' => 'bi-truck', 'title' => 'Reliable Delivery', 'description' => 'Delivery availability is subject to the configured service area.'],
             ['icon' => 'bi-headset', 'title' => 'Customer Support', 'description' => 'Support is available through the website support channels.'],

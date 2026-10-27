@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Booking Confirmed | Pooja Nilayam')
+@section('title', 'Booking Confirmed | Pooja Go')
 
 @section(
     'meta_description',
-    'Your priest booking has been confirmed successfully with Pooja Nilayam.'
+    'Your priest booking has been confirmed successfully with Pooja Go.'
 )
 
 @section('content')
@@ -165,7 +165,7 @@
                                mb-0"
                     >
 
-                        Thank you for choosing Pooja Nilayam.
+                        Thank you for choosing Pooja Go.
                         Your booking has been successfully confirmed.
 
                     </p>

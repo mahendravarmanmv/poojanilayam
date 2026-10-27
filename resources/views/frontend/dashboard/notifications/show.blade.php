@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $notification->title . ' | Pooja Nilayam')
+@section('title', $notification->title . ' | Pooja Go')
 
 @section('content')
 <div class="container py-4 py-lg-5">

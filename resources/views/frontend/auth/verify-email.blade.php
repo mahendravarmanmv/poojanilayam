@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Verify Email | Pooja Nilayam')
+@section('title', 'Verify Email | Pooja Go')
 
 @section('content')
 <section class="bg-pn-cream py-5">
@@ -13,7 +13,7 @@
                             <i class="bi bi-envelope-check fs-3"></i>
                         </div>
                         <h1 class="font-serif h2 text-pn-brown">Verify your contact</h1>
-                        <p class="text-secondary">Pooja Nilayam uses OTP verification for registration. Please continue to the OTP verification page.</p>
+                        <p class="text-secondary">Pooja Go uses OTP verification for registration. Please continue to the OTP verification page.</p>
                         <a href="{{ route('auth.otp-verification') }}" class="btn btn-pn px-4">Continue to OTP Verification</a>
                     </div>
                 </div>

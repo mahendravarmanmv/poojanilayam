@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'My Orders | Pooja Nilayam')
+@section('title', 'My Orders | Pooja Go')
 
 @section(
     'meta_description',
-    'View your Pooja Nilayam orders, shipment status, delivery information and order history.'
+    'View your Pooja Go orders, shipment status, delivery information and order history.'
 )
 
 @section('content')

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Temple Timings | Pooja Nilayam')
+@section('title', 'Temple Timings | Pooja Go')
 @section('meta_description', 'View temple opening hours, pooja timings and daily schedules.')
 
 @section('content')

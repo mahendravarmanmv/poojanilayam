@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Help Center | Pooja Nilayam')
+@section('title', 'Help Center | Pooja Go')
 
 @section(
     'meta_description',
-    'Find answers to common questions about Pooja Nilayam services, bookings, digital pooja, orders, payments and support.'
+    'Find answers to common questions about Pooja Go services, bookings, digital pooja, orders, payments and support.'
 )
 
 @section('content')

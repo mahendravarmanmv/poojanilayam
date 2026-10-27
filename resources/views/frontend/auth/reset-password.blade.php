@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Reset Password | Pooja Nilayam')
+@section('title', 'Reset Password | Pooja Go')
 
 @section('content')
 <section class="bg-pn-cream py-5">

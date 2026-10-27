@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Astrology Booking | Pooja Nilayam')
+@section('title', 'Astrology Booking | Pooja Go')
 
 @section(
     'meta_description',
-    'Book an astrology consultation with an astrologer through Pooja Nilayam.'
+    'Book an astrology consultation with an astrologer through Pooja Go.'
 )
 
 @section('content')

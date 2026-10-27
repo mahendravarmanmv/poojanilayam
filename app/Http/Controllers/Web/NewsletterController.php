@@ -31,7 +31,7 @@ class NewsletterController extends Controller
 
         return back()->with(
             'newsletter_success',
-            'Thank you for subscribing to Pooja Nilayam!'
+            'Thank you for subscribing to Pooja Go!'
         );
     }
 }

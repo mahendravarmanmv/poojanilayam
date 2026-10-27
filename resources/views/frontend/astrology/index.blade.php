@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Astrology Services | Pooja Nilayam')
+@section('title', 'Astrology Services | Pooja Go')
 
 @section(
     'meta_description',
@@ -668,7 +668,7 @@
                     >
 
                         Choose from a range of astrology-related
-                        services available through Pooja Nilayam.
+                        services available through Pooja Go.
                         Each service has its own dedicated experience.
 
                     </p>

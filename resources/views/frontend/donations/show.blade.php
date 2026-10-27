@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', $campaign->name . ' | Donations | Pooja Nilayam')
-@section('meta_description', $campaign->short_description ?: 'Support this cause through Pooja Nilayam.')
+@section('title', $campaign->name . ' | Donations | Pooja Go')
+@section('meta_description', $campaign->short_description ?: 'Support this cause through Pooja Go.')
 
 @section('content')
 <section class="bg-pn-cream border-bottom">

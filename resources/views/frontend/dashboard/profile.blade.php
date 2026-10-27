@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'My Profile | Pooja Nilayam')
+@section('title', 'My Profile | Pooja Go')
 
 @section(
     'meta_description',
-    'View and manage your Pooja Nilayam profile information.'
+    'View and manage your Pooja Go profile information.'
 )
 
 @section('content')
@@ -1114,7 +1114,7 @@
                                            mb-0"
                                 >
                                     Manage your password and protect
-                                    access to your Pooja Nilayam
+                                    access to your Pooja Go
                                     account.
                                 </p>
 

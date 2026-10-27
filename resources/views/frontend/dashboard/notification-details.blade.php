@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Notification Details | Pooja Nilayam')
-@section('meta_description', 'View your Pooja Nilayam notification details and important updates.')
+@section('title', 'Notification Details | Pooja Go')
+@section('meta_description', 'View your Pooja Go notification details and important updates.')
 
 @section('content')
 <div class="bg-pn-cream py-3">

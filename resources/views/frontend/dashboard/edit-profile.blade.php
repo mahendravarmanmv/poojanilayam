@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Profile | Pooja Nilayam')
+@section('title', 'Edit Profile | Pooja Go')
 
 @section(
     'meta_description',
-    'Update your personal information and profile details on Pooja Nilayam.'
+    'Update your personal information and profile details on Pooja Go.'
 )
 
 @section('content')
@@ -1143,7 +1143,7 @@
                                             class="text-secondary"
                                         >
                                             Changes will be saved to
-                                            your Pooja Nilayam account
+                                            your Pooja Go account
                                             after submission.
                                         </small>
 

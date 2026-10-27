@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Change Password | Pooja Nilayam')
+@section('title', 'Change Password | Pooja Go')
 
 @section(
     'meta_description',
-    'Securely change your Pooja Nilayam account password.'
+    'Securely change your Pooja Go account password.'
 )
 
 @section('content')
@@ -99,7 +99,7 @@
                            mb-0"
                 >
                     Update your password regularly to help keep
-                    your Pooja Nilayam account secure.
+                    your Pooja Go account secure.
                 </p>
 
             </div>
@@ -1235,7 +1235,7 @@
                                 class="text-secondary"
                             >
 
-                                Pooja Nilayam will never ask you to
+                                Pooja Go will never ask you to
                                 share your password through email,
                                 phone calls or messages.
 

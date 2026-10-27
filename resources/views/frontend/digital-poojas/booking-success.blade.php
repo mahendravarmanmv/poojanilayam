@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Digital Pooja Booking Confirmed | Pooja Nilayam')
+@section('title', 'Digital Pooja Booking Confirmed | Pooja Go')
 
 @section(
     'meta_description',
-    'Your Digital Pooja booking has been successfully confirmed with Pooja Nilayam.'
+    'Your Digital Pooja booking has been successfully confirmed with Pooja Go.'
 )
 
 @section('content')
@@ -258,7 +258,7 @@
                            mb-4"
                 >
 
-                    Thank you for choosing Pooja Nilayam.
+                    Thank you for choosing Pooja Go.
                     Your Digital Pooja booking has been successfully
                     confirmed.
 
@@ -1161,7 +1161,7 @@
                                mb-0"
                     >
 
-                        Pooja Nilayam supports multiple notification
+                        Pooja Go supports multiple notification
                         channels for important service updates.
 
                     </p>

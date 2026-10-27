@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Shopping Cart | Pooja Nilayam')
-@section('meta_description', 'Review your selected devotional products before checkout at Pooja Nilayam.')
+@section('title', 'Shopping Cart | Pooja Go')
+@section('meta_description', 'Review your selected devotional products before checkout at Pooja Go.')
 
 @push('styles')
 <style>

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Temple Donations | Pooja Nilayam')
-@section('meta_description', 'Support temple activities and sacred services through Pooja Nilayam.')
+@section('title', 'Temple Donations | Pooja Go')
+@section('meta_description', 'Support temple activities and sacred services through Pooja Go.')
 
 @section('content')
 <section class="bg-pn-cream border-bottom">

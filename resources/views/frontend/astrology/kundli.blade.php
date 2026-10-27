@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Kundli | Pooja Nilayam')
+@section('title', 'Kundli | Pooja Go')
 
 @section(
     'meta_description',
-    'Create your Kundli by providing your birth details through Pooja Nilayam.'
+    'Create your Kundli by providing your birth details through Pooja Go.'
 )
 
 @section('content')

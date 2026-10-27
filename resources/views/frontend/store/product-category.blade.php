@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Pooja Samagri | Pooja Nilayam Store')
+@section('title', 'Pooja Samagri | Pooja Go Store')
 
 @section(
     'meta_description',
-    'Explore pooja samagri and devotional essentials from Pooja Nilayam.'
+    'Explore pooja samagri and devotional essentials from Pooja Go.'
 )
 
 @section('content')
@@ -1652,7 +1652,7 @@
                            mt-3"
                 >
 
-                    Continue exploring Pooja Nilayam Store
+                    Continue exploring Pooja Go Store
 
                 </h2>
 

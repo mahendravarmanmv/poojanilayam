@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Donate | Pooja Nilayam')
+@section('title', 'Donate | Pooja Go')
 
 @section(
     'meta_description',
-    'Support spiritual initiatives and devotional activities through Pooja Nilayam.'
+    'Support spiritual initiatives and devotional activities through Pooja Go.'
 )
 
 @section('content')
@@ -399,7 +399,7 @@
                     >
 
                         Choose a donation purpose that
-                        matters to you. Pooja Nilayam provides a
+                        matters to you. Pooja Go provides a
                         convenient way to make your contribution and
                         receive a donation receipt after successful
                         completion.

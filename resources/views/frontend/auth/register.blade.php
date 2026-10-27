@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Register | Pooja Nilayam')
+@section('title', 'Register | Pooja Go')
 
 @section('content')
 <section class="bg-pn-cream py-5">
@@ -8,7 +8,7 @@
         <div class="row justify-content-center">
             <div class="col-12 col-md-9 col-lg-6">
                 <div class="text-center mb-4">
-                    <span class="small text-pn-gold fw-semibold text-uppercase pn-section-label">Join Pooja Nilayam</span>
+                    <span class="small text-pn-gold fw-semibold text-uppercase pn-section-label">Join Pooja Go</span>
                     <h1 class="font-serif display-5 text-pn-brown mt-2 mb-2">Create your account</h1>
                     <p class="text-secondary mb-0">Register once and manage your poojas, orders and spiritual activities.</p>
                 </div>

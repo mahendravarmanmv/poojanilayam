@@ -19,11 +19,13 @@
 
     <meta
         name="description"
-        content="@yield('meta_description', 'Pooja Nilayam - Bringing devotion closer to your home.')"
+        content="@yield('meta_description', 'Pooja Go - Bringing devotion closer to your home.')"
     >
+	
+	<link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
 
     <title>
-        @yield('title', 'Pooja Nilayam')
+        @yield('title', 'Pooja Go')
     </title>
 
     @vite([

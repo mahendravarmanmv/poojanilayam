@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', $cmsPage?->title ? $cmsPage->title . ' | Pooja Nilayam' : 'Terms & Conditions | Pooja Nilayam')
+@section('title', $cmsPage?->title ? $cmsPage->title . ' | Pooja Go' : 'Terms & Conditions | Pooja Go')
 
 @section(
     'meta_description',
-    $cmsPage?->excerpt ?: 'Read the Pooja Nilayam Terms & Conditions governing use of the platform and its services.'
+    $cmsPage?->excerpt ?: 'Read the Pooja Go Terms & Conditions governing use of the platform and its services.'
 )
 
 @section('content')
@@ -23,7 +23,7 @@
     |--------------------------------------------------------------------------
     */
 
-    $lastUpdated = data_get($cmsPage?->metadata, 'last_updated', 'To be updated by Pooja Nilayam');
+    $lastUpdated = data_get($cmsPage?->metadata, 'last_updated', 'To be updated by Pooja Go');
 
 
     $sections = [
@@ -225,7 +225,7 @@
                 >
 
                     Please review the terms that govern the use of
-                    the Pooja Nilayam website and its services.
+                    the Pooja Go website and its services.
 
                 </p>
 
@@ -504,7 +504,7 @@
                                    text-secondary"
                         >
 
-                            Contact the Pooja Nilayam team if you
+                            Contact the Pooja Go team if you
                             have questions about these terms.
 
                         </p>
@@ -592,7 +592,7 @@
 
                                         This section will contain the
                                         approved introduction to the
-                                        Pooja Nilayam Terms & Conditions
+                                        Pooja Go Terms & Conditions
                                         and explain the scope of these
                                         terms.
 
@@ -665,7 +665,7 @@
                                         define how users accept and
                                         agree to the applicable terms
                                         when accessing or using the
-                                        Pooja Nilayam platform.
+                                        Pooja Go platform.
 
                                     </p>
 
@@ -719,7 +719,7 @@
                                                lh-lg"
                                     >
 
-                                        Pooja Nilayam includes customer
+                                        Pooja Go includes customer
                                         registration, login, OTP
                                         verification and account
                                         management as part of the
@@ -813,7 +813,7 @@
                                                lh-lg"
                                     >
 
-                                        The Pooja Nilayam platform
+                                        The Pooja Go platform
                                         includes multiple service
                                         areas such as online pooja,
                                         temple booking, digital pooja,
@@ -1072,7 +1072,7 @@
                                     >
 
                                         Astrology services documented
-                                        for Pooja Nilayam include
+                                        for Pooja Go include
                                         Horoscope, Kundli, Match Making,
                                         Numerology, Palm Reading and
                                         Vastu Consultation. The final
@@ -1510,7 +1510,7 @@
                                         The approved legal terms
                                         should identify activities
                                         that are not permitted while
-                                        using the Pooja Nilayam
+                                        using the Pooja Go
                                         platform or services.
 
                                     </p>
@@ -1741,7 +1741,7 @@
 
                                         Questions regarding these
                                         Terms & Conditions can be
-                                        directed to the Pooja Nilayam
+                                        directed to the Pooja Go
                                         support team using the
                                         approved contact details.
 
@@ -1753,7 +1753,7 @@
                                         class="btn btn-pn"
                                     >
 
-                                        Contact Pooja Nilayam
+                                        Contact Pooja Go
 
                                         <i
                                             class="bi bi-arrow-right ms-1"

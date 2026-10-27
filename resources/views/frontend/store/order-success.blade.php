@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Order Confirmed | Pooja Nilayam')
+@section('title', 'Order Confirmed | Pooja Go')
 
 @section(
     'meta_description',
-    'Your Pooja Nilayam order has been successfully placed.'
+    'Your Pooja Go order has been successfully placed.'
 )
 
 @section('content')
@@ -1523,7 +1523,7 @@
                            mt-3"
                 >
 
-                    Thank you for choosing Pooja Nilayam.
+                    Thank you for choosing Pooja Go.
 
                 </h2>
 
