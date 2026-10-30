@@ -10,60 +10,6 @@
 @section('content')
 
 
-
-
-{{-- ============================================================
-     BREADCRUMB
-============================================================ --}}
-
-<section class="bg-pn-cream border-bottom">
-
-    <div class="container py-3">
-
-        <nav aria-label="breadcrumb">
-
-            <ol class="breadcrumb mb-0">
-
-                <li class="breadcrumb-item">
-
-                    <a
-                        href="{{ route('home') }}"
-                        class="text-pn-primary"
-                    >
-                        Home
-                    </a>
-
-                </li>
-
-
-                <li class="breadcrumb-item">
-
-                    <a
-                        href="{{ route('priest.index') }}"
-                        class="text-pn-primary"
-                    >
-                        Priests
-                    </a>
-
-                </li>
-
-
-                <li
-                    class="breadcrumb-item active"
-                    aria-current="page"
-                >
-                    {{ $priest['name'] }}
-                </li>
-
-            </ol>
-
-        </nav>
-
-    </div>
-
-</section>
-
-
 {{-- ============================================================
      PRIEST HERO / PROFILE
 ============================================================ --}}
@@ -1830,201 +1776,205 @@
 </section>
 
 
+
 {{-- ============================================================
      RATINGS & REVIEWS
 ============================================================ --}}
 
-<section class="py-5">
+<section id="reviews" class="py-5">
 
     <div class="container">
 
-        <div
-            class="row
-                   g-5"
-        >
+        <div class="row g-5">
 
             {{-- Rating Summary --}}
 
             <div class="col-12 col-lg-4">
 
-                <span
-                    class="small
-                           text-pn-gold
-                           fw-semibold
-                           text-uppercase"
-                >
+                <span class="small text-pn-gold fw-semibold text-uppercase">
                     Devotee Reviews
                 </span>
 
-
-                <h2
-                    class="font-serif
-                           display-6
-                           text-pn-brown
-                           mt-2"
-                >
-
+                <h2 class="font-serif display-6 text-pn-brown mt-2">
                     Ratings & Reviews
-
                 </h2>
 
+                <div class="pn-divider mb-4"></div>
 
-                <div
-                    class="pn-divider
-                           mb-4"
-                ></div>
+                <div class="text-center border border-warning-subtle rounded-5 p-4">
 
-
-                <div
-                    class="text-center
-                           border
-                           border-warning-subtle
-                           rounded-5
-                           p-4"
-                >
-
-                    <div
-                        class="display-4
-                               font-serif
-                               text-pn-brown"
-                    >
-
+                    <div class="display-4 font-serif text-pn-brown">
                         {{ $priest['rating'] }}
-
                     </div>
 
-
-                    <div
-                        class="text-warning
-                               fs-5
-                               mb-2"
-                    >
-
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-
+                    <div class="text-warning fs-5 mb-2">
+                        @for($star = 1; $star <= 5; $star++)
+                            <i class="bi {{ $star <= round((float) $priest['rating']) ? 'bi-star-fill' : 'bi-star' }}"></i>
+                        @endfor
                     </div>
 
-
-                    <p
-                        class="small
-                               text-secondary
-                               mb-0"
-                    >
-
-                        Based on
-                        {{ $priest['reviews'] }}
-                        reviews
-
+                    <p class="small text-secondary mb-0">
+                        Based on {{ $priest['reviews'] }} reviews
                     </p>
 
                 </div>
 
             </div>
 
-
-            {{-- Reviews --}}
+            {{-- Published Reviews --}}
 
             <div class="col-12 col-lg-8">
 
-                <div
-                    class="vstack
-                           gap-3"
-                >
+                @forelse($reviews as $review)
 
-                    @foreach($reviews as $review)
+                    <article class="border border-warning-subtle rounded-4 p-4 mb-3">
 
-                        <article
-                            class="border
-                                   border-warning-subtle
-                                   rounded-4
-                                   p-4"
-                        >
+                        <div class="d-flex flex-column flex-sm-row justify-content-between gap-2 mb-2">
 
-                            <div
-                                class="d-flex
-                                       flex-column
-                                       flex-sm-row
-                                       justify-content-between
-                                       gap-2
-                                       mb-2"
-                            >
+                            <div>
 
-                                <div>
+                                <strong class="text-pn-brown">
+                                    {{ $review->customerProfile?->user?->name ?? 'Devotee' }}
+                                </strong>
 
-                                    <strong
-                                        class="text-pn-brown"
-                                    >
-
-                                        {{ $review['name'] }}
-
-                                    </strong>
-
-
-                                    <small
-                                        class="text-secondary
-                                               d-block"
-                                    >
-
-                                        {{ $review['date'] }}
-
-                                    </small>
-
-                                </div>
-
-
-                                <span
-                                    class="small
-                                           text-warning"
-                                >
-
-                                    <i
-                                        class="bi bi-star-fill"
-                                    ></i>
-
-                                    {{ $review['rating'] }}
-
-                                </span>
+                                <small class="text-secondary d-block">
+                                    {{ $review->published_at?->format('d M Y') }}
+                                </small>
 
                             </div>
 
+                            <span class="small text-warning">
+                                <i class="bi bi-star-fill"></i>
+                                {{ $review->rating }}/5
+                            </span>
 
-                            <p
-                                class="small
-                                       text-secondary
-                                       mb-0"
-                            >
+                        </div>
 
-                                {{ $review['text'] }}
+                        @if($review->title)
+                            <h3 class="h6 text-pn-brown">
+                                {{ $review->title }}
+                            </h3>
+                        @endif
 
-                            </p>
+                        <p class="small text-secondary mb-0">
+                            {{ $review->review_text ?: 'Rated this priest.' }}
+                        </p>
 
-                        </article>
+                    </article>
 
-                    @endforeach
+                @empty
 
+                    <div class="border border-warning-subtle rounded-4 p-4 text-center">
+
+                        <i class="bi bi-chat-square-heart fs-2 text-pn-primary"></i>
+
+                        <h3 class="font-serif h5 text-pn-brown mt-3">
+                            No Reviews Yet
+                        </h3>
+
+                        <p class="small text-secondary mb-0">
+                            Be the first devotee to share your experience with this priest.
+                        </p>
+
+                    </div>
+
+                @endforelse
+					
+				
+{{-- Submit a Review --}}
+
+@if(auth()->check() && $eligibleBookings->isNotEmpty())
+
+    <div class="card border border-warning-subtle rounded-4 mt-4">
+
+        <div class="card-body p-4">
+
+            <h3 class="font-serif h4 text-pn-brown mb-2">
+                Share Your Experience
+            </h3>
+
+            <p class="small text-secondary mb-4">
+                Thank you for completing a booking with this priest.
+                Please share your feedback.
+            </p>
+
+            <form method="POST"
+                  action="{{ route('priest.reviews.store', ['slug' => $priest['slug']]) }}">
+
+                @csrf
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">
+                        Select Completed Booking
+                    </label>
+
+                    <select name="booking_id" class="form-select" required>
+                        <option value="">Choose a booking</option>
+
+                        @foreach($eligibleBookings as $booking)
+                            <option value="{{ $booking->id }}">
+                                {{ $booking->booking_id }}
+                                - {{ $booking->completed_at->format('d M Y') }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
 
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">
+                        Your Rating
+                    </label>
 
-                <div
-                    class="text-center
-                           mt-4"
-                >
-
-                    <a
-                        href="#"
-                        class="btn
-                               btn-pn-outline"
-                    >
-
-                        View All Reviews
-
-                    </a>
-
+                    <select name="rating" class="form-select" required>
+                        <option value="">Select rating</option>
+                        @for($i = 5; $i >= 1; $i--)
+                            <option value="{{ $i }}">
+                                {{ $i }} Star{{ $i > 1 ? 's' : '' }}
+                            </option>
+                        @endfor
+                    </select>
                 </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">
+                        Review Title (Optional)
+                    </label>
+
+                    <input type="text"
+                           name="title"
+                           class="form-control"
+                           maxlength="150"
+                           placeholder="Give your review a title">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">
+                        Your Experience (Optional)
+                    </label>
+
+                    <textarea name="review_text"
+                              rows="4"
+                              maxlength="5000"
+                              class="form-control"
+                              placeholder="Share your experience with this priest..."></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-pn px-4">
+                    Submit Review
+                    <i class="bi bi-arrow-right ms-2"></i>
+                </button>
+
+                <p class="small text-secondary mt-3 mb-0">
+                    Your review will be visible after admin approval.
+                </p>
+
+            </form>
+
+        </div>
+    </div>
+
+@endif
+
 
             </div>
 
@@ -2033,6 +1983,7 @@
     </div>
 
 </section>
+
 
 
 {{-- ============================================================

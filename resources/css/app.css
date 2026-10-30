@@ -159,7 +159,7 @@ iframe {
 ------------------------------------------------------- */
 
 .pn-hero {
-    min-height: 680px;
+    min-height: 440px;
 
     background:
         linear-gradient(
@@ -170,22 +170,19 @@ iframe {
             rgba(251, 246, 236, 0.08) 100%
         ),
         url("/images/home/hero.webp")
-        right center /
+        right -30px / /* <-- ADJUST THIS VALUE */
         cover no-repeat;
 }
 
 .pn-hero-title {
-    font-size: clamp(
-        2.7rem,
-        6vw,
-        5.25rem
-    );
+    font-size: 60px;
 
-    line-height: 1.02;
+    line-height: 1.06;
 }
 
+/* Restores red/terracotta accent color */
 .pn-hero-accent {
-    color: var(--pn-primary);
+    color: var(--pn-primary) !important;
 }
 
 
@@ -288,7 +285,7 @@ iframe {
 @media (max-width: 991.98px) {
 
     .pn-hero {
-        min-height: 650px;
+        min-height: 360px;
 
         background:
             linear-gradient(
@@ -310,11 +307,11 @@ iframe {
 @media (max-width: 575.98px) {
 
     .pn-hero {
-        min-height: 620px;
+        min-height: 420px;
     }
 
     .pn-hero-title {
-        font-size: 2.8rem;
+        font-size: 2.2rem;
     }
 
     .pn-brand-logo {

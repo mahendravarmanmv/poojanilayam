@@ -195,6 +195,10 @@ Route::prefix('priests')
 
         Route::get('/{slug}/poojas', [PriestController::class, 'poojas'])
             ->name('poojas');
+			
+		Route::post('/{slug}/reviews', [ReviewController::class, 'storePriest'])
+		->middleware('auth')
+		->name('reviews.store');
     });
 
 

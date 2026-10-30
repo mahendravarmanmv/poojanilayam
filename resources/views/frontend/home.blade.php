@@ -41,7 +41,13 @@ $services = [
         'image' => 'images/services/store.png',
         'title' => 'Store',
         'subtitle' => 'Pooja Samagri'
+    ],
+    [
+        'image' => 'images/services/donations.png',
+        'title' => 'Donations',
+        'subtitle' => 'Support a Cause'
     ]
+	
 ];
 
 
@@ -174,12 +180,14 @@ $services = [
 
 <section class="pn-hero d-flex align-items-center">
 
-    <div class="container py-5">
+    {{-- Reduced vertical padding from py-5 to py-4 py-lg-4 --}}
+    <div class="container py-4 py-lg-4">
 
-        <div class="row">
+        <div class="row align-items-center">
 
             <div class="col-12 col-lg-7">
 
+                {{-- Changed mb-4 to mb-3 --}}
                 <span
                     class="badge
                            rounded-pill
@@ -189,26 +197,22 @@ $services = [
                            border-warning-subtle
                            px-3
                            py-2
-                           mb-4"
+                           mb-3"
                 >
-
                     <i class="bi bi-stars me-1"></i>
-
                     A SIMPLER WAY TO EXPERIENCE DEVOTION
-
                 </span>
 
 
+                {{-- Changed mb-4 to mb-3 --}}
                 <h1
                     class="pn-hero-title
                            font-serif
                            fw-normal
                            text-pn-brown
-                           mb-4"
+                           mb-3"
                 >
-
                     Your sacred journey,
-
                     <span
                         class="pn-hero-accent
                                d-block
@@ -216,68 +220,54 @@ $services = [
                     >
                         beautifully connected.
                     </span>
-
                 </h1>
 
 
+                {{-- Changed mb-4 to mb-3 and reduced font size from lead to normal/small-lead --}}
                 <p
-                    class="lead
-                           text-pn-brown
+                    class="text-pn-brown
                            col-lg-10
-                           mb-4"
+                           mb-3
+                           fs-6"
                 >
-
                     Discover authentic poojas, trusted priests,
                     sacred temples and meaningful digital
                     experiences — all in one place.
-
                 </p>
 
 
                 {{-- Search --}}
-
                 <div class="pn-search">
 
-				<form
-				action="{{ route('search') }}"
-				method="GET"
-				>
+                    <form action="{{ route('search') }}" method="GET">
 
                         <div
                             class="bg-white
                                    rounded-3
                                    border
                                    shadow-sm
-                                   p-2"
+                                   p-1 p-sm-2"
                         >
 
-                            <div class="row g-2">
+                            <div class="row g-2 align-items-center">
 
                                 <div class="col-12 col-md">
 
-                                    <div
-                                        class="input-group
-                                               input-group-lg"
-                                    >
+                                    {{-- Removed input-group-lg for a more compact height --}}
+                                    <div class="input-group">
 
                                         <span
                                             class="input-group-text
                                                    bg-transparent
                                                    border-0"
                                         >
-
-                                            <i
-                                                class="bi bi-search
-                                                       text-pn-primary"
-                                            ></i>
-
+                                            <i class="bi bi-search text-pn-primary"></i>
                                         </span>
-
 
                                         <input
                                             type="search"
-											name="q"
-											value="{{ request('q') }}"
+                                            name="q"
+                                            value="{{ request('q') }}"
                                             class="form-control
                                                    border-0
                                                    shadow-none"
@@ -289,24 +279,18 @@ $services = [
 
                                 </div>
 
-
                                 <div class="col-12 col-md-auto">
 
+                                    {{-- Removed btn-lg to match compact search bar --}}
                                     <button
                                         type="submit"
                                         class="btn
                                                btn-pn
-                                               btn-lg
                                                w-100
                                                px-4"
                                     >
-
                                         Explore
-
-                                        <i
-                                            class="bi bi-arrow-right ms-2"
-                                        ></i>
-
+                                        <i class="bi bi-arrow-right ms-2"></i>
                                     </button>
 
                                 </div>
@@ -320,53 +304,27 @@ $services = [
                 </div>
 
 
-                {{-- Benefits --}}
-
+                {{-- Benefits (Reduced top margin mt-4 -> mt-3) --}}
                 <div
                     class="d-flex
                            flex-wrap
-                           gap-4
-                           mt-4"
+                           gap-3
+                           mt-3"
                 >
-
                     <span class="small">
-
-                        <i
-                            class="bi bi-check-circle-fill
-                                   text-pn-primary
-                                   me-1"
-                        ></i>
-
+                        <i class="bi bi-check-circle-fill text-pn-primary me-1"></i>
                         Authentic
-
                     </span>
 
-
                     <span class="small">
-
-                        <i
-                            class="bi bi-check-circle-fill
-                                   text-pn-primary
-                                   me-1"
-                        ></i>
-
+                        <i class="bi bi-check-circle-fill text-pn-primary me-1"></i>
                         Trusted
-
                     </span>
-
 
                     <span class="small">
-
-                        <i
-                            class="bi bi-check-circle-fill
-                                   text-pn-primary
-                                   me-1"
-                        ></i>
-
+                        <i class="bi bi-check-circle-fill text-pn-primary me-1"></i>
                         Convenient
-
                     </span>
-
                 </div>
 
             </div>

@@ -9,149 +9,65 @@
 
 @section('content')
 
-{{-- ============================================================
-     BREADCRUMB
-============================================================ --}}
-<section class="bg-pn-cream border-bottom">
-    <div class="container py-3">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0">
-                <li class="breadcrumb-item">
-                    <a href="{{ route('home') }}" class="text-pn-primary">Home</a>
-                </li>
-                <li class="breadcrumb-item active" aria-current="page">Priests</li>
-            </ol>
-        </nav>
-    </div>
-</section>
 
-{{-- ============================================================
-     HERO
-============================================================ --}}
-<section class="bg-pn-cream py-5">
+
+{{-- COMPACT QUICK BENEFITS STRIP --}}
+<section class="py-1 bg-white border-bottom">
     <div class="container">
-        <div class="row align-items-center g-4">
-            <div class="col-12 col-lg-7">
-                <span class="small text-pn-gold fw-semibold text-uppercase">
-                    Trusted Priests
-                </span>
+        <div class="row row-cols-2 row-cols-lg-4 g-0">
 
-                <h1 class="font-serif display-4 text-pn-brown mt-2 mb-3">
-                    Find the right priest
-                    <span class="d-block">for your sacred occasion.</span>
-                </h1>
-
-                <p class="lead text-secondary col-xl-10 mb-4">
-                    Discover verified priests with experience in traditional poojas, rituals and devotional services.
-                </p>
-
-                {{-- Search Form --}}
-                <form action="{{ route('priest.index') }}" method="GET">
-                    <input type="hidden" name="location" value="{{ request('location') }}">
-                    <input type="hidden" name="specialization" value="{{ request('specialization') }}">
-                    <input type="hidden" name="language" value="{{ request('language') }}">
-
-                    <div class="input-group input-group-lg bg-white rounded-pill shadow-sm overflow-hidden">
-                        <span class="input-group-text bg-white border-0 ps-4">
-                            <i class="bi bi-search text-pn-primary"></i>
-                        </span>
-
-                        <input
-                            type="search" 
-                            value="{{ request('search') }}"
-                            name="search"
-                            class="form-control border-0 shadow-none"
-                            placeholder="Search priests, services or locations..."
-                            aria-label="Search priests"
-                        >
-
-                        <button type="submit" class="btn btn-pn rounded-pill m-1 px-4">
-                            Search
-                        </button>
+            <div class="col">
+                <div class="d-flex align-items-center gap-2 px-2 py-1 h-100">
+                    <i class="bi bi-patch-check text-pn-primary"></i>
+                    <div>
+                        <span class="small fw-semibold text-pn-brown">Verified Priests</span>
+                        <span class="d-block text-secondary small">Trusted profiles</span>
                     </div>
-                </form>
-            </div>
-
-            <div class="col-12 col-lg-5">
-                <div class="pn-digital rounded-5 text-white p-4 p-md-5 text-center">
-                    <div class="mx-auto rounded-circle d-flex align-items-center justify-content-center bg-warning text-dark mb-4" style="width:100px;height:100px;">
-                        <i class="bi bi-person-badge display-5"></i>
-                    </div>
-
-                    <h2 class="font-serif h2">Experienced & Verified</h2>
-
-                    <p class="text-white-50 small mb-0">
-                        Connect with priests who can help you perform meaningful traditional rituals.
-                    </p>
                 </div>
             </div>
+
+            <div class="col">
+                <div class="d-flex align-items-center gap-2 px-2 py-1 h-100">
+                    <i class="bi bi-mortarboard text-pn-primary"></i>
+                    <div>
+                        <span class="small fw-semibold text-pn-brown">Experienced</span>
+                        <span class="d-block text-secondary small">Traditional knowledge</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="d-flex align-items-center gap-2 px-2 py-1 h-100">
+                    <i class="bi bi-calendar-check text-pn-primary"></i>
+                    <div>
+                        <span class="small fw-semibold text-pn-brown">Check Availability</span>
+                        <span class="d-block text-secondary small">Choose suitable slots</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="d-flex align-items-center gap-2 px-2 py-1 h-100">
+                    <i class="bi bi-star text-pn-primary"></i>
+                    <div>
+                        <span class="small fw-semibold text-pn-brown">Rated by Devotees</span>
+                        <span class="d-block text-secondary small">Community feedback</span>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </section>
 
-{{-- ============================================================
-     QUICK BENEFITS
-============================================================ --}}
-<section class="py-4 bg-white border-bottom">
-    <div class="container">
-        <div class="row row-cols-2 row-cols-md-4 g-3">
-            <div class="col">
-                <div class="d-flex align-items-center gap-3 p-3 h-100">
-                    <div class="rounded-circle d-flex align-items-center justify-content-center bg-pn-cream text-pn-primary flex-shrink-0" style="width:48px;height:48px;">
-                        <i class="bi bi-patch-check"></i>
-                    </div>
-                    <div>
-                        <strong class="small text-pn-brown d-block">Verified Priests</strong>
-                        <small class="text-secondary">Trusted profiles</small>
-                    </div>
-                </div>
-            </div>
 
-            <div class="col">
-                <div class="d-flex align-items-center gap-3 p-3 h-100">
-                    <div class="rounded-circle d-flex align-items-center justify-content-center bg-pn-cream text-pn-primary flex-shrink-0" style="width:48px;height:48px;">
-                        <i class="bi bi-mortarboard"></i>
-                    </div>
-                    <div>
-                        <strong class="small text-pn-brown d-block">Experienced</strong>
-                        <small class="text-secondary">Traditional knowledge</small>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="d-flex align-items-center gap-3 p-3 h-100">
-                    <div class="rounded-circle d-flex align-items-center justify-content-center bg-pn-cream text-pn-primary flex-shrink-0" style="width:48px;height:48px;">
-                        <i class="bi bi-calendar-check"></i>
-                    </div>
-                    <div>
-                        <strong class="small text-pn-brown d-block">Check Availability</strong>
-                        <small class="text-secondary">Choose suitable slots</small>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="d-flex align-items-center gap-3 p-3 h-100">
-                    <div class="rounded-circle d-flex align-items-center justify-content-center bg-pn-cream text-pn-primary flex-shrink-0" style="width:48px;height:48px;">
-                        <i class="bi bi-star"></i>
-                    </div>
-                    <div>
-                        <strong class="small text-pn-brown d-block">Rated by Devotees</strong>
-                        <small class="text-secondary">Community feedback</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
 {{-- ============================================================
      FILTER SECTION
 ============================================================ --}}
-<section class="py-5 bg-light-subtle">
+<section class="py-3 bg-light-subtle">
     <div class="container">
-        <div class="d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-3 mb-4">
+        <div class="d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-2 mb-3">
             <div>
                 <span class="small text-pn-gold fw-semibold text-uppercase">Priest Directory</span>
                 <h2 class="font-serif display-6 text-pn-brown mt-2 mb-0">Find a Priest</h2>

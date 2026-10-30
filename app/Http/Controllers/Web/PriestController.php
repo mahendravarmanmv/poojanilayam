@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Models\Booking;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Http\Controllers\Controller;
 use App\Models\PujariProfile;
+use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -12,8 +14,23 @@ class PriestController extends Controller
 {
     private function baseQuery()
     {
-        return PujariProfile::query()
-            ->where('is_active', true)
+        
+		return PujariProfile::query()
+			->withAvg([
+				'reviews as published_rating' => fn ($query) => $query
+					->where('customer_visible', true)
+					->whereNotNull('published_at')
+					->whereNull('hidden_at')
+					->whereIn('status', ['approved', 'published']),
+			], 'rating')
+			->withCount([
+				'reviews as published_reviews_count' => fn ($query) => $query
+					->where('customer_visible', true)
+					->whereNotNull('published_at')
+					->whereNull('hidden_at')
+					->whereIn('status', ['approved', 'published']),
+			])
+			->where('is_active', true)
             ->where('profile_status', '!=', 'incomplete')
             ->where('verification_status', 'approved')
             ->with([
@@ -158,12 +175,51 @@ class PriestController extends Controller
             ])
             ->values();
 
-        return view('frontend.priests.show', [
-            'priest' => $mappedPriest,
-            'services' => $services,
-            'reviews' => [],
-            'slots' => $this->mapAvailabilitySlots($priest),
-        ]);
+		$reviews = $priest->reviews()
+		->where('customer_visible', true)
+		->whereNotNull('published_at')
+		->whereNull('hidden_at')
+		->whereIn('status', ['approved', 'published'])
+		->with('customerProfile.user')
+		->latest('published_at')
+		->get();
+		
+		$eligibleBookings = collect();
+
+		if (auth()->check() && $customerProfile = auth()->user()->customerProfile) {
+
+			$eligibleBookings = Booking::query()
+				->where('customer_profile_id', $customerProfile->id)
+				->where('status', 'completed')
+				->whereNotNull('completed_at')
+				->whereHas('assignments', function ($query) use ($priest) {
+					$query->where('pujari_profile_id', $priest->id);
+				})
+				->whereNotIn('id', Review::query()
+					->select('booking_id')
+					->where('reviewable_type', PujariProfile::class)
+					->where('reviewable_id', $priest->id)
+					->whereNotNull('booking_id')
+				)
+				->orderByDesc('completed_at')
+				->get();
+		}
+		
+		dd([
+    'logged_in' => auth()->check(),
+    'user_id' => auth()->id(),
+    'customer_profile_id' => auth()->user()?->customerProfile?->id,
+    'eligible_bookings_count' => $eligibleBookings->count(),
+    'eligible_bookings' => $eligibleBookings->pluck('id'),
+]);
+
+		return view('frontend.priests.show', [
+		'priest' => $mappedPriest,
+		'services' => $services,
+		'reviews' => $reviews,
+		'slots' => $this->mapAvailabilitySlots($priest),
+		'eligibleBookings' => $eligibleBookings,
+		]);
     }
 
     
@@ -253,7 +309,9 @@ private function mapCard(PujariProfile $priest): array
         ->filter()
         ->implode(' ');
 
-    $location = $this->formatLocation($address);
+    $location = filled($priest->location)
+    ? trim($priest->location)
+    : $this->formatLocation($address);
 
     $searchText = implode(' ', array_filter([
         $priest->display_name,
@@ -286,9 +344,11 @@ private function mapCard(PujariProfile $priest): array
 
         'specializations' => $specializations,
 
-        'rating' => '—',
+		'rating' => $priest->published_rating !== null
+		? number_format((float) $priest->published_rating, 1)
+		: '—',
 
-        'reviews' => '—',
+		'reviews' => (int) ($priest->published_reviews_count ?? 0),
 
         'image' => $profile?->profile_photo,
 

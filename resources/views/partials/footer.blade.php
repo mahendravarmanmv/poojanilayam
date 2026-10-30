@@ -228,9 +228,9 @@
                             Customer Support
                         </div>
 
-                        <div class="fw-semibold">
+                        {{-- <div class="fw-semibold">
                             +91 80000 00000
-                        </div>
+                        </div> --}}
 
                     </div>
 
@@ -247,7 +247,7 @@
                         </div>
 
                         <div class="fw-semibold">
-                            support@poojanilayam.com
+                            poojago.info@gmail.com
                         </div>
 
                     </div>

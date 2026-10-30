@@ -15,20 +15,6 @@
 
 @section('content')
 
-{{-- BREADCRUMB --}}
-<section class="bg-pn-cream border-bottom">
-    <div class="container py-3">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0">
-                <li class="breadcrumb-item"><a href="{{ route('home') }}" class="text-pn-primary text-decoration-none">Home</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('store.index') }}" class="text-pn-primary text-decoration-none">Store</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('store.category', ['slug' => $product['category_slug']]) }}" class="text-pn-primary text-decoration-none">{{ $product['category'] }}</a></li>
-                <li class="breadcrumb-item active text-truncate" aria-current="page">{{ $product['name'] }}</li>
-            </ol>
-        </nav>
-    </div>
-</section>
-
 {{-- PRODUCT DETAILS --}}
 <section class="py-4 py-md-5">
     <div class="container">

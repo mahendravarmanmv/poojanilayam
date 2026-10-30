@@ -109,60 +109,6 @@
 @endphp
 
 
-
-
-{{-- ============================================================
-     BREADCRUMB
-============================================================ --}}
-
-<section class="bg-pn-cream border-bottom">
-
-    <div class="container py-3">
-
-        <nav aria-label="breadcrumb">
-
-            <ol class="breadcrumb mb-0">
-
-                <li class="breadcrumb-item">
-
-                    <a
-                        href="{{ route('home') }}"
-                        class="text-pn-primary"
-                    >
-                        Home
-                    </a>
-
-                </li>
-
-
-                <li class="breadcrumb-item">
-
-                    <a
-                        href="{{ route('pooja.index') }}"
-                        class="text-pn-primary"
-                    >
-                        Poojas
-                    </a>
-
-                </li>
-
-
-                <li
-                    class="breadcrumb-item active"
-                    aria-current="page"
-                >
-                    {{ $pooja['name'] }}
-                </li>
-
-            </ol>
-
-        </nav>
-
-    </div>
-
-</section>
-
-
 {{-- ============================================================
      MAIN PO0JA INTRODUCTION
 ============================================================ --}}
