@@ -44,11 +44,10 @@ class PriestController extends Controller
                         'temple.profile.address.state',
                         'temple.profile.address.country',
                     ]),
-                'availabilities' => fn ($query) => $query
-                    ->where('status', 'available')
-                    ->orderBy('availability_date')
-                    ->orderBy('day_of_week')
-                    ->orderBy('start_time'),
+				'availabilities' => fn ($query) => $query
+				->orderBy('availability_date')
+				->orderBy('day_of_week')
+				->orderBy('start_time'),
             ]);
     }
 
@@ -205,13 +204,6 @@ class PriestController extends Controller
 				->get();
 		}
 		
-		dd([
-    'logged_in' => auth()->check(),
-    'user_id' => auth()->id(),
-    'customer_profile_id' => auth()->user()?->customerProfile?->id,
-    'eligible_bookings_count' => $eligibleBookings->count(),
-    'eligible_bookings' => $eligibleBookings->pluck('id'),
-]);
 
 		return view('frontend.priests.show', [
 		'priest' => $mappedPriest,
@@ -228,8 +220,36 @@ public function book(string $slug): View
     $priest = $this->findPublicPriest($slug);
     $mappedPriest = $this->mapProfile($priest);
 
-    $availableDates = $this->mapAvailableDates($priest);
-    $timeSlots = $this->mapTimeSlots($priest);
+    $services = $priest->services()
+        ->where('is_active', true)
+        ->orderBy('sort_order')
+        ->orderBy('service_name')
+        ->get();
+
+    // Generate availability slots separately for each service duration.
+    $serviceSlotData = [];
+
+    foreach ($services as $service) {
+        $duration = max(1, (int) $service->duration_minutes);
+
+        $slots = $this->mapTimeSlots($priest, $duration);
+
+        $serviceSlotData[$service->id] = [
+            'duration_minutes' => $duration,
+            'dates' => $this->mapAvailableDates($priest, $slots),
+            'slots' => $slots,
+        ];
+    }
+
+    // Initially select the first active service.
+    $selectedService = $services->first();
+
+    $selectedData = $selectedService
+        ? ($serviceSlotData[$selectedService->id] ?? null)
+        : null;
+
+    $availableDates = $selectedData['dates'] ?? collect();
+    $timeSlots = $selectedData['slots'] ?? collect();
 
     $firstDate = $availableDates->first();
 
@@ -243,6 +263,8 @@ public function book(string $slug): View
         'priest' => array_merge($mappedPriest, [
             'service' => $mappedPriest['specializations'][0] ?? 'Not specified',
         ]),
+        'services' => $services,
+        'serviceSlotData' => $serviceSlotData,
         'availableDates' => $availableDates,
         'timeSlots' => $timeSlots,
         'selectedDate' => $firstDate['full_date'] ?? 'Not selected',
@@ -354,7 +376,7 @@ private function mapCard(PujariProfile $priest): array
 
         'verified' => $priest->verification_status === 'approved',
 
-        'available' => $priest->availabilities->isNotEmpty(),
+        'available' => $priest->availabilities->contains('status', 'available'),
 
         'slug' => $priest->display_name,
 
@@ -384,148 +406,181 @@ private function mapCard(PujariProfile $priest): array
         ]);
     }
 
-    private function mapAvailabilitySlots(PujariProfile $priest)
-    {
-        return $priest->availabilities
-            ->groupBy(fn ($availability) => $availability->availability_date?->format('Y-m-d') ?? 'recurring-' . $availability->day_of_week)
-            ->map(function ($items, $key) {
-                $first = $items->first();
+	private function mapAvailabilitySlots(PujariProfile $priest)
+	{
+	return $priest->availabilities
+		->where('status', 'available')
+		->groupBy(function ($availability) {
+			return $availability->availability_date?->format('Y-m-d')
+				?? 'recurring-' . $availability->day_of_week;
+		})
+		->map(function ($items) {
+			$first = $items->first();
 
-                return [
-                    'date' => $first->availability_date?->format('d') ?? '—',
-                    'month' => $first->availability_date?->format('M') ?? 'Recurring',
-                    'day' => $first->availability_date?->format('l') ?? $this->dayName($first->day_of_week),
-                    'slots' => $items->map(fn ($item) => $this->formatTimeRange($item->start_time, $item->end_time))->values()->all(),
-                ];
-            })
-            ->values();
-    }
+			return [
+				'date' => $first->availability_date?->format('d') ?? '—',
+				'month' => $first->availability_date?->format('M') ?? 'Recurring',
+				'day' => $first->availability_date?->format('l')
+					?? $this->dayName($first->day_of_week),
+				'slots' => $items->map(
+					fn ($item) => $this->formatTimeRange(
+						$item->start_time,
+						$item->end_time
+					)
+				)->values()->all(),
+			];
+		})
+		->values();
+	}
 
     
-private function mapAvailableDates(PujariProfile $priest)
-{
-    $today = now()->startOfDay();
-    $lastDate = $today->copy()->addDays(29);
+	private function mapAvailableDates(PujariProfile $priest, $timeSlots = null)
+	{
+	$timeSlots = $timeSlots ?? $this->mapTimeSlots($priest, 60);
 
-    $dates = collect();
+	return $timeSlots
+		->pluck('date_value')
+		->unique()
+		->sort()
+		->values()
+		->map(function ($date, $index) {
+			$carbonDate = \Carbon\Carbon::parse($date);
 
-    foreach ($priest->availabilities as $item) {
-        if ($item->status !== 'available') {
-            continue;
-        }
+			return [
+				'date_value' => $date,
+				'date' => $carbonDate->format('d'),
+				'month' => $carbonDate->format('M'),
+				'day' => $carbonDate->format('D'),
+				'day_name' => $carbonDate->format('l'),
+				'full_date' => $carbonDate->format('d F Y'),
+				'active' => $index === 0,
+			];
+		});
+	}
 
-        // Specific-date availability.
-        if ($item->availability_date !== null) {
-            $date = $item->availability_date->copy()->startOfDay();
-
-            if ($date->lt($today) || $date->gt($lastDate)) {
-                continue;
-            }
-
-            $dates->put($date->format('Y-m-d'), $date);
-
-            continue;
-        }
-
-        // Recurring weekly availability.
-        if ($item->availability_type !== 'recurring') {
-            continue;
-        }
-
-        for ($date = $today->copy(); $date->lte($lastDate); $date->addDay()) {
-            if ((int) $date->dayOfWeek === (int) $item->day_of_week) {
-                $dates->put(
-                    $date->format('Y-m-d'),
-                    $date->copy()
-                );
-            }
-        }
-    }
-
-    return $dates
-        ->sortKeys()
-        ->map(function ($date) {
-            return [
-                'date_value' => $date->format('Y-m-d'),
-                'date' => $date->format('d'),
-                'month' => $date->format('M'),
-                'day' => $date->format('D'),
-                'day_name' => $date->format('l'),
-                'full_date' => $date->format('d F Y'),
-                'active' => false,
-            ];
-        })
-        ->values()
-        ->map(function ($date, $index) {
-            $date['active'] = $index === 0;
-
-            return $date;
-        });
-}
-
-private function mapTimeSlots(PujariProfile $priest)
+	private function mapTimeSlots(PujariProfile $priest, int $durationMinutes = 60)
 {
     $today = now()->startOfDay();
     $lastDate = $today->copy()->addDays(29);
 
     $slots = collect();
 
-    foreach ($priest->availabilities as $item) {
-        if ($item->status !== 'available') {
-            continue;
-        }
+    $durationMinutes = max(1, $durationMinutes);
 
-        if ($item->availability_date !== null) {
-            $date = $item->availability_date->copy()->startOfDay();
+    for (
+        $date = $today->copy();
+        $date->lte($lastDate);
+        $date->addDay()
+    ) {
+        $dateValue = $date->format('Y-m-d');
 
-            if ($date->lt($today) || $date->gt($lastDate)) {
-                continue;
-            }
-
-            $dates = collect([$date]);
-        } elseif ($item->availability_type === 'recurring') {
-            $dates = collect();
-
-            for (
-                $date = $today->copy();
-                $date->lte($lastDate);
-                $date->addDay()
-            ) {
-                if ((int) $date->dayOfWeek === (int) $item->day_of_week) {
-                    $dates->push($date->copy());
+        // Find availability records applicable to this date.
+        $applicableRecords = $priest->availabilities->filter(
+            function ($item) use ($date, $dateValue) {
+                if ($item->availability_type === 'specific') {
+                    return $item->availability_date?->format('Y-m-d')
+                        === $dateValue;
                 }
-            }
-        } else {
-            continue;
-        }
 
-        foreach ($dates as $date) {
-            // Avoid offering a slot whose start time has already passed today.
-            if (
-                $date->isToday()
-                && $item->start_time !== null
-                && $item->start_time <= now()->format('H:i:s')
-            ) {
+                if ($item->availability_type === 'recurring') {
+                    return (int) $item->day_of_week
+                        === (int) $date->dayOfWeek;
+                }
+
+                return false;
+            }
+        );
+
+        $availableRecords = $applicableRecords
+            ->where('status', 'available');
+
+        $unavailableRecords = $applicableRecords
+            ->where('status', 'unavailable');
+
+        foreach ($availableRecords as $item) {
+            if (!$item->start_time || !$item->end_time) {
                 continue;
             }
 
-            $slots->push([
-                'availability_id' => $item->id,
-                'date_value' => $date->format('Y-m-d'),
-                'start_time' => $item->start_time,
-                'end_time' => $item->end_time,
-                'time' => $this->formatTimeRange(
-                    $item->start_time,
-                    $item->end_time
-                ),
-                'available' => true,
-                'active' => false,
-            ]);
+            $windowStart = \Carbon\Carbon::parse(
+                $dateValue . ' ' . $item->start_time
+            );
+
+            $windowEnd = \Carbon\Carbon::parse(
+                $dateValue . ' ' . $item->end_time
+            );
+
+            // Ignore invalid availability windows.
+            if ($windowEnd->lte($windowStart)) {
+                continue;
+            }
+
+            // Generate consecutive slots using the service duration.
+            for (
+                $slotStart = $windowStart->copy();
+                $slotStart->copy()->addMinutes($durationMinutes)->lte($windowEnd);
+                $slotStart->addMinutes($durationMinutes)
+            ) {
+                $slotEnd = $slotStart->copy()->addMinutes($durationMinutes);
+
+                // Hide slots that have already started today.
+                if (
+                    $date->isToday()
+                    && $slotStart->lte(now())
+                ) {
+                    continue;
+                }
+
+                // Exclude slots overlapping an unavailable window.
+                $isBlocked = $unavailableRecords->contains(
+                    function ($blocked) use ($dateValue, $slotStart, $slotEnd) {
+                        if (!$blocked->start_time || !$blocked->end_time) {
+                            return false;
+                        }
+
+                        $blockedStart = \Carbon\Carbon::parse(
+                            $dateValue . ' ' . $blocked->start_time
+                        );
+
+                        $blockedEnd = \Carbon\Carbon::parse(
+                            $dateValue . ' ' . $blocked->end_time
+                        );
+
+                        return $slotStart->lt($blockedEnd)
+                            && $slotEnd->gt($blockedStart);
+                    }
+                );
+
+                if ($isBlocked) {
+                    continue;
+                }
+
+                $slots->push([
+                    'availability_id' => $item->id,
+                    'date_value' => $dateValue,
+                    'start_time' => $slotStart->format('H:i:s'),
+                    'end_time' => $slotEnd->format('H:i:s'),
+                    'time' => $this->formatTimeRange(
+                        $slotStart->format('H:i:s'),
+                        $slotEnd->format('H:i:s')
+                    ),
+                    'available' => true,
+                    'active' => false,
+                ]);
+            }
         }
     }
 
+    // Remove duplicate slots and sort chronologically.
     return $slots
-        ->sortBy(fn ($slot) => $slot['date_value'] . ' ' . $slot['start_time'])
+        ->unique(function ($slot) {
+            return $slot['date_value'] . '|'
+                . $slot['start_time'] . '|'
+                . $slot['end_time'];
+        })
+        ->sortBy(function ($slot) {
+            return $slot['date_value'] . ' ' . $slot['start_time'];
+        })
         ->values();
 }
 

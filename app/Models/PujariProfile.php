@@ -88,4 +88,9 @@ class PujariProfile extends Model
 	{
 	return $this->morphMany(Review::class, 'reviewable');
 	}
+	
+	public function services(): HasMany
+	{
+    return $this->hasMany(PujariService::class);
+	}
 }

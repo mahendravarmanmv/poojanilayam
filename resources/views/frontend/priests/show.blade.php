@@ -1883,97 +1883,172 @@
 				
 {{-- Submit a Review --}}
 
-@if(auth()->check() && $eligibleBookings->isNotEmpty())
+                @if(session('success'))
+                    <div class="alert alert-success" role="alert">{{ session('success') }}</div>
+                @endif
 
-    <div class="card border border-warning-subtle rounded-4 mt-4">
+                @if(session('error'))
+                    <div class="alert alert-danger" role="alert">{{ session('error') }}</div>
+                @endif
 
-        <div class="card-body p-4">
+                @if($errors->any())
+                    <div class="alert alert-danger" role="alert">
+                        <ul class="mb-0">
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
 
-            <h3 class="font-serif h4 text-pn-brown mb-2">
-                Share Your Experience
-            </h3>
+                <div class="card border border-warning-subtle rounded-4 shadow-sm mt-4">
+                    <div class="card-body p-4 p-md-5">
 
-            <p class="small text-secondary mb-4">
-                Thank you for completing a booking with this priest.
-                Please share your feedback.
-            </p>
+                        @auth
+                            @if($eligibleBookings->isNotEmpty())
+                                <h3 class="font-serif h4 text-pn-brown mb-2">
+                                    Share Your Experience
+                                </h3>
 
-            <form method="POST"
-                  action="{{ route('priest.reviews.store', ['slug' => $priest['slug']]) }}">
+                                <p class="text-secondary mb-4">
+                                    Share your rating and feedback about {{ $priest['name'] }}.
+                                    Your review will help other devotees.
+                                </p>
 
-                @csrf
+                                <form
+                                    action="{{ route('priest.reviews.store', ['slug' => $priest['slug']]) }}"
+                                    method="POST"
+                                >
+                                    @csrf
 
-                <div class="mb-3">
-                    <label class="form-label fw-semibold">
-                        Select Completed Booking
-                    </label>
+                                    <div class="mb-4">
+                                        <label for="booking_id" class="form-label fw-semibold">
+                                            Select Completed Booking <span class="text-danger">*</span>
+                                        </label>
 
-                    <select name="booking_id" class="form-select" required>
-                        <option value="">Choose a booking</option>
+                                        <select
+                                            class="form-select @error('booking_id') is-invalid @enderror"
+                                            id="booking_id"
+                                            name="booking_id"
+                                            required
+                                        >
+                                            <option value="">Choose a booking</option>
+                                            @foreach($eligibleBookings as $booking)
+                                                <option
+                                                    value="{{ $booking->id }}"
+                                                    {{ (string) old('booking_id') === (string) $booking->id ? 'selected' : '' }}
+                                                >
+                                                    {{ $booking->booking_id ?? ('Booking #' . $booking->id) }}
+                                                    @if($booking->completed_at)
+                                                        - {{ $booking->completed_at->format('d M Y') }}
+                                                    @endif
+                                                </option>
+                                            @endforeach
+                                        </select>
 
-                        @foreach($eligibleBookings as $booking)
-                            <option value="{{ $booking->id }}">
-                                {{ $booking->booking_id }}
-                                - {{ $booking->completed_at->format('d M Y') }}
-                            </option>
-                        @endforeach
-                    </select>
+                                        @error('booking_id')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label class="form-label fw-semibold">
+                                            Your Rating <span class="text-danger">*</span>
+                                        </label>
+
+                                        <div class="d-flex flex-wrap gap-3">
+                                            @for($star = 1; $star <= 5; $star++)
+                                                <div class="form-check">
+                                                    <input
+                                                        class="form-check-input"
+                                                        type="radio"
+                                                        name="rating"
+                                                        id="priest_rating{{ $star }}"
+                                                        value="{{ $star }}"
+                                                        {{ (string) old('rating') === (string) $star ? 'checked' : '' }}
+                                                        required
+                                                    >
+                                                    <label class="form-check-label" for="priest_rating{{ $star }}">
+                                                        <span class="text-warning">
+                                                            {{ $star }} <i class="bi bi-star-fill"></i>
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            @endfor
+                                        </div>
+
+                                        @error('rating')
+                                            <div class="text-danger small mt-1">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="priest_review_title" class="form-label fw-semibold">
+                                            Review Title (Optional)
+                                        </label>
+                                        <input
+                                            type="text"
+                                            class="form-control @error('title') is-invalid @enderror"
+                                            id="priest_review_title"
+                                            name="title"
+                                            maxlength="150"
+                                            value="{{ old('title') }}"
+                                            placeholder="Summarize your experience"
+                                        >
+                                        @error('title')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label for="priest_review_text" class="form-label fw-semibold">
+                                            Your Review (Optional)
+                                        </label>
+                                        <textarea
+                                            class="form-control @error('review_text') is-invalid @enderror"
+                                            id="priest_review_text"
+                                            name="review_text"
+                                            rows="5"
+                                            maxlength="5000"
+                                            placeholder="Tell us about your experience with this priest..."
+                                        >{{ old('review_text') }}</textarea>
+                                        @error('review_text')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <button type="submit" class="btn btn-pn px-4">
+                                        <i class="bi bi-send me-2"></i>
+                                        Submit Review
+                                    </button>
+
+                                    <p class="small text-secondary mt-3 mb-0">
+                                        Your review will be visible after admin approval.
+                                    </p>
+                                </form>
+                            @else
+                                <h3 class="font-serif h4 text-pn-brown mb-2">
+                                    Complete a Priest Booking to Write a Review
+                                </h3>
+                                <p class="text-secondary mb-0">
+                                    You can submit a rating and review after completing a booking
+                                    with {{ $priest['name'] }}.
+                                </p>
+                            @endif
+                        @else
+                            <h3 class="font-serif h4 text-pn-brown mb-2">
+                                Sign in to write a review
+                            </h3>
+                            <p class="text-secondary">
+                                Please log in to share your rating and feedback about this priest.
+                            </p>
+                            <a href="{{ route('login') }}" class="btn btn-pn px-4">
+                                Login to Review
+                            </a>
+                        @endauth
+
+                    </div>
                 </div>
-
-                <div class="mb-3">
-                    <label class="form-label fw-semibold">
-                        Your Rating
-                    </label>
-
-                    <select name="rating" class="form-select" required>
-                        <option value="">Select rating</option>
-                        @for($i = 5; $i >= 1; $i--)
-                            <option value="{{ $i }}">
-                                {{ $i }} Star{{ $i > 1 ? 's' : '' }}
-                            </option>
-                        @endfor
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label fw-semibold">
-                        Review Title (Optional)
-                    </label>
-
-                    <input type="text"
-                           name="title"
-                           class="form-control"
-                           maxlength="150"
-                           placeholder="Give your review a title">
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label fw-semibold">
-                        Your Experience (Optional)
-                    </label>
-
-                    <textarea name="review_text"
-                              rows="4"
-                              maxlength="5000"
-                              class="form-control"
-                              placeholder="Share your experience with this priest..."></textarea>
-                </div>
-
-                <button type="submit" class="btn btn-pn px-4">
-                    Submit Review
-                    <i class="bi bi-arrow-right ms-2"></i>
-                </button>
-
-                <p class="small text-secondary mt-3 mb-0">
-                    Your review will be visible after admin approval.
-                </p>
-
-            </form>
-
-        </div>
-    </div>
-
-@endif
 
 
             </div>
