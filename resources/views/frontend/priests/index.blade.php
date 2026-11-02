@@ -366,7 +366,7 @@
 {{-- ============================================================
      PRIEST SPECIALIZATIONS
 ============================================================ --}}
-<section class="py-5 bg-pn-cream">
+{{-- <section class="py-5 bg-pn-cream">
     <div class="container">
         <div class="row align-items-center g-5">
             <div class="col-12 col-lg-5">
@@ -440,12 +440,12 @@
             </div>
         </div>
     </div>
-</section>
+</section> --}}
 
 {{-- ============================================================
      FINAL CTA
 ============================================================ --}}
-<section class="py-5">
+{{-- <section class="py-5">
     <div class="container">
         <div class="pn-digital rounded-5 overflow-hidden text-white">
             <div class="p-4 p-md-5 text-center">
@@ -460,6 +460,6 @@
             </div>
         </div>
     </div>
-</section>
+</section> --}}
 
 @endsection

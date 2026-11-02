@@ -262,6 +262,14 @@
 			<script type="application/json" id="priestServiceSlotData">
 			@json($serviceSlotData)
 			</script>
+			<script type="application/json" id="priestTaxData">
+			@json($priestTaxes->map(function ($tax) {
+			return [
+			'name' => $tax->name,
+			'percentage' => (float) $tax->percentage,
+			];
+			})->values())
+			</script>
             <input type="hidden" name="terms_accepted" id="termsAcceptedValue" value="0">
             <div id="priestBookingReviewMessage" class="alert alert-warning d-none mt-3" role="alert" aria-live="polite"></div>
 
@@ -1646,7 +1654,7 @@
 
                             {{-- Temple --}}
 
-                            <div
+                           {{--  <div
                                 class="d-flex
                                        justify-content-between
                                        gap-3
@@ -1673,139 +1681,61 @@
 
                                 </strong>
 
-                            </div>
+                            </div> --}}
 
 
                             <hr>
 
 
-                            {{-- Price --}}
+						{{-- Price Summary --}}
 
-                            <div
-                                class="d-flex
-                                       justify-content-between
-                                       gap-3
-                                       mt-4
-                                       mb-2"
-                            >
+						{{-- Priest Service --}}
+						<div class="d-flex justify-content-between gap-3 mt-4 mb-2">
+						<span class="small text-secondary">Priest Service</span>
 
-                                <span
-                                    class="small
-                                           text-secondary"
-                                >
+						<span class="small text-pn-brown" id="priestServiceAmount">
+						₹0.00
+						</span>
+						</div>
 
-                                    Priest Service
+						{{-- Platform Fee --}}
+						{{-- <div class="d-flex justify-content-between gap-3 mb-2">
+						<span class="small text-secondary">Platform Fee</span>
 
-                                </span>
+						<span class="small text-pn-brown">
+						Not specified
+						</span>
+						</div> --}}
 
+						{{-- Taxes --}}
+						<div class="mb-3">
 
-                                <span
-                                    class="small
-                                           text-pn-brown"
-                                >
+						<div class="d-flex justify-content-between gap-3 mb-2">
+						<span class="small text-secondary">Taxes</span>
 
-                                    {{ $priest['price_from'] }}
+						<span class="small text-pn-brown" id="priestTaxTotal">
+						₹0.00
+						</span>
+						</div>
 
-                                </span>
+						<div id="priestTaxBreakdown"></div>
 
-                            </div>
+						</div>
 
+						<hr>
 
-                            {{-- Platform Fee --}}
+						{{-- Total --}}
+						<div class="d-flex justify-content-between align-items-center gap-3 mt-3 mb-4">
 
-                            <div
-                                class="d-flex
-                                       justify-content-between
-                                       gap-3
-                                       mb-2"
-                            >
+						<strong class="text-pn-brown">
+						Total Amount
+						</strong>
 
-                                <span
-                                    class="small
-                                           text-secondary"
-                                >
+						<strong class="fs-4 text-pn-primary" id="priestBookingTotal">
+						₹0.00
+						</strong>
 
-                                    Platform Fee
-
-                                </span>
-
-
-                                <span
-                                    class="small
-                                           text-pn-brown"
-                                >
-
-                                    Not specified
-
-                                </span>
-
-                            </div>
-
-
-                            {{-- Tax --}}
-
-                            <div
-                                class="d-flex
-                                       justify-content-between
-                                       gap-3
-                                       mb-3"
-                            >
-
-                                <span
-                                    class="small
-                                           text-secondary"
-                                >
-
-                                    Taxes
-
-                                </span>
-
-
-                                <span
-                                    class="small
-                                           text-pn-brown"
-                                >
-
-                                    Not specified
-
-                                </span>
-
-                            </div>
-
-
-                            <hr>
-
-
-                            {{-- Total --}}
-
-                            <div
-                                class="d-flex
-                                       justify-content-between
-                                       align-items-center
-                                       gap-3
-                                       mt-3
-                                       mb-4"
-                            >
-
-                                <strong
-                                    class="text-pn-brown"
-                                >
-
-                                    Total Amount
-
-                                </strong>
-
-
-                                <strong
-                                    class="fs-4
-                                           text-pn-primary"
-                                >
-
-                                    Calculated at booking
-
-                                </strong>
-
-                            </div>
+						</div>
 
 
                             {{-- Continue --}}
@@ -2203,5 +2133,95 @@
     </div>
 
 </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const serviceRadios = document.querySelectorAll(
+        'input[name="service_choice"]'
+    );
+
+    const taxDataElement = document.getElementById('priestTaxData');
+
+    const taxes = taxDataElement
+        ? JSON.parse(taxDataElement.textContent)
+        : [];
+
+    const serviceAmount = document.getElementById('priestServiceAmount');
+    const taxTotalElement = document.getElementById('priestTaxTotal');
+    const taxBreakdown = document.getElementById('priestTaxBreakdown');
+    const totalElement = document.getElementById('priestBookingTotal');
+
+    function formatAmount(amount) {
+        return '₹' + amount.toFixed(2);
+    }
+
+    function updatePriestBookingPrice() {
+
+        const selectedService = document.querySelector(
+            'input[name="service_choice"]:checked'
+        );
+
+        if (!selectedService) {
+            return;
+        }
+
+        const price = parseFloat(
+            selectedService.dataset.servicePrice
+        ) || 0;
+
+        let totalTax = 0;
+
+        taxBreakdown.innerHTML = '';
+
+        taxes.forEach(function (tax) {
+
+            const percentage = parseFloat(tax.percentage) || 0;
+
+            const taxAmount = Math.round(
+                (price * percentage / 100 + Number.EPSILON) * 100
+            ) / 100;
+
+            totalTax += taxAmount;
+
+            const row = document.createElement('div');
+            row.className = 'd-flex justify-content-between gap-3 mb-1';
+
+            const name = document.createElement('small');
+            name.className = 'text-secondary';
+            name.textContent = `${tax.name} (${percentage}%)`;
+
+            const amount = document.createElement('small');
+            amount.className = 'text-pn-brown';
+            amount.textContent = formatAmount(taxAmount);
+
+            row.appendChild(name);
+            row.appendChild(amount);
+
+            taxBreakdown.appendChild(row);
+        });
+
+        totalTax = Math.round(
+            (totalTax + Number.EPSILON) * 100
+        ) / 100;
+
+        const totalAmount = Math.round(
+            (price + totalTax + Number.EPSILON) * 100
+        ) / 100;
+
+        serviceAmount.textContent = formatAmount(price);
+        taxTotalElement.textContent = formatAmount(totalTax);
+        totalElement.textContent = formatAmount(totalAmount);
+    }
+
+    serviceRadios.forEach(function (radio) {
+        radio.addEventListener('change', updatePriestBookingPrice);
+    });
+
+    // Calculate the initially selected service.
+    updatePriestBookingPrice();
+
+});
+</script>
 
 @endsection

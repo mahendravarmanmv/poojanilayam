@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Models\Tax;
 use App\Models\Booking;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Http\Controllers\Controller;
@@ -215,64 +216,80 @@ class PriestController extends Controller
     }
 
     
-public function book(string $slug): View
-{
-    $priest = $this->findPublicPriest($slug);
-    $mappedPriest = $this->mapProfile($priest);
+	public function book(string $slug): View
+	{
+		$priest = $this->findPublicPriest($slug);
+		$mappedPriest = $this->mapProfile($priest);
 
-    $services = $priest->services()
-        ->where('is_active', true)
-        ->orderBy('sort_order')
-        ->orderBy('service_name')
-        ->get();
+		$services = $priest->services()
+			->where('is_active', true)
+			->orderBy('sort_order')
+			->orderBy('service_name')
+			->get();
+			
+		// Load only active taxes enabled for the Priest module.
+		$priestTaxes = Tax::query()
+		->where('is_active', true)
+		->whereHas('modules', function ($query) {
+			$query->where('module', 'priests')
+				  ->where('is_enabled', true);
+		})
+		->orderBy('name')
+		->get([
+			'id',
+			'name',
+			'code',
+			'percentage',
+		]);
 
-    // Generate availability slots separately for each service duration.
-    $serviceSlotData = [];
+		// Generate availability slots separately for each service duration.
+		$serviceSlotData = [];
 
-    foreach ($services as $service) {
-        $duration = max(1, (int) $service->duration_minutes);
+		foreach ($services as $service) {
+			$duration = max(1, (int) $service->duration_minutes);
 
-        $slots = $this->mapTimeSlots($priest, $duration);
+			$slots = $this->mapTimeSlots($priest, $duration);
 
-        $serviceSlotData[$service->id] = [
-            'duration_minutes' => $duration,
-            'dates' => $this->mapAvailableDates($priest, $slots),
-            'slots' => $slots,
-        ];
-    }
+			$serviceSlotData[$service->id] = [
+				'duration_minutes' => $duration,
+				'dates' => $this->mapAvailableDates($priest, $slots),
+				'slots' => $slots,
+			];
+		}
 
-    // Initially select the first active service.
-    $selectedService = $services->first();
+		// Initially select the first active service.
+		$selectedService = $services->first();
 
-    $selectedData = $selectedService
-        ? ($serviceSlotData[$selectedService->id] ?? null)
-        : null;
+		$selectedData = $selectedService
+			? ($serviceSlotData[$selectedService->id] ?? null)
+			: null;
 
-    $availableDates = $selectedData['dates'] ?? collect();
-    $timeSlots = $selectedData['slots'] ?? collect();
+		$availableDates = $selectedData['dates'] ?? collect();
+		$timeSlots = $selectedData['slots'] ?? collect();
 
-    $firstDate = $availableDates->first();
+		$firstDate = $availableDates->first();
 
-    $dateSlots = $firstDate
-        ? $timeSlots->where('date_value', $firstDate['date_value'])->values()
-        : collect();
+		$dateSlots = $firstDate
+			? $timeSlots->where('date_value', $firstDate['date_value'])->values()
+			: collect();
 
-    $firstSlot = $dateSlots->firstWhere('available', true);
+		$firstSlot = $dateSlots->firstWhere('available', true);
 
-    return view('frontend.priests.book', [
-        'priest' => array_merge($mappedPriest, [
-            'service' => $mappedPriest['specializations'][0] ?? 'Not specified',
-        ]),
-        'services' => $services,
-        'serviceSlotData' => $serviceSlotData,
-        'availableDates' => $availableDates,
-        'timeSlots' => $timeSlots,
-        'selectedDate' => $firstDate['full_date'] ?? 'Not selected',
-        'selectedDateValue' => $firstDate['date_value'] ?? '',
-        'selectedDay' => $firstDate['day_name'] ?? 'Not selected',
-        'selectedTime' => $firstSlot['time'] ?? 'Not selected',
-    ]);
-}
+		return view('frontend.priests.book', [
+			'priest' => array_merge($mappedPriest, [
+				'service' => $mappedPriest['specializations'][0] ?? 'Not specified',
+			]),
+			'services' => $services,
+			'priestTaxes' => $priestTaxes,
+			'serviceSlotData' => $serviceSlotData,
+			'availableDates' => $availableDates,
+			'timeSlots' => $timeSlots,
+			'selectedDate' => $firstDate['full_date'] ?? 'Not selected',
+			'selectedDateValue' => $firstDate['date_value'] ?? '',
+			'selectedDay' => $firstDate['day_name'] ?? 'Not selected',
+			'selectedTime' => $firstSlot['time'] ?? 'Not selected',
+		]);
+	}
 
 
     public function poojas(string $slug): View
