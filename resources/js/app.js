@@ -1076,6 +1076,75 @@ import './bootstrap';
             });
 
         }
+		
+		// Submit Priest Booking and create Cashfree payment order.
+async function submitPriestBooking(button) {
+    if (form.dataset.submitting === 'true') {
+        return;
+    }
+
+    form.dataset.submitting = 'true';
+
+    const originalText = button.textContent.trim();
+
+    button.disabled = true;
+    button.textContent = 'Please wait...';
+
+    showMessage('Creating your booking. Please wait...');
+
+    try {
+        const response = await fetch(form.action, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: new FormData(form)
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            let errorMessage = result.message || 'Unable to create your booking.';
+
+            if (result.errors) {
+                const firstError = Object.values(result.errors).flat()[0];
+                if (firstError) {
+                    errorMessage = firstError;
+                }
+            }
+
+            throw new Error(errorMessage);
+        }
+
+        if (!result.payment_session_id) {
+            throw new Error('Payment session was not generated. Please try again.');
+        }
+
+        showMessage('Opening secure Cashfree payment...');
+
+        if (typeof window.Cashfree !== 'function') {
+            throw new Error('Cashfree payment SDK is not loaded.');
+        }
+
+        const cashfree = window.Cashfree({
+            mode: form.dataset.cashfreeMode || 'sandbox'
+        });
+
+        await cashfree.checkout({
+            paymentSessionId: result.payment_session_id,
+            redirectTarget: '_self'
+        });
+
+    } catch (error) {
+        console.error('Priest booking payment error:', error);
+        showMessage(error.message || 'Something went wrong. Please try again.');
+
+        form.dataset.submitting = 'false';
+        button.disabled = false;
+        button.textContent = originalText;
+    }
+}
 
         // Continue to Review buttons.
         document.querySelectorAll('[data-priest-booking-review]').forEach(button => {
@@ -1111,15 +1180,16 @@ import './bootstrap';
                     return;
                 }
 
-                const requiredFields = [
-                    ['first_name', 'Please enter your first name.'],
-                    ['last_name', 'Please enter your last name.'],
-                    ['mobile', 'Please enter your mobile number.'],
-                    ['address', 'Please enter your address.'],
-                    ['city', 'Please enter your city.'],
-                    ['state', 'Please enter your state.'],
-                    ['pincode', 'Please enter your PIN code.']
-                ];
+				const requiredFields = [
+				['first_name', 'Please enter your first name.'],
+				['last_name', 'Please enter your last name.'],
+				['mobile', 'Please enter your mobile number.'],
+				['email', 'Please enter your email address.'],
+				['address', 'Please enter your address.'],
+				['city', 'Please enter your city.'],
+				['state', 'Please select your state.'],
+				['pincode', 'Please enter your PIN code.']
+				];
 
                 for (const [name, error] of requiredFields) {
 
@@ -1145,11 +1215,7 @@ import './bootstrap';
                 }
 
                 termsInput.value = terms && terms.checked ? '1' : '0';
-
-                showMessage(
-                    'Your selections are ready for review. ' +
-                    'Booking confirmation and payment are not submitted yet.'
-                );
+				submitPriestBooking(button);
 
             });
 

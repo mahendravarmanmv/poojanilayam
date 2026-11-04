@@ -10,84 +10,53 @@
 @section('content')
 
 @php
+    $priestBooking = $booking;
 
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY SUCCESS DATA
-    |--------------------------------------------------------------------------
-    | These values will later come from the confirmed booking.
-    |--------------------------------------------------------------------------
-    */
+    $payment = $priestBooking->payments
+        ->sortByDesc('paid_at')
+        ->first();
+
+    $priestName = $priestBooking->pujariProfile->display_name ?? 'Priest';
+
+    $priestSlug = $priestBooking->pujariProfile->pujari_number
+        ?? \Illuminate\Support\Str::slug($priestName);
 
     $booking = [
+        'booking_id' => $priestBooking->booking_number,
+        'reference_id' => $payment->gateway_order_id ?? 'N/A',
 
-        'booking_id' => 'PNP-20260818-00428',
+        'status' => $priestBooking->booking_status === 'payment_review'
+            ? 'Payment Under Review'
+            : 'Confirmed',
 
-        'reference_id' => 'REF-7K29P4',
+        'priest_name' => $priestName,
+        'priest_title' => 'Verified Priest',
 
-        'status' => 'Confirmed',
+        'service' => $priestBooking->service_name,
 
-        'priest_name' => 'Sri Ananda Sharma',
+        'date' => $priestBooking->booking_date->format('d F Y'),
+        'day' => $priestBooking->booking_date->format('l'),
 
-        'priest_title' => 'Vedic Priest',
+        'time' => \Carbon\Carbon::parse($priestBooking->start_time)
+            ->format('h:i A')
+            . ' - '
+            . \Carbon\Carbon::parse($priestBooking->end_time)
+                ->format('h:i A'),
 
-        'priest_image' => 'priest-1.jpg',
+        'location' => trim(
+            $priestBooking->city . ', ' . $priestBooking->state
+        ),
 
-        'service' => 'Vedic Pooja',
+        'temple' => 'Not applicable',
 
-        'date' => '18 August 2026',
+        'amount' => '₹' . number_format(
+            (float) $priestBooking->total_amount,
+            2
+        ),
 
-        'day' => 'Tuesday',
-
-        'time' => '07:00 AM',
-
-        'location' => 'Hyderabad, Telangana',
-
-        'temple' => 'Sri Venkateswara Temple',
-
-        'amount' => '₹1,732.50',
-
-        'live_available' => true,
-
-        'google_meet' => true,
-
-        'calendar_invite' => true
-
-    ];
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | NOTIFICATION CHANNELS
-    |--------------------------------------------------------------------------
-    */
-
-    $notifications = [
-
-        [
-            'icon' => 'bi-envelope-check',
-            'title' => 'Email Confirmation',
-            'description' =>
-                'Booking confirmation has been sent to your registered email address.',
-            'status' => 'Sent'
-        ],
-
-        [
-            'icon' => 'bi-phone',
-            'title' => 'SMS Confirmation',
-            'description' =>
-                'A booking confirmation message will be sent to your registered mobile number.',
-            'status' => 'Sent'
-        ],
-
-        [
-            'icon' => 'bi-whatsapp',
-            'title' => 'WhatsApp Notification',
-            'description' =>
-                'WhatsApp notification will be sent where supported.',
-            'status' => 'Sent'
-        ]
-
+        'live_available' => false,
+        'google_meet' => false,
+        'calendar_invite' => false,
     ];
 
 @endphp
@@ -142,7 +111,7 @@
                                d-block
                                mt-4"
                     >
-                        Booking Confirmed
+                        {{ $booking['status'] }}
                     </span>
 
 
@@ -154,7 +123,9 @@
                                mb-3"
                     >
 
-                        Your priest booking is confirmed.
+                        {{ $booking['status'] === 'Confirmed'
+    ? 'Your priest booking is confirmed.'
+    : 'Your payment was received. Your booking is under review.' }}
 
                     </h1>
 
@@ -165,8 +136,7 @@
                                mb-0"
                     >
 
-                        Thank you for choosing Pooja Go.
-                        Your booking has been successfully confirmed.
+                       Thank you for choosing Pooja Go. Your booking details are provided below.
 
                     </p>
 
@@ -552,51 +522,16 @@
                             {{-- Temple --}}
 
                             <div class="col-12">
+    <div class="bg-light-subtle rounded-4 p-3">
+        <small class="text-secondary d-block">
+            Customer Location
+        </small>
 
-                                <div
-                                    class="bg-light-subtle
-                                           rounded-4
-                                           p-3"
-                                >
-
-                                    <small
-                                        class="text-secondary
-                                               d-block"
-                                    >
-
-                                        Temple / Service Location
-
-                                    </small>
-
-
-                                    <strong
-                                        class="text-pn-brown"
-                                    >
-
-                                        {{ $booking['temple'] }}
-
-                                    </strong>
-
-
-                                    <small
-                                        class="text-secondary
-                                               d-block
-                                               mt-1"
-                                    >
-
-                                        <i
-                                            class="bi bi-geo-alt
-                                                   text-pn-primary
-                                                   me-1"
-                                        ></i>
-
-                                        {{ $booking['location'] }}
-
-                                    </small>
-
-                                </div>
-
-                            </div>
+        <strong class="text-pn-brown">
+            {{ $booking['location'] }}
+        </strong>
+    </div>
+</div>
 
                         </div>
 
@@ -627,16 +562,13 @@
                                    gap-3"
                         >
 
-                            <img
-                                src="{{ asset('images/priests/' . $booking['priest_image']) }}"
-                                width="88"
-                                height="88"
-                                class="rounded-4
-                                       object-fit-cover
-                                       flex-shrink-0"
-                                alt="{{ $booking['priest_name'] }}"
-                                loading="lazy"
-                            >
+						<div
+						class="rounded-4 bg-pn-cream text-pn-primary
+						d-flex align-items-center justify-content-center flex-shrink-0"
+						style="width:88px;height:88px;"
+						>
+						<i class="bi bi-person-circle" style="font-size:3rem;"></i>
+						</div>
 
 
                             <div class="flex-grow-1">
@@ -696,7 +628,7 @@
 
 
                             <a
-                                href="{{ route('priest.show', ['slug' => Str::slug($booking['priest_name'])]) }}"
+                                href="{{ route('priest.show', ['slug' => $priestSlug]) }}"
                                 class="btn
                                        btn-pn-outline
                                        btn-sm"
@@ -970,164 +902,7 @@
                     </div>
 
                 @endif
-
-
-                {{-- =============================================
-                     NOTIFICATIONS
-                ============================================== --}}
-
-                <div
-                    class="card
-                           border
-                           border-warning-subtle
-                           rounded-5
-                           mb-4"
-                >
-
-                    <div class="card-body p-4 p-md-5">
-
-                        <div
-                            class="d-flex
-                                   align-items-start
-                                   gap-3
-                                   mb-4"
-                        >
-
-                            <div
-                                class="rounded-circle
-                                       bg-pn-cream
-                                       text-pn-primary
-                                       d-flex
-                                       align-items-center
-                                       justify-content-center
-                                       flex-shrink-0"
-                                style="width:50px;height:50px;"
-                            >
-
-                                <i class="bi bi-bell"></i>
-
-                            </div>
-
-
-                            <div>
-
-                                <h2
-                                    class="font-serif
-                                           h3
-                                           text-pn-brown
-                                           mb-1"
-                                >
-
-                                    Confirmation Notifications
-
-                                </h2>
-
-
-                                <p
-                                    class="small
-                                           text-secondary
-                                           mb-0"
-                                >
-
-                                    Your booking information will be
-                                    communicated through supported
-                                    notification channels.
-
-                                </p>
-
-                            </div>
-
-                        </div>
-
-
-                        <div
-                            class="vstack
-                                   gap-3"
-                        >
-
-                            @foreach($notifications as $notification)
-
-                                <div
-                                    class="d-flex
-                                           align-items-start
-                                           gap-3
-                                           border
-                                           border-warning-subtle
-                                           rounded-4
-                                           p-3"
-                                >
-
-                                    <div
-                                        class="rounded-circle
-                                               bg-pn-cream
-                                               text-pn-primary
-                                               d-flex
-                                               align-items-center
-                                               justify-content-center
-                                               flex-shrink-0"
-                                        style="width:44px;height:44px;"
-                                    >
-
-                                        <i
-                                            class="bi {{ $notification['icon'] }}"
-                                        ></i>
-
-                                    </div>
-
-
-                                    <div class="flex-grow-1">
-
-                                        <div
-                                            class="d-flex
-                                                   flex-column
-                                                   flex-sm-row
-                                                   justify-content-between
-                                                   gap-2"
-                                        >
-
-                                            <strong
-                                                class="text-pn-brown"
-                                            >
-
-                                                {{ $notification['title'] }}
-
-                                            </strong>
-
-
-                                            <span
-                                                class="badge
-                                                       rounded-pill
-                                                       bg-success-subtle
-                                                       text-success-emphasis
-                                                       align-self-start"
-                                            >
-
-                                                {{ $notification['status'] }}
-
-                                            </span>
-
-                                        </div>
-
-
-                                        <small
-                                            class="text-secondary"
-                                        >
-
-                                            {{ $notification['description'] }}
-
-                                        </small>
-
-                                    </div>
-
-                                </div>
-
-                            @endforeach
-
-                        </div>
-
-                    </div>
-
-                </div>
+              
 
 
                 {{-- =============================================
@@ -1555,7 +1330,7 @@
                                            bg-success"
                                 >
 
-                                    Confirmed
+                                    {{ $booking['status'] }}
 
                                 </span>
 
@@ -1595,34 +1370,10 @@
                                        gap-2"
                             >
 
-                                <a
-                                    href="#"
-                                    class="btn
-                                           btn-pn"
-                                >
-
-                                    <i
-                                        class="bi bi-calendar-event me-2"
-                                    ></i>
-
-                                    Add to Calendar
-
-                                </a>
+                                
 
 
-                                <a
-                                    href="{{ route('dashboard.bookings') }}"
-                                    class="btn
-                                           btn-pn-outline"
-                                >
-
-                                    <i
-                                        class="bi bi-receipt me-2"
-                                    ></i>
-
-                                    View Booking
-
-                                </a>
+                               
 
 
                                 <a
@@ -1794,22 +1545,7 @@
                            gap-2"
                 >
 
-                    <a
-                        href="{{ route('dashboard.bookings') }}"
-                        class="btn
-                               btn-warning
-                               text-dark
-                               fw-semibold
-                               px-4"
-                    >
-
-                        View My Bookings
-
-                        <i
-                            class="bi bi-calendar-check ms-2"
-                        ></i>
-
-                    </a>
+                    
 
 
                     <a

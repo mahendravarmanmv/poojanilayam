@@ -252,7 +252,13 @@
 
     <div class="container">
 
-        <form id="priestBookingForm" method="POST" action="#" novalidate>
+			<form
+			id="priestBookingForm"
+			method="POST"
+			action="{{ route('priest.booking.store', ['slug' => request()->route('slug')]) }}"
+			data-cashfree-mode="{{ config('services.cashfree.environment', 'sandbox') === 'production' ? 'production' : 'sandbox' }}"
+			novalidate
+			>
             @csrf
             <input type="hidden" name="booking_date" id="selectedBookingDate" value="{{ $selectedDateValue ?? '' }}">
             <input type="hidden" name="availability_id" id="selectedAvailabilityId" value="">
@@ -1070,31 +1076,13 @@
                                 </label>
 
 
-                                <select
-                                    id="state"
-                                    name="state"
-                                    class="form-select"
-                                >
+                                <select  id="state" name="state" class="form-select" required >
 
-                                    <option selected>
-                                        Select State
-                                    </option>
-
-                                    <option>
-                                        Telangana
-                                    </option>
-
-                                    <option>
-                                        Andhra Pradesh
-                                    </option>
-
-                                    <option>
-                                        Karnataka
-                                    </option>
-
-                                    <option>
-                                        Tamil Nadu
-                                    </option>
+							<option value="" selected disabled>Select State</option>
+							<option value="Telangana">Telangana</option>
+							<option value="Andhra Pradesh">Andhra Pradesh</option>
+							<option value="Karnataka">Karnataka</option>
+							<option value="Tamil Nadu">Tamil Nadu</option>
 
                                 </select>
 
@@ -1460,7 +1448,7 @@
                                btn-lg"
                     >
 
-                        Continue to Review
+                        Proceed to Payment
 
                         <i
                             class="bi bi-arrow-right ms-2"
@@ -1751,7 +1739,7 @@
                                        d-lg-block"
                             >
 
-                                Continue to Review
+                                Proceed to Payment
 
                                 <i
                                     class="bi bi-arrow-right ms-2"
@@ -2118,7 +2106,7 @@
                            px-4"
                 >
 
-                    Continue to Review
+                    Proceed to Payment
 
                     <i
                         class="bi bi-arrow-right ms-2"
@@ -2133,7 +2121,7 @@
     </div>
 
 </section>
-
+<script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 

@@ -15,6 +15,7 @@ class PujariService extends Model
         'service_name',
         'description',
         'price',
+		'duration_minutes',
         'is_active',
         'sort_order',
     ];
@@ -23,6 +24,7 @@ class PujariService extends Model
     {
         return [
             'price' => 'decimal:2',
+			'duration_minutes' => 'integer',
             'is_active' => 'boolean',
             'sort_order' => 'integer',
         ];

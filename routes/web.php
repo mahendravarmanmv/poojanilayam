@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Web\PriestBookingController;
 use App\Http\Controllers\Web\ReviewController;
 use App\Http\Controllers\Web\PoojaController;
 use App\Http\Controllers\Web\HomeController;
@@ -190,8 +191,7 @@ Route::prefix('priests')
         Route::get('/{slug}/book', [PriestController::class, 'book'])
             ->name('book');
 
-        Route::view('/{slug}/booking-success', 'frontend.priests.booking-success')
-            ->name('booking.success');
+        Route::get('/{slug}/booking-success', [PriestBookingController::class, 'success'])->name('booking.success');
 
         Route::get('/{slug}/poojas', [PriestController::class, 'poojas'])
             ->name('poojas');
@@ -199,6 +199,15 @@ Route::prefix('priests')
 		Route::post('/{slug}/reviews', [ReviewController::class, 'storePriest'])
 		->middleware('auth')
 		->name('reviews.store');
+		
+		Route::post('/{slug}/book', [PriestBookingController::class, 'store'])
+		->name('booking.store');
+		
+		Route::get('/booking/payment-return', [PriestBookingController::class, 'paymentReturn'])
+		->name('booking.payment.return');
+
+		Route::post('/booking/cashfree/webhook', [PriestBookingController::class, 'webhook'])
+		->name('booking.cashfree.webhook');
     });
 
 
