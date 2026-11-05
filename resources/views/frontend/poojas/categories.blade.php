@@ -5,28 +5,17 @@
 
 @section('content')
 
-<section class="bg-pn-cream py-4">
+<section class="py-3">
     <div class="container">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-3">
-                <li class="breadcrumb-item"><a href="{{ route('home') }}" class="text-pn-primary">Home</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('pooja.index') }}" class="text-pn-primary">Poojas</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Categories</li>
-            </ol>
-        </nav>
 
-        <div class="text-center py-4">
-            <span class="pn-section-label text-uppercase text-pn-gold fw-semibold small">Sacred Collections</span>
+        <div class="text-center py-1">           
             <h1 class="font-serif display-5 text-pn-brown mt-2 mb-3">Explore Pooja Categories</h1>
-            <div class="pn-divider mx-auto my-3"></div>
-            <p class="text-secondary mx-auto mb-0 col-lg-7">
-                Discover meaningful rituals and traditional poojas organised by purpose, deity, festival and special occasion.
-            </p>
+            <div class="pn-divider mx-auto my-3"></div>           
         </div>
     </div>
 </section>
 
-<section class="py-4 border-bottom bg-white">
+<section class="py-3 border-bottom bg-white">
     <div class="container">
         <div class="pn-search mx-auto">
             <div class="input-group input-group-lg border rounded-3 shadow-sm overflow-hidden">
@@ -69,19 +58,6 @@
                 </div>
             @endforeach
         </div>
-    </div>
-</section>
-
-<section class="bg-pn-cream py-5">
-    <div class="container text-center py-lg-3">
-        <span class="text-pn-gold text-uppercase small fw-semibold pn-section-label">Need Help Choosing?</span>
-        <h2 class="font-serif text-pn-brown mt-2 mb-3">Find a Pooja that feels right for you</h2>
-        <p class="text-secondary mx-auto col-lg-6 mb-4">
-            Browse our Pooja collection or explore the available services to find a ritual suited to your occasion and purpose.
-        </p>
-        <a href="{{ route('pooja.index') }}" class="btn btn-pn px-4">
-            Browse All Poojas <i class="bi bi-arrow-right ms-2"></i>
-        </a>
     </div>
 </section>
 

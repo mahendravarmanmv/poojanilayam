@@ -10,48 +10,6 @@
 @section('content')
 
 
-
-
-{{-- ============================================================
-     BREADCRUMB
-============================================================ --}}
-
-<section class="bg-pn-cream border-bottom">
-
-    <div class="container py-3">
-
-        <nav aria-label="breadcrumb">
-
-            <ol class="breadcrumb mb-0">
-
-                <li class="breadcrumb-item">
-
-                    <a
-                        href="{{ route('home') }}"
-                        class="text-pn-primary"
-                    >
-                        Home
-                    </a>
-
-                </li>
-
-
-                <li
-                    class="breadcrumb-item active"
-                    aria-current="page"
-                >
-                    Astrology
-                </li>
-
-            </ol>
-
-        </nav>
-
-    </div>
-
-</section>
-
-
 {{-- ============================================================
      ASTROLOGY HERO
 ============================================================ --}}
@@ -1832,84 +1790,6 @@
                     services configured on the platform.
 
                 </small>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-{{-- ============================================================
-     FINAL CTA
-============================================================ --}}
-
-<section class="py-5">
-
-    <div class="container">
-
-        <div
-            class="pn-digital
-                   rounded-5
-                   overflow-hidden
-                   text-white"
-        >
-
-            <div
-                class="p-4
-                       p-md-5
-                       text-center"
-            >
-
-                <i
-                    class="bi bi-stars
-                           display-5
-                           text-warning"
-                ></i>
-
-
-                <h2
-                    class="font-serif
-                           display-6
-                           mt-3"
-                >
-
-                    Find the guidance you are looking for.
-
-                </h2>
-
-
-                <p
-                    class="text-white-50
-                           col-lg-7
-                           mx-auto"
-                >
-
-                    Explore astrology services and connect
-                    with an astrologer through the consultation
-                    option that suits you.
-
-                </p>
-
-
-                <a
-                    href="#astrologers"
-                    class="btn
-                           btn-warning
-                           text-dark
-                           fw-semibold
-                           px-4"
-                >
-
-                    Find an Astrologer
-
-                    <i
-                        class="bi bi-arrow-right ms-2"
-                    ></i>
-
-                </a>
 
             </div>
 

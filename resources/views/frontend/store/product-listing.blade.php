@@ -16,7 +16,7 @@
 
 <section
     id="products"
-    class="py-5 bg-pn-cream"
+    class="py-3"
 >
 
     <div class="container">
@@ -30,18 +30,7 @@
                    mb-4"
         >
 
-            <div class="col-12 col-lg-7">
-
-                <span
-                    class="small
-                           text-pn-gold
-                           fw-semibold
-                           text-uppercase"
-                >
-
-                    Our Collection
-
-                </span>
+            <div class="col-12 col-lg-7">             
 
 
                 <h2
@@ -1023,86 +1012,6 @@
     </div>
 
 </div>
-
-
-{{-- ============================================================
-     SHOPPING CTA
-============================================================ --}}
-
-<section class="py-5">
-
-    <div class="container">
-
-        <div
-            class="pn-digital
-                   rounded-5
-                   overflow-hidden
-                   text-white"
-        >
-
-            <div
-                class="p-4
-                       p-md-5
-                       text-center"
-            >
-
-                <i
-                    class="bi bi-bag-heart
-                           display-5
-                           text-warning"
-                ></i>
-
-
-                <h2
-                    class="font-serif
-                           display-6
-                           mt-3"
-                >
-
-                    Find something meaningful
-                    for your sacred space.
-
-                </h2>
-
-
-                <p
-                    class="text-white-50
-                           col-lg-7
-                           mx-auto
-                           mb-4"
-                >
-
-                    Explore devotional essentials selected for
-                    everyday worship, festivals and thoughtful
-                    spiritual gifting.
-
-                </p>
-
-
-                <a
-                    href="#products"
-                    class="btn
-                           btn-warning
-                           text-dark
-                           fw-semibold
-                           px-4"
-                >
-
-                    Continue Shopping
-
-                    <i
-                        class="bi bi-arrow-right ms-2"
-                    ></i>
-
-                </a>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
 
 @endsection
 @push('scripts')

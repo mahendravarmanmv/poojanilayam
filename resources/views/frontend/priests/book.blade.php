@@ -14,20 +14,11 @@
      BOOKING HEADER
 ============================================================ --}}
 
-<section class="bg-pn-cream py-4 py-lg-5">
+<section class="py-4 py-lg-2">
 
     <div class="container">
 
-        <div class="text-center">
-
-            <span
-                class="small
-                       text-pn-gold
-                       fw-semibold
-                       text-uppercase"
-            >
-                Priest Booking
-            </span>
+        <div class="text-center">         
 
 
             <h1
@@ -43,199 +34,7 @@
             </h1>
 
 
-            <p
-                class="text-secondary
-                       mx-auto
-                       col-lg-7
-                       mb-0"
-            >
-
-                Choose your preferred date and time, provide
-                the required devotee details and review your
-                booking before proceeding to payment.
-
-            </p>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-{{-- ============================================================
-     BOOKING STEPS
-============================================================ --}}
-
-<section class="py-3 bg-white border-bottom">
-
-    <div class="container">
-
-        <div
-            class="row
-                   row-cols-4
-                   g-0
-                   justify-content-center"
-        >
-
-            {{-- Step 1 --}}
-
-            <div class="col">
-
-                <div
-                    class="text-center
-                           position-relative"
-                >
-
-                    <div
-                        class="mx-auto
-                               rounded-circle
-                               bg-pn-primary
-                               text-white
-                               d-flex
-                               align-items-center
-                               justify-content-center
-                               fw-semibold"
-                        style="width:38px;height:38px;"
-                    >
-                        1
-                    </div>
-
-
-                    <small
-                        class="d-block
-                               mt-2
-                               fw-semibold
-                               text-pn-brown"
-                    >
-
-                        Select Slot
-
-                    </small>
-
-                </div>
-
-            </div>
-
-
-            {{-- Step 2 --}}
-
-            <div class="col">
-
-                <div
-                    class="text-center
-                           position-relative"
-                >
-
-                    <div
-                        class="mx-auto
-                               rounded-circle
-                               bg-light
-                               text-secondary
-                               border
-                               d-flex
-                               align-items-center
-                               justify-content-center
-                               fw-semibold"
-                        style="width:38px;height:38px;"
-                    >
-                        2
-                    </div>
-
-
-                    <small
-                        class="d-block
-                               mt-2
-                               text-secondary"
-                    >
-
-                        Your Details
-
-                    </small>
-
-                </div>
-
-            </div>
-
-
-            {{-- Step 3 --}}
-
-            <div class="col">
-
-                <div
-                    class="text-center
-                           position-relative"
-                >
-
-                    <div
-                        class="mx-auto
-                               rounded-circle
-                               bg-light
-                               text-secondary
-                               border
-                               d-flex
-                               align-items-center
-                               justify-content-center
-                               fw-semibold"
-                        style="width:38px;height:38px;"
-                    >
-                        3
-                    </div>
-
-
-                    <small
-                        class="d-block
-                               mt-2
-                               text-secondary"
-                    >
-
-                        Review
-
-                    </small>
-
-                </div>
-
-            </div>
-
-
-            {{-- Step 4 --}}
-
-            <div class="col">
-
-                <div
-                    class="text-center
-                           position-relative"
-                >
-
-                    <div
-                        class="mx-auto
-                               rounded-circle
-                               bg-light
-                               text-secondary
-                               border
-                               d-flex
-                               align-items-center
-                               justify-content-center
-                               fw-semibold"
-                        style="width:38px;height:38px;"
-                    >
-                        4
-                    </div>
-
-
-                    <small
-                        class="d-block
-                               mt-2
-                               text-secondary"
-                    >
-
-                        Payment
-
-                    </small>
-
-                </div>
-
-            </div>
+         
 
         </div>
 
@@ -248,7 +47,7 @@
      MAIN BOOKING AREA
 ============================================================ --}}
 
-<section class="py-5">
+<section class="py-3">
 
     <div class="container">
 

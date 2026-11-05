@@ -26,74 +26,18 @@
     </div>
 @endif
 
-<section class="bg-pn-cream border-bottom">
-
-    <div class="container py-3">
-
-        <nav aria-label="breadcrumb">
-
-            <ol class="breadcrumb mb-0">
-
-                <li class="breadcrumb-item">
-
-                    <a
-                        href="{{ route('home') }}"
-                        class="text-pn-primary"
-                    >
-                        Home
-                    </a>
-
-                </li>
-
-
-                <li class="breadcrumb-item">
-
-                    <a
-                        href="{{ route('donation.index') }}"
-                        class="text-pn-primary"
-                    >
-                        Donation
-                    </a>
-
-                </li>
-
-
-                <li
-                    class="breadcrumb-item active"
-                    aria-current="page"
-                >
-                    Donate Now
-                </li>
-
-            </ol>
-
-        </nav>
-
-    </div>
-
-</section>
-
 
 {{-- ============================================================
      PAGE HEADER
 ============================================================ --}}
 
-<section class="bg-pn-cream py-5">
+<section class="py-3">
 
     <div class="container">
 
         <div class="row justify-content-center">
 
-            <div class="col-12 col-lg-9 text-center">
-
-                <span
-                    class="small
-                           text-pn-gold
-                           fw-semibold
-                           text-uppercase"
-                >
-                    Donation
-                </span>
+            <div class="col-12 col-lg-9 text-center">              
 
 
                 <h1
@@ -101,239 +45,10 @@
                            display-4
                            text-pn-brown
                            mt-2
-                           mb-3"
+                           mb-2"
                 >
                     Make a Donation
                 </h1>
-
-
-                <p
-                    class="lead
-                           text-secondary
-                           col-lg-9
-                           mx-auto
-                           mb-0"
-                >
-                    Choose your donation purpose, enter your contribution,
-                    and provide your donor details to continue.
-                </p>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-{{-- ============================================================
-     DONATION PROGRESS
-============================================================ --}}
-
-<section class="py-4 border-bottom">
-
-    <div class="container">
-
-        <div
-            class="d-flex
-                   align-items-center
-                   justify-content-center"
-        >
-
-            {{-- Step 1 --}}
-
-            <div
-                class="d-flex
-                       align-items-center
-                       gap-2"
-            >
-
-                <span
-                    class="rounded-circle
-                           bg-pn-primary
-                           text-white
-                           d-inline-flex
-                           align-items-center
-                           justify-content-center"
-                    style="width:34px;height:34px;"
-                >
-                    1
-                </span>
-
-
-                <small
-                    class="fw-semibold
-                           text-pn-primary
-                           d-none
-                           d-sm-inline"
-                >
-                    Purpose
-                </small>
-
-            </div>
-
-
-            <div
-                class="bg-pn-primary
-                       mx-2
-                       mx-sm-3"
-                style="height:2px;width:35px;"
-            ></div>
-
-
-            {{-- Step 1 --}}
-
-            <div
-                class="d-flex
-                       align-items-center
-                       gap-2"
-            >
-
-                <span
-                    class="rounded-circle
-                           bg-pn-primary
-                           text-white
-                           d-inline-flex
-                           align-items-center
-                           justify-content-center"
-                    style="width:34px;height:34px;"
-                >
-                    2
-                </span>
-
-
-                <small
-                    class="fw-semibold
-                           text-pn-primary
-                           d-none
-                           d-sm-inline"
-                >
-                    Purpose
-                </small>
-
-            </div>
-
-
-            <div
-                class="bg-pn-primary
-                       mx-2
-                       mx-sm-3"
-                style="height:2px;width:35px;"
-            ></div>
-
-
-            {{-- Step 2 --}}
-
-            <div
-                class="d-flex
-                       align-items-center
-                       gap-2"
-            >
-
-                <span
-                    class="rounded-circle
-                           bg-pn-primary
-                           text-white
-                           d-inline-flex
-                           align-items-center
-                           justify-content-center"
-                    style="width:34px;height:34px;"
-                >
-                    3
-                </span>
-
-
-                <small
-                    class="fw-semibold
-                           text-pn-primary
-                           d-none
-                           d-sm-inline"
-                >
-                    Amount
-                </small>
-
-            </div>
-
-
-            <div
-                class="bg-pn-primary
-                       mx-2
-                       mx-sm-3"
-                style="height:2px;width:35px;"
-            ></div>
-
-
-            {{-- Step 3 --}}
-
-            <div
-                class="d-flex
-                       align-items-center
-                       gap-2"
-            >
-
-                <span
-                    class="rounded-circle
-                           bg-pn-primary
-                           text-white
-                           d-inline-flex
-                           align-items-center
-                           justify-content-center"
-                    style="width:34px;height:34px;"
-                >
-                    4
-                </span>
-
-
-                <small
-                    class="fw-semibold
-                           text-pn-primary
-                           d-none
-                           d-sm-inline"
-                >
-                    Details
-                </small>
-
-            </div>
-
-
-            <div
-                class="bg-secondary-subtle
-                       mx-2
-                       mx-sm-3"
-                style="height:2px;width:35px;"
-            ></div>
-
-
-            {{-- Step 5 --}}
-
-            <div
-                class="d-flex
-                       align-items-center
-                       gap-2"
-            >
-
-                <span
-                    class="rounded-circle
-                           border
-                           border-secondary
-                           text-secondary
-                           d-inline-flex
-                           align-items-center
-                           justify-content-center"
-                    style="width:34px;height:34px;"
-                >
-                    5
-                </span>
-
-
-                <small
-                    class="text-secondary
-                           d-none
-                           d-sm-inline"
-                >
-                    Payment
-                </small>
 
             </div>
 
@@ -348,7 +63,7 @@
      DONATION FORM
 ============================================================ --}}
 
-<section class="py-5">
+<section class="py-3">
 
     <div class="container">
 

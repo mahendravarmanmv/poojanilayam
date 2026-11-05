@@ -159,24 +159,23 @@ iframe {
 ------------------------------------------------------- */
 
 .pn-hero {
-    min-height: 440px;
+    min-height: 450px;
 
     background:
         linear-gradient(
             90deg,
             rgba(251, 246, 236, 0.98) 0%,
             rgba(251, 246, 236, 0.94) 38%,
-            rgba(251, 246, 236, 0.55) 62%,
+            rgba(251, 246, 236, 0.55) 55%,
             rgba(251, 246, 236, 0.08) 100%
         ),
         url("/images/home/hero.webp")
-        right -30px / /* <-- ADJUST THIS VALUE */
+        right -53px / /* <-- ADJUST THIS VALUE */
         cover no-repeat;
 }
 
 .pn-hero-title {
-    font-size: 60px;
-
+    font-size: 65px;
     line-height: 1.06;
 }
 

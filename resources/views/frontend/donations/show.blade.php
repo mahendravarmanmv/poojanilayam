@@ -4,17 +4,6 @@
 @section('meta_description', $campaign->short_description ?: 'Support this cause through Pooja Go.')
 
 @section('content')
-<section class="bg-pn-cream border-bottom">
-    <div class="container py-3">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0">
-                <li class="breadcrumb-item"><a href="{{ route('home') }}" class="text-pn-primary">Home</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('donation.index') }}" class="text-pn-primary">Donations</a></li>
-                <li class="breadcrumb-item active" aria-current="page">{{ $campaign->name }}</li>
-            </ol>
-        </nav>
-    </div>
-</section>
 
 <section class="py-5">
     <div class="container">

@@ -11,65 +11,13 @@
 
 
 
-{{-- COMPACT QUICK BENEFITS STRIP --}}
-<section class="py-1 bg-white border-bottom">
-    <div class="container">
-        <div class="row row-cols-2 row-cols-lg-4 g-0">
-
-            <div class="col">
-                <div class="d-flex align-items-center gap-2 px-2 py-1 h-100">
-                    <i class="bi bi-patch-check text-pn-primary"></i>
-                    <div>
-                        <span class="small fw-semibold text-pn-brown">Verified Priests</span>
-                        <span class="d-block text-secondary small">Trusted profiles</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="d-flex align-items-center gap-2 px-2 py-1 h-100">
-                    <i class="bi bi-mortarboard text-pn-primary"></i>
-                    <div>
-                        <span class="small fw-semibold text-pn-brown">Experienced</span>
-                        <span class="d-block text-secondary small">Traditional knowledge</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="d-flex align-items-center gap-2 px-2 py-1 h-100">
-                    <i class="bi bi-calendar-check text-pn-primary"></i>
-                    <div>
-                        <span class="small fw-semibold text-pn-brown">Check Availability</span>
-                        <span class="d-block text-secondary small">Choose suitable slots</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="d-flex align-items-center gap-2 px-2 py-1 h-100">
-                    <i class="bi bi-star text-pn-primary"></i>
-                    <div>
-                        <span class="small fw-semibold text-pn-brown">Rated by Devotees</span>
-                        <span class="d-block text-secondary small">Community feedback</span>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</section>
-
-
-
 {{-- ============================================================
      FILTER SECTION
 ============================================================ --}}
 <section class="py-3 bg-light-subtle">
     <div class="container">
         <div class="d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-2 mb-3">
-            <div>
-                <span class="small text-pn-gold fw-semibold text-uppercase">Priest Directory</span>
+            <div>                
                 <h2 class="font-serif display-6 text-pn-brown mt-2 mb-0">Find a Priest</h2>
             </div>
 

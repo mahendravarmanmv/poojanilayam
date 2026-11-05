@@ -7,17 +7,9 @@
 
 
 
-<section class="bg-pn-cream py-4">
+<section class="py-4">
     <div class="container">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-4">
-                <li class="breadcrumb-item"><a href="{{ route('home') }}" class="text-pn-primary">Home</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('pooja.index') }}" class="text-pn-primary">Poojas</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('pooja.categories') }}" class="text-pn-primary">Categories</a></li>
-                <li class="breadcrumb-item active" aria-current="page">{{ $categoryName }}</li>
-            </ol>
-        </nav>
-
+        
         <div class="row align-items-center py-3 py-lg-4">
             <div class="col-lg-8">
                 <span class="pn-section-label text-uppercase text-pn-gold fw-semibold small">Pooja Category</span>
@@ -125,19 +117,6 @@
                     </article>
                 </div>
             @endforeach
-        </div>
-    </div>
-</section>
-
-<section class="bg-pn-cream py-5">
-    <div class="container text-center py-lg-3">
-        <h2 class="font-serif text-pn-brown mb-3">Looking for another kind of Pooja?</h2>
-        <p class="text-secondary mx-auto col-lg-6 mb-4">
-            Explore all Pooja categories to find rituals for festivals, family occasions, prosperity, wellbeing and more.
-        </p>
-        <div class="d-flex flex-column flex-sm-row justify-content-center gap-2">
-            <a href="{{ route('pooja.categories') }}" class="btn btn-pn px-4">Explore Categories</a>
-            <a href="{{ route('pooja.index') }}" class="btn btn-pn-outline px-4">View All Poojas</a>
         </div>
     </div>
 </section>
