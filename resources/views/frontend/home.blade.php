@@ -340,7 +340,7 @@ $services = [
      SERVICE CATEGORIES
 ============================================================ --}}
 
-<section class="py-5 bg-pn-cream">
+<section class="py-1 bg-pn-cream">
 
     <div class="container">
 
@@ -413,7 +413,7 @@ $services = [
      POPULAR POOJAS
 ============================================================ --}}
 
-<section class="py-5">
+<section class="py-2">
 
     <div class="container py-lg-4">
 
@@ -427,17 +427,7 @@ $services = [
                    mb-4"
         >
 
-            <div>
-
-                <span
-                    class="pn-section-label
-                           text-uppercase
-                           text-pn-gold
-                           small
-                           fw-semibold"
-                >
-                    Discover
-                </span>
+            <div>                
 
 
                 <h2
@@ -1152,7 +1142,7 @@ $services = [
      ASTROLOGY
 ============================================================ --}}
 
-<section class="py-5 bg-pn-beige">
+<section class="py-2 bg-pn-beige">
 
     <div class="container py-lg-4">
 
@@ -1258,7 +1248,7 @@ $services = [
      ONLINE STORE
 ============================================================ --}}
 
-<section class="py-5">
+<section class="py-2">
 
     <div class="container py-lg-4">
 
@@ -1273,17 +1263,6 @@ $services = [
         >
 
             <div>
-
-                <span
-                    class="pn-section-label
-                           text-uppercase
-                           text-pn-gold
-                           small
-                           fw-semibold"
-                >
-                    Sacred Essentials
-                </span>
-
 
                 <h2
                     class="font-serif
