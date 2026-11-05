@@ -1102,7 +1102,24 @@ async function submitPriestBooking(button) {
             body: new FormData(form)
         });
 
-        const result = await response.json();
+		const contentType = response.headers.get('content-type') || '';
+
+		if (!contentType.includes('application/json')) {
+		const responseText = await response.text();
+
+		console.error('Priest booking returned non-JSON response:', {
+		status: response.status,
+		url: response.url,
+		redirected: response.redirected,
+		response: responseText.substring(0, 1000)
+		});
+
+		throw new Error(
+		`Server returned an unexpected response (HTTP ${response.status}). Please check the server logs.`
+		);
+		}
+
+		const result = await response.json();
 
         if (!response.ok || !result.success) {
             let errorMessage = result.message || 'Unable to create your booking.';
