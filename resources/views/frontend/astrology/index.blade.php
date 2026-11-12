@@ -9,1794 +9,280 @@
 
 @section('content')
 
+@php
+    /*
+    |--------------------------------------------------------------------------
+    | Date strip
+    |--------------------------------------------------------------------------
+    | ?date=YYYY-MM-DD  -> selected day
+    | ?from=YYYY-MM-DD  -> first day shown in the 7-day strip
+    */
+    $selected = \Carbon\Carbon::make(request('date'))?->startOfDay() ?? today();
+    $from     = \Carbon\Carbon::make(request('from'))?->startOfDay() ?? today();
+
+    // Keep the selected day visible inside the strip
+    if ($selected->lt($from) || $selected->gt($from->copy()->addDays(6))) {
+        $from = $selected->copy();
+    }
+
+    $days     = collect(range(0, 6))->map(fn ($i) => $from->copy()->addDays($i));
+    $prevFrom = $from->copy()->subDays(7)->max(today());
+    $nextFrom = $from->copy()->addDays(7);
+    $canGoPrev = $from->gt(today());
+
+    $dateLink = fn ($date, $start) => request()->fullUrlWithQuery([
+        'date' => $date->toDateString(),
+        'from' => $start->toDateString(),
+    ]) . '#select-date';
+
+    /*
+    |--------------------------------------------------------------------------
+    | Temporary UI Data (replace with Controller / DB data later)
+    |--------------------------------------------------------------------------
+    */
+    $signs = [
+        ['name' => 'Mesha',      'english' => 'Aries',       'glyph' => '♈︎', 'rating' => 3,   'text' => 'Good opportunities at work. Stay confident.'],
+        ['name' => 'Vrishabha',  'english' => 'Taurus',      'glyph' => '♉︎', 'rating' => 3,   'text' => 'Focus on finances and avoid unnecessary expenses.'],
+        ['name' => 'Mithuna',    'english' => 'Gemini',      'glyph' => '♊︎', 'rating' => 3,   'text' => 'Good communication brings positive results.'],
+        ['name' => 'Karkataka',  'english' => 'Cancer',      'glyph' => '♋︎', 'rating' => 3,   'text' => 'Family support brings happiness. Take care of your health.'],
+        ['name' => 'Simha',      'english' => 'Leo',         'glyph' => '♌︎', 'rating' => 3.5, 'text' => 'Confidence and new opportunities are on the way.'],
+        ['name' => 'Kanya',      'english' => 'Virgo',       'glyph' => '♍︎', 'rating' => 2.5, 'text' => 'Plan your work well. Avoid overthinking.'],
+        ['name' => 'Tula',       'english' => 'Libra',       'glyph' => '♎︎', 'rating' => 3,   'text' => 'Balance work and personal life. Good day for relationships.'],
+        ['name' => 'Vrushchika', 'english' => 'Scorpio',     'glyph' => '♏︎', 'rating' => 3,   'text' => 'Stay calm and avoid conflicts. New opportunities may come.'],
+        ['name' => 'Dhanu',      'english' => 'Sagittarius', 'glyph' => '♐︎', 'rating' => 3,   'text' => 'A favorable day for learning and travel plans.'],
+        ['name' => 'Makara',     'english' => 'Capricorn',   'glyph' => '♑︎', 'rating' => 3,   'text' => 'Hard work brings positive results. Be patient.'],
+        ['name' => 'Kumbha',     'english' => 'Aquarius',    'glyph' => '♒︎', 'rating' => 3.5, 'text' => 'Good time for new ideas and networking.'],
+        ['name' => 'Meena',      'english' => 'Pisces',      'glyph' => '♓︎', 'rating' => 3,   'text' => 'Focus on your goals. Spiritual growth is indicated.'],
+    ];
+@endphp
+
 
 {{-- ============================================================
-     ASTROLOGY HERO
+     HERO
 ============================================================ --}}
 
-<section class="bg-pn-cream py-5 overflow-hidden">
+<section class="astrology-hero d-flex align-items-center">
+    
 
-    <div class="container">
+    <div class="container position-relative py-5" style="z-index: 1;">
+        <div class="row">
+            <div class="col-12 col-md-6 col-lg-5 astrology-hero-content">
+                <span class="small text-pn-gold fw-bold text-uppercase">Indian Horoscope</span>
 
-        <div
-            class="row
-                   align-items-center
-                   g-5"
-        >
+                <h1 class="font-serif display-5 fw-semibold text-pn-brown pn-hero-accent mt-2 mb-3">Daily Horoscope</h1>
 
-            {{-- =================================================
-                 HERO CONTENT
-            ================================================== --}}
-
-            <div class="col-12 col-lg-6">
-
-                <span
-                    class="small
-                           text-pn-gold
-                           fw-semibold
-                           text-uppercase"
-                >
-
-                    Astrology & Guidance
-
-                </span>
-
-
-                <h1
-                    class="font-serif
-                           display-3
-                           text-pn-brown
-                           mt-2
-                           mb-3"
-                >
-
-                    Discover guidance
-                    <span
-                        class="text-pn-primary"
-                    >
-                        for your journey.
-                    </span>
-
-                </h1>
-
-
-                <p
-                    class="lead
-                           text-secondary
-                           col-xl-11
-                           mb-4"
-                >
-
-                    Explore traditional astrology services,
-                    connect with experienced astrologers and
-                    choose a consultation that suits you.
-
+                <p class="text-white mb-4">
+                    Get your daily predictions based on Vedic astrology.
+                    Explore insights for love, career, finance, health,
+                    family and more.
                 </p>
 
+                <a href="#todays-horoscope" class="btn btn-pn px-4">
+                    View Today's Horoscope
+                    <i class="bi bi-arrow-right ms-2"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
 
-                {{-- Search --}}
 
-                <form
-                    action="{{ route('astrology.index') }}"
-                    method="GET"
-                >
+{{-- ============================================================
+     SELECT DATE
+============================================================ --}}
 
-                    <div
-                        class="input-group
-                               input-group-lg
-                               bg-white
-                               rounded-pill
-                               shadow-sm
-                               overflow-hidden"
+<section class="pt-4">
+    <div class="container">
+        <div id="select-date" class="p-3">
+
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <div class="d-flex align-items-center gap-2">
+                    <h2 class="font-serif fs-4 fw-semibold text-pn-brown mb-0">Select Date</h2>
+                    <span class="d-none d-sm-inline-block border-top border-warning px-4"></span>
+                    <span class="d-none d-sm-inline-block rounded-circle bg-warning p-1"></span>
+                </div>
+
+                <div class="dropdown">
+                    <button
+                        type="button"
+                        class="btn btn-link small text-pn-primary text-decoration-underline p-0"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
                     >
+                        <i class="bi bi-calendar3 me-1"></i>
+                        Pick a Date
+                    </button>
 
-                        <span
-                            class="input-group-text
-                                   bg-white
-                                   border-0
-                                   ps-4"
-                        >
-
-                            <i
-                                class="bi bi-search
-                                       text-pn-primary"
-                            ></i>
-
-                        </span>
-
-
+                    <form
+                        method="GET"
+                        action="{{ request()->url() }}#select-date"
+                        class="dropdown-menu dropdown-menu-end p-3"
+                    >
+                        <label for="pickDate" class="form-label small mb-1">Choose a date</label>
                         <input
-                            type="search"
-                            name="search"
-                            class="form-control
-                                   border-0
-                                   shadow-none"
-                            placeholder="Search astrology services..."
-                            aria-label="Search astrology services"
+                            type="date"
+                            id="pickDate"
+                            name="date"
+                            value="{{ $selected->toDateString() }}"
+                            min="{{ today()->toDateString() }}"
+                            class="form-control form-control-sm mb-2"
+                            required
                         >
-
-
-                        <button
-                            type="submit"
-                            class="btn
-                                   btn-pn
-                                   rounded-pill
-                                   m-1
-                                   px-4"
-                        >
-
-                            Explore
-
-                            <i
-                                class="bi bi-arrow-right ms-1"
-                            ></i>
-
-                        </button>
-
-                    </div>
-
-                </form>
-
-
-                {{-- Trust Points --}}
-
-                <div
-                    class="row
-                           row-cols-1
-                           row-cols-sm-3
-                           g-3
-                           mt-4"
-                >
-
-                    <div class="col">
-
-                        <div
-                            class="d-flex
-                                   align-items-center
-                                   gap-2"
-                        >
-
-                            <div
-                                class="rounded-circle
-                                       bg-white
-                                       text-pn-primary
-                                       d-flex
-                                       align-items-center
-                                       justify-content-center
-                                       flex-shrink-0"
-                                style="width:42px;height:42px;"
-                            >
-
-                                <i
-                                    class="bi bi-patch-check"
-                                ></i>
-
-                            </div>
-
-
-                            <div>
-
-                                <strong
-                                    class="small
-                                           d-block
-                                           text-pn-brown"
-                                >
-
-                                    Trusted
-
-                                </strong>
-
-
-                                <small
-                                    class="text-secondary"
-                                >
-
-                                    Astrologers
-
-                                </small>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="col">
-
-                        <div
-                            class="d-flex
-                                   align-items-center
-                                   gap-2"
-                        >
-
-                            <div
-                                class="rounded-circle
-                                       bg-white
-                                       text-pn-primary
-                                       d-flex
-                                       align-items-center
-                                       justify-content-center
-                                       flex-shrink-0"
-                                style="width:42px;height:42px;"
-                            >
-
-                                <i
-                                    class="bi bi-calendar-check"
-                                ></i>
-
-                            </div>
-
-
-                            <div>
-
-                                <strong
-                                    class="small
-                                           d-block
-                                           text-pn-brown"
-                                >
-
-                                    Flexible
-
-                                </strong>
-
-
-                                <small
-                                    class="text-secondary"
-                                >
-
-                                    Consultation slots
-
-                                </small>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="col">
-
-                        <div
-                            class="d-flex
-                                   align-items-center
-                                   gap-2"
-                        >
-
-                            <div
-                                class="rounded-circle
-                                       bg-white
-                                       text-pn-primary
-                                       d-flex
-                                       align-items-center
-                                       justify-content-center
-                                       flex-shrink-0"
-                                style="width:42px;height:42px;"
-                            >
-
-                                <i
-                                    class="bi bi-shield-check"
-                                ></i>
-
-                            </div>
-
-
-                            <div>
-
-                                <strong
-                                    class="small
-                                           d-block
-                                           text-pn-brown"
-                                >
-
-                                    Secure
-
-                                </strong>
-
-
-                                <small
-                                    class="text-secondary"
-                                >
-
-                                    Online booking
-
-                                </small>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
+                        <button type="submit" class="btn btn-pn btn-sm w-100">View Horoscope</button>
+                    </form>
                 </div>
-
             </div>
 
-
-            {{-- =================================================
-                 HERO VISUAL
-            ================================================== --}}
-
-            <div class="col-12 col-lg-6">
-
-                <div
-                    class="position-relative"
-                >
-
-                    {{-- Main visual --}}
-
-                    <div
-                        class="pn-digital
-                               rounded-5
-                               overflow-hidden
-                               position-relative"
-                    >
-
-                        <div
-                            class="ratio ratio-4x3"
-                        >
-
-                            <img
-                                src="{{ asset('images/home/hero.webp') }}"
-                                class="object-fit-cover"
-                                alt="Astrology consultation"
-                                loading="eager"
-                            >
-
-                        </div>
-
-
-                        {{-- Overlay --}}
-
-                        <div
-                            class="position-absolute
-                                   bottom-0
-                                   start-0
-                                   end-0
-                                   p-4
-                                   text-white"
-                            style="background:linear-gradient(transparent,rgba(35,20,12,.9));"
-                        >
-
-                            <span
-                                class="small
-                                       text-warning
-                                       fw-semibold
-                                       text-uppercase"
-                            >
-
-                                Astrology Guidance
-
-                            </span>
-
-
-                            <h2
-                                class="font-serif
-                                       h2
-                                       mt-2
-                                       mb-1"
-                            >
-
-                                Explore your questions
-                                with clarity.
-
-                            </h2>
-
-
-                            <small
-                                class="text-white-50"
-                            >
-
-                                Traditional services,
-                                thoughtfully presented.
-
-                            </small>
-
-                        </div>
-
-                    </div>
-
-
-                    {{-- Floating Card --}}
-
-                    <div
-                        class="position-absolute
-                               bottom-0
-                               start-0
-                               translate-middle-y
-                               ms-3
-                               d-none
-                               d-sm-block"
-                    >
-
-                        <div
-                            class="bg-white
-                                   rounded-4
-                                   shadow-sm
-                                   p-3"
-                        >
-
-                            <div
-                                class="d-flex
-                                       align-items-center
-                                       gap-3"
-                            >
-
-                                <div
-                                    class="rounded-circle
-                                           bg-pn-cream
-                                           text-pn-primary
-                                           d-flex
-                                           align-items-center
-                                           justify-content-center"
-                                    style="width:48px;height:48px;"
-                                >
-
-                                    <i class="bi bi-stars"></i>
-
-                                </div>
-
-
-                                <div>
-
-                                    <strong
-                                        class="small
-                                               d-block
-                                               text-pn-brown"
-                                    >
-
-                                        Personalized Guidance
-
-                                    </strong>
-
-
-                                    <small
-                                        class="text-secondary"
-                                    >
-
-                                        Choose what you need.
-
-                                    </small>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-{{-- ============================================================
-     ASTROLOGY SERVICE NAVIGATION
-============================================================ --}}
-
-<section class="py-4 bg-white border-bottom">
-
-    <div class="container">
-
-        <div
-            class="row
-                   row-cols-2
-                   row-cols-md-3
-                   row-cols-lg-6
-                   g-3"
-        >
-
-            @foreach($services as $service)
-
-                <div class="col">
-
-                    <a
-                        href="{{ match (Str::slug($service['title'])) { 'horoscope' => route('astrology.horoscope'), 'kundli' => route('astrology.kundli'), 'match-making' => route('astrology.match-making'), 'numerology' => route('astrology.numerology'), 'palm-reading' => route('astrology.palm-reading'), 'vastu-consultation' => route('astrology.vastu'), default => route('astrology.index') } }}"
-                        class="card
-                               border
-                               border-warning-subtle
-                               rounded-4
-                               h-100
-                               text-center
-                               text-decoration-none
-                               text-pn-brown"
-                    >
-
-                        <div
-                            class="card-body
-                                   p-3"
-                        >
-
-                            <div
-                                class="rounded-circle
-                                       bg-pn-cream
-                                       text-pn-primary
-                                       d-flex
-                                       align-items-center
-                                       justify-content-center
-                                       mx-auto"
-                                style="width:58px;height:58px;"
-                            >
-
-                                <i
-                                    class="bi {{ $service['icon'] }}
-                                           fs-4"
-                                ></i>
-
-                            </div>
-
-
-                            <h2
-                                class="h6
-                                       fw-semibold
-                                       mt-3
-                                       mb-1"
-                            >
-
-                                {{ $service['title'] }}
-
-                            </h2>
-
-
-                            <small
-                                class="text-secondary"
-                            >
-
-                                {{ $service['subtitle'] }}
-
-                            </small>
-
-                        </div>
-
-                    </a>
-
-                </div>
-
-            @endforeach
-
-        </div>
-
-    </div>
-
-</section>
-
-
-{{-- ============================================================
-     INTRODUCTION
-============================================================ --}}
-
-<section class="py-5">
-
-    <div class="container">
-
-        <div
-            class="row
-                   justify-content-center"
-        >
-
-            <div class="col-12 col-lg-8">
-
-                <div
-                    class="text-center"
-                >
-
-                    <span
-                        class="small
-                               text-pn-gold
-                               fw-semibold
-                               text-uppercase"
-                    >
-
-                        Astrology Services
-
-                    </span>
-
-
-                    <h2
-                        class="font-serif
-                               display-6
-                               text-pn-brown
-                               mt-2"
-                    >
-
-                        Guidance for the questions
-                        that matter to you.
-
-                    </h2>
-
-
-                    <div
-                        class="pn-divider
-                               mx-auto
-                               my-3"
-                    ></div>
-
-
-                    <p
-                        class="text-secondary
-                               mb-0"
-                    >
-
-                        Choose from a range of astrology-related
-                        services available through Pooja Go.
-                        Each service has its own dedicated experience.
-
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-{{-- ============================================================
-     SERVICE CARDS
-============================================================ --}}
-
-<section class="pb-5">
-
-    <div class="container">
-
-        <div
-            class="row
-                   row-cols-1
-                   row-cols-md-2
-                   row-cols-lg-3
-                   g-4"
-        >
-
-            @foreach($services as $index => $service)
-
-                <div class="col">
-
-                    <article
-                        class="card
-                               border
-                               border-warning-subtle
-                               rounded-5
-                               h-100"
-                    >
-
-                        <div class="card-body p-4 p-md-5">
-
-                            {{-- Number --}}
-
-                            <div
-                                class="d-flex
-                                       align-items-center
-                                       justify-content-between
-                                       mb-4"
-                            >
-
-                                <div
-                                    class="rounded-circle
-                                           bg-pn-cream
-                                           text-pn-primary
-                                           d-flex
-                                           align-items-center
-                                           justify-content-center"
-                                    style="width:62px;height:62px;"
-                                >
-
-                                    <i
-                                        class="bi {{ $service['icon'] }}
-                                               fs-4"
-                                    ></i>
-
-                                </div>
-
-
-                                <span
-                                    class="small
-                                           text-secondary"
-                                >
-
-                                    0{{ $index + 1 }}
-
-                                </span>
-
-                            </div>
-
-
-                            <h2
-                                class="font-serif
-                                       h3
-                                       text-pn-brown
-                                       mb-1"
-                            >
-
-                                {{ $service['title'] }}
-
-                            </h2>
-
-
-                            <span
-                                class="small
-                                       text-pn-primary
-                                       fw-semibold"
-                            >
-
-                                {{ $service['subtitle'] }}
-
-                            </span>
-
-
-                            <p
-                                class="small
-                                       text-secondary
-                                       mt-3
-                                       mb-4"
-                            >
-
-                                {{ $service['description'] }}
-
-                            </p>
-
-
-                            <a
-                                href="{{ match (Str::slug($service['title'])) { 'horoscope' => route('astrology.horoscope'), 'kundli' => route('astrology.kundli'), 'match-making' => route('astrology.match-making'), 'numerology' => route('astrology.numerology'), 'palm-reading' => route('astrology.palm-reading'), 'vastu-consultation' => route('astrology.vastu'), default => route('astrology.index') } }}"
-                                class="btn
-                                       btn-pn-outline
-                                       w-100"
-                            >
-
-                                Explore {{ $service['title'] }}
-
-                                <i
-                                    class="bi bi-arrow-right ms-2"
-                                ></i>
-
-                            </a>
-
-                        </div>
-
-                    </article>
-
-                </div>
-
-            @endforeach
-
-        </div>
-
-    </div>
-
-</section>
-
-
-{{-- ============================================================
-     CONSULTATION TYPES
-============================================================ --}}
-
-<section class="py-5 bg-pn-cream">
-
-    <div class="container">
-
-        <div
-            class="row
-                   align-items-center
-                   g-5"
-        >
-
-            <div class="col-12 col-lg-5">
-
-                <span
-                    class="small
-                           text-pn-gold
-                           fw-semibold
-                           text-uppercase"
-                >
-
-                    Consultation Options
-
-                </span>
-
-
-                <h2
-                    class="font-serif
-                           display-6
-                           text-pn-brown
-                           mt-2
-                           mb-3"
-                >
-
-                    Choose how you want
-                    to connect.
-
-                </h2>
-
-
-                <div
-                    class="pn-divider
-                           mb-4"
-                ></div>
-
-
-                <p
-                    class="text-secondary"
-                >
-
-                    The documented astrology consultation flow
-                    supports three consultation types:
-                    Video, Audio and Chat.
-
-                </p>
-
-
+            <div class="d-flex align-items-center gap-2">
                 <a
-                    href="#astrologers"
-                    class="btn
-                           btn-pn"
+                    href="{{ $canGoPrev ? $dateLink($selected, $prevFrom) : '#select-date' }}"
+                    class="btn btn-outline-secondary rounded-circle flex-shrink-0 {{ $canGoPrev ? '' : 'disabled' }}"
+                    aria-label="Previous days"
+                    @if(!$canGoPrev) aria-disabled="true" tabindex="-1" @endif
                 >
-
-                    Find an Astrologer
-
-                    <i
-                        class="bi bi-arrow-right ms-2"
-                    ></i>
-
+                    <i class="bi bi-chevron-left"></i>
                 </a>
 
-            </div>
+                <div class="d-flex gap-2 flex-grow-1 overflow-x-auto py-1">
+                    @foreach($days as $day)
+                        @php
+                            $isSelected = $day->isSameDay($selected);
+                            $label = $day->isToday() ? 'Today' : ($day->isTomorrow() ? 'Tomorrow' : $day->format('D'));
+                        @endphp
 
-
-            <div class="col-12 col-lg-7">
-
-                <div
-                    class="row
-                           row-cols-1
-                           row-cols-md-3
-                           g-3"
-                >
-
-                    @foreach($consultationTypes as $type)
-
-                        <div class="col">
-
-                            <div
-                                class="card
-                                       border
-                                       border-warning-subtle
-                                       rounded-4
-                                       bg-white
-                                       h-100"
-                            >
-
-                                <div
-                                    class="card-body
-                                           p-4
-                                           text-center"
-                                >
-
-                                    <div
-                                        class="rounded-circle
-                                               bg-pn-cream
-                                               text-pn-primary
-                                               d-flex
-                                               align-items-center
-                                               justify-content-center
-                                               mx-auto"
-                                        style="width:58px;height:58px;"
-                                    >
-
-                                        <i
-                                            class="bi {{ $type['icon'] }}
-                                                   fs-4"
-                                        ></i>
-
-                                    </div>
-
-
-                                    <h3
-                                        class="font-serif
-                                               h5
-                                               text-pn-brown
-                                               mt-3"
-                                    >
-
-                                        {{ $type['title'] }}
-
-                                    </h3>
-
-
-                                    <p
-                                        class="small
-                                               text-secondary
-                                               mb-0"
-                                    >
-
-                                        {{ $type['description'] }}
-
-                                    </p>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
+                        <a
+                            href="{{ $dateLink($day, $from) }}"
+                            class="btn flex-fill text-center rounded-3 px-3 py-2 {{ $isSelected ? 'btn-pn' : 'bg-white border-warning-subtle text-pn-brown' }}"
+                            @if($isSelected) aria-current="date" @endif
+                        >
+                            <span class="d-block small">{{ $label }}</span>
+                            <span class="d-block font-serif fs-3 fw-semibold lh-1 my-1">{{ $day->format('d') }}</span>
+                            <span class="d-block small">{{ $day->format('M') }}</span>
+                        </a>
                     @endforeach
-
                 </div>
 
+                <a
+                    href="{{ $dateLink($selected, $nextFrom) }}"
+                    class="btn btn-outline-secondary rounded-circle flex-shrink-0"
+                    aria-label="Next days"
+                >
+                    <i class="bi bi-chevron-right"></i>
+                </a>
             </div>
 
         </div>
-
     </div>
-
 </section>
 
 
 {{-- ============================================================
-     ASTROLOGERS
+     TODAY'S HOROSCOPE
 ============================================================ --}}
 
-<section
-    id="astrologers"
-    class="py-5"
->
-
+<section class="pt-4">
     <div class="container">
+        <div id="todays-horoscope" class="card border border-warning-subtle rounded-4 p-3">
 
-        <div
-            class="d-flex
-                   flex-column
-                   flex-md-row
-                   align-items-md-end
-                   justify-content-between
-                   gap-3
-                   mb-5"
-        >
+            <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-1 mb-3">
+                <div class="d-flex align-items-center gap-2">
+                    <h2 class="font-serif fs-4 fw-semibold text-pn-brown mb-0">
+                        {{ $selected->isToday() ? "Today's Horoscope" : 'Horoscope' }}
+                    </h2>
+                    <span class="d-none d-sm-inline-block border-top border-warning px-4"></span>
+                    <span class="d-none d-sm-inline-block rounded-circle bg-warning p-1"></span>
+                </div>
 
-            <div>
-
-                <span
-                    class="small
-                           text-pn-gold
-                           fw-semibold
-                           text-uppercase"
-                >
-
-                    Experienced Guidance
-
-                </span>
-
-
-                <h2
-                    class="font-serif
-                           display-6
-                           text-pn-brown
-                           mt-2
-                           mb-0"
-                >
-
-                    Meet Our Astrologers
-
-                </h2>
-
+                <small class="text-secondary">{{ $selected->format('d F Y, l') }}</small>
             </div>
 
+            <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 g-3">
+                @foreach($signs as $sign)
+                    <div class="col">
+                        <article class="card h-100 border border-warning-subtle rounded-3 bg-white p-2">
 
-            <a
-                href="{{ route('astrology.index') }}"
-                class="btn
-                       btn-pn-outline
-                       align-self-start
-                       align-self-md-auto"
-            >
-
-                View All Astrologers
-
-                <i
-                    class="bi bi-arrow-right ms-2"
-                ></i>
-
-            </a>
-
-        </div>
-
-
-        <div
-            class="row
-                   row-cols-1
-                   row-cols-md-2
-                   row-cols-lg-3
-                   g-4"
-        >
-
-            @foreach($astrologers as $astrologer)
-
-                <div class="col">
-
-                    <article
-                        class="card
-                               border
-                               border-warning-subtle
-                               rounded-5
-                               overflow-hidden
-                               h-100"
-                    >
-
-                        {{-- Image --}}
-
-                        <div
-                            class="position-relative"
-                        >
-
-                            @if(!empty($astrologer['image']))
-
-                                <img
-                                    src="{{ asset($astrologer['image']) }}"
-                                    class="card-img-top
-                                           object-fit-cover"
-                                    style="height:280px;"
-                                    alt="{{ $astrologer['name'] }}"
-                                    loading="lazy"
-                                >
-
-                            @else
-
-                                <div
-                                    class="d-flex
-                                           align-items-center
-                                           justify-content-center
-                                           bg-pn-cream
-                                           text-pn-primary"
-                                    style="height:280px;"
-                                    aria-label="Astrologer image unavailable"
-                                >
-                                    <i class="bi bi-person-circle display-1"></i>
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <div class="ratio ratio-1x1 w-25 flex-shrink-0">
+                                    <div class="d-flex align-items-center justify-content-center rounded-circle border border-2 border-warning bg-warning-subtle text-pn-primary fs-5">
+                                        {{ $sign['glyph'] }}
+                                    </div>
                                 </div>
 
-                            @endif
-
-
-                            @if($astrologer['verified'])
-
-                                <span
-                                    class="position-absolute
-                                           top-0
-                                           start-0
-                                           m-3
-                                           badge
-                                           rounded-pill
-                                           bg-success
-                                           px-3
-                                           py-2"
-                                >
-
-                                    <i
-                                        class="bi bi-patch-check-fill me-1"
-                                    ></i>
-
-                                    Verified
-
-                                </span>
-
-                            @endif
-
-                        </div>
-
-
-                        <div
-                            class="card-body
-                                   p-4
-                                   d-flex
-                                   flex-column"
-                        >
-
-                            <div
-                                class="d-flex
-                                       align-items-center
-                                       justify-content-between
-                                       gap-2
-                                       mb-2"
-                            >
-
-                                <span
-                                    class="small
-                                           text-pn-primary
-                                           fw-semibold"
-                                >
-
-                                    {{ $astrologer['specialization'] }}
-
-                                </span>
-
-
-                                @if($astrologer['rating'] !== null)
-
-                                    <span
-                                        class="small
-                                               text-secondary"
-                                    >
-
-                                        <i
-                                            class="bi bi-star-fill
-                                                   text-warning"
-                                        ></i>
-
-                                        {{ $astrologer['rating'] }}
-
-                                    </span>
-
-                                @endif
-
+                                <div class="lh-sm">
+                                    <strong class="d-block small text-pn-brown">{{ $sign['name'] }}</strong>
+                                    <small class="text-secondary">({{ $sign['english'] }})</small>
+                                </div>
                             </div>
 
-
-                            <h3
-                                class="font-serif
-                                       h4
-                                       text-pn-brown"
-                            >
-
-                                {{ $astrologer['name'] }}
-
-                            </h3>
-
-
-                            <div
-                                class="vstack
-                                       gap-2
-                                       mb-4"
-                            >
-
-                                <small
-                                    class="text-secondary"
-                                >
-
-                                    <i
-                                        class="bi bi-award
-                                               text-pn-primary
-                                               me-1"
-                                    ></i>
-
-                                    {{ $astrologer['experience'] }}
-
-                                </small>
-
-
-                                <small
-                                    class="text-secondary"
-                                >
-
-                                    <i
-                                        class="bi bi-translate
-                                               text-pn-primary
-                                               me-1"
-                                    ></i>
-
-                                    {{ $astrologer['languages'] }}
-
-                                </small>
-
-
-                                <small
-                                    class="text-secondary"
-                                >
-
-                                    <i
-                                        class="bi bi-people
-                                               text-pn-primary
-                                               me-1"
-                                    ></i>
-
-                                    @if($astrologer['reviews'] > 0)
-                                        {{ $astrologer['reviews'] }} reviews
-                                    @else
-                                        No reviews yet
-                                    @endif
-
-                                </small>
-
+                            <div class="small text-pn-gold mb-1" aria-label="Rating {{ $sign['rating'] }} out of 5">
+                                @for($i = 1; $i <= 5; $i++)
+                                    <i class="bi {{ $sign['rating'] >= $i ? 'bi-star-fill' : ($sign['rating'] >= $i - 0.5 ? 'bi-star-half' : 'bi-star') }}"></i>
+                                @endfor
                             </div>
 
+                            <p class="small text-secondary mb-2">{{ $sign['text'] }}</p>
 
-                            <div
-                                class="mt-auto
-                                       d-grid
-                                       gap-2"
+                            <a
+                                href="{{ route('astrology.horoscope', ['sign' => Str::slug($sign['english']), 'date' => $selected->toDateString()]) }}"
+                                class="small fw-semibold text-pn-primary text-decoration-none mt-auto"
                             >
+                                Read More
+                                <i class="bi bi-arrow-right ms-1"></i>
+                            </a>
 
-                                <a
-                                    href="{{ route('astrology.index') }}"
-                                    class="btn
-                                           btn-pn-outline"
-                                >
-
-                                    View Profile
-
-                                </a>
-
-
-                                <a
-                                    href="{{ route('astrology.booking') }}"
-                                    class="btn
-                                           btn-pn"
-                                >
-
-                                    Book Consultation
-
-                                    <i
-                                        class="bi bi-arrow-right ms-2"
-                                    ></i>
-
-                                </a>
-
-                            </div>
-
-                        </div>
-
-                    </article>
-
-                </div>
-
-            @endforeach
+                        </article>
+                    </div>
+                @endforeach
+            </div>
 
         </div>
-
     </div>
-
 </section>
 
 
 {{-- ============================================================
-     TOPICS
+     EXPERT ASTROLOGERS CTA
 ============================================================ --}}
 
-<section class="py-5 bg-light-subtle">
-
+<section class="py-4">
     <div class="container">
-
-        <div class="text-center mb-5">
-
-            <span
-                class="small
-                       text-pn-gold
-                       fw-semibold
-                       text-uppercase"
+        <div class="position-relative overflow-hidden card border border-warning-subtle rounded-4 bg-pn-cream">
+            <img
+                src="{{ asset('images/astrology/astrologer-cta.webp') }}"
+                alt=""
+                class="d-none d-md-block position-absolute top-0 end-0 h-100 w-50 object-fit-cover"
             >
 
-                Explore Guidance
+            <div class="position-relative row g-0">
+                <div class="col-12 col-md-6 p-4 p-lg-5">
+                    <span class="small text-pn-gold fw-semibold text-uppercase">Get Deeper Guidance</span>
 
-            </span>
+                    <h2 class="font-serif display-6 fw-bold text-pn-brown mt-2 mb-3">
+                        Connect with Expert Astrologers
+                    </h2>
 
+                    <p class="text-secondary mb-4">
+                        Get personalized solutions for your life's questions
+                        through video, audio or chat consultations.
+                    </p>
 
-            <h2
-                class="font-serif
-                       display-6
-                       text-pn-brown
-                       mt-2"
-            >
-
-                What would you like guidance on?
-
-            </h2>
-
-
-            <p
-                class="text-secondary
-                       col-lg-7
-                       mx-auto
-                       mb-0"
-            >
-
-                Start with a topic that is important to you
-                and explore the available astrology services.
-
-            </p>
-
-        </div>
-
-
-        <div
-            class="row
-                   row-cols-2
-                   row-cols-sm-3
-                   row-cols-md-4
-                   g-3
-                   justify-content-center"
-        >
-
-            @foreach($topics as $topic)
-
-                <div class="col">
-
-                    <a
-                        href="#"
-                        class="d-flex
-                               align-items-center
-                               gap-3
-                               border
-                               border-warning-subtle
-                               rounded-4
-                               bg-white
-                               p-3
-                               text-decoration-none
-                               text-pn-brown
-                               h-100"
-                    >
-
-                        <div
-                            class="rounded-circle
-                                   bg-pn-cream
-                                   text-pn-primary
-                                   d-flex
-                                   align-items-center
-                                   justify-content-center
-                                   flex-shrink-0"
-                            style="width:44px;height:44px;"
-                        >
-
-                            <i class="bi bi-stars"></i>
-
-                        </div>
-
-
-                        <span
-                            class="small
-                                   fw-semibold"
-                        >
-
-                            {{ $topic }}
-
-                        </span>
-
+                    <a href="{{ route('astrology.booking') }}" class="btn btn-pn px-4">
+                        Find an Astrologer
+                        <i class="bi bi-arrow-right ms-2"></i>
                     </a>
-
                 </div>
+            </div>
 
-            @endforeach
-
+            <div class="ratio ratio-16x9 d-md-none">
+                <img
+                    src="{{ asset('images/astrology/astrologer-cta.webp') }}"
+                    alt="Astrologer consulting with a tablet beside a lit lamp"
+                    class="object-fit-cover"
+                    loading="lazy"
+                >
+            </div>
         </div>
-
     </div>
-
-</section>
-
-
-{{-- ============================================================
-     HOW ASTROLOGY CONSULTATION WORKS
-============================================================ --}}
-
-<section class="py-5">
-
-    <div class="container">
-
-        <div
-            class="text-center
-                   mb-5"
-        >
-
-            <span
-                class="small
-                       text-pn-gold
-                       fw-semibold
-                       text-uppercase"
-            >
-
-                Simple Process
-
-            </span>
-
-
-            <h2
-                class="font-serif
-                       display-6
-                       text-pn-brown
-                       mt-2"
-            >
-
-                How Astrology Consultation Works
-
-            </h2>
-
-
-            <div
-                class="pn-divider
-                       mx-auto
-                       my-3"
-            ></div>
-
-        </div>
-
-
-        <div
-            class="row
-                   row-cols-1
-                   row-cols-md-3
-                   row-cols-lg-6
-                   g-4"
-        >
-
-            {{-- Step 1 --}}
-
-            <div class="col">
-
-                <div
-                    class="text-center
-                           h-100"
-                >
-
-                    <div
-                        class="mx-auto
-                               rounded-circle
-                               bg-pn-cream
-                               text-pn-primary
-                               d-flex
-                               align-items-center
-                               justify-content-center
-                               fw-semibold
-                               fs-5"
-                        style="width:62px;height:62px;"
-                    >
-                        01
-                    </div>
-
-
-                    <h3
-                        class="font-serif
-                               h6
-                               text-pn-brown
-                               mt-3"
-                    >
-
-                        Browse Astrologers
-
-                    </h3>
-
-
-                    <p
-                        class="small
-                               text-secondary
-                               mb-0"
-                    >
-
-                        Explore available astrologers.
-
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            {{-- Step 2 --}}
-
-            <div class="col">
-
-                <div
-                    class="text-center
-                           h-100"
-                >
-
-                    <div
-                        class="mx-auto
-                               rounded-circle
-                               bg-pn-cream
-                               text-pn-primary
-                               d-flex
-                               align-items-center
-                               justify-content-center
-                               fw-semibold
-                               fs-5"
-                        style="width:62px;height:62px;"
-                    >
-                        02
-                    </div>
-
-
-                    <h3
-                        class="font-serif
-                               h6
-                               text-pn-brown
-                               mt-3"
-                    >
-
-                        Select Astrologer
-
-                    </h3>
-
-
-                    <p
-                        class="small
-                               text-secondary
-                               mb-0"
-                    >
-
-                        Choose the astrologer you prefer.
-
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            {{-- Step 3 --}}
-
-            <div class="col">
-
-                <div
-                    class="text-center
-                           h-100"
-                >
-
-                    <div
-                        class="mx-auto
-                               rounded-circle
-                               bg-pn-cream
-                               text-pn-primary
-                               d-flex
-                               align-items-center
-                               justify-content-center
-                               fw-semibold
-                               fs-5"
-                        style="width:62px;height:62px;"
-                    >
-                        03
-                    </div>
-
-
-                    <h3
-                        class="font-serif
-                               h6
-                               text-pn-brown
-                               mt-3"
-                    >
-
-                        Choose Type
-
-                    </h3>
-
-
-                    <p
-                        class="small
-                               text-secondary
-                               mb-0"
-                    >
-
-                        Video, Audio or Chat.
-
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            {{-- Step 4 --}}
-
-            <div class="col">
-
-                <div
-                    class="text-center
-                           h-100"
-                >
-
-                    <div
-                        class="mx-auto
-                               rounded-circle
-                               bg-pn-cream
-                               text-pn-primary
-                               d-flex
-                               align-items-center
-                               justify-content-center
-                               fw-semibold
-                               fs-5"
-                        style="width:62px;height:62px;"
-                    >
-                        04
-                    </div>
-
-
-                    <h3
-                        class="font-serif
-                               h6
-                               text-pn-brown
-                               mt-3"
-                    >
-
-                        Select Slot
-
-                    </h3>
-
-
-                    <p
-                        class="small
-                               text-secondary
-                               mb-0"
-                    >
-
-                        Choose an available time.
-
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            {{-- Step 5 --}}
-
-            <div class="col">
-
-                <div
-                    class="text-center
-                           h-100"
-                >
-
-                    <div
-                        class="mx-auto
-                               rounded-circle
-                               bg-pn-cream
-                               text-pn-primary
-                               d-flex
-                               align-items-center
-                               justify-content-center
-                               fw-semibold
-                               fs-5"
-                        style="width:62px;height:62px;"
-                    >
-                        05
-                    </div>
-
-
-                    <h3
-                        class="font-serif
-                               h6
-                               text-pn-brown
-                               mt-3"
-                    >
-
-                        Payment
-
-                    </h3>
-
-
-                    <p
-                        class="small
-                               text-secondary
-                               mb-0"
-                    >
-
-                        Complete secure payment.
-
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            {{-- Step 6 --}}
-
-            <div class="col">
-
-                <div
-                    class="text-center
-                           h-100"
-                >
-
-                    <div
-                        class="mx-auto
-                               rounded-circle
-                               bg-success-subtle
-                               text-success
-                               d-flex
-                               align-items-center
-                               justify-content-center
-                               fw-semibold
-                               fs-5"
-                        style="width:62px;height:62px;"
-                    >
-                        <i class="bi bi-check-lg"></i>
-                    </div>
-
-
-                    <h3
-                        class="font-serif
-                               h6
-                               text-pn-brown
-                               mt-3"
-                    >
-
-                        Confirmed
-
-                    </h3>
-
-
-                    <p
-                        class="small
-                               text-secondary
-                               mb-0"
-                    >
-
-                        Consultation is confirmed.
-
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-{{-- ============================================================
-     IMPORTANT NOTE
-============================================================ --}}
-
-<section class="pb-5">
-
-    <div class="container">
-
-        <div
-            class="alert
-                   alert-light
-                   border
-                   border-warning-subtle
-                   rounded-4
-                   d-flex
-                   align-items-start
-                   gap-3"
-        >
-
-            <i
-                class="bi bi-info-circle
-                       text-pn-primary
-                       fs-5"
-            ></i>
-
-
-            <div>
-
-                <strong
-                    class="d-block
-                           text-pn-brown
-                           mb-1"
-                >
-
-                    Astrology consultations are provided
-                    as a guidance service.
-
-                </strong>
-
-
-                <small
-                    class="text-secondary"
-                >
-
-                    The available consultation type, astrologer
-                    and appointment slot will depend on the
-                    services configured on the platform.
-
-                </small>
-
-            </div>
-
-        </div>
-
-    </div>
-
 </section>
 
 @endsection

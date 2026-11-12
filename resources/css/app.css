@@ -76,9 +76,9 @@ iframe {
     color: var(--pn-gold) !important;
 }
 
-.text-pn-brown {
+/*.text-pn-brown {
     color: var(--pn-brown) !important;
-}
+}*/
 
 .bg-pn-cream {
     background-color: var(--pn-cream) !important;
@@ -157,17 +157,17 @@ iframe {
 /* -------------------------------------------------------
    Hero
 ------------------------------------------------------- */
-
 .pn-hero {
     min-height: 450px;
 
     background:
         linear-gradient(
             90deg,
-            rgba(251, 246, 236, 0.98) 0%,
-            rgba(251, 246, 236, 0.94) 38%,
-            rgba(251, 246, 236, 0.55) 55%,
-            rgba(251, 246, 236, 0.08) 100%
+            rgba(45, 4, 2, 0.98) 0%,
+            rgba(56, 5, 2, 0.95) 40%,
+            rgba(56, 5, 1, 0.75) 47%,
+            rgba(56, 5, 1, 0.35) 70%,
+            rgba(56, 5, 1, 0) 90%
         ),
         url("/images/home/hero.webp")
         right -53px / /* <-- ADJUST THIS VALUE */
@@ -175,13 +175,37 @@ iframe {
 }
 
 .pn-hero-title {
-    font-size: 65px;
+	color: #ffffff !important;
+    font-size: 48px;
     line-height: 1.06;
+}
+.pn-hero-accent {
+        color: #f8d49a !important;
 }
 
 /* Restores red/terracotta accent color */
-.pn-hero-accent {
+/*.pn-hero-accent {
     color: var(--pn-primary) !important;
+}*/
+
+/* -------------------------------------------------------
+   Astrology
+------------------------------------------------------- */
+.astrology-hero {
+    min-height: 450px;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(45, 4, 2, 0.98) 0%,
+            rgba(56, 5, 2, 0.95) 40%,
+            rgba(56, 5, 1, 0.75) 47%,
+            rgba(56, 5, 1, 0.35) 70%,
+            rgba(56, 5, 1, 0) 90%
+        ),
+        url("/images/astrology-hero.webp")
+        right -53px / /* <-- ADJUST THIS VALUE */
+        cover no-repeat;
 }
 
 
@@ -279,26 +303,56 @@ iframe {
    Mobile
 ------------------------------------------------------- */
 
-
-
 @media (max-width: 991.98px) {
-
     .pn-hero {
-        min-height: 360px;
+    min-height: 360px;
 
-        background:
-            linear-gradient(
-                180deg,
-                rgba(251, 246, 236, 0.98) 0%,
-                rgba(251, 246, 236, 0.90) 52%,
-                rgba(251, 246, 236, 0.30) 100%
-            ),
-            url("/images/home/hero.webp")
-            center center /
-            cover
-            no-repeat;
+    background:
+        linear-gradient(
+            90deg,
+            rgba(45, 4, 2, 0.98) 0%,
+            rgba(56, 5, 2, 0.95) 40%,
+            rgba(56, 5, 1, 0.75) 47%,
+            rgba(56, 5, 1, 0.35) 70%,
+            rgba(56, 5, 1, 0) 90%
+        ),
+        url("/images/home/hero.webp")
+        right center /
+        cover
+        no-repeat;
+}
+
+    .pn-hero-title {
+        /*color: #ffffff !important;*/
+		max-width: 60%;
+        font-weight: 700 !important;
     }
 
+    .pn-hero p {
+        /*color: #ffffff !important;*/
+        max-width: 52%;
+        text-align: left;
+        margin-left: 0;
+        margin-right: auto;
+    }
+	
+	.astrology-hero {
+    min-height: 360px;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(45, 4, 2, 0.98) 0%,
+            rgba(56, 5, 2, 0.95) 40%,
+            rgba(56, 5, 1, 0.75) 47%,
+            rgba(56, 5, 1, 0.35) 70%,
+            rgba(56, 5, 1, 0) 90%
+        ),
+        url("/images/astrology-hero.webp")
+        right center /
+        cover
+        no-repeat;
+	}
 }
 
 
@@ -356,4 +410,76 @@ iframe {
     width: 58px;
     height: 58px;
     flex-shrink: 0;
+}
+
+
+/* -------------------------------------------------------
+   Astrology Hero - Mobile Image
+------------------------------------------------------- */
+
+
+/* Astrology Hero - Mobile */
+@media (max-width: 767.98px) {
+    .astrology-hero {
+        background: #380502 !important;
+        min-height: auto;
+    }
+
+    .astrology-hero::after {
+        display: none !important;
+    }
+}
+
+
+
+
+/* -------------------------------------------------------
+   PoojaGo Footer
+------------------------------------------------------- */
+
+.poojago-footer {
+    background: linear-gradient(
+        135deg,
+        #450805 0%,
+        #650f09 50%,
+        #450805 100%
+    );
+}
+
+.poojago-gold-line {
+    width: 85px;
+    height: 1px;
+    background-color: #d4a54c;
+}
+
+.poojago-social {
+    width: 46px;
+    height: 46px;
+}
+
+/* -------------------------------------------------------
+   PoojaGo Header
+------------------------------------------------------- */
+
+.poojago-header-bg {
+    background-color: #5f1b12;
+}
+
+/* Light text on the dark background (scoped to the navbar, so the mobile offcanvas stays cream) */
+.poojago-header-bg .nav-link,
+.poojago-header-bg .text-pn-brown,
+.poojago-header-bg .text-pn-primary {
+    color: rgba(255, 255, 255, 0.88) !important;
+}
+
+.poojago-header-bg .nav-link:hover,
+.poojago-header-bg .nav-link:focus,
+.poojago-header-bg .text-pn-brown:hover {
+    color: #e8c66d !important;
+}
+
+/* Cart badge: gold so it doesn't disappear into the maroon */
+.poojago-header-bg .badge {
+    background-color: #e8c66d !important;
+    color: #450805 !important;
 }

@@ -16,12 +16,7 @@
 
 
     {{-- Main Navigation --}}
-    <nav
-    class="navbar
-           navbar-expand-xl
-           bg-pn-cream
-           border-bottom
-           py-0">
+    <nav class="navbar navbar-expand-xl poojago-header-bg border-bottom border-warning border-opacity-25 py-0">
 
         <div class="container py-0">
 
@@ -32,7 +27,7 @@
     class="navbar-brand d-flex align-items-center">
 
     <img
-        src="{{ asset('images/logo.png') }}"
+        src="{{ asset('images/logo-white.webp') }}"
         alt="Pooja Go"
         class="img-fluid pn-brand-logo">
 
@@ -80,7 +75,7 @@
                     <i
                         class="bi bi-list
                                fs-2
-                               text-pn-primary"></i>
+                               text-white"></i>
 
                 </button>
 
