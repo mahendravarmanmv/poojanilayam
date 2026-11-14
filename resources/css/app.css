@@ -19,6 +19,14 @@ html {
 body {
     background: #fff;
     color: var(--pn-brown);
+	font-family: 'Roboto', sans-serif;
+}
+
+.font-serif {
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
 }
 
 a {
@@ -28,7 +36,6 @@ a {
 /* -------------------------------------------------------
    Responsive Safety
 ------------------------------------------------------- */
-
 img,
 svg,
 video,
@@ -79,43 +86,33 @@ iframe {
 /*.text-pn-brown {
     color: var(--pn-brown) !important;
 }*/
+.text-pn-red {
+    color: #880C0A !important;
+}
 
-.bg-pn-cream {
+/*.bg-pn-cream {
     background-color: var(--pn-cream) !important;
-}
+}*/
 
-.bg-pn-beige {
+/*.bg-pn-beige {
     background-color: var(--pn-beige) !important;
-}
+}*/
 
-.bg-pn-primary {
+/*.bg-pn-primary {
     background-color: var(--pn-primary) !important;
 }
 
 .bg-pn-brown {
     background-color: var(--pn-brown) !important;
-}
-
-
-/* -------------------------------------------------------
-   Typography
-------------------------------------------------------- */
-
-.font-serif {
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
-}
+}*/
 
 
 /* -------------------------------------------------------
    Buttons
 ------------------------------------------------------- */
-
 .btn-pn {
     --bs-btn-color: #fff;
-    --bs-btn-bg: var(--pn-primary);
+    --bs-btn-bg: #880C0A;
     --bs-btn-border-color: var(--pn-primary);
 
     --bs-btn-hover-color: #fff;
@@ -138,11 +135,9 @@ iframe {
     font-weight: 600;
 }
 
-
 /* -------------------------------------------------------
    Section Heading
 ------------------------------------------------------- */
-
 .pn-section-label {
     letter-spacing: 0.14em;
 }
@@ -152,7 +147,6 @@ iframe {
     height: 2px;
     background-color: var(--pn-gold);
 }
-
 
 /* -------------------------------------------------------
    Hero
@@ -179,8 +173,11 @@ iframe {
     font-size: 48px;
     line-height: 1.06;
 }
-.pn-hero-accent {
+.pn-hero-home {
         color: #f8d49a !important;
+}
+.pn-hero-accent {
+        color: #880C0A !important;
 }
 
 /* Restores red/terracotta accent color */
@@ -188,40 +185,52 @@ iframe {
     color: var(--pn-primary) !important;
 }*/
 
-/* -------------------------------------------------------
-   Astrology
-------------------------------------------------------- */
+/* Astrology */
 .astrology-hero {
     min-height: 450px;
 
     background:
         linear-gradient(
             90deg,
-            rgba(45, 4, 2, 0.98) 0%,
-            rgba(56, 5, 2, 0.95) 40%,
-            rgba(56, 5, 1, 0.75) 47%,
-            rgba(56, 5, 1, 0.35) 70%,
-            rgba(56, 5, 1, 0) 90%
+            rgba(252, 240, 215, 0.98) 0%,
+            rgba(252, 240, 215, 0.95) 40%,
+            rgba(252, 240, 215, 0.75) 47%,
+            rgba(252, 240, 215, 0.35) 70%,
+            rgba(252, 240, 215, 0) 90%
         ),
         url("/images/astrology-hero.webp")
         right -53px / /* <-- ADJUST THIS VALUE */
         cover no-repeat;
 }
+.astrology-bottom {
+    min-height: 450px;
 
+    background:
+        linear-gradient(
+            90deg,
+            rgba(253, 249, 238, 0.98) 0%,
+            rgba(253, 249, 238, 0.95) 40%,
+            rgba(253, 249, 238, 0.75) 47%,
+            rgba(253, 249, 238, 0.35) 70%,
+            rgba(253, 249, 238, 0) 90%
+        ),
+        url("/images/astrologer.webp")
+        right -53px / /* <-- ADJUST THIS VALUE */
+        cover no-repeat;
+}
 
-/* -------------------------------------------------------
-   Search
-------------------------------------------------------- */
+/* Donations */
+.thankyou-hero {
+    min-height: 450px;
+    background: url("/images/donations.webp") right -20px / cover no-repeat;
+}
 
+/* Search */
 .pn-search {
     max-width: 720px;
 }
 
-
-/* -------------------------------------------------------
-   Service Cards
-------------------------------------------------------- */
-
+/* Service Cards */
 .pn-service-card {
     transition:
         transform 180ms ease,
@@ -239,7 +248,6 @@ iframe {
         0 0.75rem 2rem
         rgba(56, 35, 28, 0.08) !important;
 }
-
 
 /* -------------------------------------------------------
    Pooja Cards
@@ -264,31 +272,28 @@ iframe {
     object-fit: cover;
 }
 
-
 /* -------------------------------------------------------
    Occasion Cards
 ------------------------------------------------------- */
 
-.pn-occasion-icon {
+/*.pn-occasion-icon {
     width: 64px;
     height: 64px;
-}
+} */
 
 
 /* -------------------------------------------------------
    Temple Images
 ------------------------------------------------------- */
 
-.pn-temple-image {
+/*.pn-temple-image {
     aspect-ratio: 4 / 3;
     object-fit: cover;
-}
-
+}*/
 
 /* -------------------------------------------------------
    Digital Pooja
 ------------------------------------------------------- */
-
 .pn-digital {
     background:
         linear-gradient(
@@ -297,7 +302,6 @@ iframe {
             rgba(113, 50, 31, 0.90)
         );
 }
-
 
 /* -------------------------------------------------------
    Mobile
@@ -342,11 +346,11 @@ iframe {
     background:
         linear-gradient(
             90deg,
-            rgba(45, 4, 2, 0.98) 0%,
-            rgba(56, 5, 2, 0.95) 40%,
-            rgba(56, 5, 1, 0.75) 47%,
-            rgba(56, 5, 1, 0.35) 70%,
-            rgba(56, 5, 1, 0) 90%
+            rgba(252, 240, 215, 0.98) 0%,
+            rgba(252, 240, 215, 0.95) 40%,
+            rgba(252, 240, 215, 0.75) 47%,
+            rgba(252, 240, 215, 0.35) 70%,
+            rgba(252, 240, 215, 0) 90%
         ),
         url("/images/astrology-hero.webp")
         right center /
@@ -355,10 +359,7 @@ iframe {
 	}
 }
 
-
-
 @media (max-width: 575.98px) {
-
     .pn-hero {
         min-height: 420px;
     }
@@ -397,46 +398,37 @@ iframe {
     height: 80px;
     width: auto;
 }
-
 .pn-mobile-menu {
     --bs-offcanvas-width: min(400px, 92vw);
 }
-
 .pn-newsletter-form {
     min-width: 0;
 }
-
 .icon-circle-58 {
     width: 58px;
     height: 58px;
     flex-shrink: 0;
 }
 
-
 /* -------------------------------------------------------
    Astrology Hero - Mobile Image
 ------------------------------------------------------- */
 
-
 /* Astrology Hero - Mobile */
 @media (max-width: 767.98px) {
-    .astrology-hero {
+    /*.astrology-hero {
         background: #380502 !important;
         min-height: auto;
-    }
+    }*/
 
     .astrology-hero::after {
         display: none !important;
     }
 }
 
-
-
-
 /* -------------------------------------------------------
    PoojaGo Footer
 ------------------------------------------------------- */
-
 .poojago-footer {
     background: linear-gradient(
         135deg,
@@ -445,7 +437,6 @@ iframe {
         #450805 100%
     );
 }
-
 .poojago-gold-line {
     width: 85px;
     height: 1px;
@@ -456,11 +447,9 @@ iframe {
     width: 46px;
     height: 46px;
 }
-
 /* -------------------------------------------------------
    PoojaGo Header
 ------------------------------------------------------- */
-
 .poojago-header-bg {
     background-color: #5f1b12;
 }

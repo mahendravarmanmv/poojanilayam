@@ -62,16 +62,14 @@
 ============================================================ --}}
 
 <section class="astrology-hero d-flex align-items-center">
-    
-
-    <div class="container position-relative py-5" style="z-index: 1;">
+    <div class="container-fluid px-3 px-md-4 px-lg-5 position-relative py-5" style="z-index: 1;">
         <div class="row">
-            <div class="col-12 col-md-6 col-lg-5 astrology-hero-content">
+            <div class="col-12 col-sm-8 col-md-6 col-lg-5 astrology-hero-content text-start">
                 <span class="small text-pn-gold fw-bold text-uppercase">Indian Horoscope</span>
 
                 <h1 class="font-serif display-5 fw-semibold text-pn-brown pn-hero-accent mt-2 mb-3">Daily Horoscope</h1>
 
-                <p class="text-white mb-4">
+                <p class="text-dark mb-4">
                     Get your daily predictions based on Vedic astrology.
                     Explore insights for love, career, finance, health,
                     family and more.
@@ -92,33 +90,39 @@
 ============================================================ --}}
 
 <section class="pt-4">
-    <div class="container">
-        <div id="select-date" class="p-3">
+    <div class="container-fluid px-3 px-md-4 px-lg-5">
+        <div id="select-date" class="bg-pn-cream border border-warning-subtle rounded-4 p-3 p-md-4">
 
+            {{-- Header Row --}}
             <div class="d-flex align-items-center justify-content-between mb-3">
-                <div class="d-flex align-items-center gap-2">
-                    <h2 class="font-serif fs-4 fw-semibold text-pn-brown mb-0">Select Date</h2>
-                    <span class="d-none d-sm-inline-block border-top border-warning px-4"></span>
-                    <span class="d-none d-sm-inline-block rounded-circle bg-warning p-1"></span>
+                <div class="d-flex align-items-center gap-3">
+                    <h2 class="font-serif fs-3 fw-bold text-pn-red mb-0">Select Date</h2>
+
+                    {{-- Gold line with centered diamond (pure Bootstrap 5) --}}
+                    <div class="d-none d-sm-flex align-items-center">
+                        <span class="border-top border-warning px-4"></span>
+                        <span class="text-warning lh-1 small">&#9670;</span>
+                        <span class="border-top border-warning px-4"></span>
+                    </div>
                 </div>
 
                 <div class="dropdown">
                     <button
                         type="button"
-                        class="btn btn-link small text-pn-primary text-decoration-underline p-0"
+                        class="btn btn-link d-inline-flex align-items-center gap-2 text-pn-primary fw-semibold text-decoration-none p-0"
                         data-bs-toggle="dropdown"
                         aria-expanded="false"
                     >
-                        <i class="bi bi-calendar3 me-1"></i>
-                        Pick a Date
+                        <i class="bi bi-calendar3 fs-5"></i>
+                        <span class="text-decoration-underline">Pick a Date</span>
                     </button>
 
                     <form
                         method="GET"
                         action="{{ request()->url() }}#select-date"
-                        class="dropdown-menu dropdown-menu-end p-3"
+                        class="dropdown-menu dropdown-menu-end shadow-sm border-warning-subtle p-3"
                     >
-                        <label for="pickDate" class="form-label small mb-1">Choose a date</label>
+                        <label for="pickDate" class="form-label small fw-semibold text-pn-brown mb-1">Choose a date</label>
                         <input
                             type="date"
                             id="pickDate"
@@ -133,17 +137,17 @@
                 </div>
             </div>
 
-            <div class="d-flex align-items-center gap-2">
-                <a
-                    href="{{ $canGoPrev ? $dateLink($selected, $prevFrom) : '#select-date' }}"
-                    class="btn btn-outline-secondary rounded-circle flex-shrink-0 {{ $canGoPrev ? '' : 'disabled' }}"
-                    aria-label="Previous days"
-                    @if(!$canGoPrev) aria-disabled="true" tabindex="-1" @endif
-                >
-                    <i class="bi bi-chevron-left"></i>
-                </a>
+            {{-- 7-Day Date Strip --}}
+            <div class="d-flex align-items-center gap-2 gap-md-3">
+			<a href="{{ $canGoPrev ? $dateLink($selected, $prevFrom) : '#select-date' }}"
+			class="btn bg-white border border-warning-subtle text-pn-primary rounded-circle d-inline-flex align-items-center justify-content-center flex-shrink-0 p-2 lh-1 {{ $canGoPrev ? '' : 'disabled' }}"
+			aria-label="Previous days"
+			@if(!$canGoPrev) aria-disabled="true" tabindex="-1" @endif >
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+			<polyline points="15 18 9 12 15 6"></polyline>
+			</svg></a>
 
-                <div class="d-flex gap-2 flex-grow-1 overflow-x-auto py-1">
+                <div class="d-flex gap-2 gap-md-3 flex-grow-1 overflow-x-auto py-1">
                     @foreach($days as $day)
                         @php
                             $isSelected = $day->isSameDay($selected);
@@ -152,23 +156,31 @@
 
                         <a
                             href="{{ $dateLink($day, $from) }}"
-                            class="btn flex-fill text-center rounded-3 px-3 py-2 {{ $isSelected ? 'btn-pn' : 'bg-white border-warning-subtle text-pn-brown' }}"
+                            class="btn flex-fill text-center rounded-3 px-3 py-3 {{ $isSelected ? 'btn-pn text-white shadow-sm' : 'bg-white bg-opacity-75 border border-warning-subtle text-pn-brown' }}"
                             @if($isSelected) aria-current="date" @endif
                         >
-                            <span class="d-block small">{{ $label }}</span>
-                            <span class="d-block font-serif fs-3 fw-semibold lh-1 my-1">{{ $day->format('d') }}</span>
-                            <span class="d-block small">{{ $day->format('M') }}</span>
+                            <span class="d-block small {{ $isSelected ? 'text-white' : 'text-pn-brown' }}">
+                                {{ $label }}
+                            </span>
+                            <span class="d-block fs-3 fw-bold lh-1 my-2 {{ $isSelected ? 'text-white' : 'text-pn-brown' }}">
+                                {{ $day->format('d') }}
+                            </span>
+                            <span class="d-block small {{ $isSelected ? 'text-white-50' : 'text-secondary' }}">
+                                {{ $day->format('M') }}
+                            </span>
                         </a>
                     @endforeach
                 </div>
 
-                <a
-                    href="{{ $dateLink($selected, $nextFrom) }}"
-                    class="btn btn-outline-secondary rounded-circle flex-shrink-0"
-                    aria-label="Next days"
-                >
-                    <i class="bi bi-chevron-right"></i>
-                </a>
+				<a
+				href="{{ $dateLink($selected, $nextFrom) }}"
+				class="btn bg-white border border-warning-subtle text-pn-primary rounded-circle d-inline-flex align-items-center justify-content-center flex-shrink-0 p-2 lh-1"
+				aria-label="Next days"
+				>
+				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+				<polyline points="9 18 15 12 9 6"></polyline>
+				</svg>
+				</a>
             </div>
 
         </div>
@@ -181,16 +193,20 @@
 ============================================================ --}}
 
 <section class="pt-4">
-    <div class="container">
-        <div id="todays-horoscope" class="card border border-warning-subtle rounded-4 p-3">
+    <div class="container-fluid px-3 px-md-4 px-lg-5">
+        <div id="todays-horoscope" class="bg-pn-cream border border-warning-subtle rounded-4 p-3 p-md-4">
 
             <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-1 mb-3">
                 <div class="d-flex align-items-center gap-2">
-                    <h2 class="font-serif fs-4 fw-semibold text-pn-brown mb-0">
+                    <h2 class="font-serif fs-4 fw-semibold text-pn-red mb-0">
                         {{ $selected->isToday() ? "Today's Horoscope" : 'Horoscope' }}
                     </h2>
-                    <span class="d-none d-sm-inline-block border-top border-warning px-4"></span>
-                    <span class="d-none d-sm-inline-block rounded-circle bg-warning p-1"></span>
+					<div class="d-none d-sm-flex align-items-center">
+                        <span class="border-top border-warning px-4"></span>
+                        <span class="text-warning lh-1 small">&#9670;</span>
+                        <span class="border-top border-warning px-4"></span>
+                    </div>
+                    
                 </div>
 
                 <small class="text-secondary">{{ $selected->format('d F Y, l') }}</small>
@@ -201,18 +217,18 @@
                     <div class="col">
                         <article class="card h-100 border border-warning-subtle rounded-3 bg-white p-2">
 
-                            <div class="d-flex align-items-center gap-2 mb-1">
-                                <div class="ratio ratio-1x1 w-25 flex-shrink-0">
-                                    <div class="d-flex align-items-center justify-content-center rounded-circle border border-2 border-warning bg-warning-subtle text-pn-primary fs-5">
-                                        {{ $sign['glyph'] }}
-                                    </div>
-                                </div>
+					<div class="d-flex align-items-center gap-2 mb-2">
+					<div class="ratio ratio-1x1 w-25 flex-shrink-0">
+					<div class="d-flex align-items-center justify-content-center rounded-circle bg-pn-beige text-pn-red fs-4">
+					{{ $sign['glyph'] }}
+					</div>
+					</div>
 
-                                <div class="lh-sm">
-                                    <strong class="d-block small text-pn-brown">{{ $sign['name'] }}</strong>
-                                    <small class="text-secondary">({{ $sign['english'] }})</small>
-                                </div>
-                            </div>
+					<div class="lh-sm">
+					<strong class="d-block small text-pn-red">{{ $sign['name'] }}</strong>
+					<small class="text-secondary">({{ $sign['english'] }})</small>
+					</div>
+					</div>
 
                             <div class="small text-pn-gold mb-1" aria-label="Rating {{ $sign['rating'] }} out of 5">
                                 @for($i = 1; $i <= 5; $i++)
@@ -244,42 +260,23 @@
      EXPERT ASTROLOGERS CTA
 ============================================================ --}}
 
-<section class="py-4">
-    <div class="container">
-        <div class="position-relative overflow-hidden card border border-warning-subtle rounded-4 bg-pn-cream">
-            <img
-                src="{{ asset('images/astrology/astrologer-cta.webp') }}"
-                alt=""
-                class="d-none d-md-block position-absolute top-0 end-0 h-100 w-50 object-fit-cover"
-            >
+<section class="astrology-bottom d-flex align-items-center">
+    <div class="container-fluid px-3 px-md-4 px-lg-5 position-relative py-5" style="z-index: 1;">
+        <div class="row">
+            <div class="col-12 col-sm-8 col-md-6 col-lg-5 astrology-hero-content text-start">
+                <span class="small text-pn-gold fw-bold text-uppercase">Get Deeper Guidance</span>
 
-            <div class="position-relative row g-0">
-                <div class="col-12 col-md-6 p-4 p-lg-5">
-                    <span class="small text-pn-gold fw-semibold text-uppercase">Get Deeper Guidance</span>
+                <h1 class="font-serif display-5 fw-semibold text-pn-brown pn-hero-accent mt-2 mb-3">Connect with Expert Astrologers</h1>
 
-                    <h2 class="font-serif display-6 fw-bold text-pn-brown mt-2 mb-3">
-                        Connect with Expert Astrologers
-                    </h2>
-
-                    <p class="text-secondary mb-4">
-                        Get personalized solutions for your life's questions
+                <p class="text-dark mb-4">
+                    Get personalized solutions for your life's questions
                         through video, audio or chat consultations.
-                    </p>
+                </p>
 
-                    <a href="{{ route('astrology.booking') }}" class="btn btn-pn px-4">
-                        Find an Astrologer
-                        <i class="bi bi-arrow-right ms-2"></i>
-                    </a>
-                </div>
-            </div>
-
-            <div class="ratio ratio-16x9 d-md-none">
-                <img
-                    src="{{ asset('images/astrology/astrologer-cta.webp') }}"
-                    alt="Astrologer consulting with a tablet beside a lit lamp"
-                    class="object-fit-cover"
-                    loading="lazy"
-                >
+                <a href="{{ route('astrology.booking') }}" class="btn btn-pn px-4">
+                    Find an Astrologer
+                    <i class="bi bi-arrow-right ms-2"></i>
+                </a>
             </div>
         </div>
     </div>

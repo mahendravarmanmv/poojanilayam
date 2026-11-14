@@ -25,11 +25,12 @@ class DonationController extends Controller
             ->where('status', 'active')
             ->orderBy('sort_order')
             ->orderBy('name')
-            ->get(['id', 'name', 'slug', 'description'])
+            ->get(['id', 'name', 'slug', 'description', 'image_path'])
             ->map(fn (DonationType $type) => [
                 'id' => $type->id,
                 'title' => $type->name,
                 'description' => $type->description,
+				'image' => $type->image_path,
                 'icon' => $this->donationTypeIcon($type->slug),
             ])
             ->values();

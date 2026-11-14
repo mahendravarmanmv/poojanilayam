@@ -1,400 +1,176 @@
 @extends('layouts.app')
 
-@section('title', 'Donate | Pooja Go')
+@section('title', 'Astrology Services | Pooja Go')
 
 @section(
     'meta_description',
-    'Support spiritual initiatives and devotional activities through Pooja Go.'
+    'Explore astrology services including Horoscope, Kundli, Match Making, Numerology, Palm Reading and Vastu Consultation.'
 )
 
 @section('content')
 
-{{-- Donation data is supplied by DonationController@index. --}}
-
-
 {{-- ============================================================
-     DONATION TYPES
+     HERO
 ============================================================ --}}
 
-<section
-    id="donationTypes"
-    class="py-5"
->
+<section class="thankyou-hero d-flex align-items-center">
+    <div class="container-fluid px-3 px-md-4 px-lg-5 position-relative py-5" style="z-index: 1;">
+        <div class="row">
+            <div class="col-12 col-sm-8 col-md-6 col-lg-5 astrology-hero-content text-start">                
 
-    <div class="container">
+                <h1 class="font-serif display-5 fw-semibold text-pn-brown pn-hero-accent mt-2 mb-3">
+				Your<br>Special Occasion<br>Can Create Smiles
+				</h1>
 
-        <div
-            class="row
-                   align-items-end
-                   g-4
-                   mb-5"
-        >
-
-            <div class="col-12 col-lg-8">
-
-                <span
-                    class="small
-                           text-pn-gold
-                           fw-semibold
-                           text-uppercase"
-                >
-
-                    Choose Your Purpose
-
-                </span>
-
-
-                <h2
-                    class="font-serif
-                           display-6
-                           text-pn-brown
-                           mt-2
-                           mb-2"
-                >
-
-                    Ways you can contribute
-
-                </h2>
-
-
-                <p
-                    class="text-secondary
-                           mb-0"
-                >
-
-                    Select the donation purpose that best matches
-                    your intention.
-
+                <p class="text-dark mb-4">
+                    Celebrate your special moments by supporting a child's education, food and well-being.
                 </p>
+				
+				<div class="d-flex align-items-stretch mt-3">
+				<!-- Real Impact -->
+				<div class="d-flex flex-column align-items-start justify-content-start pe-4 border-end border-warning">
+				<i class="bi bi-heart fs-2 pn-hero-accent rounded-circle border border-warning d-inline-flex align-items-center justify-content-center p-2 mb-1"></i>
+				<small class="text-dark">Real Impact</small>
+				</div>
 
+				<!-- Photos & Videos -->
+				<div class="d-flex flex-column align-items-center justify-content-start px-4 border-end border-warning">
+				<i class="bi bi-camera fs-2 pn-hero-accent rounded-circle border border-warning d-inline-flex align-items-center justify-content-center p-2 mb-1"></i>
+				<small class="text-center text-dark">Photos &amp; Videos<br>of Your Contribution</small>
+				</div>
+
+				<!-- Donation Certificate -->
+				<div class="d-flex flex-column align-items-center justify-content-start px-4 border-end border-warning">
+				<i class="bi bi-file-earmark-check fs-2 pn-hero-accent rounded-circle border border-warning d-inline-flex align-items-center justify-content-center p-2 mb-1"></i>
+				<small class="text-center text-dark">Donation<br>Certificate</small>
+				</div>
+				</div>
+               
             </div>
-
         </div>
-
-
-        <div
-            class="row
-                   row-cols-1
-                   row-cols-sm-2
-                   row-cols-lg-4
-                   g-4"
-        >
-
-            @foreach($donationTypes as $type)
-
-                <div class="col">
-
-                    <div
-                        class="card
-                               border
-                               border-warning-subtle
-                               rounded-5
-                               h-100"
-                    >
-
-                        <div class="card-body p-4">
-
-                            <div
-                                class="rounded-circle
-                                       bg-pn-cream
-                                       text-pn-primary
-                                       d-flex
-                                       align-items-center
-                                       justify-content-center
-                                       mb-4"
-                                style="width:58px;height:58px;"
-                            >
-
-                                <i
-                                    class="bi
-                                           {{ $type['icon'] }}
-                                           fs-5"
-                                ></i>
-
-                            </div>
-
-
-                            <h3
-                                class="font-serif
-                                       h4
-                                       text-pn-brown
-                                       mb-2"
-                            >
-
-                                {{ $type['title'] }}
-
-                            </h3>
-
-
-                            <p
-                                class="small
-                                       text-secondary
-                                       mb-0"
-                            >
-
-                                {{ $type['description'] }}
-
-                            </p>
-
-                            <a href="{{ route('donation.donate', ['donation_type_id' => $type['id']]) }}" class="btn btn-pn-outline w-100 mt-3">Donate for this purpose <i class="bi bi-arrow-right ms-1"></i></a>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            @endforeach
-
-        </div>
-
     </div>
-
 </section>
 
+<section class="pt-4">
+    <div class="container-fluid px-3 px-md-4 px-lg-5">
+        <div class="bg-pn-cream border border-warning-subtle rounded-4 p-3 p-md-4">
 
-{{-- ============================================================
-     ACTIVE DONATION CAMPAIGNS
-============================================================ --}}
+            <div class="text-center">
 
-@if($campaigns->isNotEmpty())
-<section id="donationCampaigns" class="py-5">
-    <div class="container">
-        <div class="row align-items-end g-4 mb-4">
-            <div class="col-12 col-lg-8">
-                <span class="small text-pn-gold fw-semibold text-uppercase">Current Initiatives</span>
-                <h2 class="font-serif display-6 text-pn-brown mt-2 mb-2">Support an active campaign</h2>
-                <p class="text-secondary mb-0">Choose a published campaign to see its details and submit a donation request.</p>
-            </div>
-        </div>
-        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
-            @foreach($campaigns as $campaign)
-                <div class="col">
-                    <article class="card border border-warning-subtle rounded-5 h-100">
-                        <div class="card-body p-4 d-flex flex-column">
-                            <span class="badge rounded-pill bg-pn-cream text-pn-primary align-self-start mb-3">
-                                {{ $campaign->donationType?->name ?? 'Donation' }}
-                            </span>
-                            <h3 class="font-serif h4 text-pn-brown">{{ $campaign->name }}</h3>
-                            <p class="small text-secondary flex-grow-1">
-                                {{ $campaign->short_description ?: \Illuminate\Support\Str::limit(strip_tags($campaign->description ?? 'Support this devotional initiative.'), 160) }}
-                            </p>
-                            @if($campaign->target_amount)
-                                <div class="small text-secondary mb-3">
-                                    Target: <strong class="text-pn-brown">₹{{ number_format((float) $campaign->target_amount, 2) }}</strong>
+                <h2 class="section-title font-serif fw-bold text-pn-red mb-1">
+                    Donate for Your Special Occasion
+                </h2>
+
+                {{-- Decorative Divider --}}
+                <div class="d-none d-sm-flex align-items-center justify-content-center gap-1 my-2">
+                        <span class="border-top border-warning px-5"></span>
+                        <span class="text-warning lh-1 small">◆</span>
+                        <span class="border-top border-warning px-5"></span>
+                    </div>
+
+                <p class="text-secondary mb-0">
+                    Make your celebrations more meaningful. Support a noble cause and create a positive impact.
+                </p>
+				
+				
+            <div class="row row-cols-2 row-cols-sm-5 g-2 mt-1">
+                @foreach($donationTypes as $type)
+                    <div class="col">
+                        <a href="{{ route('donation.donate', ['donation_type_id' => $type['id']]) }}" class="d-block h-100">
+                            <div class="occasion-card pn-service-card h-100 bg-donation-card border border-warning-subtle rounded-3 shadow-sm overflow-hidden text-center">
+							<div class="ratio ratio-4x3 overflow-hidden">
+							<img src="{{ asset($type['image']) }}" alt="{{ $type['title'] }}" class="w-100 h-100 object-fit-cover" loading="lazy" >
+							</div>
+                                <div class="occasion-icon rounded-circle bg-donation-card border text-pn-primary d-flex align-items-center justify-content-center mx-auto position-relative z-2">
+                                   
                                 </div>
-                            @endif
-                            <div class="d-grid gap-2">
-                                <a href="{{ route('donation.show', $campaign->slug) }}" class="btn btn-pn-outline">View Campaign</a>
-                                <a href="{{ route('donation.donate', ['campaign' => $campaign->slug]) }}" class="btn btn-pn">Donate to Campaign</a>
+                                <div class="px-1 pb-2 pt-1">
+                                    <h3 class="font-serif fs-12 fw-bold text-pn-red text-truncate mb-1" title="{{ $type['title'] }}">
+                                        {{ $type['title'] }}
+                                    </h3>
+                                    <p class="occasion-desc fs-9 text-secondary mb-1">
+                                        {{ $type['description'] }}
+                                    </p>
+                                    <i class="bi bi-arrow-right text-pn-primary small"></i>
+                                </div>
                             </div>
-                        </div>
-                    </article>
-                </div>
-            @endforeach
+                        </a>
+                    </div>
+                @endforeach
+            </div>
+
+            </div>
+
         </div>
     </div>
 </section>
-@endif
 
-{{-- ============================================================
-     SUGGESTED DONATION AMOUNTS
-============================================================ --}}
+<section class="pt-4">
+    <div class="container-fluid px-3 px-md-4 px-lg-5">
+        <div class="bg-pn-cream border border-warning-subtle rounded-4 p-3 p-md-4">
 
-<section class="py-5 bg-pn-cream">
+            <div class="text-center">
 
-    <div class="container">
-
-        <div
-            class="row
-                   align-items-center
-                   g-5"
-        >
-
-            <div class="col-12 col-lg-6">
-
-                <span
-                    class="small
-                           text-pn-gold
-                           fw-semibold
-                           text-uppercase"
-                >
-
-                    Give What Feels Right
-
-                </span>
-
-
-                <h2
-                    class="font-serif
-                           display-6
-                           text-pn-brown
-                           mt-2
-                           mb-3"
-                >
-
-                    Choose your donation amount.
-
+                <h2 class="section-title font-serif fw-bold text-pn-red mb-1">
+                    Choose Your Donation Amount
                 </h2>
 
+                {{-- Decorative Divider --}}
+                <div class="d-none d-sm-flex align-items-center justify-content-center gap-1 my-2">
+                        <span class="border-top border-warning px-5"></span>
+                        <span class="text-warning lh-1 small">◆</span>
+                        <span class="border-top border-warning px-5"></span>
+                    </div>
 
-                <p
-                    class="text-secondary
-                           mb-4"
-                >
-
-                    You can choose from a suggested amount or enter
-                    a custom amount when you continue to donate.
-
+                <p class="text-secondary mb-0">
+                    You can choose from a suggested amount or enter a custom amount.
                 </p>
-
-
-                <div
-                    class="d-flex
-                           flex-wrap
-                           gap-2"
-                >
-
-                    @foreach($suggestedAmounts as $amount)
-
-                        <a href="{{ route('donation.donate', ['amount' => $amount]) }}" class="btn btn-outline-secondary rounded-pill px-4">₹{{ number_format($amount) }}</a>
-
-                    @endforeach
-
-                </div>
-
-            </div>
-
-
-            <div class="col-12 col-lg-6">
-
-                <div
-                    class="border
-                           border-warning-subtle
-                           rounded-5
-                           bg-white
-                           p-4
-                           p-md-5"
-                >
-
-                    <div
-                        class="d-flex
-                               align-items-start
-                               gap-3
-                               mb-4"
-                    >
-
-                        <div
-                            class="rounded-circle
-                                   bg-pn-cream
-                                   text-pn-primary
-                                   d-flex
-                                   align-items-center
-                                   justify-content-center
-                                   flex-shrink-0"
-                            style="width:54px;height:54px;"
-                        >
-
-                            <i class="bi bi-heart-fill"></i>
-
-                        </div>
-
-
-                        <div>
-
-                            <h3
-                                class="font-serif
-                                       h4
-                                       text-pn-brown
-                                       mb-1"
-                            >
-
-                                Your contribution matters
-
-                            </h3>
-
-
-                            <p
-                                class="small
-                                       text-secondary
-                                       mb-0"
-                            >
-
-                                Every donation can be made with a
-                                purpose and devotion.
-
-                            </p>
-
-                        </div>
-
-                    </div>
-
-
-                    <div
-                        class="border
-                               border-warning-subtle
-                               rounded-4
-                               p-3"
-                    >
-
-                        <div
-                            class="d-flex
-                                   align-items-center
-                                   justify-content-between
-                                   gap-3"
-                        >
-
-                            <span
-                                class="small
-                                       text-secondary"
-                            >
-
-                                Suggested contribution
-
-                            </span>
-
-
-                            <strong
-                                class="fs-4
-                                       text-pn-primary"
-                            >
-
-                                ₹1,001
-
-                            </strong>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="d-grid mt-3">
-
-                        <a
-                            href="{{ route('donation.donate', ['amount' => 1001]) }}"
-                            class="btn
-                                   btn-pn
-                                   btn-lg"
-                        >
-
-                            Continue to Donate
-
-                            <i
-                                class="bi bi-arrow-right ms-2"
-                            ></i>
-
-                        </a>
-
-                    </div>
-
-                </div>
+				
+				<div class="row g-2 justify-content-center mt-2">
+				@foreach($suggestedAmounts as $amount)
+					<div class="col-6 col-sm-4 col-md-3 col-lg-2">
+						<a href="{{ route('donation.donate', ['amount' => $amount]) }}"
+						   class="btn btn-outline-secondary rounded-pill w-100">
+							₹{{ number_format($amount) }}
+						</a>
+					</div>
+				@endforeach
+				</div>				
+				
+            
 
             </div>
 
         </div>
-
     </div>
+</section>
 
+
+{{-- ============================================================
+     EXPERT ASTROLOGERS CTA
+============================================================ --}}
+
+<section class="d-flex align-items-center">
+    <div class="container-fluid px-3 px-md-4 px-lg-5 position-relative py-5" style="z-index: 1;">
+        <div class="row justify-content-center">
+            <div class="col-12 col-sm-10 col-md-8 col-lg-7 astrology-hero-content text-center">
+
+                <h1 class="font-serif display-5 fw-semibold text-pn-brown pn-hero-accent mt-2 mb-3">
+                    Your Contribution Matters
+                </h1>
+
+                <p class="text-dark mb-4">
+                    Your donation helps provide food, education and essential support to children in need.
+                </p>
+
+                <a href="{{ route('donation.donate', ['amount' => 1001]) }}" class="btn btn-pn px-4">
+                    Continue to Donate
+                    <i class="bi bi-arrow-right ms-2"></i>
+                </a>
+
+            </div>
+        </div>
+    </div>
 </section>
 
 @endsection

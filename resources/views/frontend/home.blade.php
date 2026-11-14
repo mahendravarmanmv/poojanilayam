@@ -126,7 +126,7 @@
 
                 <h1 class="pn-hero-title font-serif fw-normal text-pn-brown mb-3">
                     Your sacred journey,
-                    <span class="pn-hero-accent d-block fw-semibold">
+                    <span class="pn-hero-home d-block fw-semibold">
                         beautifully connected.
                     </span>
                 </h1>
@@ -140,22 +140,22 @@
                 {{-- Benefits --}}
                 <div class="d-flex align-items-stretch mt-3">
                     <div class="d-flex flex-column align-items-start justify-content-center pe-4 border-end border-warning">
-                        <i class="bi bi-shield-fill-check fs-2 pn-hero-accent rounded-circle border border-warning d-inline-flex align-items-center justify-content-center p-2 mb-1"></i>
+                        <i class="bi bi-shield-fill-check fs-2 pn-hero-home rounded-circle border border-warning d-inline-flex align-items-center justify-content-center p-2 mb-1"></i>
                         <small class="text-white">Authentic</small>
                     </div>
 
                     <div class="d-flex flex-column align-items-center justify-content-center px-4 border-end border-warning">
-                        <i class="bi bi-people-fill fs-2 pn-hero-accent rounded-circle border border-warning d-inline-flex align-items-center justify-content-center p-2 mb-1"></i>
+                        <i class="bi bi-people-fill fs-2 pn-hero-home rounded-circle border border-warning d-inline-flex align-items-center justify-content-center p-2 mb-1"></i>
                         <small class="text-center text-white">Trusted Priests</small>
                     </div>
 
                     <div class="d-flex flex-column align-items-center justify-content-center px-4 border-end border-warning">
-                        <i class="bi bi-flower1 fs-2 pn-hero-accent rounded-circle border border-warning d-inline-flex align-items-center justify-content-center p-2 mb-1"></i>
+                        <i class="bi bi-flower1 fs-2 pn-hero-home rounded-circle border border-warning d-inline-flex align-items-center justify-content-center p-2 mb-1"></i>
                         <small class="text-center text-white">Safe &amp; Secure</small>
                     </div>
 
                     <div class="d-flex flex-column align-items-center justify-content-center ps-4">
-                        <i class="bi bi-headset fs-2 pn-hero-accent rounded-circle border border-warning d-inline-flex align-items-center justify-content-center p-2 mb-1"></i>
+                        <i class="bi bi-headset fs-2 pn-hero-home rounded-circle border border-warning d-inline-flex align-items-center justify-content-center p-2 mb-1"></i>
                         <small class="text-center text-white">24/7 Support</small>
                     </div>
                 </div>
@@ -170,7 +170,7 @@
 ============================================================ --}}
 
 <section class="py-1">
-    <div class="container">
+    <div class="container-fluid px-3 px-md-4 px-lg-5">
         <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-3">
             @foreach($services as $service)
 
