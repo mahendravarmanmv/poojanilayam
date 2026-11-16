@@ -346,6 +346,14 @@ Route::prefix('donations')
         Route::get('/{slug}', 'show')
             ->where('slug', '[A-Za-z0-9-]+')
             ->name('show');
+			
+		// Cashfree payment return
+		Route::get('/payment/return', 'paymentReturn')
+		->name('payment.return');
+
+		// Cashfree webhook
+		Route::post('/cashfree/webhook', 'webhook')
+		->name('cashfree.webhook');
     });
 
 

@@ -27,6 +27,8 @@ class Donation extends Model
         'donor_name',
         'donor_email',
         'donor_mobile',
+		'pan',
+		'address',
         'is_anonymous',
         'purpose',
         'donor_message',
@@ -79,4 +81,10 @@ class Donation extends Model
     {
         return $this->hasOne(DonationReceipt::class);
     }
+	
+	public function payments(): HasMany
+	{
+		return $this->hasMany(DonationPayment::class);
+	}
+
 }

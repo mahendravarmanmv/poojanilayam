@@ -67,11 +67,12 @@
 
     <div class="container">
 
-        <form
-            id="donationForm"
-            method="POST"
-            action="{{ route('donation.submit') }}"
-        >
+		<form
+		id="donationForm"
+		method="POST"
+		action="{{ route('donation.submit') }}"
+		data-cashfree-mode="{{ config('services.cashfree.environment') === 'production' ? 'production' : 'sandbox' }}"
+		>
 
             @if($selectedCampaign)
                 <input type="hidden" name="donation_campaign_id" value="{{ $selectedCampaign->id }}">
@@ -951,7 +952,7 @@
     id="continueDonationButton"
     class="btn btn-pn btn-lg"
 >
-    Submit Donation Request
+    Proceed to Payment
     <i class="bi bi-arrow-right ms-2"></i>
 </button>
 
@@ -1154,6 +1155,8 @@
 
 @push('scripts')
 
+<script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 const donationAmount =
@@ -1311,53 +1314,113 @@ const summaryType =
     |--------------------------------------------------------------------------
     */
 
-    const donationForm =
-        document.getElementById(
-            'donationForm'
-        );
+    
+/*
+|--------------------------------------------------------------------------
+| Cashfree Payment Integration
+|--------------------------------------------------------------------------
+*/
 
+const donationForm = document.getElementById('donationForm');
 
-    const continueButton =
-        document.getElementById(
-            'continueDonationButton'
-        );
+const continueButton = document.getElementById(
+    'continueDonationButton'
+);
 
+donationForm?.addEventListener('submit', async function (event) {
 
-    donationForm?.addEventListener(
-        'submit',
-        function (event) {
+    event.preventDefault();
 
-            /*
-            |--------------------------------------------------------------------------
-            | UI Prototype
-            |--------------------------------------------------------------------------
-            | Backend payment route will be connected later.
-            |--------------------------------------------------------------------------
-            */
+    // Validate form
+    if (!donationForm.checkValidity()) {
 
-            if (!donationForm.checkValidity()) {
+        donationForm.classList.add('was-validated');
 
-                event.preventDefault();
+        return;
+    }
 
-                donationForm.classList.add(
-                    'was-validated'
-                );
+    // Prevent multiple submissions
+    if (continueButton.disabled) {
+        return;
+    }
 
-                return;
+    const originalButtonHtml = continueButton.innerHTML;
 
+    continueButton.disabled = true;
+
+    continueButton.innerHTML =
+        '<span class="spinner-border spinner-border-sm me-2"></span>' +
+        'Initiating Payment...';
+
+    try {
+
+        // Initialize Cashfree
+        const cashfree = Cashfree({
+            mode: donationForm.dataset.cashfreeMode
+        });
+
+        // Submit donation details to Laravel
+        const response = await fetch(donationForm.action, {
+
+            method: 'POST',
+
+            headers: {
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+
+            body: new FormData(donationForm)
+
+        });
+
+        const result = await response.json();
+
+        // Handle Laravel validation / payment errors
+        if (!response.ok || !result.success) {
+
+            let errorMessage = result.message ||
+                'Unable to initiate donation payment.';
+
+            if (result.errors) {
+                errorMessage = Object.values(result.errors)
+                    .flat()
+                    .join('\n');
             }
 
-
-            continueButton.disabled =
-                true;
-
-
-            continueButton.innerHTML =
-    '<span class="spinner-border spinner-border-sm me-2"></span>' +
-    'Submitting Request...';
-
+            throw new Error(errorMessage);
         }
-    );
+
+        // Validate payment session
+        if (!result.payment_session_id) {
+            throw new Error('Cashfree payment session was not received.');
+        }
+
+        // Open Cashfree Checkout
+        await cashfree.checkout({
+
+            paymentSessionId: result.payment_session_id,
+
+            redirectTarget: '_self'
+
+        });
+
+    } catch (error) {
+
+        console.error('Donation Payment Error:', error);
+
+        alert(
+            error.message ||
+            'Something went wrong. Please try again.'
+        );
+
+        continueButton.disabled = false;
+
+        continueButton.innerHTML = originalButtonHtml;
+
+    }
+
+});
+
 
 
     updateSummary();
