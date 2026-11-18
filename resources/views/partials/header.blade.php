@@ -103,9 +103,21 @@
                         </a>
 
                     </li>
+					
+					<li class="nav-item">
+
+                        <a
+                            href="{{ route('pooja.index') }}"
+                            class="nav-link
+                                   px-xl-3
+                                   text-pn-brown">
+                            Poojas
+                        </a>
+
+                    </li>
 
 
-                    <li class="nav-item dropdown">
+                    {{-- <li class="nav-item dropdown">
 
                         <a
                             href="{{ route('pooja.index') }}"
@@ -143,17 +155,17 @@
                                 </a>
                             </li>
 
-                            {{-- <li>
+                            <li>
                                 <a
                                     href="{{ route('pooja.index') }}"
                                     class="dropdown-item py-2">
                                     Temple Poojas
                                 </a>
-                            </li> --}}
+                            </li>
 
                         </ul>
 
-                    </li>
+                    </li> --}}
 
 
                     {{-- <li class="nav-item">
@@ -275,7 +287,7 @@
                     @auth
                         <a
                             href="{{ route('dashboard.index') }}"
-                            class="btn btn-pn-outline
+                            class="btn btn-pn
                                    ms-2
                                    px-4">
                             Dashboard
