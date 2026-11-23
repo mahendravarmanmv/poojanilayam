@@ -16,4 +16,14 @@ Route::middleware(['auth', 'customer.profile.complete'])
 
         Route::post('/poojas/{slug}/book', [BookingController::class, 'store'])
             ->name('pooja.book.store');
+		Route::get('/pooja-booking/payment/{payment}', [BookingController::class, 'checkout'])
+			->name('pooja.booking.payment.checkout');
     });
+
+// Pooja Booking Cashfree Payment Routes
+
+Route::get('/pooja-booking/payment-return', [BookingController::class, 'paymentReturn'])
+    ->name('pooja.booking.payment.return');
+
+Route::post('/pooja-booking/cashfree/webhook', [BookingController::class, 'webhook'])
+    ->name('pooja.booking.cashfree.webhook');

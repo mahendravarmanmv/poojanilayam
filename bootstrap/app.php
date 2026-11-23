@@ -14,20 +14,21 @@ return Application::configure(basePath: dirname(__DIR__))
     
 
 	->withMiddleware(function (Middleware $middleware): void {
-		$middleware->web(append: [
-			\App\Http\Middleware\ComingSoonMiddleware::class,
-		]);
+    $middleware->web(append: [
+        \App\Http\Middleware\ComingSoonMiddleware::class,
+    ]);
 
-		$middleware->alias([
-			'customer.profile.complete' => \App\Http\Middleware\EnsureCustomerProfileComplete::class,
-		]);
+    $middleware->alias([
+        'customer.profile.complete' => \App\Http\Middleware\EnsureCustomerProfileComplete::class,
+    ]);
 
-		// Exclude Cashfree webhook from CSRF validation
-		$middleware->validateCsrfTokens(
-			except: [
-				'priests/booking/cashfree/webhook',
-			]
-		);
+    // Exclude Cashfree webhooks from CSRF validation
+    $middleware->validateCsrfTokens(
+        except: [
+            'priests/booking/cashfree/webhook',
+            'pooja-booking/cashfree/webhook',
+        ]
+    );
 	})
 
 

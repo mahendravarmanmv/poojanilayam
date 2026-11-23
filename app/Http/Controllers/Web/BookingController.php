@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Models\BookingPayment;
+use App\Models\BookingStatusHistory;
+use App\Services\CashfreePaymentService;
 use App\Http\Controllers\Controller;
 use App\Models\Address;
 use App\Models\Currency;
@@ -24,6 +27,7 @@ class BookingController extends Controller
     public function __construct(
         private readonly BookingAvailabilityService $availability,
         private readonly BookingService $bookingService,
+		private readonly CashfreePaymentService $cashfreePaymentService,
     ) {
     }
 
@@ -235,6 +239,13 @@ class BookingController extends Controller
             'relationship' => 'Self',
         ]);
         $validated['sankalpam']['members'] = $members;
+		
+		$paymentCustomerDetails = [
+		'customer_id' => 'POOJA_' . $request->user()->id,
+		'customer_name' => $validated['devotee_name'],
+		'customer_email' => $validated['devotee_email'],
+		'customer_phone' => $validated['devotee_phone'],
+		];
 
         unset($validated['devotee_name'], $validated['devotee_phone'], $validated['devotee_email'], $validated['devotee_dob'], $validated['booking_date']);
 
@@ -247,8 +258,419 @@ class BookingController extends Controller
             return back()->withInput()->with('error', $exception->getMessage());
         }
 
+		// Create Cashfree payment order
+	$gatewayOrderId = 'POOJA_' . $booking->id . '_' . strtoupper(bin2hex(random_bytes(4)));
+
+	$payment = BookingPayment::create([
+	'booking_id' => $booking->id,
+	'gateway' => 'cashfree',
+	'gateway_order_id' => $gatewayOrderId,
+	'amount' => $booking->total_amount,
+	'currency' => 'INR',
+	'payment_status' => 'pending',
+	]);
+
+	try {
+
+	$returnUrl = route('pooja.booking.payment.return', [
+		'order_id' => $gatewayOrderId,
+	]);
+
+	$notifyUrl = route('pooja.booking.cashfree.webhook');
+
+	$cashfreeResponse = $this->cashfreePaymentService->createOrder(
+		$gatewayOrderId,
+		(float) $booking->total_amount,
+		$paymentCustomerDetails,
+		$returnUrl,
+		$notifyUrl
+	);
+
+	$payment->update([
+		'payment_session_id' => $cashfreeResponse['payment_session_id'],
+		'gateway_response' => $cashfreeResponse,
+	]);
+
+	// Payment checkout page will be added in the next step
+	return redirect()->route('pooja.booking.payment.checkout', [
+		'payment' => $payment->id,
+	]);
+
+	} catch (\Throwable $exception) {
+
+	report($exception);
+
+	$payment->update([
+		'payment_status' => 'failed',
+		'gateway_response' => [
+			'error' => $exception->getMessage(),
+		],
+	]);
+
+	return redirect()
+		->route('dashboard.bookings')
+		->with('error', 'Unable to initiate payment. Please try again.');
+	}
+    }
+	
+	public function checkout(BookingPayment $payment): View
+	{
+    $payment->load('booking');
+
+    // Verify this payment belongs to the logged-in customer
+    if (
+        $payment->booking->customer_profile_id !==
+        auth()->user()->customerProfile?->id
+    ) {
+        abort(403);
+    }
+
+    // Only pending payments can proceed
+    if ($payment->payment_status !== 'pending') {
         return redirect()
             ->route('dashboard.bookings')
-            ->with('success', "Booking #{$booking->booking_id} has been created successfully.");
+            ->with('error', 'This payment is no longer pending.');
     }
+
+    // Verify Cashfree payment session exists
+    if (empty($payment->payment_session_id)) {
+        return redirect()
+            ->route('dashboard.bookings')
+            ->with('error', 'Payment session is unavailable. Please try again.');
+    }
+
+    return view('frontend.poojas.payment-checkout', [
+        'payment' => $payment,
+        'cashfreeMode' => config('services.cashfree.environment', 'sandbox'),
+    ]);
+	}
+	
+	public function paymentReturn(Request $request): RedirectResponse
+	{
+    $gatewayOrderId = $request->query('order_id');
+
+    if (!$gatewayOrderId) {
+        return redirect()
+            ->route('dashboard.bookings')
+            ->with('error', 'Invalid payment response.');
+    }
+
+    $payment = BookingPayment::query()
+        ->where('gateway_order_id', $gatewayOrderId)
+        ->with('booking')
+        ->first();
+
+    if (!$payment) {
+        return redirect()
+            ->route('dashboard.bookings')
+            ->with('error', 'Payment record not found.');
+    }
+
+    // Already processed successfully
+    if ($payment->payment_status === 'paid') {
+        return redirect()
+            ->route('dashboard.bookings')
+            ->with('success', 'Your booking payment has already been confirmed.');
+    }
+
+    try {
+
+        // Verify payment directly with Cashfree
+$cashfreeOrder = $this->cashfreePaymentService->fetchOrder(
+    $gatewayOrderId
+);
+
+// Verify order ID, amount and currency
+if (
+    ($cashfreeOrder['order_id'] ?? null) !== $payment->gateway_order_id ||
+    abs(
+        (float) ($cashfreeOrder['order_amount'] ?? 0) -
+        (float) $payment->amount
+    ) > 0.001 ||
+    ($cashfreeOrder['order_currency'] ?? '') !== $payment->currency
+) {
+    throw new \RuntimeException('Cashfree order details mismatch.');
+}
+
+if (($cashfreeOrder['order_status'] ?? '') === 'PAID') {
+
+    // Verify successful payment attempt
+    $payments = $this->cashfreePaymentService->fetchPayments(
+        $gatewayOrderId
+    );
+
+    $successfulPayment = collect($payments)->first(
+        function ($item) use ($payment, $gatewayOrderId) {
+            return ($item['order_id'] ?? null) === $gatewayOrderId
+                && ($item['payment_status'] ?? null) === 'SUCCESS'
+                && ($item['payment_currency'] ?? '') === $payment->currency
+                && abs(
+                    (float) ($item['payment_amount'] ?? 0) -
+                    (float) $payment->amount
+                ) <= 0.001;
+        }
+    );
+
+    if (!$successfulPayment) {
+        throw new \RuntimeException(
+            'No matching successful Cashfree payment found.'
+        );
+    }
+	
+	$gatewayPaymentId = (string) ($successfulPayment['cf_payment_id'] ?? '');
+
+	if ($gatewayPaymentId === '') {
+	throw new \RuntimeException('Cashfree payment ID is missing.');
+	}
+
+           \Illuminate\Support\Facades\DB::transaction(function () use ($payment, $cashfreeOrder, $successfulPayment, $gatewayPaymentId) {
+
+                $payment = BookingPayment::query()
+                    ->lockForUpdate()
+                    ->findOrFail($payment->id);
+
+                // Prevent duplicate confirmation
+                if ($payment->payment_status === 'paid') {
+                    return;
+                }
+
+				$booking = \App\Models\Booking::query()
+				->lockForUpdate()
+				->findOrFail($payment->booking_id);
+
+                $oldStatus = $booking->status;
+				
+				$slot = \App\Models\BookingSlot::query()
+				->lockForUpdate()
+				->findOrFail($booking->booking_slot_id);
+
+				$slot->increment('booked_count');
+
+                $payment->update([
+                    'payment_status' => 'paid',
+					'gateway_payment_id' => $gatewayPaymentId,
+					'gateway_response' => [
+					'order' => $cashfreeOrder,
+					'payment' => $successfulPayment,
+					],
+                    'paid_at' => now(),
+                ]);
+
+                $booking->update([
+                    'status' => 'confirmed',
+                    'payment_confirmed_at' => now(),
+                    'confirmed_at' => now(),
+                ]);
+
+                BookingStatusHistory::query()->create([
+                    'booking_id' => $booking->id,
+                    'from_status' => $oldStatus,
+                    'to_status' => 'confirmed',
+                    'changed_by_user_id' => null,
+                    'remarks' => 'Payment confirmed successfully through Cashfree.',
+                    'changed_at' => now(),
+                ]);
+
+            });
+
+            return redirect()
+                ->route('dashboard.bookings')
+                ->with('success', 'Payment successful! Your pooja booking is confirmed.');
+        }
+
+        // Payment is not yet confirmed
+        $payment->update([
+            'gateway_response' => $cashfreeOrder,
+        ]);
+
+        return redirect()
+            ->route('dashboard.bookings')
+            ->with('error', 'Your payment is not yet confirmed. Please check your booking status.');
+
+    } catch (\Throwable $exception) {
+
+        report($exception);
+
+        return redirect()
+            ->route('dashboard.bookings')
+            ->with('error', 'Unable to verify your payment right now. Please check your booking status.');
+    }
+	}
+	
+	public function webhook(Request $request): JsonResponse
+	{
+    $rawBody = $request->getContent();
+
+    $signature = (string) $request->header('x-webhook-signature');
+    $timestamp = (string) $request->header('x-webhook-timestamp');
+
+    // Verify Cashfree webhook signature
+    if (!$this->cashfreePaymentService->verifyWebhookSignature(
+        $rawBody,
+        $timestamp,
+        $signature
+    )) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Invalid webhook signature.',
+        ], 401);
+    }
+
+    $payload = json_decode($rawBody, true);
+
+    if (!is_array($payload)) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Invalid webhook payload.',
+        ], 400);
+    }
+
+    $gatewayOrderId = data_get($payload, 'data.order.order_id');
+
+    if (!$gatewayOrderId) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Missing order ID.',
+        ], 400);
+    }
+
+    $payment = BookingPayment::query()
+        ->where('gateway_order_id', $gatewayOrderId)
+        ->where('gateway', 'cashfree')
+        ->first();
+
+    if (!$payment) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Payment record not found.',
+        ], 404);
+    }
+
+    try {
+        // Verify the order directly with Cashfree
+        $cashfreeOrder = $this->cashfreePaymentService->fetchOrder(
+            $gatewayOrderId
+        );
+
+        // Verify order ID, amount and currency
+        if (
+            ($cashfreeOrder['order_id'] ?? null) !== $payment->gateway_order_id ||
+            abs(
+                (float) ($cashfreeOrder['order_amount'] ?? 0) -
+                (float) $payment->amount
+            ) > 0.001 ||
+            ($cashfreeOrder['order_currency'] ?? '') !== $payment->currency
+        ) {
+            throw new \RuntimeException(
+                'Cashfree order details mismatch.'
+            );
+        }
+
+        // Process only successfully paid orders
+        if (($cashfreeOrder['order_status'] ?? '') !== 'PAID') {
+            return response()->json([
+                'success' => true,
+                'message' => 'Webhook received. Payment is not yet confirmed.',
+            ]);
+        }
+
+        // Verify the successful payment attempt
+        $payments = $this->cashfreePaymentService->fetchPayments(
+            $gatewayOrderId
+        );
+
+        $successfulPayment = collect($payments)->first(
+            function ($item) use ($payment, $gatewayOrderId) {
+                return ($item['order_id'] ?? null) === $gatewayOrderId
+                    && ($item['payment_status'] ?? null) === 'SUCCESS'
+                    && ($item['payment_currency'] ?? '') === $payment->currency
+                    && abs(
+                        (float) ($item['payment_amount'] ?? 0) -
+                        (float) $payment->amount
+                    ) <= 0.001;
+            }
+        );
+
+        if (!$successfulPayment) {
+            throw new \RuntimeException(
+                'No matching successful Cashfree payment found.'
+            );
+        }
+
+        \Illuminate\Support\Facades\DB::transaction(function () use (
+            $payment,
+            $cashfreeOrder,
+            $successfulPayment
+        ) {
+            $lockedPayment = BookingPayment::query()
+                ->lockForUpdate()
+                ->findOrFail($payment->id);
+
+            // Prevent duplicate webhook processing
+            if ($lockedPayment->payment_status === 'paid') {
+                return;
+            }
+
+            $booking = \App\Models\Booking::query()
+                ->lockForUpdate()
+                ->findOrFail($lockedPayment->booking_id);
+
+            $oldStatus = $booking->status;
+			
+			$slot = \App\Models\BookingSlot::query()
+			->lockForUpdate()
+			->findOrFail($booking->booking_slot_id);
+
+			$slot->increment('booked_count');
+
+            $gatewayPaymentId = (string) (
+                $successfulPayment['cf_payment_id'] ?? ''
+            );
+
+            if ($gatewayPaymentId === '') {
+                throw new \RuntimeException(
+                    'Cashfree payment ID is missing.'
+                );
+            }
+
+            $lockedPayment->update([
+                'gateway_payment_id' => $gatewayPaymentId,
+                'payment_status' => 'paid',
+                'paid_at' => now(),
+                'gateway_response' => [
+                    'order' => $cashfreeOrder,
+                    'payment' => $successfulPayment,
+                ],
+            ]);
+
+            $booking->update([
+                'status' => 'confirmed',
+                'payment_confirmed_at' => now(),
+                'confirmed_at' => now(),
+            ]);
+
+            BookingStatusHistory::query()->create([
+                'booking_id' => $booking->id,
+                'from_status' => $oldStatus,
+                'to_status' => 'confirmed',
+                'changed_by_user_id' => null,
+                'remarks' => 'Payment confirmed successfully through Cashfree webhook.',
+                'changed_at' => now(),
+            ]);
+        });
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Webhook processed successfully.',
+        ]);
+
+    } catch (\Throwable $exception) {
+        report($exception);
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Webhook processing failed.',
+        ], 500);
+    }
+	}
 }
