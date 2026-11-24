@@ -160,27 +160,6 @@
 </section>
 
 {{-- ============================================================
-     BOOKING STEPPER
-============================================================ --}}
-<section class="bg-white border-bottom sticky-top shadow-sm py-2 z-3">
-    <div class="container">
-        <div class="d-flex overflow-auto py-1 gap-3 align-items-center justify-content-between">
-            @foreach($steps as $step)
-                <div class="d-flex align-items-center flex-shrink-0 gap-2">
-                    <span class="badge rounded-circle bg-pn-primary text-white p-2 d-inline-flex align-items-center justify-content-center" style="width: 28px; height: 28px;">
-                        {{ $step['number'] }}
-                    </span>
-                    <span class="small fw-semibold text-pn-brown">{{ $step['title'] }}</span>
-                </div>
-                @if(!$loop->last)
-                    <i class="bi bi-chevron-right text-muted small flex-shrink-0"></i>
-                @endif
-            @endforeach
-        </div>
-    </div>
-</section>
-
-{{-- ============================================================
      MAIN BOOKING AREA
 ============================================================ --}}
 <section class="py-5 bg-light-subtle">
@@ -487,23 +466,23 @@
                                 </span>
                                 <div>
                                     <span class="text-uppercase small fw-bold text-pn-primary tracking-wide">Step 05</span>
-                                    <h2 class="font-serif h4 text-pn-brown mb-0">Review & Payment Method</h2>
+                                    <h2 class="font-serif h4 text-pn-brown mb-0">Review & Secure Payment</h2>
                                 </div>
                             </div>
-
-                            <div class="row g-3 mb-4">
-                                @foreach($paymentMethods as $index => $method)
-                                    <div class="col-12 col-sm-6">
-                                        <input type="radio" class="btn-check" name="payment_method" id="payment{{ $method['id'] }}" value="{{ $method['id'] }}" required {{ old('payment_method', 'upi') === $method['id'] ? 'checked' : '' }}>
-                                        <label for="payment{{ $method['id'] }}" class="card border rounded-3 p-3 w-100" style="cursor: pointer;">
-                                            <div class="d-flex align-items-center gap-2">
-                                                <i class="bi {{ $method['icon'] }} text-pn-primary fs-5"></i>
-                                                <span class="small fw-semibold text-pn-brown">{{ $method['name'] }}</span>
-                                            </div>
-                                        </label>
-                                    </div>
-                                @endforeach
-                            </div>
+							
+							<div class="card bg-light border rounded-3 p-3 mb-4">
+							<div class="d-flex align-items-center gap-3">
+							<i class="bi bi-shield-lock text-pn-primary fs-3"></i>
+							<div>
+							<strong class="text-pn-brown">Secure Online Payment</strong>
+							<p class="small text-secondary mb-0">
+							You will be redirected to our secure payment gateway
+							to complete your payment using available payment options.
+							</p>
+							</div>
+							</div>
+							</div>
+                            
 
                             <div class="alert alert-warning-subtle text-pn-brown border-0 rounded-3 small d-flex align-items-center gap-2 mb-0">
                                 <i class="bi bi-shield-check fs-5 text-pn-primary"></i>
@@ -516,7 +495,7 @@
 
                     {{-- Terms & Mobile CTA --}}
                     <div class="form-check mb-4">
-                        <input class="form-check-input" type="checkbox" id="bookingTerms" name="booking_terms" value="1" required checked>
+                        <input class="form-check-input" type="checkbox" id="bookingTerms" name="booking_terms" value="1" required>
                         <label class="form-check-label small text-secondary" for="bookingTerms">
                             I confirm that the booking information provided is correct and agree to the applicable Pooja Go terms and policies.
                         </label>
@@ -524,7 +503,7 @@
 
                     <div class="d-lg-none">
                         <button type="submit" class="btn btn-pn btn-lg w-100 shadow-sm">
-                            Create Booking <i class="bi bi-arrow-right ms-2"></i>
+                            Proceed to Payment <i class="bi bi-arrow-right ms-2"></i>
                         </button>
                     </div>
                 </form>
@@ -578,10 +557,10 @@
                                     <span class="text-secondary">Add-ons</span>
                                     <span id="summaryAddons">{{ $activeCurrencySymbol }}0.00</span>
                                 </div>
-                                <div class="d-flex justify-content-between">
-                                    <span class="text-secondary">Taxes / Charges</span>
-                                    <span class="text-secondary">Included</span>
-                                </div>
+							<div class="d-flex justify-content-between">
+							<span class="text-secondary">Taxes / Charges</span>
+							<span id="summaryTaxes">{{ $activeCurrencySymbol }}0.00</span>
+							</div>
                             </div>
 
                             <div class="pt-3 d-flex align-items-center justify-content-between">
@@ -597,7 +576,7 @@
 
                         <div class="card-footer bg-light p-3 border-top-0">
                             <button type="submit" form="bookingForm" class="btn btn-pn btn-lg w-100 rounded-3 shadow-sm d-none d-lg-block">
-                                Create Booking <i class="bi bi-arrow-right ms-2"></i>
+                                Proceed to Payment <i class="bi bi-arrow-right ms-2"></i>
                             </button>
                         </div>
                     </div>
@@ -717,7 +696,7 @@
             container.innerHTML = matching.map(slot => {
                 const id = 'slot' + slot.id;
                 const time = new Date('2000-01-01T' + slot.start_time).toLocaleTimeString('en-IN', {hour:'2-digit', minute:'2-digit', hour12:true});
-                return '<div><input type="radio" class="btn-check booking-slot" name="booking_slot_id" id="' + id + '" value="' + Number(slot.id) + '" data-start="' + slot.start_time + '" data-end="' + slot.end_time + '" required><label for="' + id + '" class="btn btn-outline-secondary rounded-pill px-3">' + time + '</label></div>';
+                return '<div><input type="radio" class="btn-check booking-slot" name="booking_slot_id" id="' + id + '" value="' + Number(slot.id) + '" data-start="' + slot.start_time + '" data-end="' + slot.end_time + '" ' + (Number(slot.remaining_capacity) <= 0 ? 'disabled' : '') + ' required><label for="' + id + '" class="btn btn-outline-secondary rounded-pill px-3">' + time + '</label></div>';
             }).join('');
         });
     }
@@ -783,11 +762,7 @@
             event.preventDefault();
             alert('Please select an available time slot.');
             return;
-        }
-        if (!form.querySelector('input[name="payment_method"]:checked')) {
-            event.preventDefault();
-            alert('Please select a payment method.');
-        }
+        }       
     });
 
     updateDateSummary(selectedDate());

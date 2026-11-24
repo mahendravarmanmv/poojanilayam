@@ -40,13 +40,33 @@ class BookingController extends Controller
             ->where('is_active', true)
             ->firstOrFail();
 
-        $templePooja = TemplePooja::query()
-            ->where('pooja_id', $pooja->id)
-            ->first();
+        $templePooja = TemplePooja::query()->with(['pricing.currency'])->where('pooja_id', $pooja->id)->first();
 
-        $basePoojaPrice = 0;
-        $currencySymbol = '₹';
-        $currencyCode = 'INR';
+		$basePoojaPrice = 0;
+		$currencySymbol = '₹';
+		$currencyCode = 'INR';
+
+		if ($templePooja) {
+		$pricing = $templePooja->pricing
+		->where('is_active', true)
+		->where('is_default', true)
+		->first()
+		?? $templePooja->pricing
+			->where('is_active', true)
+			->first();
+
+		if ($pricing) {
+		$basePoojaPrice = max(
+			0,
+			(float) $pricing->amount - (float) $pricing->discount_amount
+		);
+
+		if ($pricing->currency) {
+			$currencySymbol = $pricing->currency->symbol ?? '₹';
+			$currencyCode = $pricing->currency->code ?? 'INR';
+		}
+		}
+		}
 
         if (!empty($pooja->starting_price)) {
             $basePoojaPrice = (float) $pooja->starting_price;
@@ -70,11 +90,6 @@ class BookingController extends Controller
 
         if ($templePooja) {
             $slots = $this->availability->slotsForDate($templePooja, $date);
-        }
-
-        // Fallback: If DB has no slots configured for this date, provide standard Vedic muhurtham slots
-        if ($slots->isEmpty()) {
-            $slots = $this->getDefaultMuhurthamSlots($templePooja, $date);
         }
 
         $currencies = Currency::query()->where('is_active', true)->orderBy('name')->get();
@@ -141,41 +156,16 @@ class BookingController extends Controller
             $slots = $this->availability->slotsForDate($templePooja, $date);
         }
 
-        if ($slots->isEmpty()) {
-            $slots = $this->getDefaultMuhurthamSlots($templePooja, $date);
-        }
-
-        return response()->json([
-            'date' => $validated['date'],
-            'slots' => $slots->map(fn ($slot) => [
-                'id' => is_array($slot) ? $slot['id'] : $slot->id,
-                'start_time' => is_array($slot) ? $slot['start_time'] : $slot->start_time,
-                'end_time' => is_array($slot) ? $slot['end_time'] : $slot->end_time,
-                'capacity' => 10,
-                'remaining_capacity' => 10,
-            ])->values(),
-        ]);
-    }
-
-    /**
-     * Helper to return standard Muhurtham slots or grab existing booking_slots.
-     */
-    private function getDefaultMuhurthamSlots(?TemplePooja $templePooja, Carbon $date): \Illuminate\Support\Collection
-    {
-        // Check if any booking_slots exist in the DB
-        $existing = \App\Models\BookingSlot::query()->take(6)->get();
-        if ($existing->isNotEmpty()) {
-            return $existing;
-        }
-
-        // Fallback default slots collection
-        return collect([
-            (object) ['id' => 1, 'start_time' => '07:30:00', 'end_time' => '08:30:00', 'remaining_capacity' => 5],
-            (object) ['id' => 2, 'start_time' => '09:30:00', 'end_time' => '10:30:00', 'remaining_capacity' => 5],
-            (object) ['id' => 3, 'start_time' => '11:00:00', 'end_time' => '12:00:00', 'remaining_capacity' => 5],
-            (object) ['id' => 4, 'start_time' => '16:30:00', 'end_time' => '17:30:00', 'remaining_capacity' => 5],
-            (object) ['id' => 5, 'start_time' => '18:30:00', 'end_time' => '19:30:00', 'remaining_capacity' => 5],
-        ]);
+		return response()->json([
+		'date' => $validated['date'],
+		'slots' => $slots->map(fn ($slot) => [
+		'id' => $slot->id,
+		'start_time' => $slot->start_time,
+		'end_time' => $slot->end_time,
+		'capacity' => $slot->capacity,
+		'remaining_capacity' => $this->availability->remainingCapacity($slot),
+		])->values(),
+		]);
     }
 
     public function store(Request $request, string $slug): RedirectResponse
@@ -223,6 +213,7 @@ class BookingController extends Controller
             'address.postal_code' => ['nullable', 'string', 'max:30'],
             'address.latitude' => ['nullable', 'numeric'],
             'address.longitude' => ['nullable', 'numeric'],
+			'booking_terms' => ['required', 'accepted'],
         ]);
 
         // Pass the temple_pooja_id required by BookingService
