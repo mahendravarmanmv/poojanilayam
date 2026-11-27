@@ -455,66 +455,6 @@
                 </div>
 
 
-                {{-- Active Filters --}}
-
-                <div
-                    class="d-flex
-                           flex-wrap
-                           align-items-center
-                           gap-2
-                           mb-4"
-                >
-
-                    <span
-                        class="small
-                               text-secondary
-                               me-1"
-                    >
-                        Popular:
-                    </span>
-
-
-                    <a
-                        href="{{ route('pooja.index', ['search' => 'Ganapathi']) }}"
-                        class="badge
-                               rounded-pill
-                               bg-pn-beige
-                               text-pn-primary
-                               px-3
-                               py-2"
-                    >
-                        Ganapathi
-                    </a>
-
-
-                    <a
-                        href="{{ route('pooja.index', ['search' => 'Homam']) }}"
-                        class="badge
-                               rounded-pill
-                               bg-pn-beige
-                               text-pn-primary
-                               px-3
-                               py-2"
-                    >
-                        Homam
-                    </a>
-
-
-                    <a
-                        href="{{ route('pooja.index', ['search' => 'Prosperity']) }}"
-                        class="badge
-                               rounded-pill
-                               bg-pn-beige
-                               text-pn-primary
-                               px-3
-                               py-2"
-                    >
-                        Prosperity
-                    </a>
-
-                </div>
-
-
                 {{-- Pooja Grid --}}
 
                 <div class="row g-4" data-pn-listing="poojas">
@@ -526,7 +466,7 @@
                              data-name="{{ $pooja['name'] }}"
                              data-category="{{ $pooja['category'] }}"
                              data-location="{{ $pooja['location'] }}"
-                             data-price="{{ preg_replace('/[^0-9.]/', '', $pooja['price']) }}"
+                             data-price="{{ $pooja['has_discount'] ? $pooja['discount_price'] : ($pooja['price'] ?? 0) }}"
                              data-rating="{{ $pooja['rating'] }}"
                              data-reviews="{{ $pooja['reviews'] }}"
                              data-search="{{ $pooja['name'] . ' ' . $pooja['category'] . ' ' . $pooja['description'] . ' ' . $pooja['location'] }}">
@@ -736,49 +676,62 @@
 
                                     {{-- Bottom --}}
 
-                                    <div
-                                        class="d-flex
-                                               align-items-end
-                                               justify-content-between
-                                               gap-2"
-                                    >
+                                    
 
-                                        <div>
+								<div class="mt-auto">
 
-                                            <small
-                                                class="text-secondary
-                                                       d-block"
-                                            >
-                                                Starting from
-                                            </small>
+									@if($pooja['has_discount'])
+
+										<div class="d-flex justify-content-between align-items-center gap-2">
+
+											{{-- Discount percentage - Left --}}
+											<span class="text-success fw-bold text-nowrap">
+												{{ round((($pooja['price'] - $pooja['discount_price']) / $pooja['price']) * 100) }}% OFF
+											</span>
+
+											{{-- Price details - Right --}}
+											<div class="d-flex align-items-center gap-2">
+												<span class="text-secondary text-decoration-line-through small">
+													{{ $pooja['currency_symbol'] }}{{ number_format($pooja['price'], 0) }}
+												</span>
+
+												<strong class="fs-5 text-pn-primary">
+													{{ $pooja['currency_symbol'] }}{{ number_format($pooja['discount_price'], 0) }}
+												</strong>
+											</div>
+
+										</div>
+
+									@elseif($pooja['price'] !== null)
+
+										<div class="d-flex justify-content-end">
+											<strong class="fs-5 text-pn-brown">
+												{{ $pooja['currency_symbol'] }}{{ number_format($pooja['price'], 0) }}
+											</strong>
+										</div>
+
+									@else
+
+										<div class="d-flex justify-content-end">
+											<strong class="fs-6 text-pn-brown">
+												Contact for pricing
+											</strong>
+										</div>
+
+									@endif
+
+									{{-- View Details button - Next row --}}
+									<div class="mt-3">
+										<a href="{{ route('pooja.show', ['slug' => $pooja['slug']]) }}"
+										   class="btn btn-pn btn-sm w-100">
+											View Details
+											<i class="bi bi-arrow-right ms-1"></i>
+										</a>
+									</div>
+
+								</div>
 
 
-                                            <strong
-                                                class="fs-5
-                                                       text-pn-brown"
-                                            >
-
-                                                {{ $pooja['price'] }}
-
-                                            </strong>
-
-                                        </div>
-
-
-                                        <a
-                                            href="{{ route('pooja.show', ['slug' => Str::slug($pooja['name'])]) }}"
-                                            class="btn btn-pn btn-sm px-3"
-                                        >
-
-                                            View Details
-
-                                            <i
-                                                class="bi bi-arrow-right ms-1"
-                                            ></i>
-
-                                        </a>
-
-                                    </div>
 
                                 </div>
 

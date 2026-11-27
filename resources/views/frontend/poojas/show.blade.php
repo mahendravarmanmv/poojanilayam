@@ -449,27 +449,45 @@
 
                 {{-- Price --}}
 
-                <div class="mb-4">
+				<div class="mb-4">
 
-                    <small
-                        class="text-secondary
-                               d-block"
-                    >
-                        Starting from
-                    </small>
+				<small class="text-secondary d-block mb-1">
+					Starting from
+				</small>
 
+				@if($pooja['has_discount'])
 
-                    <strong
-                        class="display-6
-                               text-pn-primary
-                               font-serif"
-                    >
+					<div class="d-flex align-items-center flex-wrap gap-3">
 
-                        {{ $pooja['starting_price'] }}
+						<span class="text-secondary text-decoration-line-through">
+							{{ $pooja['currency_symbol'] }}{{ number_format($pooja['starting_price'], 2) }}
+						</span>
 
-                    </strong>
+						<strong class="display-6 text-pn-primary font-serif">
+							{{ $pooja['currency_symbol'] }}{{ number_format($pooja['discount_price'], 2) }}
+						</strong>
 
-                </div>
+						<span class="badge bg-success">
+							{{ round((($pooja['starting_price'] - $pooja['discount_price']) / $pooja['starting_price']) * 100) }}% OFF
+						</span>
+
+					</div>
+
+				@elseif($pooja['starting_price'] !== null)
+
+					<strong class="display-6 text-pn-primary font-serif">
+						{{ $pooja['currency_symbol'] }}{{ number_format($pooja['starting_price'], 2) }}
+					</strong>
+
+				@else
+
+					<strong class="fs-5 text-pn-brown">
+						Contact for pricing
+					</strong>
+
+				@endif
+
+				</div>
 
 
                 {{-- Booking CTA --}}
@@ -1478,15 +1496,28 @@
                         </small>
 
 
-                        <strong
-                            class="display-5
-                                   font-serif
-                                   text-warning"
-                        >
+						@if($pooja['has_discount'])
+						<div>
+						<small class="text-white-50 text-decoration-line-through">
+						{{ $pooja['currency_symbol'] }}{{ number_format($pooja['starting_price'], 2) }}
+						</small>
 
-                            {{ $pooja['starting_price'] }}
+						<strong class="display-5 font-serif text-warning d-block">
+						{{ $pooja['currency_symbol'] }}{{ number_format($pooja['discount_price'], 2) }}
+						</strong>
+						</div>
 
-                        </strong>
+						@elseif($pooja['starting_price'] !== null)
+
+						<strong class="display-5 font-serif text-warning">
+						{{ $pooja['currency_symbol'] }}{{ number_format($pooja['starting_price'], 2) }}
+						</strong>
+						@else
+						<strong class="fs-5 text-warning">
+						Contact for pricing
+						</strong>
+
+						@endif
 
 
                         <small
@@ -1777,14 +1808,31 @@
                                        mt-4"
                             >
 
-                                <strong
-                                    class="fs-5
-                                           text-pn-brown"
-                                >
+							<div>
+							@if($related['has_discount'])
 
-                                    {{ $related['price'] }}
+							<span class="small text-secondary text-decoration-line-through">
+							{{ $related['currency_symbol'] }}{{ number_format($related['price'], 2) }}
+							</span>
 
-                                </strong>
+							<strong class="fs-5 text-pn-brown d-block">
+							{{ $related['currency_symbol'] }}{{ number_format($related['discount_price'], 2) }}
+							</strong>
+
+							@elseif($related['price'] !== null)
+
+							<strong class="fs-5 text-pn-brown">
+							{{ $related['currency_symbol'] }}{{ number_format($related['price'], 2) }}
+							</strong>
+
+							@else
+
+							<strong class="small text-pn-brown">
+							Contact for pricing
+							</strong>
+
+							@endif
+							</div>
 
 
                                 <a

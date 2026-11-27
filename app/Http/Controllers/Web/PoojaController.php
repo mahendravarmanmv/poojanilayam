@@ -221,7 +221,10 @@ class PoojaController extends Controller
                 'image' => $this->imagePath($related),
                 'name' => $related->name,
                 'description' => $related->short_description ?: $related->description ?: 'Traditional devotional service.',
-                'price' => $this->displayPrice($related),
+                'price' => $this->pricingData($related)['amount'],
+				'discount_price' => $this->pricingData($related)['discount_price'],
+				'currency_symbol' => $this->pricingData($related)['currency_symbol'],
+				'has_discount' => $this->pricingData($related)['has_discount'],
                 'rating' => '—',
                 'slug' => $related->slug,
             ])->all();
@@ -236,6 +239,8 @@ class PoojaController extends Controller
             ->map(fn ($tp) => $tp->temple)
             ->filter()
             ->first();
+		
+		$pricing = $this->pricingData($pooja);
 
         return [
             'slug' => $pooja->slug,
@@ -248,14 +253,17 @@ class PoojaController extends Controller
 			? number_format((float) $pooja->reviews_avg_rating, 1)
 			: '—',
 			'reviews' => (string) ($pooja->reviews_count ?? 0),
-            'price' => $this->displayPrice($pooja),
+            'price' => $pricing['amount'],
+			'discount_price' => $pricing['discount_price'],
+			'currency_symbol' => $pricing['currency_symbol'],
+			'has_discount' => $pricing['has_discount'],
             'location' => $temple?->name ?? 'Multiple locations',
             'featured' => (bool) $pooja->is_featured,
         ];
     }
 
     private function poojaDetailData(Pooja $pooja): array
-    {
+    {		
         $temple = $pooja->templePoojas
             ->where('status', 'active')
             ->map(fn ($tp) => $tp->temple)
@@ -293,6 +301,8 @@ class PoojaController extends Controller
             'rating' => '—',
             'slug' => $priestProfile->pujari_number ?: $priestProfile->display_name,
         ] : null;
+		
+		$pricing = $this->pricingData($pooja);
 
         return [
             'slug' => $pooja->slug,
@@ -307,7 +317,10 @@ class PoojaController extends Controller
 			: '—',
 			'reviews' => (string) $pooja->reviews->count(),
             'duration' => $pooja->duration_minutes ? $pooja->duration_minutes . ' Mins' : 'As per ritual',
-            'starting_price' => $this->displayPrice($pooja),
+            'starting_price' => $pricing['amount'],
+			'discount_price' => $pricing['discount_price'],
+			'currency_symbol' => $pricing['currency_symbol'],
+			'has_discount' => $pricing['has_discount'],
             'location' => $temple?->name ?? 'Multiple locations',
             'language' => 'As per selected service',
             'mode' => $mode ?: 'As per selected service',
@@ -315,17 +328,34 @@ class PoojaController extends Controller
         ];
     }
 
-    private function displayPrice(Pooja $pooja): string
-    {
-        $price = $pooja->pricing
-            ->where('is_active', true)
-            ->sortByDesc('is_default')
-            ->first();
+    private function pricingData(Pooja $pooja): array
+	{
+    $price = $pooja->pricing
+        ->where('is_active', true)
+        ->sortByDesc('is_default')
+        ->first();
 
-        return $price
-            ? (($price->currency?->symbol ?? '') . number_format((float) $price->amount, 2))
-            : 'Contact for pricing';
+    if (!$price) {
+        return [
+            'amount' => null,
+            'discount_amount' => null,
+            'currency_symbol' => '',
+            'has_discount' => false,
+        ];
     }
+
+    $amount = (float) $price->amount;
+    $discountAmount = (float) $price->discount_amount;
+	$finalPrice = $amount - $discountAmount;
+
+    return [
+        'amount' => $amount,
+		'discount_amount' => $discountAmount,
+		'discount_price' => $finalPrice,
+		'currency_symbol' => $price->currency?->symbol ?? '',
+		'has_discount' => $discountAmount > 0 && $discountAmount < $amount,
+    ];
+	}
 
     /**
      * Return a public-relative path for an admin-uploaded pooja image.
